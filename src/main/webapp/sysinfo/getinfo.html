@@ -1,0 +1,50 @@
+<html>
+<head>
+<script type="text/javascript" src="sysinfo.js"></script>
+<script type="text/javascript">
+	var text = "";
+
+	window.onload=function(){
+		document.getElementById("config").value=readConfig();
+		getPcMac(function(macAddress){
+			document.getElementById("mac").value=macAddress;
+			showCpu();
+		});
+
+	}
+
+	function showCpu(){
+		getCpuNumber(function(result){
+			document.getElementById("cpu").value=result;
+			showDisk();
+		});
+	}
+
+	function showDisk(){
+		getDiskNumber(function(result){
+			document.getElementById("disk").value=result;
+		});
+		showUUID();
+	}
+
+	function showUUID(){
+		getUUID(function(result){
+			document.getElementById("uuid").value=result;
+		});
+	}
+
+
+</script>
+</head>
+<body>
+mac:<textarea id="mac" cols="60" rows="3"></textarea>
+<br/>
+cpu:<textarea id="cpu" cols="60" rows="3"></textarea>
+<br/>
+disk:<textarea id="disk" cols="60" rows="3"></textarea>
+<br/>
+uuid:<textarea id="uuid" cols="60" rows="3"></textarea>
+<br/>
+config:<textarea id="config" cols="60" rows="3"></textarea>
+</body>
+</html>
