@@ -1,0 +1,72 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript">
+function showChild(parent){
+	var img = parent.children[0];
+	if(img.state=="open"){
+		img.src="";
+		img.state="close";
+		img.src="http://pub.idqqimg.com/smartqq/css/image/open_arrow.png";
+	}else{
+		img.state = "open";
+		img.src="http://pub.idqqimg.com/smartqq/css/image/open_arrow_fire.png";
+	}
+	var display=parent.nextElementSibling.style.display;
+	if(display=="none"){
+		parent.nextElementSibling.style.display="block";
+	}else{
+		parent.nextElementSibling.style.display="none";
+	}
+	
+	//alert(parent);
+}	
+</script>
+</head>
+<body>
+	<div>
+		<div style="background-color:#555;width:252px;height:45px;border-radius:8px 8px 0px 0px;text-align:center">
+			<div style="padding-top:14px;">
+			<span style="font-size:18px;color:white;padding-left:20px;">联系人</span>
+			<span><img style="float:right;width:14px;margin-right:20px;" src="http://pub.idqqimg.com/smartqq/css/image/title_search_icon.png"/></span>
+			</div>
+		</div>
+
+		<div style="width:250px;height:450px;background-color:#eee;font-size:16px;font-family:微软雅黑;border:solid 1px #ccc;">
+			<div>
+				<div onclick="showChild(this);" style="width:250px;height:40px;background-color:white;border-bottom:1px solid #CCC;line-height:40px;cursor:pointer">
+					<img src="http://pub.idqqimg.com/smartqq/css/image/open_arrow.png" style="width:12px;height:12px;padding-left:15px;"/><span style="padding-left:5px;">庐阳区</span><span style="color:#ccc;font-size:12px;float:right;padding-right:20px">4/12</span>
+				</div>
+				<span style="display:none" state="close">
+					<div style="padding-left:50px;background-color:whitesmoke;height:56px;border-bottom:1px solid #ddd">
+						<p style="line-height:0px;display:inline-block">叶新舟</p>
+						<p style="font-size:8px;color:#aaa;line-height:15px;margin:0px"><span>[在线]</span><span style="padding-left:5px;">15856985122</span>
+						</p>
+					</div>
+					<div style="padding-left:50px;background-color:whitesmoke;height:56px;border-bottom:1px solid #ddd">
+						<p style="line-height:0px;display:inline-block">叶新舟</p>
+						<p style="font-size:8px;color:#aaa;line-height:15px;margin:0px"><span>[在线]</span><span style="padding-left:5px;">15856985122</span>
+						</p>
+					</div>
+				</span>
+			</div>
+			<div style="width:250px;height:40px;background-color:white;border-bottom:1px solid #CCC;line-height:40px">
+				<img src="http://pub.idqqimg.com/smartqq/css/image/open_arrow.png" style="width:12px;height:12px;padding-left:15px;"/><span style="padding-left:5px;">瑶海区</span><span style="color:#ccc;font-size:12px;float:right;padding-right:20px">4/12</span>
+			</div>
+			<div style="width:250px;height:40px;background-color:white;border-bottom:1px solid #CCC;line-height:40px">
+				<img src="http://pub.idqqimg.com/smartqq/css/image/open_arrow.png" style="width:12px;height:12px;padding-left:15px;"/><span style="padding-left:5px;">蜀山区</span><span style="color:#ccc;font-size:12px;float:right;padding-right:20px">4/12</span>
+			</div>
+			<div style="width:250px;height:40px;background-color:white;border-bottom:1px solid #CCC;line-height:40px">
+				<img src="http://pub.idqqimg.com/smartqq/css/image/open_arrow.png" style="width:12px;height:12px;padding-left:15px;"/><span style="padding-left:5px;">包河区</span><span style="color:#ccc;font-size:12px;float:right;padding-right:20px">4/12</span>
+			</div>
+			<div style="width:250px;height:40px;background-color:white;border-bottom:1px solid #CCC;line-height:40px">
+				<img src="http://pub.idqqimg.com/smartqq/css/image/open_arrow.png" style="width:12px;height:12px;padding-left:15px;"/><span style="padding-left:5px;">滨湖新区</span><span style="color:#ccc;font-size:12px;float:right;padding-right:20px">4/12</span>
+			</div>
+		</div>
+
+		<div style="background-color:#555;width:252px;height:45px;border-radius:0px 0px 8px 8px;">
+			
+		</div>
+	</div>
+</body>
+</html>
