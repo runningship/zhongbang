@@ -2,7 +2,10 @@ package com.youwei.zjb.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -11,25 +14,15 @@ import javax.persistence.Table;
 public class GenJin {
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer id;
-	
-	public Integer cid;
-	
-	/**
-	 * 区域id
-	 */
-	public Integer qid;
-	
-	/**
-	 * 店面id
-	 */
-	public Integer did;
 	
 	
 	/**
 	 * 用户id
 	 */
-	public Integer uid;
+	@Column(name="uid")
+	public Integer userId;
 	
 	/**
 	 * 房源id
@@ -43,11 +36,11 @@ public class GenJin {
 	
 	public Date addtime;
 	
-	public Integer sh;
+	public Integer sh =0;
 	
 	public Integer chuzu;
 	
-	public Integer flag;
+	public String area;
 	
-	public String ztai;
+	public String bianhao;
 }

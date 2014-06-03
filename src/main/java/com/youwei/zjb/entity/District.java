@@ -2,12 +2,13 @@ package com.youwei.zjb.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * 小区表
+ * 都盘字典(小区表)
  */
 @Entity
 @Table(name="house_annex")
@@ -21,12 +22,14 @@ public class District {
 	/**
 	 * 小区名称
 	 */
-	public String area;
+	@Column(name="area")
+	public String name;
 	
 	/**
 	 * 小区首字母
 	 */
-	public String pin;
+	@Column(name="pin")
+	public String pyShort;
 	
 	/**
 	 * 小区全拼
@@ -61,12 +64,4 @@ public class District {
 	
 	public Integer uid;
 	
-	public Integer did;
-	
-	/**
-	 * 区域编号
-	 */
-	public Integer qid;
-	
-	public Integer cid;
 }
