@@ -1,9 +1,6 @@
 package com.youwei.zjb.house;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -11,7 +8,9 @@ import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.Page;
 import org.bc.sdak.TransactionalServiceHelper;
 
+import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.entity.GenJin;
+import com.youwei.zjb.util.HqlHelper;
 
 
 public class GenJinService {
@@ -51,10 +50,10 @@ public class GenJinService {
 		StringBuilder hql = null;
 		List<Object> params = new ArrayList<Object>();
 		if(StringUtils.isNotEmpty(query.xpath)){
-			hql = new StringBuilder(" select gj from  GenJin gj  ,User u where gj.userId=u.id and u.id is not null and u.orgpath like ? order by gj.id");
+			hql = new StringBuilder(" select gj from  GenJin gj  ,User u where gj.userId=u.id and u.id is not null and u.orgpath like ? ");
 			params.add(query.xpath+"%");
 		}else{
-			hql =  new StringBuilder("from GenJin where 1=1 ");
+			hql =  new StringBuilder("from GenJin gj where 1=1 ");
 		}
 		
 		if(query.houseId!=null){
@@ -76,28 +75,10 @@ public class GenJinService {
 			hql.append(" and bianhao like ?");
 			params.add("%"+query.bianhao+"%");
 		}
+		hql.append(HqlHelper.buildDateSegment("addtime", query.addtimeStart, DateSeparator.After, params));
+		hql.append(HqlHelper.buildDateSegment("addtime", query.addtimeEnd, DateSeparator.Before, params));
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		if(StringUtils.isNotEmpty(query.addtimeStart)){
-			try {
-				Date dateStart = sdf.parse(query.addtimeStart);
-				hql.append(" and addtime>= ? ");
-				params.add(dateStart);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		if(StringUtils.isNotEmpty(query.addtimeEnd)){
-			try {
-				Date dateEnd = sdf.parse(query.addtimeEnd);
-				hql.append(" and addtime<= ? ");
-				params.add(dateEnd);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
-		
+		hql.append(" order by gj.id ");
 		Page<GenJin> page = new Page<GenJin>();
 		page.setCurrentPageNo(1);
 		page.setPageSize(40);

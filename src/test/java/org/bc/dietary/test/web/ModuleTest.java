@@ -7,6 +7,7 @@ import org.junit.Test;
 import com.youwei.zjb.SimpDaoTool;
 import com.youwei.zjb.StartUpListener;
 import com.youwei.zjb.entity.AuthCode;
+import com.youwei.zjb.entity.Client;
 import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.District;
 import com.youwei.zjb.entity.FanKui;
@@ -110,6 +111,14 @@ public class ModuleTest {
 		Page<AuthCode> page = new Page<AuthCode>();
 		page.setCurrentPageNo(1);
 		page = SimpDaoTool.getGlobalCommonDaoService().findPage(page, "from AuthCode");
+		System.out.println(page.getResult().size());
+	}
+	
+	@Test
+	public void testClient(){
+		Page<Client> page = new Page<Client>();
+		page.setCurrentPageNo(1);
+		page = SimpDaoTool.getGlobalCommonDaoService().findPage(page, "from Client");
 		System.out.println(page.getResult().size());
 	}
 }

@@ -1,6 +1,8 @@
 package com.youwei.zjb.house;
 
-public class GenJinQuery {
+import com.youwei.zjb.AbstractQuery;
+
+public class GenJinQuery extends AbstractQuery {
 
 	public Integer houseId;
 	

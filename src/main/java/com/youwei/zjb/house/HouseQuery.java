@@ -3,7 +3,9 @@ package com.youwei.zjb.house;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HouseQuery {
+import com.youwei.zjb.AbstractQuery;
+
+public class HouseQuery extends AbstractQuery{
 
 	public HouseAttribute xinzhi;
 	public String quyu;
