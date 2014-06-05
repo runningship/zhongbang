@@ -15,16 +15,26 @@
 <script type="text/javascript" src="../js/sysinfo.js"></script>
 <script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="../js/jquery.caozuobendi.js"></script>
 <script type="text/javascript">
     hex.sizeTo(800,350);
 
-alert(hex.formResized)
+//alert(hex.formResized)
 var getUserTreeStr,lm,lc,ld,lu;
     getPcMac(function(result){lm=result;});
     getCpuNumber(function(result){lc=result;});
     getDiskNumber(function(result){ld=result;});
     getUUID(function(result){lu=result;});
-//alert(1)
+
+    function artdialog(conts,icon,callback){
+        art.dialog({
+            title:false,
+            content: conts,
+            icon: icon,
+            time: 3,
+            close: callback
+        });
+    }
     function get_user(){
     var compStr=$('.company').find('option:selected').parent().attr('label'),
         compStrs=$('.company').val()
@@ -52,13 +62,15 @@ var getUserTreeStr,lm,lc,ld,lu;
             data:'',
             timeout:3000,
             dataType:'json',
-            beforeSend: function(XMLHttpRequest){//alert(0)
-                    },
-            success:function (data, textStatus) {
+            beforeSend: function(XMLHttpRequest){
+                $(".company").prepend('<option>加载中...</option>')
+                $(".user").prepend('<option>加载中...</option>')
+            },success:function (data, textStatus) {
                 if(data!=""){
                     //alert(1)
                     //var dataObj=eval("("+data+")");//转换为json对象 
                     //alert(data.result.length);//输出root的子对象数量 
+                    $(".company").empty();
                     getUserTreeStr=data
                     $.each(data.result, function(index, item) {
                         //alert(item.name);
@@ -78,6 +90,7 @@ var getUserTreeStr,lm,lc,ld,lu;
         })
     }
     function loginStart(){
+        function loginYes(){window.location='/index.html'}
     var did=$('.deptl').val(),
         uid=$('.user').val(),
         pwd=$('.password').val(),
@@ -90,6 +103,8 @@ var getUserTreeStr,lm,lc,ld,lu;
             uuid:lu,
             harddrive:ld
         },urls="/zb/user/login";
+        if(uid==''){artdialog('请选择用户','warning','');$('.user').focus();return false;}
+        if(pwd==''){artdialog('请输入密码','warning','');$('.password').focus();return false;}
         $.ajax({
             async: true,
             type:'POST',
@@ -98,29 +113,14 @@ var getUserTreeStr,lm,lc,ld,lu;
             url: urls,
             data: param,
             beforeSend: function(XMLHttpRequest){
-                //alert(0)
             },success: function(json){
                 //alert(json)
                 if(json!=""){
                     var datas=eval('(' + unescape(json) + ')');
                     if(datas.result==0){
-                        art.dialog({
-                            title:false,
-                            content: datas.msg,
-                            icon: 'succeed',
-                            time: 3,
-                            close: function () {
-                                window.location='/home.html'
-
-                            }
-                        });
+                        artdialog(datas.msg,'succeed',loginYes);
                     }else{
-                        art.dialog({
-                            title:false,
-                            content: datas.msg,
-                            icon: 'warning',
-                            time: 2
-                        });
+                        artdialog(datas.msg,'warning','');
                     }
                 }else{
                     //lTip('网络故障2，请稍后重试...',''); return false;
@@ -134,6 +134,9 @@ var getUserTreeStr,lm,lc,ld,lu;
         get_company();
         $('.company').on('change', function(event) {
             get_user();
+        });
+        $('.user').on('change', function(event) {
+            $('.password').focus();
         });
         $('.btn_submit').on('click', function(event) {
             loginStart();
@@ -152,26 +155,16 @@ var getUserTreeStr,lm,lc,ld,lu;
                 var datas=eval('(' + unescape(data) + ')');
                 
                 if(datas.result==0){
-                    art.dialog({
-                        title:false,
-                        content: datas.msg,
-                        icon: 'succeed',
-                        time: 4,
-                        close: function () {
-                            $('.lb_reg').toggle();
-                            $('.lb_login').toggle();
-                            $('.password').focus();
-                        }
-                    });
+                    function loginy() {
+                        $('.lb_reg').toggle();
+                        $('.lb_login').toggle();
+                        $('.password').focus();
+                    }
+                    artdialog(datas.msg,'succeed',loginy);
                     $('.authCode').val();
                     $('.beizhu').val();
                 }else{
-                    art.dialog({
-                        title:false,
-                        content: datas.msg,
-                        icon: 'warning',
-                        time: 2
-                    });
+                    artdialog(datas.msg,'warning','');
                 }
             });
         });
@@ -186,10 +179,15 @@ var getUserTreeStr,lm,lc,ld,lu;
             $('.deptr').focus();
         });
     })
+    $('form').on('submit', function(event) {
+        loginStart();
+        return false;
+    });
     $(document).keydown(function(event){  
 //alert(event.keyCode)
         if(event.keyCode==13){  
            loginStart();
+           return false;
         }  
     }); 
 </script>
@@ -198,8 +196,8 @@ var getUserTreeStr,lm,lc,ld,lu;
     <div class="winTool">
         <a href="" class="">X</a>
     </div>
-    <div class="header">
-        <a href="#"><img src="../style/images/logo.png" alt=""></a>
+    <div class="header title">
+        <a href="#"><img src="../style/images/logo.png" alt="" class=" title"></a>
     </div>
     <div class="mainer">
         <div class="login_box lb_login">

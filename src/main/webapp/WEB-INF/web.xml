@@ -23,5 +23,22 @@
 	    <url-pattern>/zb/*</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+        <servlet-name>fileup</servlet-name>
+        <servlet-class> com.youwei.zjb.files.FileUploadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>fileup</servlet-name>
+	    <url-pattern>/file/upload/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+        <servlet-name>filedown</servlet-name>
+        <servlet-class> com.youwei.zjb.files.FileDownloadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>filedown</servlet-name>
+	    <url-pattern>/file/download/*</url-pattern>
+	</servlet-mapping>
 	
 </web-app>
