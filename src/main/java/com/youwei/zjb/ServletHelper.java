@@ -24,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.GException;
 import org.bc.sdak.utils.LogUtil;
 import org.bc.web.ModelAndView;
+import org.bc.web.WebParam;
 
 public class ServletHelper {
 
@@ -111,28 +112,42 @@ public class ServletHelper {
 	private static void setValue(Object obj, Map<String, Object> data) {
 		
 		for(Field f : obj.getClass().getDeclaredFields()){
-			if(!data.containsKey(f.getName())){
+			String pname=f.getName();
+			WebParam wparam = f.getAnnotation(WebParam.class);
+			if(wparam!=null && StringUtils.isNotEmpty(wparam.name())){
+				pname = wparam.name();
+			}
+			if(!data.containsKey(pname)){
 				Column column = f.getAnnotation(Column.class);
 				if(column!=null && column.nullable()==false){
-					throw new GException(BusinessExceptionType.ParameterMissingError,f.getName() + " is required");
+					throw new GException(BusinessExceptionType.ParameterMissingError,pname + " is required");
 				}
 			}
 			f.setAccessible(true);
 			try {
 				if("float".equals(f.getType().getName()) || "java.lang.Float".equals(f.getType().getName())){
-					Object tmp = data.get(f.getName());
+					Object tmp = data.get(pname);
 					try{
 						if(tmp!=null){
 							f.set(obj, Float.valueOf(String.valueOf(tmp)));
 						}
 					}catch(Exception ex){
-						throw new GException(BusinessExceptionType.ParameterMissingError,"无效的数据["+f.getName()+"="+tmp+"],必须是数字类型");
+						throw new GException(BusinessExceptionType.ParameterMissingError,"无效的数据["+pname+"="+tmp+"],必须是数字类型");
+					}
+				}else if("int".equals(f.getType().getName()) || "java.lang.Integer".equals(f.getType().getName())){
+					Object tmp = data.get(pname);
+					try{
+						if(tmp!=null){
+							f.set(obj, Integer.valueOf(String.valueOf(tmp)));
+						}
+					}catch(Exception ex){
+						throw new GException(BusinessExceptionType.ParameterMissingError,"无效的数据["+pname+"="+tmp+"],必须是数字类型");
 					}
 				}else{
-					f.set(obj, data.get(f.getName()));
+					f.set(obj, data.get(pname));
 				}
 			} catch (IllegalArgumentException | IllegalAccessException e) {
-				LogUtil.warning("set value for "+obj.getClass().getName()+"."+f.getName()+" failed.("+e.getMessage()+")");
+				LogUtil.warning("set value for "+obj.getClass().getName()+"."+pname+" failed.("+e.getMessage()+")");
 			}
 		}
 	}

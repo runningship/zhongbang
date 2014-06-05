@@ -3,11 +3,15 @@ package org.bc.web;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.json.JSONObject;
+
 public class ModelAndView {
 
 	public String jsp;
 	
 	public String redirect;
 	
-	public Map<String,Object> data = new HashMap<String,Object>();
+	public String contentType;
+	
+	public JSONObject data = new JSONObject();
 }

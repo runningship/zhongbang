@@ -42,7 +42,7 @@ public class PC {
 	public String uuid;
 	
 	@Column(name="llock")
-	public String lock;
+	public Integer lock;
 	
 	@Column(name="regnumber")
 	public String authCode;

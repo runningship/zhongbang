@@ -24,7 +24,7 @@ public class StartUpListener implements ServletContextListener{
 	}
 
 	private void initModule() {
-//		ModuleManager.add("org.bc.dietary");
+		ModuleManager.add("com.youwei.zjb");
 	}
 
 	public static void initDataSource(){

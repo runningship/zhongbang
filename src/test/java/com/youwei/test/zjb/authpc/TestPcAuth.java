@@ -14,6 +14,7 @@ import com.youwei.zjb.SimpDaoTool;
 import com.youwei.zjb.StartUpListener;
 import com.youwei.zjb.authpc.PcAuthService;
 import com.youwei.zjb.entity.PC;
+import com.youwei.zjb.util.SecurityHelper;
 
 public class TestPcAuth {
 	
@@ -52,15 +53,14 @@ public class TestPcAuth {
 	
 	@Test
 	public void testValidatePC(){
-		PcAuthService pas = new PcAuthService();
 		PC pc = new PC();
 		pc.mac="";
-		Assert.assertFalse(pas.validate(pc));
+		Assert.assertFalse(SecurityHelper.validate(pc));
 		pc.deptId=86;
-		Assert.assertFalse(pas.validate(pc));
+		Assert.assertFalse(SecurityHelper.validate(pc));
 		
 		pc.mac="e0cb4e9f9aad";
-		Assert.assertTrue(pas.validate(pc));
+		Assert.assertTrue(SecurityHelper.validate(pc));
 	}
 	
 	@Test

@@ -1,6 +1,7 @@
 package com.youwei.zjb.client;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -18,15 +19,31 @@ public class ClientService {
 	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
 	
 	public void add(Client client){
-		
+		client.addtime = new Date();
+		dao.saveOrUpdate(client);
 	}
 	
 	public void update(Client client){
-		
+		dao.saveOrUpdate(client);
 	}
 	
 	public void delete(Integer id){
-		
+		Client client = dao.get(Client.class, id);
+		if(client!=null){
+			dao.delete(client);
+		}
+	}
+	
+	public void assign(Integer clientId,Integer userId){
+		Client client = dao.get(Client.class, clientId);
+		if(client==null){
+			return;
+		}
+		if(userId==null){
+			return;
+		}
+		client.salesman = userId;
+		dao.saveOrUpdate(client);
 	}
 	
 	public List<Client> list(ClientQuery query){

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>众邦房源管理系统</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+<link rel="stylesheet" href="../style/css.css">
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="../style/login.css">
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script src="../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/sysinfo.js"></script>
+<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript">
+    hex.sizeTo(800,350);
+
+alert(hex.formResized)
+var getUserTreeStr,lm,lc,ld,lu;
+    getPcMac(function(result){lm=result;});
+    getCpuNumber(function(result){lc=result;});
+    getDiskNumber(function(result){ld=result;});
+    getUUID(function(result){lu=result;});
+//alert(1)
+    function get_user(){
+    var compStr=$('.company').find('option:selected').parent().attr('label'),
+        compStrs=$('.company').val()
+        //alert(compStr)
+        $.each(getUserTreeStr.result, function(index, item) {
+            //alert(item.name);
+            if(item.name==compStr){
+                //alert(item.name)
+                var optgroups='';
+                $.each(item.children, function(index, items) {
+                    if(items.deptId==compStrs){
+                        //alert(items.name)
+                        $(".user").empty();
+                        $.each(items.children, function(index, itemu) {
+                            $(".user").prepend('<option value="'+itemu.userId+'" >'+itemu.name+'</option>');
+                        })
+                    }
+                })
+            }
+        });  
+    }
+    function get_company(){
+        $.ajax({
+            url:'/zb/user/getUserTree',
+            data:'',
+            timeout:3000,
+            dataType:'json',
+            beforeSend: function(XMLHttpRequest){//alert(0)
+                    },
+            success:function (data, textStatus) {
+                if(data!=""){
+                    //alert(1)
+                    //var dataObj=eval("("+data+")");//转换为json对象 
+                    //alert(data.result.length);//输出root的子对象数量 
+                    getUserTreeStr=data
+                    $.each(data.result, function(index, item) {
+                        //alert(item.name);
+                        var optgroups='';
+                        $.each(item.children, function(indexs, items) {
+                            //alert(items.name);
+                            optgroups=optgroups + '<option value="'+items.deptId+'">'+items.name+'</option>';
+                        }); 
+                        //alert(optgroups)
+                        var optgroup=$(".company").prepend('<optgroup label="'+item.name+'">'+optgroups+'</optgroup>');
+                    });  
+/**/                get_user();
+                }
+            },
+            complete: function(XMLHttpRequest, textStatus){},
+            error:function (XMLHttpRequest, textStatus, errorThrown) {}
+        })
+    }
+    function loginStart(){
+    var did=$('.deptl').val(),
+        uid=$('.user').val(),
+        pwd=$('.password').val(),
+        param = {
+            deptId:did,
+            userId:uid,
+            pwd:pwd,
+            cpu:lc,
+            mac:lm,
+            uuid:lu,
+            harddrive:ld
+        },urls="/zb/user/login";
+        $.ajax({
+            async: true,
+            type:'POST',
+            dataType:'html',
+            timeout: 3000,
+            url: urls,
+            data: param,
+            beforeSend: function(XMLHttpRequest){
+                //alert(0)
+            },success: function(json){
+                //alert(json)
+                if(json!=""){
+                    var datas=eval('(' + unescape(json) + ')');
+                    if(datas.result==0){
+                        art.dialog({
+                            title:false,
+                            content: datas.msg,
+                            icon: 'succeed',
+                            time: 3,
+                            close: function () {
+                                window.location='/home.html'
+
+                            }
+                        });
+                    }else{
+                        art.dialog({
+                            title:false,
+                            content: datas.msg,
+                            icon: 'warning',
+                            time: 2
+                        });
+                    }
+                }else{
+                    //lTip('网络故障2，请稍后重试...',''); return false;
+                }
+            },complete: function(XMLHttpRequest, textStatus){
+            },error: function(XMLHttpRequest, textStatus, errorThrown){
+            }
+        });
+    }
+    $(function(){
+        get_company();
+        $('.company').on('change', function(event) {
+            get_user();
+        });
+        $('.btn_submit').on('click', function(event) {
+            loginStart();
+        });
+        $('.btn_reg').on('click', function(event) {
+            $.post("/zb/pc/add",{
+                authCode:$('.authCode').val(),
+                deptId:$('.deptr').val(),
+                beizhu:$('.beizhu').val(),
+                cpu:lc,
+                mac:lm,
+                uuid:lu,
+                harddrive:ld
+            },function(data,status){
+                //alert("Data: " + data + "\nStatus: " + status);
+                var datas=eval('(' + unescape(data) + ')');
+                
+                if(datas.result==0){
+                    art.dialog({
+                        title:false,
+                        content: datas.msg,
+                        icon: 'succeed',
+                        time: 4,
+                        close: function () {
+                            $('.lb_reg').toggle();
+                            $('.lb_login').toggle();
+                            $('.password').focus();
+                        }
+                    });
+                    $('.authCode').val();
+                    $('.beizhu').val();
+                }else{
+                    art.dialog({
+                        title:false,
+                        content: datas.msg,
+                        icon: 'warning',
+                        time: 2
+                    });
+                }
+            });
+        });
+        $('.btn_go_login').on('click', function(event) {
+            $('.lb_reg').toggle();
+            $('.lb_login').toggle();
+            $('.password').focus();
+        });
+        $('.btn_go_reg').on('click', function(event) {
+            $('.lb_reg').toggle();
+            $('.lb_login').toggle();
+            $('.deptr').focus();
+        });
+    })
+    $(document).keydown(function(event){  
+//alert(event.keyCode)
+        if(event.keyCode==13){  
+           loginStart();
+        }  
+    }); 
+</script>
+</head>
+<body class="login">
+    <div class="winTool">
+        <a href="" class="">X</a>
+    </div>
+    <div class="header">
+        <a href="#"><img src="../style/images/logo.png" alt=""></a>
+    </div>
+    <div class="mainer">
+        <div class="login_box lb_login">
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <label for="company" class="col-sm-3 control-label">账号</label>
+                <div class="col-sm-9">
+                    <div class="row">
+                        <div class="col-xs-7">
+                            <select name="company" class="form-control company deptl"></select>
+                        </div>
+                        <div class="col-xs-5">
+                            <select name="user" class="form-control user"></select>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="password" class="col-sm-3 control-label">密码</label>
+                <div class="col-sm-9">
+                  <input type="password" class="form-control password" placeholder="Password" value="">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-9">
+                    <a href="#" class="btn btn-primary btn_submit">登　录</a>
+                    <a href="#" class="btn btn-default btn_go_reg">授权</a>
+                </div>
+              </div>
+            </form>
+        </div>
+        <div class="login_box lb_reg">
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <label for="company" class="col-sm-3 control-label">分公司</label>
+                <div class="col-sm-9">
+                    <select name="company" class="form-control company deptr"></select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="password" class="col-sm-3 control-label">授权码</label>
+                <div class="col-sm-9">
+                  <input type="password" name="authCode" class="form-control authCode" placeholder="Password" value="">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="password" class="col-sm-3 control-label">备　注</label>
+                <div class="col-sm-9">
+                  <input type="text" name="beizhu" class="form-control beizhu" placeholder="备注" value="">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-9">
+                    <a href="#" class="btn btn-primary btn_reg">授　权</a>
+                    <a href="#" class="btn btn-default btn_go_login">返回</a>
+                </div>
+              </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

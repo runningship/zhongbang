@@ -1,0 +1,37 @@
+[{
+    "name":"瑶海营销中心",
+    "children":[
+        {
+            "name":"临泉路分公司",
+            "children":[
+                {
+                    "name":"赵艳萍"
+                },{
+                    "name":"许龙"
+                }
+            ]
+        },
+        {
+            "name":"长江东路分公司",
+            "children":[]
+        },
+        {
+            "name":"通达路分公司",
+            "children":[]
+        }
+    ]
+},
+{
+    "name":"包河营销中心",
+    "children":[]
+},{
+    "name":"总部",
+    "children":[]
+},{
+    "name":"庐阳营销中心",
+    "children":[]
+},{
+    "name":"庐阳营销中心",
+    "children":[]
+}
+]

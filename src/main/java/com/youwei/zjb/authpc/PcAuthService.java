@@ -1,44 +1,71 @@
 package com.youwei.zjb.authpc;
 
-import java.util.List;
+import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
-import org.bc.sdak.GException;
 import org.bc.sdak.Page;
 import org.bc.sdak.TransactionalServiceHelper;
+import org.bc.web.ModelAndView;
+import org.bc.web.Module;
+import org.bc.web.WebMethod;
 
-import com.youwei.zjb.BusinessExceptionType;
 import com.youwei.zjb.SimpDaoTool;
 import com.youwei.zjb.entity.AuthCode;
 import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.PC;
+import com.youwei.zjb.util.JSONHelper;
 
+@Module(name="/pc/")
 public class PcAuthService {
 
-	CommonDaoService service = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
+	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
 	
-	public void add(PC pc){
+	@WebMethod
+	public ModelAndView add(PC pc){
+		ModelAndView mv = new ModelAndView();
 		if(pc==null){
-			return;
+			return mv;
+		}
+		
+		if(pc.deptId==null){
+			mv.data.put("result", "1");
+			mv.data.put("msg", "授权失败，没有店id");
+			return mv;
 		}
 		
 		if(StringUtils.isEmpty(pc.mac) && StringUtils.isEmpty(pc.cpu) && StringUtils.isEmpty(pc.harddrive) && StringUtils.isEmpty(pc.uuid)){
-			throw new GException(BusinessExceptionType.MachineCodeEmpty,"机器码为空，不能授权，可能是由于您安装的是精简版的操作系统.");
+			mv.data.put("result", "2");
+			mv.data.put("msg", "机器码为空，不能授权，可能是由于您安装的是精简版的操作系统.");
+			return mv;
 		}
 		
-		Department comp = service.getUniqueByKeyValue(Department.class, "fid", 0);
-		AuthCode code = service.getUniqueByKeyValue(AuthCode.class, "fidn", comp.id);
+		Department comp = dao.getUniqueByKeyValue(Department.class, "fid", 0);
+		AuthCode code = dao.getUniqueByKeyValue(AuthCode.class, "fidn", comp.id);
 		if(code==null || code.authCode==null || !code.authCode.equals(pc.authCode)){
-			throw new GException(BusinessExceptionType.AuthCodeError,"授权码不正确");
+			mv.data.put("result", "3");
+			mv.data.put("msg", "授权码不正确,请联系系统管理员");
+			return mv;
 		}
 		
-		SimpDaoTool.getGlobalCommonDaoService().saveOrUpdate(pc);
+		PC po = dao.getUniqueByParams(PC.class, new String[]{"deptId","mac","cpu","harddrive","uuid"},	new Object[]{pc.deptId,pc.mac,pc.cpu,pc.harddrive,pc.uuid});
+		if(po==null){
+			pc.addtime = new Date();
+			pc.lock=0;
+			dao.saveOrUpdate(pc);
+		}
+		
+		mv.data.put("result", "0");
+		mv.data.put("msg", "授权成功，等待审核");
+		return mv;
 	}
 	
-	public Page<PC> unAuthList(Page<PC> page){
-		page = SimpDaoTool.getGlobalCommonDaoService().findPage(page, "from PC where lock='0' ");
-		return page;
+	@WebMethod
+	public ModelAndView unAuthList(Page<PC> page){
+		ModelAndView mv = new ModelAndView();
+		page = SimpDaoTool.getGlobalCommonDaoService().findPage(page, "from PC where lock=0 or lock is null");
+		mv.data.put("result",JSONHelper.toJSON(page));
+		return mv;
 	}
 	
 	public Page<PC> authorizedList(Page<PC> page,int deptId){
@@ -46,87 +73,24 @@ public class PcAuthService {
 		return page;
 	}
 	
-	public void unlock(int pcId){
-		PC pc = service.get(PC.class, pcId);
+	@WebMethod
+	public ModelAndView unlock(Integer pcId){
+		ModelAndView mv = new ModelAndView();
+		PC pc = dao.get(PC.class, pcId);
 		if(pc!=null){
-			pc.lock="1";
-			service.saveOrUpdate(pc);
+			pc.lock=1;
+			dao.saveOrUpdate(pc);
 		}
+		mv.data.put("result", 0);
+		return mv;
 	}
 	
 	public void lock(int pcId){
-		PC pc = service.get(PC.class, pcId);
+		PC pc = dao.get(PC.class, pcId);
 		if(pc!=null){
-			pc.lock="0";
-			service.saveOrUpdate(pc);
+			pc.lock=0;
+			dao.saveOrUpdate(pc);
 		}
 	}
-	
-	public boolean validate(PC pc){
-		List<PC> list = SimpDaoTool.getGlobalCommonDaoService().listByParams(PC.class, new String[]{"deptId"}, new Object[]{pc.deptId});
-		if(list==null){
-			return false;
-		}
-		if(hasMac(list,pc)){
-			return true;
-		}
-		if(hasCPU(list,pc)){
-			return true;
-		}
-		if(hasHarddrive(list,pc)){
-			return true;
-		}
-		if(hasUUID(list,pc)){
-			return true;
-		}
-		return false;
-	}
-	
-	private boolean hasMac(List<PC> list, PC target){
-		if(StringUtils.isEmpty(target.mac)){
-			return false;
-		}
-		for(PC pc : list){
-			if(pc.mac!=null && pc.mac.contains(target.mac)){
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private boolean hasCPU(List<PC> list, PC target){
-		if(StringUtils.isEmpty(target.cpu)){
-			return false;
-		}
-		for(PC pc : list){
-			if(pc.cpu!=null && pc.mac.contains(target.cpu)){
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private boolean hasHarddrive(List<PC> list, PC target){
-		if(StringUtils.isEmpty(target.harddrive)){
-			return false;
-		}
-		for(PC pc : list){
-			if(pc.harddrive!=null && pc.mac.contains(target.harddrive)){
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private boolean hasUUID(List<PC> list, PC target){
-		if(StringUtils.isEmpty(target.uuid)){
-			return false;
-		}
-		for(PC pc : list){
-			if(pc.uuid!=null && pc.mac.contains(target.uuid)){
-				return true;
-			}
-		}
-		return false;
-	}
+
 }

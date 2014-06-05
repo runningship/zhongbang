@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.GException;
 import org.bc.sdak.utils.LogUtil;
@@ -34,6 +36,7 @@ public class GrandServlet extends HttpServlet{
 	protected void service(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		resp.setCharacterEncoding("utf8");
+		resp.setContentType("text/html");
 		String path = req.getPathInfo();
 		User u = (User)req.getSession().getAttribute("user");
 		ThreadSession.set(u);
@@ -67,7 +70,10 @@ public class GrandServlet extends HttpServlet{
 			if(mv.redirect!=null){
 				resp.sendRedirect(mv.redirect);
 			}else if(mv.jsp==null){
-				resp.getWriter().println(mv.data.toString());
+				if(StringUtils.isNotEmpty(mv.contentType)){
+					resp.setContentType(mv.contentType);
+				}
+				resp.getWriter().write(mv.data.toString());
 			}else{
 				ServletHelper.fillMV(req,mv);
 				RequestDispatcher rd = req.getRequestDispatcher(mv.jsp);

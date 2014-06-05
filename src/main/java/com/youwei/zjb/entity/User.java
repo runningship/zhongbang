@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.bc.web.WebParam;
+
 import com.youwei.zjb.SimpDaoTool;
 
 /**
@@ -17,6 +19,7 @@ import com.youwei.zjb.SimpDaoTool;
 public class User {
 
 	@Id
+	@WebParam(name="userId")
 	public Integer id;
 	
 	@Column(name="did")

@@ -1,0 +1,13 @@
+html,body{ height: 100%; width: 100%; }
+body{font:16px "microsoft yahei",Arial,Verdana,Tahoma,"宋体";}
+
+.login { position: relative; background: url('images/login_bg.jpg') bottom right;}
+.login .winTool{ position: absolute; top: 5px; right: 5px;}
+.login .header { position: absolute; top: 0; left: 0; right: 0; height: 100px;}
+.login .mainer { position: absolute; right: 50px; bottom: 00px; }
+.login .login_box { padding: 0px; width: 400px;}
+.login .login_box th { padding-right: 20px;}
+.login .login_box .btn_box { padding-top:10px;  }
+.login .login_box .btn_submit{ display:inline-block; background: }
+.login .login_box div.form-group {margin-bottom: 8px;}
+.login .login_box.lb_reg{ display: none;}
