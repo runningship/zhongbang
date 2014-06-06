@@ -20,7 +20,7 @@
     hex.sizeTo(800,350);
 
 //alert(hex.formResized)
-var getUserTreeStr,lm,lc,ld,lu;
+var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
     getPcMac(function(result){lm=result;});
     getCpuNumber(function(result){lc=result;});
     getDiskNumber(function(result){ld=result;});
@@ -53,6 +53,7 @@ var getUserTreeStr,lm,lc,ld,lu;
                         })
                     }
                 })
+                if(uidc){$(".user ").val(uidc);$('.password').focus();}
             }
         });  
     }
@@ -81,7 +82,8 @@ var getUserTreeStr,lm,lc,ld,lu;
                         }); 
                         //alert(optgroups)
                         var optgroup=$(".company").prepend('<optgroup label="'+item.name+'">'+optgroups+'</optgroup>');
-                    });  
+                    });
+                    if(didc){$(".company").val(didc);}
 /**/                get_user();
                 }
             },
@@ -105,6 +107,8 @@ var getUserTreeStr,lm,lc,ld,lu;
         },urls="/zb/user/login";
         if(uid==''){artdialog('请选择用户','warning','');$('.user').focus();return false;}
         if(pwd==''){artdialog('请输入密码','warning','');$('.password').focus();return false;}
+                        SetCookie('zb_l_comp',did);
+                        SetCookie('zb_l_user',uid);
         $.ajax({
             async: true,
             type:'POST',
@@ -131,7 +135,10 @@ var getUserTreeStr,lm,lc,ld,lu;
         });
     }
     $(function(){
+        didc=GetCookie('zb_l_comp');
+        uidc=GetCookie('zb_l_user');
         get_company();
+        //$('.btn_go_reg').text(didc+'|'+uidc)
         $('.company').on('change', function(event) {
             get_user();
         });

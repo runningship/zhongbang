@@ -2,11 +2,12 @@ package com.youwei.zjb;
 
 import org.bc.sdak.ExceptionType;
 
-public enum BusinessExceptionType implements ExceptionType{
+public enum PlatformExceptionType implements ExceptionType{
 	MethodReturnTypeError,
 	ModuleInvokeError,
 	MethodParameterError,
 	ParameterMissingError,
 	AuthCodeError,
-	MachineCodeEmpty
+	MachineCodeEmpty,
+	BusinessException
 }

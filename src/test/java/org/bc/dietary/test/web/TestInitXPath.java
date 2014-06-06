@@ -25,7 +25,7 @@ public class TestInitXPath {
 	
 	@Test
 	public void testInitUserPath(){
-		List<User> users = SimpDaoTool.getGlobalCommonDaoService().listByParams(User.class, null, null);
+		List<User> users = SimpDaoTool.getGlobalCommonDaoService().listByParams(User.class, new String[]{}, null);
 		for(User user: users){
 			Department dept = SimpDaoTool.getGlobalCommonDaoService().get(Department.class, user.deptId);
 			if(dept!=null){

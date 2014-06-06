@@ -1,4 +1,4 @@
-html,body{ height: 100%; width: 100%; }
+html,body{ height: 100%; width: 100%; pointer-events:auto;}
 body{font:16px "microsoft yahei",Arial,Verdana,Tahoma,"宋体";}
 
 .login { position: relative; background: url('images/login_bg.jpg') bottom right;}

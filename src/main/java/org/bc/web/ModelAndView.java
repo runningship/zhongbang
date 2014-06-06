@@ -14,4 +14,8 @@ public class ModelAndView {
 	public String contentType;
 	
 	public JSONObject data = new JSONObject();
+	
+	public ModelAndView(){
+		
+	}
 }

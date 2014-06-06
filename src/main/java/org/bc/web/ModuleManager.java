@@ -30,7 +30,11 @@ public class ModuleManager {
 			WebMethod wm = m.getAnnotation(WebMethod.class);
 			if(wm!=null){
 				Handler handler = new Handler(clazz,m.getName());
-				handlers.put(moduleUrl +"/"+ m.getName(), handler);
+				if(StringUtils.isNotEmpty(wm.name())){
+					handlers.put(moduleUrl +"/"+ wm.name(), handler);
+				}else{
+					handlers.put(moduleUrl +"/"+ m.getName(), handler);
+				}
 			}
 		}
 	}

@@ -1,6 +1,8 @@
 package com.youwei.zjb.util;
 
+import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -26,4 +28,20 @@ public class JSONHelper {
 		jobj.put("data", arr);
 		return jobj;
 	}
+	
+	public static JSONArray toJSONArray(List<?> list){
+		if(list==null){
+			return new JSONArray();
+		}
+		JSONArray arr = new JSONArray();
+		JsonConfig cfg = new JsonConfig();
+		cfg.setIgnorePublicFields(false);
+		cfg.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
+		cfg.registerJsonValueProcessor(Timestamp.class, new JsonDateValueProcessor());
+		for(Object obj : list){
+			arr.add(JSONObject.fromObject(obj,cfg));
+		}
+		return arr;
+	}
+	
 }

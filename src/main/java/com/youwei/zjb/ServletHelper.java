@@ -63,27 +63,27 @@ public class ServletHelper {
 //				Class<?> pt = Class.forName(pTypes[i].getName());
         		if("int".equals(typeName) || "java.lang.Integer".equals(typeName)){
         			if(obj==null){
-        				throw new GException(BusinessExceptionType.ParameterMissingError,"parameter "+paramName+" is missing");
+        				throw new GException(PlatformExceptionType.ParameterMissingError,"parameter "+paramName+" is missing");
         			}
         			obj = Integer.valueOf(String.valueOf(obj));
         		}else if("long".equals(typeName) || "java.lang.Long".equals(typeName)){
         			if(obj==null){
-        				throw new GException(BusinessExceptionType.ParameterMissingError,"parameter "+paramName+" is missing");
+        				throw new GException(PlatformExceptionType.ParameterMissingError,"parameter "+paramName+" is missing");
         			}
         			obj = Long.valueOf(String.valueOf(obj));
         		}else if("float".equals(typeName) || "java.lang.Float".equals(typeName)){
         			if(obj==null){
-        				throw new GException(BusinessExceptionType.ParameterMissingError,"parameter "+paramName+" is missing");
+        				throw new GException(PlatformExceptionType.ParameterMissingError,"parameter "+paramName+" is missing");
         			}
         			obj = Float.valueOf(String.valueOf(obj));
         		}else if("double".equals(typeName) || "java.lang.Double".equals(typeName)){
         			if(obj==null){
-        				throw new GException(BusinessExceptionType.ParameterMissingError,"parameter "+paramName+" is missing");
+        				throw new GException(PlatformExceptionType.ParameterMissingError,"parameter "+paramName+" is missing");
         			}
         			obj = Double.valueOf(String.valueOf(obj));
         		}else if("char".equals(typeName) || "java.lang.Character".equals(typeName)){
         			if(obj==null){
-        				throw new GException(BusinessExceptionType.ParameterMissingError,"parameter "+paramName+" is missing");
+        				throw new GException(PlatformExceptionType.ParameterMissingError,"parameter "+paramName+" is missing");
         			}
         			obj = String.valueOf(obj).charAt(0);
         		}else if("java.lang.String".equals(typeName)){
@@ -98,7 +98,7 @@ public class ServletHelper {
 				}
         		values[i] = obj;
 			}catch(ClassNotFoundException ex){
-				throw new GException(BusinessExceptionType.MethodParameterError,"parameter ("+pTypes[i].getName()
+				throw new GException(PlatformExceptionType.MethodParameterError,"parameter ("+pTypes[i].getName()
 						+ " " + paramName+") of method ("+cm.getDeclaringClass().getName()+"."+cm.getName()
 						+") is not support,method type should be primary type or vo",ex);
 			}catch (InstantiationException | IllegalAccessException ex) {
@@ -120,7 +120,7 @@ public class ServletHelper {
 			if(!data.containsKey(pname)){
 				Column column = f.getAnnotation(Column.class);
 				if(column!=null && column.nullable()==false){
-					throw new GException(BusinessExceptionType.ParameterMissingError,pname + " is required");
+					throw new GException(PlatformExceptionType.ParameterMissingError,pname + " is required");
 				}
 			}
 			f.setAccessible(true);
@@ -132,7 +132,7 @@ public class ServletHelper {
 							f.set(obj, Float.valueOf(String.valueOf(tmp)));
 						}
 					}catch(Exception ex){
-						throw new GException(BusinessExceptionType.ParameterMissingError,"无效的数据["+pname+"="+tmp+"],必须是数字类型");
+						throw new GException(PlatformExceptionType.ParameterMissingError,"无效的数据["+pname+"="+tmp+"],必须是数字类型");
 					}
 				}else if("int".equals(f.getType().getName()) || "java.lang.Integer".equals(f.getType().getName())){
 					Object tmp = data.get(pname);
@@ -141,7 +141,7 @@ public class ServletHelper {
 							f.set(obj, Integer.valueOf(String.valueOf(tmp)));
 						}
 					}catch(Exception ex){
-						throw new GException(BusinessExceptionType.ParameterMissingError,"无效的数据["+pname+"="+tmp+"],必须是数字类型");
+						throw new GException(PlatformExceptionType.ParameterMissingError,"无效的数据["+pname+"="+tmp+"],必须是数字类型");
 					}
 				}else{
 					f.set(obj, data.get(pname));
@@ -163,9 +163,9 @@ public class ServletHelper {
 					return (ModelAndView) result;
 				}
 			}
-			throw new GException(BusinessExceptionType.MethodReturnTypeError,manager.getClass().getName()+"."+method+" not found");
+			throw new GException(PlatformExceptionType.MethodReturnTypeError,manager.getClass().getName()+"."+method+" not found");
 		} catch (SecurityException | IllegalAccessException | IllegalArgumentException ex) {
-			throw new GException(BusinessExceptionType.ModuleInvokeError, "",ex);
+			throw new GException(PlatformExceptionType.ModuleInvokeError, "",ex);
 		}
 	}
 

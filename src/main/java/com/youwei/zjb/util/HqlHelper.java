@@ -1,9 +1,13 @@
 package com.youwei.zjb.util;
 
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.Basic;
+import javax.persistence.FetchType;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -28,5 +32,19 @@ public class HqlHelper {
 			//TODO
 			return "";
 		}
+	}
+	
+	public static String getLazyHql(Class<?> entity){
+		StringBuilder hql = new StringBuilder("select ");
+		for(Field f: entity.getDeclaredFields()){
+			Basic anno = f.getAnnotation(Basic.class);
+			if(anno!=null && anno.fetch()==FetchType.LAZY){
+				continue;
+			}
+			hql.append(f.getName()+" as "+ f.getName()).append(",");
+		}
+		String result = StringUtils.removeEnd(hql.toString(), ",");
+		result = result+" from " +entity.getName();
+		return result;
 	}
 }

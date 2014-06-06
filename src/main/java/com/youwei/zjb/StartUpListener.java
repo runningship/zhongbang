@@ -33,8 +33,10 @@ public class StartUpListener implements ServletContextListener{
 //		settings.put(AvailableSettings.USER, "root");
 //		settings.put(AvailableSettings.PASS, "");
 		settings.put(AvailableSettings.SHOW_SQL, "true");
-		settings.put(AvailableSettings.DRIVER, "com.microsoft.sqlserver.jdbc.SQLServerDriver");
-		settings.put(AvailableSettings.DIALECT, "org.hibernate.dialect.SQLServer2005Dialect");
+//		settings.put(AvailableSettings.DRIVER, "com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//		settings.put(AvailableSettings.DIALECT, "org.hibernate.dialect.SQLServer2005Dialect");
+		settings.put(AvailableSettings.DRIVER, "com.mysql.jdbc.Driver");
+		settings.put(AvailableSettings.DIALECT, "org.hibernate.dialect.MySQL5Dialect");
 		settings.put(AvailableSettings.CURRENT_SESSION_CONTEXT_CLASS, "thread");
 //		settings.put(AvailableSettings.HBM2DDL_AUTO, "update");
 		settings.put(AvailableSettings.POOL_SIZE, "1");
@@ -43,7 +45,8 @@ public class StartUpListener implements ServletContextListener{
 		settings.put(AvailableSettings.PROXOOL_EXISTING_POOL, "false");
 		settings.put(AvailableSettings.PROXOOL_POOL_ALIAS, "mySqlProxool");
 		
-		settings.put("annotated.packages", HouseRent.class.getPackage().getName());
+//		settings.put("annotated.packages", HouseRent.class.getPackage().getName());
+		settings.put("annotated.packages", "com.youwei.zjb");
 		SessionFactoryBuilder.applySettings(settings);
 	}
 }

@@ -9,7 +9,7 @@ import org.bc.sdak.Page;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.youwei.zjb.BusinessExceptionType;
+import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.SimpDaoTool;
 import com.youwei.zjb.StartUpListener;
 import com.youwei.zjb.authpc.PcAuthService;
@@ -33,7 +33,7 @@ public class TestPcAuth {
 		try{
 			pas.add(pc);
 		}catch(GException ex){
-			Assert.assertEquals(BusinessExceptionType.MachineCodeEmpty, ex.getType());
+			Assert.assertEquals(PlatformExceptionType.MachineCodeEmpty, ex.getType());
 		}
 		
 		pc.mac="1111111";
@@ -41,7 +41,7 @@ public class TestPcAuth {
 		try{
 			pas.add(pc);
 		}catch(GException ex){
-			Assert.assertEquals(BusinessExceptionType.AuthCodeError, ex.getType());
+			Assert.assertEquals(PlatformExceptionType.AuthCodeError, ex.getType());
 		}
 		
 		pc.authCode = "0551zbfc8880";

@@ -91,3 +91,8 @@ function readConfig(){
     var data=rf.readFileSync("config.ini","utf-8");
     return data;
 }
+
+function writeConfig(data){
+    var rf = require("fs");
+    fs.writeFileSync("config.ini", data, 'utf8')
+}
