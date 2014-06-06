@@ -1,0 +1,8 @@
+html,body,.body{ height: 100%; width: 100%;}
+body{font:16px "microsoft yahei",Arial,Verdana,Tahoma,"ËÎÌו";}
+
+.sider{ float: left; width: 120px; background: #09F;}
+
+.mainer{ margin-left: 130px; height: 100%; overflow: hidden;}
+
+
