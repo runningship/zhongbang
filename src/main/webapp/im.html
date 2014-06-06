@@ -20,7 +20,24 @@ function showChild(parent){
 	}
 	
 	//alert(parent);
-}	
+}
+window.onload=function(){
+	var w = new WebSocket("ws://localhost:9099");
+	w.onopen = function() { 
+		console.log("open"); 
+		w.send("thank you for accepting this websocket request"); 
+	};
+	w.onmessage = function(e) { 
+		console.log(e.data); 
+	};
+	w.onclose = function(e) {
+		console.log("closed"); 
+	};
+	w.onerror = function(e){
+		console.log(e); 
+	}
+	
+};
 </script>
 </head>
 <body>

@@ -1,5 +1,6 @@
 package com.youwei.zjb;
 
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.bc.web.ModuleManager;
 import org.hibernate.cfg.AvailableSettings;
 
 import com.youwei.zjb.entity.HouseRent;
+import com.youwei.zjb.im.IMServer;
 
 public class StartUpListener implements ServletContextListener{
 
@@ -21,6 +23,11 @@ public class StartUpListener implements ServletContextListener{
 	public void contextInitialized(ServletContextEvent arg0) {
 		initDataSource();
 		initModule();
+		try {
+			IMServer.startUp();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initModule() {
