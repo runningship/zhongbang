@@ -22,10 +22,26 @@ function showChild(parent){
 	//alert(parent);
 }
 window.onload=function(){
+	$.ajax({
+        url:'/zb/user/getUserTree',
+        data:'',
+        timeout:3000,
+        dataType:'json',
+        beforeSend: function(XMLHttpRequest){
+            
+        },success:function (data, textStatus) {
+            if(data!=""){
+                
+            }
+        },
+        complete: function(XMLHttpRequest, textStatus){},
+        error:function (XMLHttpRequest, textStatus, errorThrown) {}
+    });
+
 	var w = new WebSocket("ws://localhost:9099");
 	w.onopen = function() { 
 		console.log("open"); 
-		w.send("thank you for accepting this websocket request"); 
+		login(w);
 	};
 	w.onmessage = function(e) { 
 		console.log(e.data); 
@@ -38,6 +54,13 @@ window.onload=function(){
 	}
 	
 };
+function login(ws){
+	var data = JSON.parse("{}");
+	data["type"]="login";
+	data["userId"]=123;
+	data["username"]="xzye";
+	ws.send(JSON.stringify(data));
+}
 </script>
 </head>
 <body>
