@@ -15,8 +15,8 @@ import org.bc.web.ModelAndView;
 import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
-import com.youwei.zjb.entity.PC;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.sys.entity.PC;
 import com.youwei.zjb.util.SecurityHelper;
 
 @Module(name="/user/")

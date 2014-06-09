@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import com.youwei.zjb.SimpDaoTool;
-import com.youwei.zjb.entity.PC;
+import com.youwei.zjb.sys.entity.PC;
 
 public class SecurityHelper {
 

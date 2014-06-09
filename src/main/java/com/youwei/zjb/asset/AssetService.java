@@ -5,7 +5,7 @@ import java.util.Date;
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.TransactionalServiceHelper;
 
-import com.youwei.zjb.entity.Asset;
+import com.youwei.zjb.asset.entity.Asset;
 
 /**
  * 资产管理

@@ -1,4 +1,4 @@
-package com.youwei.zjb.entity;
+package com.youwei.zjb.sys.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

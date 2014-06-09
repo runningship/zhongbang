@@ -12,8 +12,8 @@ import org.junit.Test;
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.SimpDaoTool;
 import com.youwei.zjb.StartUpListener;
-import com.youwei.zjb.authpc.PcAuthService;
-import com.youwei.zjb.entity.PC;
+import com.youwei.zjb.sys.PcAuthService;
+import com.youwei.zjb.sys.entity.PC;
 import com.youwei.zjb.util.SecurityHelper;
 
 public class TestPcAuth {

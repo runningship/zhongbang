@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import com.youwei.zjb.SimpDaoTool;
 import com.youwei.zjb.StartUpListener;
-import com.youwei.zjb.entity.AuthCode;
 import com.youwei.zjb.entity.Client;
 import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.District;
@@ -14,10 +13,11 @@ import com.youwei.zjb.entity.FanKui;
 import com.youwei.zjb.entity.GenJin;
 import com.youwei.zjb.entity.House;
 import com.youwei.zjb.entity.HouseRent;
-import com.youwei.zjb.entity.OperRecord;
-import com.youwei.zjb.entity.PC;
 import com.youwei.zjb.entity.Role;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.sys.entity.AuthCode;
+import com.youwei.zjb.sys.entity.OperRecord;
+import com.youwei.zjb.sys.entity.PC;
 
 public class ModuleTest {
 
