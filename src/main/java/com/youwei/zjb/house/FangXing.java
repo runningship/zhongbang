@@ -1,5 +1,8 @@
 package com.youwei.zjb.house;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 public enum FangXing {
 
 	单间("单间"," hxf = 1 "),
@@ -31,4 +34,14 @@ public enum FangXing {
 		return queryStr;
 	}
 	
+	public static JSONArray toJsonArray(){
+		JSONArray arr = new JSONArray();
+		for(FangXing fx : FangXing.values()){
+			JSONObject jobj = new JSONObject();
+			jobj.put("name", fx.toString());
+			jobj.put("value", fx.toString());
+			arr.add(jobj);
+		}
+		return arr;
+	}
 }

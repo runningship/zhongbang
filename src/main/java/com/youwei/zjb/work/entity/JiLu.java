@@ -32,5 +32,4 @@ public class JiLu {
 	
 	public String goin;
 	
-	public String files;
 }

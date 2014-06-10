@@ -7,8 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.youwei.zjb.Resource;
 import com.youwei.zjb.SimpDaoTool;
+import com.youwei.zjb.sys.Authority;
 
 /**
  * 
@@ -42,14 +42,14 @@ public class Role {
 	
 	public Integer num;
 	
-	public List<Resource> getResources(){
-		List<Resource> result = new ArrayList<Resource>();
-		List<RoleResource> list = SimpDaoTool.getGlobalCommonDaoService().listByParams(RoleResource.class, new String[]{"roleId"}, new Object[]{id});
+	public List<Authority> getResources(){
+		List<Authority> result = new ArrayList<Authority>();
+		List<RoleAuthority> list = SimpDaoTool.getGlobalCommonDaoService().listByParams(RoleAuthority.class, new String[]{"roleId"}, new Object[]{id});
 		if(list==null){
 			return result;
 		}
-		for(RoleResource rr : list){
-			result.add(Resource.valueOf(rr.resource));
+		for(RoleAuthority rr : list){
+			result.add(Authority.valueOf(rr.authName));
 		}
 		return result;
 	}

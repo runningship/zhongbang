@@ -1,8 +1,17 @@
 html,body,.body{ height: 100%; width: 100%;}
 body{font:16px "microsoft yahei",Arial,Verdana,Tahoma,"ËÎÌו";}
 
-.sider{ float: left; width: 120px; background: #09F;}
+a{text-decoration:none;}
+a:hover{text-decoration:none;}
 
-.mainer{ margin-left: 130px; height: 100%; overflow: hidden;}
+.sider{ float: left; width: 120px; border-right: 1px solid #EEE;}
+.sidedl{ text-align: center; color: #555; margin: 0;}
+.sidedl dt{background: #4d7fb8;color: #203f61;text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2); padding: 8px 0;}
+.sidedl dd{background-color: #ececec;border-bottom: 1px solid #dcdcdc;border-top: 1px solid #fff;color: 727272;text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8);}
+.sidedl dd a{display: block; padding: 12px;}
+
+
+
+.mainer{ margin-left: 120px; height: 100%; overflow: hidden;}
 
 

@@ -28,11 +28,14 @@ public class Journal {
 	
 	public Integer integral;
 	
+	/**
+	 * 1.请假 
+	 * 0.工作日志
+	 * 2.会议记录
+	 */
 	@Column(name="cate")
 	public Integer category;
 	
 	public Date addtime;
-	
-	public String files;
 	
 }

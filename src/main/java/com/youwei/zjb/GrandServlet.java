@@ -20,6 +20,7 @@ import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.GException;
+import org.bc.sdak.TransactionalServiceHelper;
 import org.bc.sdak.utils.LogUtil;
 import org.bc.web.Handler;
 import org.bc.web.ModelAndView;
@@ -52,7 +53,8 @@ public class GrandServlet extends HttpServlet{
 		}
 		Object manager =null;
 		try {
-			manager = handler.getModuleClass().newInstance();
+			manager = TransactionalServiceHelper.getTransactionalService(handler.getModuleClass());
+//			manager = handler.getModuleClass().newInstance();
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -123,8 +125,12 @@ public class GrandServlet extends HttpServlet{
 			try {
 				cc = pool.getCtClass(manager.getClass().getName());
 			} catch (NotFoundException ex) {
-				LogUtil.log(Level.WARNING, "class not found", ex);
-				return new Object[]{};
+				try {
+					cc = pool.getCtClass(manager.getClass().getSuperclass().getName());
+				} catch (NotFoundException e) {
+					LogUtil.log(Level.WARNING, "class not found", ex);
+					return new Object[]{};
+				}
 			}
 		}
 		for(CtMethod cm : cc.getDeclaredMethods()){

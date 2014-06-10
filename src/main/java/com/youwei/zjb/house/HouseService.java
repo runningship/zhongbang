@@ -26,7 +26,7 @@ public class HouseService {
 	
 	@WebMethod
 	public ModelAndView add(House house){
-		ModelAndView mv = null;
+		ModelAndView mv = new ModelAndView();
 		//检查，是否是重复房源.检查条件为,小区名+楼栋号+房号
 		House po = service.getUniqueByParams(House.class, new String[]{"area","dhao","fhao"},new Object[]{house.area,house.dhao,house.fhao});
 		if(po!=null){
@@ -34,7 +34,6 @@ public class HouseService {
 			mv.data.put("result", 2);
 		}else{
 			service.saveOrUpdate(house);
-//			mv = list();
 			mv.data.put("msg", "发布成功");
 			mv.data.put("result", 0);
 		}
@@ -83,6 +82,20 @@ public class HouseService {
 		query.userId = user.id;
 		return listAll(query);
 	}
+	
+	@WebMethod
+	public ModelAndView getQueryOptions(Integer id){
+		ModelAndView mv = new ModelAndView();
+		mv.data.put("chaoxiang", ChaoXiang.toJsonArray());
+		mv.data.put("datetype", DateType.toJsonArray());
+		mv.data.put("fangxing", FangXing.toJsonArray());
+		mv.data.put("texing", HouseAttribute.toJsonArray());
+		mv.data.put("housetype", HouseType.toJsonArray());
+		mv.data.put("jiaoyi", JiaoYi.toJsonArray());
+		mv.data.put("louxing", LouXing.toJsonArray());
+		return mv;
+	}
+	
 	@WebMethod
 	public ModelAndView listAll(HouseQuery query){
 		

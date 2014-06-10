@@ -1,5 +1,8 @@
 package com.youwei.zjb.house;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 
 public enum DateType {
 
@@ -23,4 +26,14 @@ public enum DateType {
 		return field;
 	}
 	
+	public static JSONArray toJsonArray(){
+		JSONArray arr = new JSONArray();
+		for(DateType dt : DateType.values()){
+			JSONObject jobj = new JSONObject();
+			jobj.put("value", dt.code);
+			jobj.put("name", dt.field);
+			arr.add(jobj);
+		}
+		return arr;
+	}
 }

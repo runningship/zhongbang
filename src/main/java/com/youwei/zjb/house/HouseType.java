@@ -1,5 +1,8 @@
 package com.youwei.zjb.house;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 /**
  *房屋类别
  */
@@ -14,4 +17,14 @@ public enum HouseType {
 	厂房,
 	其他;
 	
+	public static JSONArray toJsonArray(){
+		JSONArray arr = new JSONArray();
+		for(HouseType ht : HouseType.values()){
+			JSONObject jobj = new JSONObject();
+			jobj.put("name", ht.toString());
+			jobj.put("value", ht.toString());
+			arr.add(jobj);
+		}
+		return arr;
+	}
 }

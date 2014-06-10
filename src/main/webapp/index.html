@@ -2,6 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+<meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<meta HTTP-EQUIV="expires" CONTENT="0">
 <title>Web桌面系统</title>
 <link rel="stylesheet" href="jsLib/themes/base/jquery.ui.all.css" />
 <link rel="stylesheet" href="jsLib/jquery-smartMenu/css/smartMenu.css" />
@@ -13,7 +16,7 @@
 <script type="text/javascript" src="jsLib/jquery-smartMenu/js/mini/jquery-smartMenu-min.js"></script>
 <script type="text/javascript" src="jsLib/window.js"></script>
 <script type="text/javascript">
-hex.maximize()
+//hex.maximize()
 $(function(){
 	//存储桌面布局元素的jquery对象
 	myLib.desktop.desktopPanel();
@@ -31,7 +34,7 @@ $(function(){
 <body>
 <a href="#" class="powered_by">Powered by jWebOS</a>
 <ul id="deskIcon">
-  <li class="desktop_icon" id="win5" path="house/index.html"> <span class="icon"><img src="style/icon/ico_b_house_big.png"/></span>
+  <li class="desktop_icon" id="win5" path="house/"> <span class="icon"><img src="style/icon/ico_b_house_big.png"/></span>
     <div class="text">房源管理
       <div class="right_cron"></div>
     </div>
@@ -73,11 +76,6 @@ $(function(){
   </li>
   <li class="desktop_icon" id="win14" path="http://www.baidu.com"> <span class="icon"><img src="style/icon/ico_b_shezhi_big.png"/></span>
     <div class="text">后台管理
-      <div class="right_cron"></div>
-    </div>
-  </li>
-  <li class="desktop_icon" id="win14" path="test.html"> <span class="icon"><img src="style/icon/ico_b_shezhi_big.png"/></span>
-    <div class="text">沟通
       <div class="right_cron"></div>
     </div>
   </li>

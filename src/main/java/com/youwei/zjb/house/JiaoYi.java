@@ -1,5 +1,8 @@
 package com.youwei.zjb.house;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 public enum JiaoYi {
 
 	出售(1),
@@ -18,4 +21,14 @@ public enum JiaoYi {
 		return code;
 	}
 	
+	public static JSONArray toJsonArray(){
+		JSONArray arr = new JSONArray();
+		for(JiaoYi jy : JiaoYi.values()){
+			JSONObject jobj = new JSONObject();
+			jobj.put("value", jy.code);
+			jobj.put("name", jy.toString());
+			arr.add(jobj);
+		}
+		return arr;
+	}
 }

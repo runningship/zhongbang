@@ -1,0 +1,35 @@
+package com.youwei.test.zjb.im;
+
+import java.util.List;
+import java.util.Map;
+
+import org.bc.web.ModelAndView;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.youwei.zjb.StartUpListener;
+import com.youwei.zjb.im.IMService;
+import com.youwei.zjb.im.entity.Contact;
+import com.youwei.zjb.util.DebugHelper;
+
+public class TestIMService {
+
+	IMService service = new IMService();
+	
+	@Before
+	public void init(){
+		StartUpListener.initDataSource();
+	}
+	
+	@Test
+	public void testGetContact(){
+		ModelAndView mv = service.getContacts(316);
+		DebugHelper.printResult((List<?>) mv.data.get("data"));
+	}
+	
+	@Test
+	public void testCountUnReadMessage(){
+		ModelAndView mv = service.countUnReadMessage(316);
+		DebugHelper.printResult((List<?>) mv.data.get("unreads"));
+	}
+}

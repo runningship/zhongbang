@@ -1,5 +1,8 @@
 package com.youwei.zjb.house;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 public enum HouseAttribute {
 
 	私盘(7), 
@@ -16,4 +19,14 @@ public enum HouseAttribute {
 		return code;
 	}  
 	
+	public static JSONArray toJsonArray(){
+		JSONArray arr = new JSONArray();
+		for(HouseAttribute ha : HouseAttribute.values()){
+			JSONObject jobj = new JSONObject();
+			jobj.put("value", ha.code);
+			jobj.put("name", ha.toString());
+			arr.add(jobj);
+		}
+		return arr;
+	}
 }

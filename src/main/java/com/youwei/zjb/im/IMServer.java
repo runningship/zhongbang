@@ -5,6 +5,7 @@ import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.json.JSONObject;
@@ -17,6 +18,7 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
 import com.youwei.zjb.im.entity.Message;
+import com.youwei.zjb.util.JSONHelper;
 
 public class IMServer extends WebSocketServer{
 
@@ -61,27 +63,30 @@ public class IMServer extends WebSocketServer{
 		JSONObject data = JSONObject.fromObject(message);
 		if("login".equals(data.getString("type"))){
 			conns.put(data.getInt("userId"), conn);
-		}if("msg".equals(data.getString("type"))){
+		}else if("msg".equals(data.getString("type"))){
 			sendMsg(conn,data);
+		}else if("history".equals(data.getString("type"))){
+			List<Message> list = dao.listByParams(Message.class, "from Message where (senderId=? and  receiverId=?) or (senderId=? and  receiverId=?) order by addtime desc", 
+					data.getInt("myId"), data.getInt("contactId") ,data.getInt("contactId"), data.getInt("myId"));
+			data.put("history", JSONHelper.toJSONArray(list));
+			conn.send(data.toString());
+		}else if("read".equals(data.getString("type"))){
+			dao.execute("update Message set read=1 where senderId=? and receiverId=? and read=0", data.getInt("contactId"), data.getInt("myId"));
+		}else if("countUnRead".equals(data.getString("type"))){
+			
 		}
 	}
 
 	private void sendMsg(WebSocket conn, JSONObject data) {
-		Integer recvId = data.getInt("reveiverId");
+		Integer recvId = data.getInt("receiverId");
 		if(recvId==null){
 			conn.send("无效的消息体，接受者不能为空");
 		}
 		data.put("sendTime", System.currentTimeMillis());
 		WebSocket recv = conns.get(recvId);
-		if(recv==null){
-			
-		}
 		
 		Integer recvType = data.getInt("receiverType");
-		if(recvType==1){
-			//个人
-			recv.send(data.toString());
-		}
+		
 		Message dbMsg = new Message();
 		dbMsg.addtime = new Date();
 		dbMsg.content = data.getString("content");
@@ -89,6 +94,11 @@ public class IMServer extends WebSocketServer{
 		dbMsg.receiverId = recvId;
 		dbMsg.receiverType=1;
 		dao.saveOrUpdate(dbMsg);
+		
+		if(recvType==1 && recv!=null){
+			//个人
+			recv.send(data.toString());
+		}
 	}
 
 	@Override

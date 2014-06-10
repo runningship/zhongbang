@@ -17,7 +17,7 @@ import com.youwei.zjb.sys.entity.PC;
 import com.youwei.zjb.util.JSONHelper;
 
 @Module(name="/pc/")
-public class PcAuthService {
+public class PcService {
 
 	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
 	

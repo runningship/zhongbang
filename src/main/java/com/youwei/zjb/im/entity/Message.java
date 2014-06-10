@@ -26,4 +26,10 @@ public class Message {
 	public String content;
 	
 	public Date addtime;
+	
+	/**
+	 * 1 已读
+	 * 0 未读
+	 */
+	public Integer read;
 }

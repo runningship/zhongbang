@@ -1,5 +1,8 @@
 package com.youwei.zjb.house;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 public enum LouXing {
 
 	多层,
@@ -15,4 +18,15 @@ public enum LouXing {
 	裙楼,
 	四合院,
 	复式;
+	
+	public static JSONArray toJsonArray(){
+		JSONArray arr = new JSONArray();
+		for(LouXing lx : LouXing.values()){
+			JSONObject jobj = new JSONObject();
+			jobj.put("name", lx.toString());
+			jobj.put("value", lx.toString());
+			arr.add(jobj);
+		}
+		return arr;
+	}
 }

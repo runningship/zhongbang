@@ -12,7 +12,7 @@ import org.junit.Test;
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.SimpDaoTool;
 import com.youwei.zjb.StartUpListener;
-import com.youwei.zjb.sys.PcAuthService;
+import com.youwei.zjb.sys.PcService;
 import com.youwei.zjb.sys.entity.PC;
 import com.youwei.zjb.util.SecurityHelper;
 
@@ -25,7 +25,7 @@ public class TestPcAuth {
 	
 	@Test
 	public void testAdd(){
-		PcAuthService pas = new PcAuthService();
+		PcService pas = new PcService();
 		PC pc = new PC();
 		pc.addtime = new Date();
 		pc.authCode = "123445";
@@ -65,7 +65,7 @@ public class TestPcAuth {
 	
 	@Test
 	public void testAuthorizedList(){
-		PcAuthService pas = new PcAuthService();
+		PcService pas = new PcService();
 		Page<PC> page = new Page<PC>();
 		page.setCurrentPageNo(1);
 		page = pas.authorizedList(page, 86);

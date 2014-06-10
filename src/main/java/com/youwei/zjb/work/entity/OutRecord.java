@@ -31,17 +31,32 @@ public class OutRecord {
 	
 	public Integer outHouse;
 	
+	/**
+	 * 外出原因
+	 */
 	public String outCont;
 	
 	public String onCont;
 	
+	/**
+	 * 1,已批阅，0或null 未批阅
+	 */
 	public Integer reply;
 	
+	/**
+	 * 打分
+	 */
 	public Integer integral;
 	
+	/**
+	 * 1 外出公事，0 外出看房
+	 */
 	@Column(name="cate")
 	public Integer category;
 	
+	/**
+	 * 批阅评价 
+	 */
 	public String conts;
 	
 	public String clientInfo;
