@@ -4,13 +4,6 @@
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="buildHtml.js"></script>
 <script type="text/javascript">
-var getStr='';
-$.get('/zb/house/getQueryOptions', function(data) {
-	getStr=JSON.parse(data);
-	//alert(getStr['chaoxiang'])
-	buildHtmlWithJsonArray("quyu",getStr['chaoxiang']);
-});
-
 window.onload=function(){
 	var arr = [];
 	var d1 = JSON.parse("{}");
@@ -19,12 +12,13 @@ window.onload=function(){
 	var d2 = JSON.parse("{}");
 	d2["val"]="瑶海区";
 	arr.push(d2);
+	buildHtmlWithJsonArray("quyu",arr);
 };
 </script>
 </head>
 <body>
 	<span id="quyu">
-		<input  type="checkbox" value="${value}" /><span>${name}</span>
+		<input  type="checkbox" value="${val}" /><span>${val}</span>
 		<br/>
 	</span>
 </body>

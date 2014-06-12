@@ -89,7 +89,7 @@ public class OutService {
 			params.add(query.category);
 		}
 		//默认只能看到自己的数据
-		User user = ThreadSession.get();
+		User user = ThreadSession.getUser();
 		hql.append(" and uid = ?");
 		params.add(user.id);
 		

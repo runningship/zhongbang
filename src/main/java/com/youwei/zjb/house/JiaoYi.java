@@ -25,8 +25,8 @@ public enum JiaoYi {
 		JSONArray arr = new JSONArray();
 		for(JiaoYi jy : JiaoYi.values()){
 			JSONObject jobj = new JSONObject();
-			jobj.put("value", jy.code);
-			jobj.put("name", jy.toString());
+			jobj.put("value", jy.name());
+			jobj.put("name", jy.name());
 			arr.add(jobj);
 		}
 		return arr;

@@ -1,6 +1,8 @@
 package com.youwei.zjb.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
@@ -10,12 +12,17 @@ import javax.persistence.Id;
 public class RoleAuthority {
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer id;
 	
 	public Integer roleId;
 	
-	public String category;
+	public String name;
 	
-	public String authName;
+	/**
+	 * module,menu,func
+	 */
+	public String type;
 	
+	public transient static final String Seporator = ",";
 }

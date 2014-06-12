@@ -15,6 +15,8 @@ public class ModelAndView {
 	
 	public JSONObject data = new JSONObject();
 	
+	public String returnText = "";
+	
 	public ModelAndView(){
 		
 	}

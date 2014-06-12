@@ -47,4 +47,17 @@ public class HqlHelper {
 		result = result+" from " +entity.getName();
 		return result;
 	}
+	
+	public static String getCommonAlis(Class<?> clazz , String alias){
+		StringBuilder hql = new StringBuilder();
+		for(Field f: clazz.getDeclaredFields()){
+			Basic anno = f.getAnnotation(Basic.class);
+			if(anno!=null && anno.fetch()==FetchType.LAZY){
+				continue;
+			}
+			hql.append(alias).append(".").append(f.getName()+" as "+ f.getName()).append(",");
+		}
+		String result = StringUtils.removeEnd(hql.toString(), ",");
+		return result;
+	}
 }

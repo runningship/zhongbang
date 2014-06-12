@@ -14,21 +14,263 @@
 <script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" src="../js/jquery.caozuobendi.js"></script>
+<script type="text/javascript" src="../js/buildHtml.js"></script>
+<script type="text/javascript">
+function setMainHeight(){
+  $('.mainer').css({
+    top: $('.header').height()+12,
+    bottom:$('.footer').height()+1
+  });
+}
+function getHuseList(a){
+  $.get('/zb/house/listAll', function(data) {
+  var getStr=JSON.parse(data);
+  //  alert(getStr['houses'])
+    buildHtmlWithJsonArray("id_House_list",getStr['houses']);
+  });
+}
+$(function(){
+setMainHeight();
+$.get('/zb/house/getQueryOptions', function(data) {
+var getStr=JSON.parse(data);
+//  alert(getStr['chaoxiang'])
+  buildHtmlWithJsonArray("id_chaoxiang",getStr['chaoxiang']); //朝向
+  buildHtmlWithJsonArray("id_fangxing",getStr['fangxing']);   //户型
+  buildHtmlWithJsonArray("id_leibie",getStr['leibie']);       //类别
+  buildHtmlWithJsonArray("id_louxing",getStr['louxing']);     //楼型
+  buildHtmlWithJsonArray("id_jiaoyi",getStr['jiaoyi']);       //交易
+  buildHtmlWithJsonArray("id_quyu",getStr['quyu']);           //区域
+  buildHtmlWithJsonArray("id_zhuangtai",getStr['zhuangtai']); //状态
+  buildHtmlWithJsonArray("id_xingzhi",getStr['xingzhi']); //房型
+  buildHtmlWithJsonArray("id_datetype",getStr['datetype']); //房型
+});
+getHuseList('');
+})
+</script>
+<style type="text/css">
+  .table{ margin-bottom: 0px;}
+</style>
 </head>
-<body>
-<form class="form-horizontal" role="form">
-  <div class="form-group">
-    <label class="col-sm-2 control-label">Email</label>
-    <div class="col-sm-10">
-      <p class="form-control-static">email@example.com</p>
+<body class="hlist bodyer">
+<div class="header">
+  <form class="form-horizontal" role="form">
+    <div class="clearfix">
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          时间段 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="#">今日房源</a></li>
+          <li><a href="#">三天内房源</a></li>
+          <li><a href="#">七天内房源</a></li>
+          <li><a href="#">一个月房源</a></li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          状 态 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_zhuangtai">
+          <li><label><input type="checkbox" name="iv_zhuangtai" value="${value}"> ${name}</label>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          朝向 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_chaoxiang">
+          <li><label><input type="checkbox" name="iv_chaoxiang" value="${value}"> ${name}</label></li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          房屋类别 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_leibie">
+          <li><label><input type="checkbox" name="iv_leibie" value="${value}"> ${name}</label></li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          性质 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_xingzhi">
+          <li><label><input type="checkbox" name="iv_xingzhi" value="${value}"> ${name}</label>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          交易 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_jiaoyi">
+          <li><label><input type="checkbox" name="iv_jiaoyi" value="${value}"> ${name}</label>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          楼型 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_louxing">
+          <li><label><input type="checkbox" name="iv_louxing" value="${value}"> ${name}</label></li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          房型 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_fangxing">
+          <li><label><input type="checkbox" name="iv_fangxing" value="${value}"> ${name}</label></li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          区域 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_quyu">
+          <li><label><input type="checkbox" name="iv_quyu" value="${value}"> ${name}</label>
+        </ul>
+      </div>
+      <div class="input-group input-group-max">
+        <span class="input-group-addon">智能</span>
+        <input type="text" class="form-control">
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <label for="inputPassword" class="col-sm-2 control-label">Password</label>
-    <div class="col-sm-10">
-      <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+
+    <div class="clearfix">
+      <div class="input-group">
+        <span class="input-group-addon">日期</span>
+        <select class="form-control" id="id_datetype">
+          <option value="${value}">${name}</option>
+        </select>
+        <input type="text" class="form-control" data-toggle="dropdown">
+        <input type="text" class="form-control" data-toggle="dropdown">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon">总价</span>
+        <input type="text" class="form-control" data-toggle="dropdown">
+        <input type="text" class="form-control" data-toggle="dropdown">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon">单价</span>
+        <input type="text" class="form-control" data-toggle="dropdown">
+        <input type="text" class="form-control" data-toggle="dropdown">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon">面积</span>
+        <input type="text" class="form-control" data-toggle="dropdown">
+        <input type="text" class="form-control" data-toggle="dropdown">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon">楼层</span>
+        <input type="text" class="form-control" data-toggle="dropdown">
+        <input type="text" class="form-control" data-toggle="dropdown">
+      </div>
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary">搜索提交</button>
+        <button type="submit" class="btn">清空</button>
+      </div>
+
+      <br><br><br><br>
+
+      <div class="input-group input-group-mt3">
+        <span class="input-group-addon">产权证</span>
+        <input type="text" class="form-control" data-toggle="dropdown">
+        <ul class="dropdown-menu" role="menu">
+          <li><label><input type="checkbox"> 蜀山区 </label></li>
+        </ul>
+      </div>
+      <div class="input-group input-group-mt3 input-group-select">
+        <span class="input-group-addon">发布人</span>
+        <select class="form-control">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
+        <select class="form-control">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
+        <select class="form-control">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
+      </div>
     </div>
+
+
+  </form>
+  <table class="table">
+    <tr>
+      <th>房源编号</th>
+      <th>类别</th>
+      <th>区域</th>
+      <th>楼盘名称</th>
+      <th>室厅卫阳</th>
+      <th>楼层</th>
+      <th>面积</th>
+      <th>单价</th>
+      <th>总价</th>
+      <th>租金</th>
+      <th>装潢</th>
+      <th>年代</th>
+      <th>发布时间</th>
+      <th>发布人</th>
+      <th>性质</th>
+      <th>状态</th>
+      <th>房配客</th>
+      <th>操作</th>
+    </tr>
+  </table>
+</div>
+<div class="mainer">
+  <table class="table table-hover" id="id_House_list">
+    <tr>
+      <td>${quyu}</td>
+      <td>出售</td>
+      <td>庐阳区</td>
+      <td>亳州城A区</td>
+      <td>1#405</td>
+      <td>1-1-1-1</td>
+      <td>4/6</td>
+      <td>31</td>
+      <td>9355</td>
+      <td>29</td>
+      <td>简装</td>
+      <td>1998</td>
+      <td>2014-2-19 15:12:00</td>
+      <td>唐瑞</td>
+      <td>私盘</td>
+      <td>有效</td>
+      <td>有</td>
+      <td>修改 删除</td>
+    </tr>
+  </table>
+</div>
+<div class="footer">
+  <div class="btn-group">
+    <button type="button" class="btn btn-default">15245</button>
+    <button type="button" class="btn btn-default">1/5</button>
   </div>
-</form>
+  <div class="btn-group">
+    <button type="button" class="btn btn-default">首页</button>
+    <button type="button" class="btn btn-default">上一页</button>
+    <button type="button" class="btn btn-default">1</button>
+    <button type="button" class="btn btn-default">2</button>
+    <button type="button" class="btn btn-default">3</button>
+    <button type="button" class="btn btn-default">4</button>
+    <button type="button" class="btn btn-default">5</button>
+    <button type="button" class="btn btn-default">下一页</button>
+    <button type="button" class="btn btn-default">尾页</button>
+  </div>
+</div>
+
 </body>
 </html>

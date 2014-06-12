@@ -41,7 +41,7 @@ public class TestHouseService {
 	public void testListByXinzhi(){
 		HouseService hs = new HouseService();
 		HouseQuery hq = new HouseQuery();
-		hq.xinzhi = HouseAttribute.公盘;
+		hq.xingzhi = HouseAttribute.公盘;
 		ModelAndView mv = hs.listAll(hq);
 		printResult(mv);
 	}
@@ -182,7 +182,7 @@ public class TestHouseService {
 		HouseQuery hq = new HouseQuery();
 		User user = new User();
 		user.id = 333;
-		ThreadSession.set(user);
+		ThreadSession.setUser(user);
 		ModelAndView mv = hs.listMy(hq);
 		printResult(mv);
 	}

@@ -30,8 +30,8 @@ public enum DateType {
 		JSONArray arr = new JSONArray();
 		for(DateType dt : DateType.values()){
 			JSONObject jobj = new JSONObject();
-			jobj.put("value", dt.code);
-			jobj.put("name", dt.field);
+			jobj.put("value", dt.name());
+			jobj.put("name", dt.name());
 			arr.add(jobj);
 		}
 		return arr;

@@ -31,4 +31,12 @@ public class IMService {
 		mv.data.put("unreads",JSONHelper.toJSONArray(list));
 		return mv;
 	}
+	
+	public ModelAndView setRead(int myId, int contactId){
+		ModelAndView mv = new ModelAndView();
+		String hql = "update Message set read=1 where senderId=? and receiverId=? and read=0";
+		dao.execute(hql, contactId, myId);
+		mv.data.put("result", 0);
+		return mv;
+	}
 }

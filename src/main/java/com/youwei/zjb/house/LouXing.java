@@ -23,8 +23,8 @@ public enum LouXing {
 		JSONArray arr = new JSONArray();
 		for(LouXing lx : LouXing.values()){
 			JSONObject jobj = new JSONObject();
-			jobj.put("name", lx.toString());
-			jobj.put("value", lx.toString());
+			jobj.put("name", lx.name());
+			jobj.put("value", lx.name());
 			arr.add(jobj);
 		}
 		return arr;

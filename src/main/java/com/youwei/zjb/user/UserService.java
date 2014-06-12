@@ -1,5 +1,6 @@
 package com.youwei.zjb.user;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,7 +8,10 @@ import java.util.Map;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
+import org.bc.sdak.GException;
+import org.bc.sdak.Page;
 import org.bc.sdak.TransactionalServiceHelper;
 import org.bc.sdak.utils.BeanUtil;
 import org.bc.sdak.utils.LogUtil;
@@ -15,8 +19,13 @@ import org.bc.web.ModelAndView;
 import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
+import com.youwei.zjb.DateSeparator;
+import com.youwei.zjb.PlatformExceptionType;
+import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.sys.entity.PC;
+import com.youwei.zjb.util.HqlHelper;
+import com.youwei.zjb.util.JSONHelper;
 import com.youwei.zjb.util.SecurityHelper;
 
 @Module(name="/user/")
@@ -35,6 +44,62 @@ public class UserService {
 		JSONArray root = merge(quyus,depts);
 		mv.contentType="text/plain";
 		mv.data.put("result", root.toString());
+		return mv;
+	}
+	
+	public void add(User user){
+		if(user.deptId==null){
+			user.deptId = -1;
+		}
+		Department dept = dao.get(Department.class, user.deptId);
+		if(dept==null){
+			throw new GException(PlatformExceptionType.BusinessException, 1, "没有指定用户所属公司");
+		}
+		user.orgpath = dept.path+user.id;
+		dao.saveOrUpdate(user);
+	}
+	
+	public ModelAndView list(UserQuery query , Page<Map> page){
+		ModelAndView mv = new ModelAndView();
+		StringBuilder hql = new StringBuilder();
+		List<Object> params = new ArrayList<Object>();
+		hql.append("select u.uname as uname,r.title as title ,u.tel as tel, u.gender as gender,u.address as address from User  u, Role r where u.roleId = r.id");
+		if(StringUtils.isNotEmpty(query.name)){
+			hql.append(" and u.uname like ? ");
+			params.add("%"+query.name+"%");
+		}
+		if(StringUtils.isNotEmpty(query.sfz)){
+			hql.append(" and u.sfz like ? ");
+			params.add("%"+query.sfz+"%");
+		}
+		if(StringUtils.isNotEmpty(query.address)){
+			hql.append(" and u.address like ? ");
+			params.add("%"+query.address+"%");
+		}
+		if(query.gender!=null){
+			hql.append(" and u.gender=?");
+			params.add(query.gender);
+		}
+		if(query.roleId!=null){
+			hql.append(" and u.roleId=?");
+			params.add(query.roleId);
+		}
+		if(query.hunyin!=null){
+			hql.append(" and u.hunyin=?");
+			params.add(query.hunyin);
+		}
+		if(query.ageStart!=null){
+			hql.append(" and u.age>=?");
+			params.add(query.ageStart);
+		}
+		if(query.ageEnd!=null){
+			hql.append(" and u.age<=?");
+			params.add(query.ageEnd);
+		}
+		hql.append(HqlHelper.buildDateSegment("rqsj", query.rqtimeStart, DateSeparator.After, params));
+		hql.append(HqlHelper.buildDateSegment("rqsj", query.rqtimeEnd, DateSeparator.Before, params));
+		page = dao.findPage(page, hql.toString(), true, params.toArray());
+		mv.data.put("users", JSONHelper.toJSONArray(page.getResult()));
 		return mv;
 	}
 	

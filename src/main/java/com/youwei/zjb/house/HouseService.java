@@ -18,6 +18,7 @@ import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.House;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.util.JSONHelper;
 
 @Module(name="/house/")
 public class HouseService {
@@ -73,7 +74,7 @@ public class HouseService {
 	}
 	
 	public ModelAndView listMy(HouseQuery query){
-		User user = ThreadSession.get();
+		User user = ThreadSession.getUser();
 		if(user==null){
 			ModelAndView mv = new ModelAndView();
 			mv.data.put("msg", "用户已经掉线");
@@ -84,21 +85,22 @@ public class HouseService {
 	}
 	
 	@WebMethod
-	public ModelAndView getQueryOptions(Integer id){
+	public ModelAndView getQueryOptions(){
 		ModelAndView mv = new ModelAndView();
 		mv.data.put("chaoxiang", ChaoXiang.toJsonArray());
 		mv.data.put("datetype", DateType.toJsonArray());
 		mv.data.put("fangxing", FangXing.toJsonArray());
-		mv.data.put("texing", HouseAttribute.toJsonArray());
-		mv.data.put("housetype", HouseType.toJsonArray());
+		mv.data.put("xingzhi", HouseAttribute.toJsonArray());
+		mv.data.put("leibie", HouseType.toJsonArray());
 		mv.data.put("jiaoyi", JiaoYi.toJsonArray());
 		mv.data.put("louxing", LouXing.toJsonArray());
+		mv.data.put("quyu", QuYu.toJsonArray());
+		mv.data.put("zhuangtai", State.toJsonArray());
 		return mv;
 	}
 	
 	@WebMethod
 	public ModelAndView listAll(HouseQuery query){
-		
 		List<Object> params = new ArrayList<Object>();
 		StringBuilder hql = null;
 		if(StringUtils.isNotEmpty(query.xpath)){
@@ -107,9 +109,9 @@ public class HouseService {
 		}else{
 			hql = new StringBuilder("from House  where 1=1 ");
 		}
-		if(query.xinzhi!=null){
-			hql.append(" and xinzhi = ? ");
-			params.add(String.valueOf(query.xinzhi.getCode()));
+		if(query.xingzhi!=null){
+			hql.append(" and xingzhi = ? ");
+			params.add(String.valueOf(query.xingzhi.getCode()));
 		}
 		if(StringUtils.isNotEmpty(query.quyu)){
 			hql.append(" and quyu = ?");
@@ -185,18 +187,15 @@ public class HouseService {
 			params.add(query.userId);
 		}
 		
-		if(query.isdel!=null){
-			hql.append(" and isdel= ? ");
-			params.add(query.isdel);
-		}
+		hql.append(" and ( isdel= 0 or isdel is null) ");
 		
 		Page<House> page = new Page<House>();
-		page.setCurrentPageNo(1);
+//		page.setCurrentPageNo(1);
+		page.setPageSize(3);
 		page = service.findPage(page, hql.toString(),params.toArray());
 		List<House> houses = page.getResult();
 		ModelAndView mv = new ModelAndView();
-		mv.data.put("houses", houses);
-		mv.jsp="/house.jsp";
+		mv.data.put("houses", JSONHelper.toJSONArray(houses));
 		return mv;
 	}
 	

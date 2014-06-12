@@ -16,8 +16,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.GException;
 import org.bc.sdak.TransactionalServiceHelper;
@@ -40,7 +38,8 @@ public class GrandServlet extends HttpServlet{
 		resp.setContentType("text/html");
 		String path = req.getPathInfo();
 		User u = (User)req.getSession().getAttribute("user");
-		ThreadSession.set(u);
+		ThreadSession.setUser(u);
+		ThreadSession.setHttpServletRequest(req);
 		LogUtil.info(path);
 		if("/".equals(path)){
 			processRootRequest(req, resp);
@@ -75,7 +74,11 @@ public class GrandServlet extends HttpServlet{
 				if(StringUtils.isNotEmpty(mv.contentType)){
 					resp.setContentType(mv.contentType);
 				}
-				resp.getWriter().write(mv.data.toString());
+				if(StringUtils.isNotEmpty(mv.returnText)){
+					resp.getWriter().write(mv.returnText);
+				}else{
+					resp.getWriter().write(mv.data.toString());
+				}
 			}else{
 				ServletHelper.fillMV(req,mv);
 				RequestDispatcher rd = req.getRequestDispatcher(mv.jsp);

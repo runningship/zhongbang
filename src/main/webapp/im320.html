@@ -1,0 +1,201 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
+<META HTTP-EQUIV="expires" CONTENT="0">
+<link rel="stylesheet" type="text/css" href="chat.css" />
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="buildHtml.js"></script>
+<script type="text/javascript">
+var contacts;
+var receiverId;
+var ws;
+var myId=320;
+function showChild(parent){
+	var img = parent.children[0];
+	if(img.state=="open"){
+		img.src="";
+		img.state="close";
+		img.src="http://pub.idqqimg.com/smartqq/css/image/open_arrow.png";
+	}else{
+		img.state = "open";
+		img.src="http://pub.idqqimg.com/smartqq/css/image/open_arrow_fire.png";
+	}
+	var display=parent.nextElementSibling.style.display;
+	if(display=="none"){
+		parent.nextElementSibling.style.display="block";
+	}else{
+		parent.nextElementSibling.style.display="none";
+	}
+	
+	//alert(parent);
+}
+window.onload=function(){
+	$.ajax({
+        url:'/zb/im/getContacts?userId='+myId,
+        data:'',
+        timeout:3000,
+        dataType:'json',
+        beforeSend: function(XMLHttpRequest){
+            
+        },success:function (data, textStatus) {
+            if(data!=""){
+                // alert(data["contacts"]);
+                contacts = data["contacts"];
+                buildHtmlWithJsonArray("contact",contacts);
+            }
+        },
+        complete: function(XMLHttpRequest, textStatus){},
+        error:function (XMLHttpRequest, textStatus, errorThrown) {
+        	console.error(XMLHttpRequest.responseText);
+        }
+    });
+
+	ws = new WebSocket("ws://localhost:9099");
+	ws.onopen = function() { 
+		console.log("open"); 
+		login(ws);
+	};
+	ws.onmessage = function(e) { 
+		var json = JSON.parse(e.data);
+		if(json['type']=='msg'){
+			onReceiveMsg(json);
+		}else if(json['type']=='history'){
+			buildHistory(json['list']);
+		}
+	};
+	ws.onclose = function(e) {
+		console.log("closed"); 
+	};
+	ws.onerror = function(e){
+		console.log(e); 
+	}
+	
+};
+function login(ws){
+	var data = JSON.parse("{}");
+	data["type"]="login";
+	data["userId"]=myId;
+	data["username"]="xzye";
+	ws.send(JSON.stringify(data));
+}
+function openChat(userId){
+	receiverId = userId;
+	var contact = getContact(userId);
+	$('#cname').text(contact["contactName"]);
+	$('#chatWindow').css('display','');	
+	// loadHistory();
+}
+function closeChat(){
+	$('#chatWindow').css('display','none');	
+}
+function getContact(cid){
+	for(var i=0;i<contacts.length;i++){
+		if(contacts[i]["contactId"]==cid){
+			return contacts[i];
+		}
+	}
+}
+function onReceiveMsg(data){
+	var dhtml = $('#recvTmp').html();
+	var sender = getContact(data['senderId']);
+	dhtml = dhtml.replace('${msg}',data['content']);
+	dhtml = dhtml.replace('${contact}',sender['contactName']);
+	dhtml = dhtml.replace('display:none','');
+	$('#msgContainer').append(dhtml);
+}
+function send(){
+	var text = $('#message').val();
+	if(text==''){
+		return;
+	}
+	$('#message').val('');
+	var dhtml = $('#sendTmp').html();
+	dhtml = dhtml.replace('${msg}',text);
+	dhtml = dhtml.replace('${me}','管理员');
+	dhtml = dhtml.replace('display:none','');
+	$('#msgContainer').append(dhtml);
+	var data = JSON.parse('{}');
+	data['senderId']=myId;
+	data['type']='msg';
+	data['receiverId']=receiverId;
+	data['receiverType']=1;
+	data['content']=text;
+	if(ws!=null){
+		ws.send(JSON.stringify(data));
+	}
+}
+function loadHistory(cid){
+	var data = JSON.parse('{}');
+	data['type']='history';
+	data['contactId']=cid;
+	ws.send(JSON.stringify(data));
+}
+</script>
+</head>
+<body>
+	<div style="float:left;">
+		<div style="background-color:#555;width:252px;height:45px;border-radius:8px 8px 0px 0px;text-align:center">
+			<div style="padding-top:14px;">
+			<span style="font-size:18px;color:white;padding-left:20px;">联系人</span>
+			<span><img style="float:right;width:14px;margin-right:20px;" src="http://pub.idqqimg.com/smartqq/css/image/title_search_icon.png"/></span>
+			</div>
+		</div>
+
+		<div style="width:250px;height:450px;background-color:#eee;font-size:16px;font-family:微软雅黑;border:solid 1px #ccc;">
+			<div>
+				
+				<span id="contact">
+				<span style="display:" state="close">
+					<div onclick="openChat(${contactId});" style="padding-left:50px;background-color:whitesmoke;height:56px;border-bottom:1px solid #ddd;cursor:pointer">
+						<p style="line-height:0px;display:inline-block">${contactName}</p>
+						<p style="font-size:8px;color:#aaa;line-height:15px;margin:0px"><span>[在线]</span><span style="padding-left:5px;">${contactTel}</span>
+						</p>
+					</div>
+				</span>
+				</span>
+			</div>
+		</div>
+
+		<div style="background-color:#555;width:252px;height:50px;border-radius:0px 0px 8px 8px;">
+			
+		</div>
+	</div>
+
+	<div id="chatWindow" style="float:left;margin-left:20px;width:652px;display">
+		<div style="background-color:#444;height:45px;border-radius:8px 8px 0px 0px;text-align:center" >
+			<div style="padding-top:14px;">
+			<span id="cname" style="font-size:22px;color:white;padding-left:20px;font-weight:bold"></span>
+			<span onclick="closeChat();" style="font-size:16px;color:white;border:1px solid #666;padding:4px 12px;border-radius:6px;margin-top:-4px;float:right;margin-right:20px;cursor:pointer">关闭</span>
+			</div>
+		</div>
+		<div id="msgContainer" style="height:452px;background-color:whitesmoke;" class="bubble">
+				
+		        
+
+		</div>
+		<div style="background-color:#555;height:50px;border-radius:0px 0px 8px 8px;">
+			<textarea id="message" style="height:36px;width:560px;border-radius:6px;margin:8px 0px 0px 20px;resize:none;padding-top:7px;font-size:18px;color:#666"></textarea>
+			<button onclick="send();" style="width:50px;height:38px;font-size:14px;vertical-align:middle;background:-webkit-linear-gradient(top,#5f9cc5,#396b9e);border-color:#044062;border:1px solid;border-radius:5px;float:right;margin-top:8px;margin-right:10px;">
+				<span style="color:white;text-align:center;">发送</span>
+			</button>
+		</div>
+	</div>
+
+	<span id="recvTmp">
+		<div  class="chat clearfix" style="display:none">
+	    	<div style="position:absolute;left:1px;">${contact}</div>
+	        <span class="triangle"></span>
+	        <div class="article">${msg}</div>
+	    </div>
+    </span>
+    <span id="sendTmp">
+	    <div  class="chat clearfix fr" style="display:none">
+	        <span class="triangle right"></span>
+	        <span class="article">${msg}</span>
+	        <div style="position:absolute;right:1px;">${me}</div>
+	    </div>
+    </span>
+</body>
+</html>

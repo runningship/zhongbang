@@ -7,7 +7,7 @@ import com.youwei.zjb.AbstractQuery;
 
 public class HouseQuery extends AbstractQuery{
 
-	public HouseAttribute xinzhi;
+	public HouseAttribute xingzhi;
 	public String quyu;
 	public FangXing fangxing;
 	public List<JiaoYi> jiaoyi = new ArrayList<JiaoYi>();

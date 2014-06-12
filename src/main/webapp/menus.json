@@ -1,0 +1,94 @@
+[{
+	"name":"fy",
+	"type":"module",
+	"text":"房源管理"
+},{
+	"name":"ky",
+	"type":"module",
+	"text":"客源管理"
+},{
+	"name":"yw",
+	"type":"module",
+	"text":"业务管理"
+},{
+	"name":"ht",
+	"type":"module",
+	"text":"合同管理"
+},{
+	"name":"rs",
+	"type":"module",
+	"text":"人事管理"
+},{
+	"name":"xz",
+	"type":"module",
+	"text":"行政管理"
+},{
+	"name":"zc",
+	"type":"module",
+	"text":"资产管理"
+},{
+	"name":"oa",
+	"type":"module",
+	"text":"OA管理"
+},{
+	"name":"xt",
+	"text":"系统管理",
+	"type":"module",
+	"children":[{
+		"name":"xt_zw",
+		"text":"职务信息",
+		"type":"menu",
+		"url":""
+	},{
+		"name":"xt_sq",
+		"text":"电脑授权",
+		"type":"virtual",
+		"children":[{
+			"name":"xt_sq_ysh",
+			"text":"已审核",
+			"type":"menu",
+			"url":""
+		},{
+			"name":"xt_sq_wsh",
+			"text":"未审核",
+			"type":"menu",
+			"url":""
+		}]
+	},{
+		"name":"xt_czjl",
+		"text":"操作记录",
+		"type":"virtual",
+		"children":[{
+			"name":"xt_czjl_dl",
+			"text":"登录记录",
+			"type":"menu",
+			"url":""
+		},{
+			"name":"xt_czjl_sq",
+			"text":"授权记录",
+			"type":"menu",
+			"url":""
+		},{
+			"name":"xt_czjl_fy",
+			"text":"房源记录",
+			"type":"menu",
+			"url":""
+		},{
+			"name":"xt_czjl_ky",
+			"text":"客源记录",
+			"type":"menu",
+			"url":""
+		},{
+			"name":"xt_czjl_rs",
+			"text":"人事记录",
+			"type":"menu",
+			"url":""
+		},{
+			"name":"xt_czjl_xt",
+			"text":"系统记录",
+			"type":"menu",
+			"url":""
+		}]
+	}]
+}
+]

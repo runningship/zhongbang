@@ -21,8 +21,8 @@ public enum HouseType {
 		JSONArray arr = new JSONArray();
 		for(HouseType ht : HouseType.values()){
 			JSONObject jobj = new JSONObject();
-			jobj.put("name", ht.toString());
-			jobj.put("value", ht.toString());
+			jobj.put("name", ht.name());
+			jobj.put("value", ht.name());
 			arr.add(jobj);
 		}
 		return arr;

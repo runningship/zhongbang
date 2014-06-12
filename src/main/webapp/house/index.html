@@ -18,9 +18,22 @@
 <script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" src="../js/jquery.caozuobendi.js"></script>
+<script type="text/javascript">
+function setMainHeight(){
+    var bodyHeight=$('.body').height()
+  $('.sider').height(bodyHeight);
+  $('.mainer').height(bodyHeight);
+}
+$(function(){
+setMainHeight();
+})
+$(window).resize(function(event) {
+setMainHeight();
+});
+</script>
 </head>
 <body>
-    <div class="body">
+    <div class="body hmain">
         <div class="sider">
             <dl class="sidedl">
                 <dt>查看房源</dt>

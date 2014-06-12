@@ -123,7 +123,7 @@ public class House {
 	public String flag;
 
 	@Column(name = "biaoshi")
-	public String xinzhi;
+	public String xingzhi;
 
 	public String tuijie;
 

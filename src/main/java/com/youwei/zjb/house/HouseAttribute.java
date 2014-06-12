@@ -23,8 +23,8 @@ public enum HouseAttribute {
 		JSONArray arr = new JSONArray();
 		for(HouseAttribute ha : HouseAttribute.values()){
 			JSONObject jobj = new JSONObject();
-			jobj.put("value", ha.code);
-			jobj.put("name", ha.toString());
+			jobj.put("value", ha.name());
+			jobj.put("name", ha.name());
 			arr.add(jobj);
 		}
 		return arr;

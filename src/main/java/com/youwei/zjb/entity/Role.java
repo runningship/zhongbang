@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -19,12 +21,9 @@ import com.youwei.zjb.sys.Authority;
 public class Role {
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer id;
 	
-	/**
-	 * 公司id
-	 */
-	public Integer cid;
 	
 	/**
 	 * 职务，相当于角色名称
@@ -49,7 +48,7 @@ public class Role {
 			return result;
 		}
 		for(RoleAuthority rr : list){
-			result.add(Authority.valueOf(rr.authName));
+			result.add(Authority.valueOf(rr.name));
 		}
 		return result;
 	}

@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -19,6 +21,7 @@ import com.youwei.zjb.SimpDaoTool;
 public class User {
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	@WebParam(name="userId")
 	public Integer id;
 	
@@ -43,6 +46,9 @@ public class User {
 	@Column(name="dizhi")
 	public String address;
 	
+	/**
+	 * 0 或null 在职,1 离职
+	 */
 	public Integer flag;
 	
 	public Integer sh;
@@ -60,12 +66,12 @@ public class User {
 	public Integer hunyin;
 	
 	/**
-	 * 如企时间
+	 * 入企时间
 	 */
 	public Date rqsj;
 	
 	/**
-	 * 如企途径
+	 * 入企途径
 	 */
 	public String rqtj;
 	

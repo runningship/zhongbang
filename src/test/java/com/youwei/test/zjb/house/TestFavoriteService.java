@@ -30,7 +30,7 @@ public class TestFavoriteService {
 	public void testQuery(){
 		User user = new User();
 		user.id = 207;
-		ThreadSession.set(user);
+		ThreadSession.setUser(user);
 		List<House> list = service.list(null);
 		printResult(list);
 	}

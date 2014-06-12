@@ -1,5 +1,7 @@
 package com.youwei.zjb.sys;
 
+import net.sf.json.JSONObject;
+
 public enum Authority {
 	fy(null,"房源管理"),
 	fy_fy(fy,"房源"),
@@ -179,16 +181,57 @@ public enum Authority {
 	zc_bg_data_quyu(zc_bg,"本区域数据"),
 	zc_bg_data_all(zc_bg,"所有数据"),
 	
+	//系统或后台管理
+	xt(null,"后台管理"),
+	xt_zw(xt,"职务权限"),
+	xt_zw_view(xt_zw,"职务表" , 1),
+	xt_zw_add(xt_zw,"添加职务"),
+	xt_zw_edit(xt_zw,"修改职务"),
+	xt_zw_del(xt_zw,"删除职务"),
+	
+	xt_sq(xt,"电脑授权"),
+	xt_sq_list(xt_sq,"列表" ,1),
+	xt_sq_del(xt_sq,"删除"),
+	xt_sq_edit(xt_sq,"修改"),
+	xt_sq_data_dept(xt_sq,"本公司数据"),
+	xt_sq_data_quyu(xt_sq,"本区域数据"),
+	xt_sq_data_all(xt_sq,"所有数据"),
+	
+	xt_sq_sh(xt_sq,"授权审核"),
+	xt_sq_sh_list(xt_sq_sh,"审核列表" , 1),
+	
+	xt_cz(xt,"操作记录"),
+	xt_cz_list(xt_cz,"操作记录列表",1),
 	xx(null,"房源");
 	
 	private Authority parent;
-	private String name;
+	private String text;
+	private int isMenu=0;
 	private Authority(Authority parent, String name){
 		this.parent = parent;
-		this.name = name;
+		this.text = name;
 	}
-
-	public String getName() {
-		return name;
+	private Authority(Authority parent, String name ,int isMenu){
+		this.parent = parent;
+		this.text = name;
+		this.isMenu = isMenu;
+	}
+	public String getText() {
+		return text;
+	}
+	public int IsMenu(){
+		return isMenu;
+	}
+	public Authority getParent(){
+		return parent;
+	}
+	
+	public JSONObject toJSONObject(){
+		JSONObject jobj = new JSONObject();
+		jobj.put("name", this.name());
+		jobj.put("text", this.text);
+		jobj.put("parent", this.parent==null? "": this.parent.name());
+		jobj.put("isMenu", this.isMenu);
+		return jobj;
 	}
 }

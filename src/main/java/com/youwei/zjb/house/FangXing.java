@@ -38,8 +38,8 @@ public enum FangXing {
 		JSONArray arr = new JSONArray();
 		for(FangXing fx : FangXing.values()){
 			JSONObject jobj = new JSONObject();
-			jobj.put("name", fx.toString());
-			jobj.put("value", fx.toString());
+			jobj.put("name", fx.name());
+			jobj.put("value", fx.name());
 			arr.add(jobj);
 		}
 		return arr;

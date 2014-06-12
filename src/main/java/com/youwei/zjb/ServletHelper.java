@@ -26,6 +26,8 @@ import org.bc.sdak.utils.LogUtil;
 import org.bc.web.ModelAndView;
 import org.bc.web.WebParam;
 
+import com.youwei.zjb.house.HouseAttribute;
+
 public class ServletHelper {
 
 	private static Map<String,Object> getData(HttpServletRequest req) {
@@ -143,7 +145,12 @@ public class ServletHelper {
 					}catch(Exception ex){
 						throw new GException(PlatformExceptionType.ParameterMissingError,"无效的数据["+pname+"="+tmp+"],必须是数字类型");
 					}
-				}else{
+				} else if(Enum.class.equals(f.getType().getSuperclass())){
+					if(data.get(pname)!=null){
+						Enum enumVal = Enum.valueOf((Class<Enum>)(f.getType()), data.get(pname).toString());
+						f.set(obj, enumVal);
+					}
+        		}else{
 					f.set(obj, data.get(pname));
 				}
 			} catch (IllegalArgumentException | IllegalAccessException e) {

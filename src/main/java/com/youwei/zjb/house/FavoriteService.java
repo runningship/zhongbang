@@ -34,7 +34,7 @@ public class FavoriteService {
 	}
 	
 	public List<House> list(HouseQuery query){
-		User user = ThreadSession.get();
+		User user = ThreadSession.getUser();
 		if(user==null){
 			return new ArrayList<House>();
 		}

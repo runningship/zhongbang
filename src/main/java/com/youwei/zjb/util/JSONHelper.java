@@ -39,7 +39,11 @@ public class JSONHelper {
 		cfg.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
 		cfg.registerJsonValueProcessor(Timestamp.class, new JsonDateValueProcessor());
 		for(Object obj : list){
-			arr.add(JSONObject.fromObject(obj,cfg));
+			if(obj instanceof Enum){
+				arr.add(JSONArray.fromObject(obj,cfg));
+			}else{
+				arr.add(JSONObject.fromObject(obj,cfg));
+			}
 		}
 		return arr;
 	}
