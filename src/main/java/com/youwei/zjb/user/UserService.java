@@ -20,7 +20,9 @@ import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
 import com.youwei.zjb.DateSeparator;
+import com.youwei.zjb.KeyConstants;
 import com.youwei.zjb.PlatformExceptionType;
+import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.sys.entity.PC;
@@ -130,6 +132,7 @@ public class UserService {
 		}
 		mv.data.put("result", "0");
 		mv.data.put("msg", "登录成功");
+		ThreadSession.getHttpServletRequest().getSession().setAttribute(KeyConstants.Session_User, user);
 		return mv;
 	}
 

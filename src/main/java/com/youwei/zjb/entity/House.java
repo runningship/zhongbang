@@ -89,12 +89,18 @@ public class House {
 	/**
 	 * 装修
 	 */
-	public String zhuangxiu;
+	public Integer zhuangxiu;
 
 	public Float mianji;
 
+	/**
+	 * 租价
+	 */
 	public Float zjia;
 
+	/**
+	 * 售价
+	 */
 	public Float sjia;
 
 	public Float djia;

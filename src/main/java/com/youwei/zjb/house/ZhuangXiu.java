@@ -3,14 +3,18 @@ package com.youwei.zjb.house;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-public enum State {
+public enum ZhuangXiu {
 
-	有效(1),
-	无效(4),
-	暂缓(3);
+	毛坯(1),
+	清水(2),
+	简装(3),
+	中装(4),
+	精装(5),
+	豪装(6);
+	
 	private int code;
 	
-	private State( int code){
+	private ZhuangXiu( int code){
 		this.code = code;
 	}
 
@@ -20,11 +24,11 @@ public enum State {
 	
 	public static JSONArray toJsonArray(){
 		JSONArray arr = new JSONArray();
-		for(State state : State.values()){
+		for(ZhuangXiu zx : ZhuangXiu.values()){
 			JSONObject jobj = new JSONObject();
-			jobj.put("value", state.name());
-			jobj.put("name", state.name());
-			jobj.put("code", state.code);
+			jobj.put("value", zx.name());
+			jobj.put("name", zx.name());
+			jobj.put("code", zx.code);
 			arr.add(jobj);
 		}
 		return arr;

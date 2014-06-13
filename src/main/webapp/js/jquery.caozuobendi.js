@@ -82,8 +82,8 @@ return l;
 function splitIsStr(a,b,c){
 var str=a;
 if(b==''){b=','};
-strs=str.split(b); //字符分割      
-for (i=0;i<strs.length ;i++ ){    
+strs=str.split(b); //字符分割 
+for (i=0;i<strs.length ;i++ ){
 if(strs[i]==c){
 return 1;
 break;
@@ -94,6 +94,22 @@ return 0;
 }
 
 
+//转换form表单成json
+$.fn.serializeObject = function(){
+   var o = {};
+   var a = this.serializeArray();
+   $.each(a, function() {
+       if (o[this.name]) {
+           if (!o[this.name].push) {
+               o[this.name] = [o[this.name]];
+           }
+           o[this.name].push(this.value || '');
+       } else {
+           o[this.name] = this.value || '';
+       }
+   });
+   return o;
+}; 
 
 
 

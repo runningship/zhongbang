@@ -16,35 +16,100 @@
 <script type="text/javascript" src="../js/jquery.caozuobendi.js"></script>
 <script type="text/javascript" src="../js/buildHtml.js"></script>
 <script type="text/javascript">
+/*
+p   当前页码   
+pn  总页码
+ln  总条数
+
+autoCount      
+currentPageNo  
+firstOfPage    
+lastOfPage     
+pageSize       
+pageUrl        
+totalCount     
+totalPageCount
+*/
+var p='',pn='',ln='';
+
+function fix(tableH,TableB){
+  alert(0)
+  for(var i=0;i<=tableB.find('td:last').index();i++){
+    TableH.eq(i).css('width',tableB.find('td').eq(i).width());
+  }
+}
 function setMainHeight(){
   $('.mainer').css({
     top: $('.header').height()+12,
     bottom:$('.footer').height()+1
   });
 }
+function setPageInfo(){
+  var pageInfos=''+
+  '<div class="btn-group">'+
+  '  <button type="button" class="btn btn-default">'+ln+'</button>'+
+  '  <button type="button" class="btn btn-default">'+p+'/'+pn+'</button>'+
+  '</div>'+
+  '<div class="btn-group">';
+  var pageInfos=pageInfos+
+  '  <button type="button" class="btn btn-default btn_p_prev_no">首页</button>';
+  var pageInfos=''+
+  '  <button type="button" class="btn btn-default btn_p_prev">上一页</button>';
+  var pageInfos=pageInfos+
+  '  <button type="button" class="btn btn-default btn_p_list">1</button>'+
+  '  <button type="button" class="btn btn-default btn_p_list">2</button>'+
+  '  <button type="button" class="btn btn-default btn_p_list">3</button>'+
+  '  <button type="button" class="btn btn-default btn_p_list">4</button>'+
+  '  <button type="button" class="btn btn-default btn_p_list">5</button>';
+  var pageInfos=pageInfos+
+  '  <button type="button" class="btn btn-default btn_p_next">下一页</button>';
+  var pageInfos=pageInfos+
+  '  <button type="button" class="btn btn-default btn_p_next_no">尾页</button>'+
+  '</div>'+
+  $('#foot_page_box').html(pageInfos);
+}
 function getHuseList(a){
-  $.get('/zb/house/listAll', function(data) {
-  var getStr=JSON.parse(data);
-  //  alert(getStr['houses'])
-    buildHtmlWithJsonArray("id_House_list",getStr['houses']);
+  var url='/zb/house/listAll';
+  $.ajax({
+    type: 'POST',
+    url: url,
+    data:a,
+    success: function(data){
+    var getStr=JSON.parse(data);
+        buildHtmlWithJsonArray("id_House_list",getStr['page']['data']);
+    }
+  });
+}
+function onSubmit_Form(){
+  $('form[name=form1]').on('submit', function(event) {
+var jsonuserinfo = $("form[name=form1]").serialize(); //自动将form表单封装成json  
+//    alert(jsonuserinfo); 
+//    alert(JSON.stringify(jsonuserinfo)); 
+//var jsonuserinfo = $('form[name=form1]').serializeObject();
+//    alert(JSON.stringify(jsonuserinfo));
+//var jsonuserinfoData=JSON.stringify(jsonuserinfo);
+//alert($("form[name=form1]").find('input[name=quyus]').val())
+    getHuseList(jsonuserinfo)
+    return false;
   });
 }
 $(function(){
-setMainHeight();
-$.get('/zb/house/getQueryOptions', function(data) {
-var getStr=JSON.parse(data);
-//  alert(getStr['chaoxiang'])
-  buildHtmlWithJsonArray("id_chaoxiang",getStr['chaoxiang']); //朝向
-  buildHtmlWithJsonArray("id_fangxing",getStr['fangxing']);   //户型
-  buildHtmlWithJsonArray("id_leibie",getStr['leibie']);       //类别
-  buildHtmlWithJsonArray("id_louxing",getStr['louxing']);     //楼型
-  buildHtmlWithJsonArray("id_jiaoyi",getStr['jiaoyi']);       //交易
-  buildHtmlWithJsonArray("id_quyu",getStr['quyu']);           //区域
-  buildHtmlWithJsonArray("id_zhuangtai",getStr['zhuangtai']); //状态
-  buildHtmlWithJsonArray("id_xingzhi",getStr['xingzhi']); //房型
-  buildHtmlWithJsonArray("id_datetype",getStr['datetype']); //房型
-});
-getHuseList('');
+  onSubmit_Form();
+  setMainHeight();
+  getHuseList('');
+  $.get('/zb/house/getQueryOptions', function(data) {
+  var getStr=JSON.parse(data);
+  //  alert(getStr['datetype'])
+    buildHtmlWithJsonArray("id_chaoxiang",getStr['chaoxiang']); //朝向
+    buildHtmlWithJsonArray("id_fangxing",getStr['fangxing']);   //户型
+    buildHtmlWithJsonArray("id_leibie",getStr['leibie']);       //类别
+    buildHtmlWithJsonArray("id_louxing",getStr['louxing']);     //楼型
+    buildHtmlWithJsonArray("id_jiaoyi",getStr['jiaoyi']);       //交易
+    buildHtmlWithJsonArray("id_quyu",getStr['quyu']);           //区域
+    buildHtmlWithJsonArray("id_zhuangtai",getStr['zhuangtai']); //状态
+    buildHtmlWithJsonArray("id_xingzhi",getStr['xingzhi']); //房型
+    buildHtmlWithJsonArray("id_datetype",getStr['datetype'],true); //房型
+  });
 })
 </script>
 <style type="text/css">
@@ -53,7 +118,7 @@ getHuseList('');
 </head>
 <body class="hlist bodyer">
 <div class="header">
-  <form class="form-horizontal" role="form">
+  <form class="form-horizontal" role="form" name="form1">
     <div class="clearfix">
       <div class="btn-group">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -71,7 +136,7 @@ getHuseList('');
           状 态 <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" id="id_zhuangtai">
-          <li><label><input type="checkbox" name="iv_zhuangtai" value="${value}"> ${name}</label>
+          <li><label><input type="checkbox" name="ztai" value="${name}"> ${name}</label>
         </ul>
       </div>
       <div class="btn-group">
@@ -79,7 +144,7 @@ getHuseList('');
           朝向 <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" id="id_chaoxiang">
-          <li><label><input type="checkbox" name="iv_chaoxiang" value="${value}"> ${name}</label></li>
+          <li><label><input type="checkbox" name="chaoxiang" value="${name}"> ${name}</label></li>
         </ul>
       </div>
       <div class="btn-group">
@@ -87,7 +152,7 @@ getHuseList('');
           房屋类别 <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" id="id_leibie">
-          <li><label><input type="checkbox" name="iv_leibie" value="${value}"> ${name}</label></li>
+          <li><label><input type="checkbox" name="leibie" value="${name}"> ${name}</label></li>
         </ul>
       </div>
       <div class="btn-group">
@@ -95,7 +160,7 @@ getHuseList('');
           性质 <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" id="id_xingzhi">
-          <li><label><input type="checkbox" name="iv_xingzhi" value="${value}"> ${name}</label>
+          <li><label><input type="checkbox" name="xingzhi" value="${name}"> ${name}</label>
         </ul>
       </div>
       <div class="btn-group">
@@ -103,7 +168,7 @@ getHuseList('');
           交易 <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" id="id_jiaoyi">
-          <li><label><input type="checkbox" name="iv_jiaoyi" value="${value}"> ${name}</label>
+          <li><label><input type="checkbox" name="jiaoyis" value="${name}"> ${name}</label>
         </ul>
       </div>
       <div class="btn-group">
@@ -111,7 +176,7 @@ getHuseList('');
           楼型 <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" id="id_louxing">
-          <li><label><input type="checkbox" name="iv_louxing" value="${value}"> ${name}</label></li>
+          <li><label><input type="checkbox" name="louxing" value="${name}"> ${name}</label></li>
         </ul>
       </div>
       <div class="btn-group">
@@ -119,7 +184,7 @@ getHuseList('');
           房型 <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" id="id_fangxing">
-          <li><label><input type="checkbox" name="iv_fangxing" value="${value}"> ${name}</label></li>
+          <li><label><input type="checkbox" name="fangxing" value="${name}"> ${name}</label></li>
         </ul>
       </div>
       <div class="btn-group">
@@ -127,75 +192,67 @@ getHuseList('');
           区域 <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" id="id_quyu">
-          <li><label><input type="checkbox" name="iv_quyu" value="${value}"> ${name}</label>
+          <li><label><input type="checkbox" name="quyus" value="${name}"> ${name}</label>
         </ul>
       </div>
-      <div class="input-group input-group-max">
-        <span class="input-group-addon">智能</span>
-        <input type="text" class="form-control">
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary">搜索提交</button>
+        <button type="submit" class="btn">清空</button>
       </div>
     </div>
 
     <div class="clearfix">
       <div class="input-group">
         <span class="input-group-addon">日期</span>
-        <select class="form-control" id="id_datetype">
-          <option value="${value}">${name}</option>
+        <select class="form-control" id="id_datetype" name="dateType">
+          <option value="${name}">${name}</option>
         </select>
-        <input type="text" class="form-control" data-toggle="dropdown">
-        <input type="text" class="form-control" data-toggle="dropdown">
+        <input type="text" class="form-control" name="dateStart">
+        <input type="text" class="form-control" name="dateEnd">
       </div>
       <div class="input-group">
-        <span class="input-group-addon">总价</span>
-        <input type="text" class="form-control" data-toggle="dropdown">
-        <input type="text" class="form-control" data-toggle="dropdown">
-      </div>
-      <div class="input-group">
-        <span class="input-group-addon">单价</span>
-        <input type="text" class="form-control" data-toggle="dropdown">
-        <input type="text" class="form-control" data-toggle="dropdown">
+        <span class="input-group-addon">售价</span>
+        <input type="text" class="form-control" name="sjiaStart">
+        <input type="text" class="form-control" name="sjiaEnd">
       </div>
       <div class="input-group">
         <span class="input-group-addon">面积</span>
-        <input type="text" class="form-control" data-toggle="dropdown">
-        <input type="text" class="form-control" data-toggle="dropdown">
+        <input type="text" class="form-control" name="mianjiStart">
+        <input type="text" class="form-control" name="mianjiEnd">
       </div>
       <div class="input-group">
         <span class="input-group-addon">楼层</span>
-        <input type="text" class="form-control" data-toggle="dropdown">
-        <input type="text" class="form-control" data-toggle="dropdown">
+        <input type="text" class="form-control" name="lcengStart">
+        <input type="text" class="form-control" name="lcengEnd">
       </div>
-      <div class="btn-group">
-        <button type="submit" class="btn btn-primary">搜索提交</button>
-        <button type="submit" class="btn">清空</button>
+      <div class="input-group input-group-max">
+        <span class="input-group-addon">智能</span>
+        <input type="text" class="form-control" name="">
       </div>
 
-      <br><br><br><br>
-
-      <div class="input-group input-group-mt3">
+      <br><br>
+      <div class="input-group input-group-max input-group-mt2">
         <span class="input-group-addon">产权证</span>
-        <input type="text" class="form-control" data-toggle="dropdown">
-        <ul class="dropdown-menu" role="menu">
-          <li><label><input type="checkbox"> 蜀山区 </label></li>
-        </ul>
-      </div>
+        <input type="text" class="form-control" name="chanquan">
+      </div><br><br>
+
       <div class="input-group input-group-mt3 input-group-select">
         <span class="input-group-addon">发布人</span>
-        <select class="form-control">
+        <select class="form-control" name="form_cid">
           <option>1</option>
           <option>2</option>
           <option>3</option>
           <option>4</option>
           <option>5</option>
         </select>
-        <select class="form-control">
+        <select class="form-control" name="form_did">
           <option>1</option>
           <option>2</option>
           <option>3</option>
           <option>4</option>
           <option>5</option>
         </select>
-        <select class="form-control">
+        <select class="form-control" name="form_uid">
           <option>1</option>
           <option>2</option>
           <option>3</option>
@@ -207,7 +264,7 @@ getHuseList('');
 
 
   </form>
-  <table class="table">
+  <table class="table .table_header">
     <tr>
       <th>房源编号</th>
       <th>类别</th>
@@ -231,46 +288,31 @@ getHuseList('');
   </table>
 </div>
 <div class="mainer">
-  <table class="table table-hover" id="id_House_list">
+  <table class="table table-hover .table_bodyer" >
+    <tbody id="id_House_list">
     <tr>
+      <td>${houseNumber}</td>
+      <td>${leibie}</td>
       <td>${quyu}</td>
-      <td>出售</td>
-      <td>庐阳区</td>
-      <td>亳州城A区</td>
-      <td>1#405</td>
-      <td>1-1-1-1</td>
-      <td>4/6</td>
-      <td>31</td>
-      <td>9355</td>
-      <td>29</td>
-      <td>简装</td>
-      <td>1998</td>
-      <td>2014-2-19 15:12:00</td>
-      <td>唐瑞</td>
-      <td>私盘</td>
-      <td>有效</td>
+      <td>${area}</td>
+      <td>${dhao}#${fhao}</td>
+      <td>${hxf}-${hxt}-${hxw}-${hxy}</td>
+      <td>${lceng}/${zceng}</td>
+      <td>${mianji}</td>
+      <td>${djia}</td>
+      <td>${zjia}</td>
+      <td>${zhuangxiu}</td>
+      <td>${dateyear}</td>
+      <td>${dateadd}</td>
+      <td>${forlxr}</td>
+      <td>${xingzhi}</td>
+      <td>${flag}</td>
       <td>有</td>
       <td>修改 删除</td>
     </tr>
+    </tbody>
   </table>
 </div>
-<div class="footer">
-  <div class="btn-group">
-    <button type="button" class="btn btn-default">15245</button>
-    <button type="button" class="btn btn-default">1/5</button>
-  </div>
-  <div class="btn-group">
-    <button type="button" class="btn btn-default">首页</button>
-    <button type="button" class="btn btn-default">上一页</button>
-    <button type="button" class="btn btn-default">1</button>
-    <button type="button" class="btn btn-default">2</button>
-    <button type="button" class="btn btn-default">3</button>
-    <button type="button" class="btn btn-default">4</button>
-    <button type="button" class="btn btn-default">5</button>
-    <button type="button" class="btn btn-default">下一页</button>
-    <button type="button" class="btn btn-default">尾页</button>
-  </div>
-</div>
-
+<div class="footer" id="foot_page_box"></div>
 </body>
 </html>

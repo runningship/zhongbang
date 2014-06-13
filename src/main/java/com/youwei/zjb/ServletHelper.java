@@ -3,8 +3,11 @@ package com.youwei.zjb;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -35,7 +38,11 @@ public class ServletHelper {
 		Enumeration<String> names = req.getParameterNames();
 		while(names.hasMoreElements()){
 			String key = names.nextElement();
-			String val = req.getParameter(key);
+			req.getParameterValues("userId");
+			String[] val = req.getParameterValues(key);
+			if(val.length==1 && StringUtils.isEmpty(val[0])){
+				continue;
+			}
 			map.put(key, val);
 		}
 		return map;
@@ -60,39 +67,41 @@ public class ServletHelper {
         for(int i=0;i<pTypes.length;i++){
         	try {
         		paramName = attr.variableName(i + pos);
-        		Object obj = data.get(paramName);
+        		String[] pval = (String[]) data.get(paramName);
+        		Object obj = null;
         		String typeName = pTypes[i].getName();
 //				Class<?> pt = Class.forName(pTypes[i].getName());
         		if("int".equals(typeName) || "java.lang.Integer".equals(typeName)){
-        			if(obj==null){
+        			if(pval==null || pval.length==0){
         				throw new GException(PlatformExceptionType.ParameterMissingError,"parameter "+paramName+" is missing");
         			}
-        			obj = Integer.valueOf(String.valueOf(obj));
+//        			obj = Integer.valueOf(String.valueOf(obj));
+        			obj = Integer.valueOf(pval[0]);
         		}else if("long".equals(typeName) || "java.lang.Long".equals(typeName)){
-        			if(obj==null){
+        			if(pval==null || pval.length==0){
         				throw new GException(PlatformExceptionType.ParameterMissingError,"parameter "+paramName+" is missing");
         			}
-        			obj = Long.valueOf(String.valueOf(obj));
+        			obj = Long.valueOf(pval[0]);
         		}else if("float".equals(typeName) || "java.lang.Float".equals(typeName)){
-        			if(obj==null){
+        			if(pval==null || pval.length==0){
         				throw new GException(PlatformExceptionType.ParameterMissingError,"parameter "+paramName+" is missing");
         			}
-        			obj = Float.valueOf(String.valueOf(obj));
+        			obj = Float.valueOf(pval[0]);
         		}else if("double".equals(typeName) || "java.lang.Double".equals(typeName)){
-        			if(obj==null){
+        			if(pval==null || pval.length==0){
         				throw new GException(PlatformExceptionType.ParameterMissingError,"parameter "+paramName+" is missing");
         			}
-        			obj = Double.valueOf(String.valueOf(obj));
+        			obj = Double.valueOf(pval[0]);
         		}else if("char".equals(typeName) || "java.lang.Character".equals(typeName)){
-        			if(obj==null){
+        			if(pval==null || pval.length==0){
         				throw new GException(PlatformExceptionType.ParameterMissingError,"parameter "+paramName+" is missing");
         			}
-        			obj = String.valueOf(obj).charAt(0);
+        			obj = String.valueOf(pval[0]).charAt(0);
         		}else if("java.lang.String".equals(typeName)){
-        			if(obj==null){
+        			if(pval==null || pval.length==0){
         				obj="";
         			}else{
-        				obj = String.valueOf(obj);
+        				obj = pval[0];
         			}
         		}else{
 					obj = Class.forName(pTypes[i].getName()).newInstance();
@@ -126,32 +135,34 @@ public class ServletHelper {
 				}
 			}
 			f.setAccessible(true);
+			String[] pval = (String[]) data.get(pname);
+			if(pval==null){
+				continue;
+			}
 			try {
 				if("float".equals(f.getType().getName()) || "java.lang.Float".equals(f.getType().getName())){
-					Object tmp = data.get(pname);
 					try{
-						if(tmp!=null){
-							f.set(obj, Float.valueOf(String.valueOf(tmp)));
-						}
+						f.set(obj, Float.valueOf(String.valueOf(pval[0])));
 					}catch(Exception ex){
-						throw new GException(PlatformExceptionType.ParameterMissingError,"无效的数据["+pname+"="+tmp+"],必须是数字类型");
+						throw new GException(PlatformExceptionType.ParameterMissingError,"无效的数据["+pname+"="+pval[0]+"],必须是数字类型");
 					}
 				}else if("int".equals(f.getType().getName()) || "java.lang.Integer".equals(f.getType().getName())){
-					Object tmp = data.get(pname);
 					try{
-						if(tmp!=null){
-							f.set(obj, Integer.valueOf(String.valueOf(tmp)));
-						}
+						f.set(obj, Integer.valueOf(String.valueOf(pval[0])));
 					}catch(Exception ex){
-						throw new GException(PlatformExceptionType.ParameterMissingError,"无效的数据["+pname+"="+tmp+"],必须是数字类型");
+						throw new GException(PlatformExceptionType.ParameterMissingError,"无效的数据["+pname+"="+pval[0]+"],必须是数字类型");
 					}
 				} else if(Enum.class.equals(f.getType().getSuperclass())){
 					if(data.get(pname)!=null){
-						Enum enumVal = Enum.valueOf((Class<Enum>)(f.getType()), data.get(pname).toString());
+						Enum enumVal = Enum.valueOf((Class<Enum>)(f.getType()), pval[0]);
 						f.set(obj, enumVal);
 					}
+        		}else if(java.util.List.class.equals(f.getType())){
+        			List list = new ArrayList();
+        			Collections.addAll(list, pval);
+        			f.set(obj, list);
         		}else{
-					f.set(obj, data.get(pname));
+					f.set(obj, pval[0]);
 				}
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				LogUtil.warning("set value for "+obj.getClass().getName()+"."+pname+" failed.("+e.getMessage()+")");

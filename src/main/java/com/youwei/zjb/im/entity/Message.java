@@ -14,22 +14,15 @@ public class Message {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer id;
 	
-	public Integer senderId;
-	
-	public Integer receiverId;
-	
-	/**
-	 * 1,个人 2,群组
-	 */
-	public Integer receiverType;
-	
 	public String content;
 	
 	public Date addtime;
 	
-	/**
-	 * 1 已读
-	 * 0 未读
-	 */
-	public Integer read;
+	public Integer senderId;
+	
+	public Integer receiverId;
+	
+	public Integer receiverType;
+	
+	public Integer hasRead;
 }

@@ -27,6 +27,7 @@ public enum JiaoYi {
 			JSONObject jobj = new JSONObject();
 			jobj.put("value", jy.name());
 			jobj.put("name", jy.name());
+			jobj.put("code", jy.code);
 			arr.add(jobj);
 		}
 		return arr;

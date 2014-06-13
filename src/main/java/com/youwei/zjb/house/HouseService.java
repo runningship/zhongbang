@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.Page;
 import org.bc.sdak.TransactionalServiceHelper;
+import org.bc.sdak.utils.BeanUtil;
 import org.bc.web.ModelAndView;
 import org.bc.web.Module;
 import org.bc.web.WebMethod;
@@ -73,7 +74,7 @@ public class HouseService {
 		}
 	}
 	
-	public ModelAndView listMy(HouseQuery query){
+	public ModelAndView listMy(HouseQuery query ,Page<House> page){
 		User user = ThreadSession.getUser();
 		if(user==null){
 			ModelAndView mv = new ModelAndView();
@@ -81,7 +82,7 @@ public class HouseService {
 			return mv;
 		}
 		query.userId = user.id;
-		return listAll(query);
+		return listAll(query ,page);
 	}
 	
 	@WebMethod
@@ -100,8 +101,9 @@ public class HouseService {
 	}
 	
 	@WebMethod
-	public ModelAndView listAll(HouseQuery query){
+	public ModelAndView listAll(HouseQuery query ,Page<House> page){
 		List<Object> params = new ArrayList<Object>();
+		System.out.println(BeanUtil.toString(query));
 		StringBuilder hql = null;
 		if(StringUtils.isNotEmpty(query.xpath)){
 			hql = new StringBuilder(" select h from  House h  ,User u where h.userId=u.id and u.id is not null and u.orgpath like ? ");
@@ -113,25 +115,35 @@ public class HouseService {
 			hql.append(" and xingzhi = ? ");
 			params.add(String.valueOf(query.xingzhi.getCode()));
 		}
-		if(StringUtils.isNotEmpty(query.quyu)){
-			hql.append(" and quyu = ?");
-			params.add(query.quyu);
-		}
-		if(query.fangxing!=null){
-			hql.append(" and ").append(query.fangxing.getQueryStr());
-		}
-		if(query.jiaoyi!=null && !query.jiaoyi.isEmpty()){
+		
+		if(query.quyus!=null){
 			hql.append(" and ( ");
-			for(int i=0;i<query.jiaoyi.size();i++){
-				hql.append(" jiaoyi = ? ");
-				if(i<query.jiaoyi.size()-1){
+			for(int i=0;i<query.quyus.size();i++){
+				hql.append(" quyu = ? ");
+				if(i<query.quyus.size()-1){
 					hql.append(" or ");
 				}
-				params.add(query.jiaoyi.get(i).getCode());
+				params.add(query.quyus.get(i));
 			}
 			hql.append(" )");
 		}
-		if(query.state!=null){
+		
+		if(query.fangxing!=null){
+			hql.append(" and ").append(query.fangxing.getQueryStr());
+		}
+		
+		if(query.jiaoyis!=null){
+			hql.append(" and ( ");
+			for(int i=0;i<query.jiaoyis.size();i++){
+				hql.append(" jiaoyi = ? ");
+				if(i<query.jiaoyis.size()-1){
+					hql.append(" or ");
+				}
+				params.add(JiaoYi.valueOf(query.jiaoyis.get(i)).getCode());
+			}
+			hql.append(" )");
+		}
+		if(query.ztai!=null){
 			
 		}
 		if(StringUtils.isNotEmpty(query.leibie)){
@@ -188,14 +200,9 @@ public class HouseService {
 		}
 		
 		hql.append(" and ( isdel= 0 or isdel is null) ");
-		
-		Page<House> page = new Page<House>();
-//		page.setCurrentPageNo(1);
-		page.setPageSize(3);
 		page = service.findPage(page, hql.toString(),params.toArray());
-		List<House> houses = page.getResult();
 		ModelAndView mv = new ModelAndView();
-		mv.data.put("houses", JSONHelper.toJSONArray(houses));
+		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;
 	}
 	

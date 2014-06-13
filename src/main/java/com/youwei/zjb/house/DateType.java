@@ -32,6 +32,7 @@ public enum DateType {
 			JSONObject jobj = new JSONObject();
 			jobj.put("value", dt.name());
 			jobj.put("name", dt.name());
+			jobj.put("code", dt.code);
 			arr.add(jobj);
 		}
 		return arr;

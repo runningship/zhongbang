@@ -37,7 +37,7 @@ public class GrandServlet extends HttpServlet{
 		resp.setCharacterEncoding("utf8");
 		resp.setContentType("text/html");
 		String path = req.getPathInfo();
-		User u = (User)req.getSession().getAttribute("user");
+		User u = (User)req.getSession().getAttribute(KeyConstants.Session_User);
 		ThreadSession.setUser(u);
 		ThreadSession.setHttpServletRequest(req);
 		LogUtil.info(path);
@@ -95,6 +95,7 @@ public class GrandServlet extends HttpServlet{
 			String msg = ex.getTargetException().getMessage();
 			resp.getWriter().println(msg);
 		}catch(GException ex){
+			ex.printStackTrace();
 			String msg = ex.getMessage();
 			if(StringUtils.isEmpty(msg)){
 				msg = ex.getStackTrace()[0].toString();

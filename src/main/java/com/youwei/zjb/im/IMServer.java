@@ -93,8 +93,12 @@ public class IMServer extends WebSocketServer{
 		dbMsg.senderId = data.getInt("senderId");
 		dbMsg.receiverId = recvId;
 		dbMsg.receiverType=1;
-		dao.saveOrUpdate(dbMsg);
-		
+		dbMsg.hasRead=0;
+		try{
+			dao.saveOrUpdate(dbMsg);
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 		if(recvType==1 && recv!=null){
 			//个人
 			recv.send(data.toString());

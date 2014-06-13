@@ -8,10 +8,10 @@ import com.youwei.zjb.AbstractQuery;
 public class HouseQuery extends AbstractQuery{
 
 	public HouseAttribute xingzhi;
-	public String quyu;
+	public List<String> quyus;
 	public FangXing fangxing;
-	public List<JiaoYi> jiaoyi = new ArrayList<JiaoYi>();
-	public State state;
+	public List<String> jiaoyis;
+	public State ztai;
 	public String leibie;
 	public Float sjiaStart;
 	public Float sjiaEnd;

@@ -25,6 +25,7 @@ public enum HouseAttribute {
 			JSONObject jobj = new JSONObject();
 			jobj.put("value", ha.name());
 			jobj.put("name", ha.name());
+			jobj.put("code", ha.code);
 			arr.add(jobj);
 		}
 		return arr;

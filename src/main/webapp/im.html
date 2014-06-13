@@ -6,12 +6,12 @@
 <META HTTP-EQUIV="expires" CONTENT="0">
 <link rel="stylesheet" type="text/css" href="chat.css" />
 <script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="buildHtml.js"></script>
+<script type="text/javascript" src="js/buildHtml.js"></script>
 <script type="text/javascript">
 var contacts;
 var receiverId;
 var ws;
-var myId=316;
+var myId;
 var msgContainer;
 function showChild(parent){
 	var img = parent.children[0];
@@ -33,6 +33,7 @@ function showChild(parent){
 	//alert(parent);
 }
 window.onload=function(){
+	myId = GetQueryString("userId");
 	msgContainer = $('#msgContainer');
 	$.ajax({
         url:'/zb/im/getContacts?userId='+myId,
@@ -156,6 +157,12 @@ function loadHistory(cid){
 	data['contactId']=cid;
 	ws.send(JSON.stringify(data));
 }
+var LocString=String(window.document.location.href);
+function GetQueryString(str){
+	var rs=new RegExp("(^|)"+str+"=([^&]*)(&|$)","gi").exec(LocString),tmp;
+	if(tmp=rs)return tmp[2];
+return "";
+}
 </script>
 </head>
 <body>
@@ -171,13 +178,13 @@ function loadHistory(cid){
 			<div>
 				
 				<span id="contact">
-				<span style="display:" state="close">
-					<div onclick="openChat(${contactId});" style="padding-left:50px;background-color:whitesmoke;height:56px;border-bottom:1px solid #ddd;cursor:pointer">
+					<div onclick="openChat(${contactId});" id="${contactId}" style="padding-left:50px;background-color:whitesmoke;height:56px;border-bottom:1px solid #ddd;cursor:pointer">
+						<div style="background:red;color:white;float:right;margin-right:10px;margin-top:10px;border-radius:8px;height:16px;width:25px;text-align:center;font-size:12px;">9</div>
 						<p style="line-height:0px;display:inline-block">${contactName}</p>
 						<p style="font-size:8px;color:#aaa;line-height:15px;margin:0px"><span>[在线]</span><span style="padding-left:5px;">${contactTel}</span>
 						</p>
+
 					</div>
-				</span>
 				</span>
 			</div>
 		</div>
