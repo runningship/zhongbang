@@ -32,28 +32,28 @@ function showChild(parent){
 	
 	//alert(parent);
 }
-window.onload=function(){
-	myId = GetQueryString("userId");
-	msgContainer = $('#msgContainer');
+function loadContacts(){
 	$.ajax({
         url:'/zb/im/getContacts?userId='+myId,
         data:'',
-        timeout:3000,
+        timeout:30000,
         dataType:'json',
         beforeSend: function(XMLHttpRequest){
             
         },success:function (data, textStatus) {
-            if(data!=""){
-                // alert(data["contacts"]);
-                contacts = data["contacts"];
-                buildHtmlWithJsonArray("contact",contacts);
-            }
+            contacts = data["contacts"];
+            buildHtmlWithJsonArray("contact",contacts);
         },
         complete: function(XMLHttpRequest, textStatus){},
         error:function (XMLHttpRequest, textStatus, errorThrown) {
         	console.error(XMLHttpRequest.responseText);
         }
     });
+}
+window.onload=function(){
+	myId = GetQueryString("userId");
+	msgContainer = $('#msgContainer');
+	loadContacts();
 
 	ws = new WebSocket("ws://localhost:9099");
 	ws.onopen = function() { 
@@ -66,6 +66,8 @@ window.onload=function(){
 			onReceiveMsg(json);
 		}else if(json['type']=='history'){
 			buildHistory(json['history']);
+		}else if(json['type']=='userprofile'){
+			setUserProfile(json);
 		}
 	};
 	ws.onclose = function(e) {
@@ -76,6 +78,9 @@ window.onload=function(){
 	}
 	
 };
+function setUserProfile(profile){
+	$('#me').text(profile['username']);
+}
 function login(ws){
 	var data = JSON.parse("{}");
 	data["type"]="login";
@@ -88,7 +93,14 @@ function openChat(userId){
 	var contact = getContact(userId);
 	$('#cname').text(contact["contactName"]);
 	$('#chatWindow').css('display','');	
+
+
+	var msgCount = $($('#'+receiverId).children(0)[0]);
+	msgCount.text(0);
+	msgCount.css('display','none');
+
 	loadHistory(userId);
+
 }
 function closeChat(){
 	$('#chatWindow').css('display','none');	
@@ -103,10 +115,15 @@ function getContact(cid){
 function onReceiveMsg(data){
 	var dhtml = $('#recvTmp').html();
 	var sender = getContact(data['senderId']);
-	dhtml = dhtml.replace('${msg}',data['content']);
-	dhtml = dhtml.replace('${contact}',sender['contactName']);
-	dhtml = dhtml.replace('display:none','');
-	msgContainer.append(dhtml);
+	var msgCount = $($('#'+data['senderId']).children(0)[0]);
+	var count = parseInt(msgCount.text());
+	count++;
+	msgCount.text(count);
+	msgCount.css('display','');
+	// dhtml = dhtml.replace('${msg}',data['content']);
+	// dhtml = dhtml.replace('${contact}',sender['contactName']);
+	// dhtml = dhtml.replace('display:none','');
+	// msgContainer.append(dhtml);
 }
 function send(){
 	var text = $('#message').val();
@@ -119,6 +136,7 @@ function send(){
 	dhtml = dhtml.replace('${me}','我自己');
 	dhtml = dhtml.replace('display:none','');
 	msgContainer.append(dhtml);
+	msgContainer.scrollTop(msgContainer.scroll(0)[0].scrollHeight);
 	var data = JSON.parse('{}');
 	data['senderId']=myId;
 	data['type']='msg';
@@ -149,6 +167,7 @@ function buildHistory(list){
 			msgContainer.prepend(dhtml);
 		}
 	}
+	msgContainer.scrollTop(msgContainer.scroll(0)[0].scrollHeight);
 }
 function loadHistory(cid){
 	var data = JSON.parse('{}');
@@ -163,24 +182,102 @@ function GetQueryString(str){
 	if(tmp=rs)return tmp[2];
 return "";
 }
+
+function search(){
+	openSearchPanel();
+	var txt = $('#searchInput').val();
+	$.ajax({
+        url:'/zb/im/search?ownerId='+myId+'&txt='+txt,
+        timeout:10000,
+        dataType:'json',
+        type:'post',
+        beforeSend: function(XMLHttpRequest){
+            
+        },success:function (data, textStatus) {
+            var userSearchResult = data["contacts"]["data"];
+            buildHtmlWithJsonArray("userSearchResult",userSearchResult);
+        },
+        error:function (XMLHttpRequest, textStatus, errorThrown) {
+        	console.error(XMLHttpRequest.responseText);
+        }
+    });
+}
+function addContact(contactId){
+	// alert(contactId);
+	var url = '/zb/im/addContact?ownerId='+myId+'&contactId='+contactId;
+	$.ajax({
+        url:url,
+        data:'',
+        type:'post',
+        timeout:10000,
+        dataType:'json',
+        beforeSend: function(XMLHttpRequest){
+            
+        },success:function (data, textStatus) {
+            closeSearchPanel();
+            loadContacts();
+        },
+        complete: function(XMLHttpRequest, textStatus){},
+        error:function (XMLHttpRequest, textStatus, errorThrown) {
+        	console.error(XMLHttpRequest.responseText);
+        }
+    });
+}
+function delContact(contactId,e){
+	event.cancelBubble=true;
+	var url = '/zb/im/delContact?ownerId='+myId+'&contactId='+contactId;
+	$.ajax({
+        url:url,
+        data:'',
+        type:'post',
+        timeout:10000,
+        dataType:'json',
+        beforeSend: function(XMLHttpRequest){
+            
+        },success:function (data, textStatus) {
+            loadContacts();
+        },
+        complete: function(XMLHttpRequest, textStatus){},
+        error:function (XMLHttpRequest, textStatus, errorThrown) {
+        	console.error(XMLHttpRequest.responseText);
+        }
+    });
+}
+function closeSearchPanel(){
+	$('#searchPanel').css('display','none');
+}
+function openSearchPanel(){
+	$('#searchPanel').css('display','');	
+}
 </script>
 </head>
 <body>
 	<div style="float:left;">
-		<div style="background-color:#555;width:252px;height:45px;border-radius:8px 8px 0px 0px;text-align:center">
+		<div style="background-color:#555;width:252px;height:65px;border-radius:8px 8px 0px 0px;text-align:center">
 			<div style="padding-top:14px;">
-			<span style="font-size:18px;color:white;padding-left:20px;">联系人</span>
-			<span><img style="float:right;width:14px;margin-right:20px;" src="http://pub.idqqimg.com/smartqq/css/image/title_search_icon.png"/></span>
+			<span id="me" style="font-size:18px;color:white;padding-left:20px;"></span>
+			<div>
+			<input id='searchInput' onfocus="this.value='';" style="width:100%;line-height:23px;float:left;color:#eee" value="手机号码/姓名拼音"/>
+			<span style="position:absolute;padding-top:10px;left:235px;" onclick="search()"><img style="float:right;width:14px;margin-right:20px;cursor:pointer" src="http://pub.idqqimg.com/smartqq/css/image/title_search_icon.png"/></span>
+			</div>
 			</div>
 		</div>
 
-		<div style="width:250px;height:450px;background-color:#eee;font-size:16px;font-family:微软雅黑;border:solid 1px #ccc;">
+		<div id="searchPanel" style="height:400px;border:solid 1px #eee;position:absolute;width:250px;background:white;display:none">
+			<span id="userSearchResult">
+				<div style="height:30px;line-height:30px;">
+					<span style="margin-left:10px;">${uname}</span><a style="float:right;margin-right:20px;" href="javascript:addContact(${userId})" >开始聊天</a>
+				</div>
+			</span>
+		</div>
+
+		<div style="width:250px;height:450px;background-color:#eee;font-size:16px;font-family:微软雅黑;border:solid 1px #ccc;overflow-y:auto">
 			<div>
 				
 				<span id="contact">
 					<div onclick="openChat(${contactId});" id="${contactId}" style="padding-left:50px;background-color:whitesmoke;height:56px;border-bottom:1px solid #ddd;cursor:pointer">
-						<div style="background:red;color:white;float:right;margin-right:10px;margin-top:10px;border-radius:8px;height:16px;width:25px;text-align:center;font-size:12px;">9</div>
-						<p style="line-height:0px;display:inline-block">${contactName}</p>
+						<div style="display:none;background:red;color:white;float:right;margin-right:10px;margin-top:10px;border-radius:8px;height:16px;width:25px;text-align:center;font-size:12px;">0</div>
+						<p style="line-height:0px;display:inline-block">${contactName}</p><span onclick="delContact(${contactId})" style="float:right;margin-right:10px;color:#aaa">x</span>
 						<p style="font-size:8px;color:#aaa;line-height:15px;margin:0px"><span>[在线]</span><span style="padding-left:5px;">${contactTel}</span>
 						</p>
 
@@ -194,14 +291,14 @@ return "";
 		</div>
 	</div>
 
-	<div id="chatWindow" style="float:left;margin-left:20px;width:652px;display">
+	<div id="chatWindow" style="float:left;margin-left:20px;width:652px;display:none">
 		<div style="background-color:#444;height:45px;border-radius:8px 8px 0px 0px;text-align:center" >
 			<div style="padding-top:14px;">
 			<span id="cname" style="font-size:22px;color:white;padding-left:20px;font-weight:bold"></span>
 			<span onclick="closeChat();" style="font-size:16px;color:white;border:1px solid #666;padding:4px 12px;border-radius:6px;margin-top:-4px;float:right;margin-right:20px;cursor:pointer">关闭</span>
 			</div>
 		</div>
-		<div id="msgContainer" style="height:452px;background-color:whitesmoke;overflow-y:scroll" class="bubble">
+		<div id="msgContainer" style="height:452px;background-color:whitesmoke;overflow-y:scroll;" class="bubble">
 				
 		        
 

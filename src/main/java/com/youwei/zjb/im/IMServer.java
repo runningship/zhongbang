@@ -17,6 +17,7 @@ import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
+import com.youwei.zjb.entity.User;
 import com.youwei.zjb.im.entity.Message;
 import com.youwei.zjb.util.JSONHelper;
 
@@ -63,6 +64,11 @@ public class IMServer extends WebSocketServer{
 		JSONObject data = JSONObject.fromObject(message);
 		if("login".equals(data.getString("type"))){
 			conns.put(data.getInt("userId"), conn);
+			User user = dao.get(User.class,data.getInt("userId"));
+			JSONObject jobj = new JSONObject();
+			jobj.put("username", user.uname);
+			jobj.put("type", "userprofile");
+			conn.send(jobj.toString());
 		}else if("msg".equals(data.getString("type"))){
 			sendMsg(conn,data);
 		}else if("history".equals(data.getString("type"))){
