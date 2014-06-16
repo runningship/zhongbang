@@ -18,6 +18,7 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.im.entity.Contact;
 import com.youwei.zjb.im.entity.Message;
 import com.youwei.zjb.util.JSONHelper;
 
@@ -55,6 +56,7 @@ public class IMServer extends WebSocketServer{
 		if(removed!=null){
 			conns.remove(removed);
 		}
+		nofityStatus(removed, 0);
 		System.out.println(conn+" removed ");
 	}
 
@@ -69,6 +71,7 @@ public class IMServer extends WebSocketServer{
 			jobj.put("username", user.uname);
 			jobj.put("type", "userprofile");
 			conn.send(jobj.toString());
+			nofityStatus(data.getInt("userId") , 1);
 		}else if("msg".equals(data.getString("type"))){
 			sendMsg(conn,data);
 		}else if("history".equals(data.getString("type"))){
@@ -80,6 +83,22 @@ public class IMServer extends WebSocketServer{
 			dao.execute("update Message set read=1 where senderId=? and receiverId=? and read=0", data.getInt("contactId"), data.getInt("myId"));
 		}else if("countUnRead".equals(data.getString("type"))){
 			
+		}
+	}
+
+	private void nofityStatus(int ownerId , int status) {
+		List<Contact> contacts = dao.listByParams(Contact.class, new String[]{"ownerId"}, new Object[]{ownerId});
+		JSONObject jobj = new JSONObject();
+		jobj.put("type", "status");
+		if(status==1){
+			jobj.put("status", "在线");
+		}else{
+			jobj.put("status", "离线");
+		}
+		for(Contact cont : contacts){
+			WebSocket conn = conns.get(cont.contactId);
+			jobj.put("contactId", cont.contactId);
+			conn.send(jobj.toString());
 		}
 	}
 
@@ -114,6 +133,10 @@ public class IMServer extends WebSocketServer{
 	@Override
 	public void onError(WebSocket conn, Exception ex) {
 		ex.printStackTrace();
+	}
+	
+	public static boolean isUserOnline(int userId){
+		return conns.keySet().contains(userId);
 	}
 
 }

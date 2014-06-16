@@ -15,6 +15,7 @@
 <script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" src="../js/jquery.caozuobendi.js"></script>
 <script type="text/javascript" src="../js/buildHtml.js"></script>
+<script type="text/javascript" src="../js/jquery.xianshang.users.js"></script>
 <script type="text/javascript">
 /*
 p   当前页码   
@@ -31,9 +32,10 @@ totalCount
 totalPageCount
 */
 var p='',pn='',ln='';
+var prev_disabled,next_disabled,pageInfos,pageNumInfos,minp,maxp,nump,pageHtml
+nump=10,pageNumInfos="",pageHtml=""
 
 function fix(tableH,TableB){
-  alert(0)
   for(var i=0;i<=tableB.find('td:last').index();i++){
     TableH.eq(i).css('width',tableB.find('td').eq(i).width());
   }
@@ -44,28 +46,92 @@ function setMainHeight(){
     bottom:$('.footer').height()+1
   });
 }
+function SetformPage(){
+  $(document).on('click', '.btn_p_prev_no', function(event) {
+    $('#page').val(1);
+    $('.btn_subnmit').click();
+  }).on('click', '.btn_p_prev', function(event) {
+    if(p-1>1){$('#page').val(p-1);$('.btn_subnmit').click();}
+  }).on('click', '.btn_p_next', function(event) {
+    if(p+1<=pn){$('#page').val(p+1);$('.btn_subnmit').click();}
+  }).on('click', '.btn_p_next_no', function(event) {
+    $('#page').val(pn);
+    $('.btn_subnmit').click();
+  }).on('click', '.btn_p_list', function(event) {
+    var ThiVal=$(this).text();
+  //  alert($(this).text())
+    $('#page').val(ThiVal);
+    $('.btn_subnmit').click();
+  });
+}
 function setPageInfo(){
-  var pageInfos=''+
-  '<div class="btn-group">'+
+  $('#foot_page_box').html("");
+  pageHtml=""
+    btn_css=" btn-primary"
+  if(p<=1){
+    prev_disabled=" disabled='disabled'"
+    next_disabled=""
+  }else if(p>=pn){
+    next_disabled=" disabled='disabled'"
+    prev_disabled=""
+  }
+
+if(pn <= 10){
+  for(var i = 1;i<=pn;i++){  
+    if(p == i){  
+        pageHtml+='<button type="button" class="btn btn-default btn_p_list '+btn_css+'">'+i+'</button>';
+    }else{  
+        pageHtml+='<button type="button" class="btn btn-default btn_p_list">'+i+'</button>';
+    }  
+  }
+}else{
+  if(p<4){  
+    for(var i = p-1;i>0;i--){  
+        pageHtml='<button type="button" class="btn btn-default btn_p_list">'+i+'</button>'+pageHtml; 
+    }  
+    pageHtml+='<button type="button" class="btn btn-default btn_p_list '+btn_css+'">'+p+'</button>';
+    pageHtml+='<button type="button" class="btn btn-default btn_p_list">'+ (p+1) +'</button>';
+    pageHtml+='<button type="button" class="btn btn-default btn_p_list">'+ (p+2) +'</button>';
+    pageHtml+='<button type="button" class="btn btn-default">...</button>';
+  }
+  if(p>=4 && (p<=pn-3)){
+    pageHtml+='<button type="button" class="btn btn-default">...</button>';
+    pageHtml+='<button type="button" class="btn btn-default btn_p_list">'+ (p-2) +'</button>';
+    pageHtml+='<button type="button" class="btn btn-default btn_p_list">'+ (p-1) +'</button>';
+    pageHtml+='<button type="button" class="btn btn-default btn_p_list '+btn_css+'">'+p+'</button>';
+    pageHtml+='<button type="button" class="btn btn-default btn_p_list">'+ (p+1) +'</button>';
+    pageHtml+='<button type="button" class="btn btn-default btn_p_list">'+ (p+2) +'</button>';
+    pageHtml+='<button type="button" class="btn btn-default">...</button>';
+  }
+  if(p>pn-3){
+    pageHtml+='<button type="button" class="btn btn-default">...</button>';
+    pageHtml+='<button type="button" class="btn btn-default btn_p_list">'+ (p-2) +'</button>';
+    pageHtml+='<button type="button" class="btn btn-default btn_p_list">'+ (p-1) +'</button>';
+    pageHtml+='<button type="button" class="btn btn-default btn_p_list '+btn_css+'">'+p+'</button>';
+    for(var i = p+1;i<=pn;i++){
+        pageHtml+='<button type="button" class="btn btn-default btn_p_list">'+i+'</button>';
+    }
+  }
+}
+
+
+  pageInfos=''+
+  '<div class="btn-group page_btn_group">'+
   '  <button type="button" class="btn btn-default">'+ln+'</button>'+
   '  <button type="button" class="btn btn-default">'+p+'/'+pn+'</button>'+
   '</div>'+
   '<div class="btn-group">';
-  var pageInfos=pageInfos+
-  '  <button type="button" class="btn btn-default btn_p_prev_no">首页</button>';
-  var pageInfos=''+
-  '  <button type="button" class="btn btn-default btn_p_prev">上一页</button>';
-  var pageInfos=pageInfos+
-  '  <button type="button" class="btn btn-default btn_p_list">1</button>'+
-  '  <button type="button" class="btn btn-default btn_p_list">2</button>'+
-  '  <button type="button" class="btn btn-default btn_p_list">3</button>'+
-  '  <button type="button" class="btn btn-default btn_p_list">4</button>'+
-  '  <button type="button" class="btn btn-default btn_p_list">5</button>';
-  var pageInfos=pageInfos+
-  '  <button type="button" class="btn btn-default btn_p_next">下一页</button>';
-  var pageInfos=pageInfos+
-  '  <button type="button" class="btn btn-default btn_p_next_no">尾页</button>'+
-  '</div>'+
+  pageInfos=pageInfos+
+  '  <button type="button" class="btn btn-default btn_p_prev_no"'+prev_disabled+'>首页</button>';
+  pageInfos=pageInfos+
+  '  <button type="button" class="btn btn-default btn_p_prev"'+prev_disabled+'>上一页</button>';
+  pageInfos=pageInfos+pageHtml;
+  pageInfos=pageInfos+
+  '  <button type="button" class="btn btn-default btn_p_next"'+next_disabled+'>下一页</button>';
+  pageInfos=pageInfos+
+  '  <button type="button" class="btn btn-default btn_p_next_no"'+next_disabled+'>尾页</button>'+
+  '</div>';
+
   $('#foot_page_box').html(pageInfos);
 }
 function getHuseList(a){
@@ -73,10 +139,15 @@ function getHuseList(a){
   $.ajax({
     type: 'POST',
     url: url,
+//    async:false,
     data:a,
     success: function(data){
     var getStr=JSON.parse(data);
         buildHtmlWithJsonArray("id_House_list",getStr['page']['data']);
+        p=getStr['page']['currentPageNo'];
+        pn=getStr['page']['totalPageCount'];
+        ln=getStr['page']['totalCount'];
+        setPageInfo();
     }
   });
 }
@@ -89,17 +160,26 @@ var jsonuserinfo = $("form[name=form1]").serialize(); //自动将form表单封�
 //    alert(JSON.stringify(jsonuserinfo));
 //var jsonuserinfoData=JSON.stringify(jsonuserinfo);
 //alert($("form[name=form1]").find('input[name=quyus]').val())
-    getHuseList(jsonuserinfo)
+    getHuseList(jsonuserinfo);
     return false;
   });
 }
+var getStr;
+function getEnumText(category,code){
+  var arr = getStr[category];
+  for(var i=0;i<arr.length;i++){
+    if(arr[i]['code']==code){
+      return arr[i]['name'];
+    }
+  }
+}
 $(function(){
-  onSubmit_Form();
-  setMainHeight();
-  getHuseList('');
-  $.get('/zb/house/getQueryOptions', function(data) {
-  var getStr=JSON.parse(data);
-  //  alert(getStr['datetype'])
+    onSubmit_Form();
+    setMainHeight();
+    getHuseList('');
+    $.get('/zb/house/getQueryOptions', function(data) {
+    getStr=JSON.parse(data);
+    //  alert(getStr['datetype'])
     buildHtmlWithJsonArray("id_chaoxiang",getStr['chaoxiang']); //朝向
     buildHtmlWithJsonArray("id_fangxing",getStr['fangxing']);   //户型
     buildHtmlWithJsonArray("id_leibie",getStr['leibie']);       //类别
@@ -109,8 +189,10 @@ $(function(){
     buildHtmlWithJsonArray("id_zhuangtai",getStr['zhuangtai']); //状态
     buildHtmlWithJsonArray("id_xingzhi",getStr['xingzhi']); //房型
     buildHtmlWithJsonArray("id_datetype",getStr['datetype'],true); //房型
+    SetformPage();
   });
-})
+    $('.dropdown-menu').click(function(){ alert();return false;})
+});
 </script>
 <style type="text/css">
   .table{ margin-bottom: 0px;}
@@ -119,6 +201,7 @@ $(function(){
 <body class="hlist bodyer">
 <div class="header">
   <form class="form-horizontal" role="form" name="form1">
+    <input type="hidden" id="page" name="currentPageNo" value="">
     <div class="clearfix">
       <div class="btn-group">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -136,7 +219,7 @@ $(function(){
           状 态 <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" id="id_zhuangtai">
-          <li><label><input type="checkbox" name="ztai" value="${name}"> ${name}</label>
+          <li><label><input type="radio" name="ztai" value="${name}"> ${name}</label>
         </ul>
       </div>
       <div class="btn-group">
@@ -144,7 +227,7 @@ $(function(){
           朝向 <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" id="id_chaoxiang">
-          <li><label><input type="checkbox" name="chaoxiang" value="${name}"> ${name}</label></li>
+          <li><label><input type="radio" name="chaoxiang" value="${name}"> ${name}</label></li>
         </ul>
       </div>
       <div class="btn-group">
@@ -152,7 +235,7 @@ $(function(){
           房屋类别 <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" id="id_leibie">
-          <li><label><input type="checkbox" name="leibie" value="${name}"> ${name}</label></li>
+          <li><label><input type="radio" name="leibie" value="${name}"> ${name}</label></li>
         </ul>
       </div>
       <div class="btn-group">
@@ -184,7 +267,7 @@ $(function(){
           房型 <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" id="id_fangxing">
-          <li><label><input type="checkbox" name="fangxing" value="${name}"> ${name}</label></li>
+          <li><label><input type="radio" name="fangxing" value="${name}"> ${name}</label></li>
         </ul>
       </div>
       <div class="btn-group">
@@ -196,7 +279,7 @@ $(function(){
         </ul>
       </div>
       <div class="btn-group">
-        <button type="submit" class="btn btn-primary">搜索提交</button>
+        <button type="submit" class="btn btn-primary btn_subnmit">搜索提交</button>
         <button type="submit" class="btn">清空</button>
       </div>
     </div>
@@ -238,27 +321,9 @@ $(function(){
 
       <div class="input-group input-group-mt3 input-group-select">
         <span class="input-group-addon">发布人</span>
-        <select class="form-control" name="form_cid">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-        </select>
-        <select class="form-control" name="form_did">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-        </select>
-        <select class="form-control" name="form_uid">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-        </select>
+        <select class="form-control get_comp" name="form_cid"></select>
+        <select class="form-control get_quyu" name="form_did"></select>
+        <select class="form-control get_user" name="form_uid"></select>
       </div>
     </div>
 
@@ -305,8 +370,8 @@ $(function(){
       <td>${dateyear}</td>
       <td>${dateadd}</td>
       <td>${forlxr}</td>
-      <td>${xingzhi}</td>
-      <td>${flag}</td>
+      <td class='runscript'>getEnumText('xingzhi',${xingzhi})</td>
+      <td class='runscript'>getEnumText('zhuangtai',${flag})</td>
       <td>有</td>
       <td>修改 删除</td>
     </tr>

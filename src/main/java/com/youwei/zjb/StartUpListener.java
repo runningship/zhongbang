@@ -12,6 +12,7 @@ import org.bc.web.ModuleManager;
 import org.hibernate.cfg.AvailableSettings;
 
 import com.youwei.zjb.entity.HouseRent;
+import com.youwei.zjb.entity.User;
 import com.youwei.zjb.im.IMServer;
 
 public class StartUpListener implements ServletContextListener{
@@ -34,7 +35,7 @@ public class StartUpListener implements ServletContextListener{
 		ModuleManager.add("com.youwei.zjb");
 	}
 
-	public static void initDataSource(){
+	public static synchronized void initDataSource(){
 		Map<String,String> settings = new HashMap<String , String>();
 //		settings.put(AvailableSettings.URL, "jdbc:mysql://localhost:3306/ihouse?characterEncoding=utf-8");
 //		settings.put(AvailableSettings.USER, "root");
@@ -55,5 +56,6 @@ public class StartUpListener implements ServletContextListener{
 //		settings.put("annotated.packages", HouseRent.class.getPackage().getName());
 		settings.put("annotated.packages", "com.youwei.zjb");
 		SessionFactoryBuilder.applySettings(settings);
+//		SimpDaoTool.getGlobalCommonDaoService().getUnique(User.class, 0);
 	}
 }

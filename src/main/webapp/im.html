@@ -42,6 +42,7 @@ function loadContacts(){
             
         },success:function (data, textStatus) {
             contacts = data["contacts"];
+            contacts = sortContacts(contacts);
             buildHtmlWithJsonArray("contact",contacts);
         },
         complete: function(XMLHttpRequest, textStatus){},
@@ -49,6 +50,19 @@ function loadContacts(){
         	console.error(XMLHttpRequest.responseText);
         }
     });
+}
+function sortContacts(contactArr){
+	var sorted = [];
+	for(var i=0;i<contactArr.length;i++){
+		if(contactArr[i].state=='离线'){
+			sorted.push(contactArr[i]);
+		}else{
+			var tmp = [];
+			tmp.push(contactArr[i]);
+			sorted = tmp.concat(sorted);
+		}
+	}
+	return sorted;
 }
 window.onload=function(){
 	myId = GetQueryString("userId");
@@ -68,6 +82,8 @@ window.onload=function(){
 			buildHistory(json['history']);
 		}else if(json['type']=='userprofile'){
 			setUserProfile(json);
+		}else if(json['type']=='status'){
+			setUserStatus(json);
 		}
 	};
 	ws.onclose = function(e) {
@@ -78,6 +94,10 @@ window.onload=function(){
 	}
 	
 };
+
+function setUserStatus(json){
+	loadContacts();
+}
 function setUserProfile(profile){
 	$('#me').text(profile['username']);
 }
@@ -275,10 +295,10 @@ function openSearchPanel(){
 			<div>
 				
 				<span id="contact">
-					<div onclick="openChat(${contactId});" id="${contactId}" style="padding-left:50px;background-color:whitesmoke;height:56px;border-bottom:1px solid #ddd;cursor:pointer">
+					<div onclick="openChat(${contactId});" id="${contactId}" style="display:none;padding-left:50px;background-color:whitesmoke;height:56px;border-bottom:1px solid #ddd;cursor:pointer">
 						<div style="display:none;background:red;color:white;float:right;margin-right:10px;margin-top:10px;border-radius:8px;height:16px;width:25px;text-align:center;font-size:12px;">0</div>
 						<p style="line-height:0px;display:inline-block">${contactName}</p><span onclick="delContact(${contactId})" style="float:right;margin-right:10px;color:#aaa">x</span>
-						<p style="font-size:8px;color:#aaa;line-height:15px;margin:0px"><span>[在线]</span><span style="padding-left:5px;">${contactTel}</span>
+						<p style="font-size:8px;color:#aaa;line-height:15px;margin:0px"><span>[${state}]</span><span style="padding-left:5px;">${contactTel}</span>
 						</p>
 
 					</div>

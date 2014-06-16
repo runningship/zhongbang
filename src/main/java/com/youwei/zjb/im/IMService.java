@@ -17,16 +17,26 @@ import org.bc.web.WebMethod;
 import com.youwei.zjb.im.entity.Contact;
 import com.youwei.zjb.util.JSONHelper;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 @Module(name="/im/")
 public class IMService {
 
 	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
 
+	
 	@WebMethod
 	public ModelAndView getContacts(int userId) {
 		ModelAndView mv = new ModelAndView();
 		List<Map> list = dao.listAsMap("select c.id as id ,c.ownerId as ownerId ,c.contactId as contactId ,c.ugroup as group ,u.uname as contactName, "
 				+ " u.tel as contactTel from User u,Contact c where c.contactId=u.id and c.ownerId=?", new Object[] { userId });
+		for(Map map : list){
+			int uid = (int) map.get("contactId");
+			if(IMServer.isUserOnline(uid)){
+				map.put("state", "在线");
+			}else{
+				map.put("state", "离线");
+			}
+		}
 		mv.data.put("contacts",JSONHelper.toJSONArray(list));
 		return mv;
 	}

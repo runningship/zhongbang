@@ -144,7 +144,7 @@ public class HouseService {
 			hql.append(" )");
 		}
 		if(query.ztai!=null){
-			
+			//TODO 不知道数据库字段
 		}
 		if(StringUtils.isNotEmpty(query.leibie)){
 			hql.append(" and leibie = ? ");
