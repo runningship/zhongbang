@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Examples</title>
+<link rel="stylesheet" href="../style/css.css">
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="../style/house.css">
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script src="../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="../js/buildHtml.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.4"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
+<link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
+<script type="text/javascript" src="../js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="../js/pagination.js"></script>
+<script type="text/javascript">
+var shEnums;
+function getGJList(search){
+  var url='/zb/genjin/list';
+  $.ajax({
+    type: 'POST',
+    url: url,
+    data:search,
+    success: function(data){
+      var getStr=JSON.parse(data);
+      dataArr = getStr['page']['data'];
+      buildHtmlWithJsonArray("id_GJ_list",dataArr);
+      Page.setPageInfo(getStr['page']);
+    }
+  });
+}
+
+function onSubmit_Form(){
+  $('form[name=form1]').on('submit', function(event) {
+    doSearch();
+    return false;
+  });
+}
+
+function doSearch(){
+  getGJList(formSerialize($('form[name=form1]')));
+  return false;
+}
+
+function deleteGJ(id){
+  art.dialog({
+    title:'提示',
+    content:'确定删除这条跟进信息吗？',
+    lock:true,
+    ok:function(){
+      $.ajax({
+        url:'/zb/genjin/delete?id='+id,
+        data:'',
+        timeout:5000,
+        dataType:'json',
+        success:function (data, textStatus) {
+            doSearch();
+        },
+        complete: function(XMLHttpRequest, textStatus){},
+        error:function (XMLHttpRequest, textStatus, errorThrown) {
+          console.error(XMLHttpRequest.responseText);
+        }
+      });
+    },
+    cancel:true
+  })
+  
+}
+
+function review(id,target){
+  var txt = target.textContent;
+  var sh;
+  if(txt=="未审核"){
+    sh=1;
+  }else{
+    sh=0;
+  }
+  $.ajax({
+        url:'/zb/genjin/review?id='+id+'&sh='+sh,
+        data:'',
+        timeout:5000,
+        dataType:'json',
+        success:function (data, textStatus) {
+          target.textContent=getEnumTextByCode(shEnums,sh);
+          // ArtAlerts('操作成功');
+        },
+        complete: function(XMLHttpRequest, textStatus){},
+        error:function (XMLHttpRequest, textStatus, errorThrown) {
+          console.error(XMLHttpRequest.responseText);
+        }
+    });
+}
+
+
+$(function(){
+  onSubmit_Form();
+  getGJList();
+  Page.Init();
+  $.get('/zb/house/getQueryOptions', function(data) {
+    var queryOpts=JSON.parse(data);
+    shEnums = queryOpts['shenhe'];
+    buildHtmlWithJsonArray("id_jiaoyi",queryOpts['jiaoyi']);       //交易
+    buildHtmlWithJsonArray("id_shenhe",queryOpts['shenhe']);       //审核
+  });
+});
+
+</script>
+<style type="text/css">
+  .table{ margin-bottom: 0px;}
+</style>
+</head>
+<body class="hlist bodyer" style="overflow:auto">
+
+<div class="header" style="position:relative;height:50px;width:100%">
+    
+    <form name="form1">
+      <input type="hidden" class="userInput" name="xpath" value="">
+    <div class="btn-group">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        审核 <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu" id="id_shenhe">
+        <li><label><input type="radio" name="sh" value="${name}"> ${name}</label>
+      </ul>
+    </div>
+    <div class="btn-group">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        交易 <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu" id="id_jiaoyi">
+        <li><label><input type="checkbox" name="jiaoyis" value="${name}"> ${name}</label>
+      </ul>
+    </div>
+    <div class="input-group input-group-max">
+      <span class="input-group-addon">房源编号</span>
+      <input type="text" class="form-control" name="bianhao">
+    </div>
+    <div class="input-group input-group-max">
+      <span class="input-group-addon">楼盘</span>
+      <input type="text" class="form-control" name="area">
+    </div>
+    <div class="btn-group">
+      <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
+    </div>
+    <br/><br/>
+    <div class="input-group">
+      <span class="input-group-addon">登记时间</span>
+      <input type="text" class="form-control" name="addtimeStart">
+      <input type="text" class="form-control" name="addtimeEnd">
+    </div>
+    <div class="input-group input-group-mt3 input-group-select" style="margin-top:1px;">
+      <span class="input-group-addon">跟进人</span>
+      <select class="form-control get_comp" name="form_cid"></select>
+      <select class="form-control get_quyu" name="form_did"></select>
+      <select class="form-control get_user" name="form_uid"></select>
+    </div>
+    
+    </form>
+</div>
+<div class="mainer" style="position:relative;width:100%">
+  <table class="table table-hover .table_bodyer" >
+    <thead>
+      <th>跟进时间</th>
+      <th>跟进人</th>
+      <th>交易</th>
+      <th>房源编号</th>
+      <th>楼盘字典</th>
+      <th>跟进内容</th>
+      <th>操作</th>
+    </thead>
+    <tbody id="id_GJ_list">
+    <tr>
+      <td>${addtime}</td>
+      <td>${deptName} ${uname}</td>
+      <td>${chuzu}</td>
+      <td>${bianhao}</td>
+      <td>${area}</td>
+      <td><a href="javascript:void(0)">${conts}</a></td>
+      <td><a class='runscript' href="javascript:void(0)" onclick="review(${id},this)">getEnumTextByCode(shEnums,${sh})</a> <a href="javascript:void(0)" onclick="deleteGJ(${id})">删除</a></td>
+      
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="footer foot_page_box" style="position:relative;margin-top:10px;height:55px;"></div>
+</body>
+</html>
