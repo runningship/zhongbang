@@ -10,6 +10,7 @@ function buildHtmlWithJsonArray(id,json,removeTemplate){
         var html = buildHtmlWithJson(temp,json[i] ,i);
         subCatagory.append(html);
     }
+    
     if(!removeTemplate){
         jtemp.css('display','none');
         subCatagory.prepend(jtemp);
@@ -18,14 +19,23 @@ function buildHtmlWithJsonArray(id,json,removeTemplate){
     var runscripts = subCatagory.find('.runscript');
     runscripts.each(function(index,obj){
         if(index>0){
+            var val="";
             try{
-            var val = eval(obj.textContent);
-            obj.textContent = val;
+                val = eval(obj.textContent);
+                if(obj.tagName=='INPUT'){
+                    obj.value = val;        
+                }else{
+                    obj.textContent = val;    
+                }
             }catch(e){
-                console.log(e);
+                console.log(obj.textContent);
+                obj.textContent = "";
             }
+            
         }
     });
+
+    
 }
 function buildHtmlWithJson(temp,json , rowIndex){
     temp.style.display='';
@@ -39,4 +49,21 @@ function buildHtmlWithJson(temp,json , rowIndex){
         dhtml = dhtml.replace(new RegExp("\\${"+key+"}","gm"),v);
     }
     return dhtml;
+}
+
+function getEnumTextByCode(enumArr,code){
+    if(code==null){
+        return "";
+    }
+    for(var i=0;i<enumArr.length;i++){
+        if(enumArr[i]['code']==code){
+          return enumArr[i]['name'];
+        }
+    }
+}
+
+//获取url里需要的值
+function getParam(name){
+var reg = new RegExp("(^|\\?|&)"+ name +"=([^&]*)(\\s|&|$)", "i");
+return (reg.test(location.search))? encodeURIComponent(decodeURIComponent(RegExp.$2.replace(/\+/g, " "))) : '';
 }

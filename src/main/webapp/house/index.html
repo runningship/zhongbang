@@ -15,20 +15,35 @@
 <script type="text/javascript" src="../js/jquery.js"></script>
 <script src="../bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="../js/sysinfo.js"></script>
-<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=chrome"></script>
 <script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" src="../js/jquery.caozuobendi.js"></script>
 <script type="text/javascript">
+$(document).on('click', '.btns', function(event) {
+    var Thi=$(this),
+    ThiType=Thi.data('type'),
+    ThiUrl=Thi.attr('href');
+    if(ThiType=='addchuzu'){
+        art.dialog.open(ThiUrl,{
+            title:'添加出租房源'
+        })
+    }else if(ThiType=='addchushou'){
+        art.dialog.open(ThiUrl,{
+            title:'添加出售房源'
+        })
+    }
+    return false;
+});
 function setMainHeight(){
     var bodyHeight=$('.body').height()
-  $('.sider').height(bodyHeight);
-  $('.mainer').height(bodyHeight);
+    $('.sider').height(bodyHeight);
+    $('.mainer').height(bodyHeight);
 }
 $(function(){
-setMainHeight();
+    setMainHeight();
 })
 $(window).resize(function(event) {
-setMainHeight();
+    setMainHeight();
 });
 </script>
 </head>
@@ -44,8 +59,8 @@ setMainHeight();
             </dl>
             <dl class="sidedl">
                 <dt>添加房源</dt>
-                <dd><a href="#">添加出售</a></dd>
-                <dd><a href="#">添加出租</a></dd>
+                <dd><a href="house_add.html?chuzu=0" class="btns" data-type="addchushou">添加出售</a></dd>
+                <dd><a href="house_add.html?chuzu=1" class="btns" data-type="addchuzu">添加出租</a></dd>
             </dl>
             <dl class="sidedl">
                 <dt>其他</dt>

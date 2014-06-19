@@ -7,6 +7,7 @@ display:inline; line-height:11px;
 
 a{text-decoration:none;}
 a:hover{text-decoration:none;}
+.miniwidth{white-space:nowrap;word-break: keep-all; text-align:center;}
 
 .dropdown-menu label{ padding: 0 10px; display: block;}
 .dropdown-menu label:hover{ background: #EEE;}
@@ -21,13 +22,14 @@ a:hover{text-decoration:none;}
 .input-group-select{ width: 504px;}
 .input-group.input-group-select select{ width: 33%;}
 .input-group.input-group-select select.form-control:not(:first-child):not(:last-child){border-radius: 0px; border-right: none;}
+.hlist table.table>tbody>tr>td{ padding-left: 0; padding-right: 0;}
 .clearfix{ padding-bottom: 5px;}
 
-.hlist.bodyer{ position: relative;}
-.bodyer .header{ position: absolute; top: 0; left: 0; right: 0; z-index: 9; padding: 10px 0 0 0;}
-.bodyer .mainer{ position: absolute; top: 0; left: 0; right: 0; bottom: 0;z-index: 1; overflow: hidden;overflow-y: auto;}
-.bodyer .footer{ position: absolute; left: 0; right: 0; bottom: 0; z-index: 8; height:44px; }
-.bodyer .footer .btn-group{ padding-top: 5px;}
+.hlist.bodyer{ position: relative; min-width: 1200px;}
+.hlist.bodyer .header{ position: absolute; top: 0; left: 0; right: 0; z-index: 9; padding: 10px 0 0 0;}
+.hlist.bodyer .mainer{ position: absolute; top: 0; left: 0; right: 0; bottom: 0;z-index: 1; overflow: hidden;overflow-y: auto;}
+.hlist.bodyer .footer{ position: absolute; left: 0; right: 0; bottom: 0; z-index: 8; height:44px; }
+.hlist.bodyer .footer .btn-group{ padding-top: 5px;}
 
 .hmain .sider{ float: left; width: 120px; border-right: 1px solid #EEE;height: 100%;background-color: #ececec; overflow-y: auto;}
 .hmain .sidedl{ text-align: center; color: #555; margin: 0;}
@@ -38,4 +40,8 @@ a:hover{text-decoration:none;}
 
 .hmain .mainer{ margin-left: 120px; height: 100%; overflow: hidden;}
 
+.hsee{ width: 700px; height: 500px;}
+.hsee td.biaoti{ width:15%; text-align:right; background:#F9F9F9;}
 
+.hadd .input-group{ width: auto;}
+.hadd{ width: 800px; height: 310px;}

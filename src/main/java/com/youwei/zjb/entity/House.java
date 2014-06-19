@@ -125,7 +125,7 @@ public class House {
 	@Column(name = "yongtu")
 	public String leibie;
 
-	// TODO
+	// 状态
 	public String flag;
 
 	@Column(name = "biaoshi")
@@ -160,6 +160,10 @@ public class House {
 	public String chanquan;
 
 	// TODO
-	public Float tudizheng;
+	public Integer tudizheng;
+	
+	public String fordlr;
+	
+	public String fordlrtel;
 
 }

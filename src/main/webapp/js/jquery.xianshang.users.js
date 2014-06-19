@@ -4,6 +4,9 @@
  * @date    2014-06-13 17:38:04
  * @version $Id$
  */
+/**
+ * 其他地方调用时使用
+ */
 var getUserTreeStr;
 $(document).ready(function() {
     
@@ -31,8 +34,9 @@ $(document).ready(function() {
         //var dataObj=eval("("+data+")");//转换为json对象 
         //alert(data.result.length);//输出root的子对象数量
         getComp.empty();
+        getComp.append('<option value="">请选择区域</option>');
         $.each(getUserTreeStr.result, function(index, item) {
-            getComp.prepend('<option value="'+item.name+'">'+item.name+'</option>');
+            getComp.append('<option value="'+item.deptId+'">'+item.name+'</option>');
         });
         if($(".get_quyu").length>0){
             fun_get_quyu();
@@ -44,12 +48,15 @@ function fun_get_quyu(){
         var getQuyu=$(".get_quyu");
         getQuyu.empty();
         //alert($(".get_comp").length)
+        getQuyu.append('<option value="">请选择分公司</option>');
         if($(".get_comp").length>0){
-            var comp_index=$(".get_comp").prop('selectedIndex');
+            var comp_index=$(".get_comp").prop('selectedIndex')-1;
             //alert(getUserTreeStr.result[comp_index].children)
-            $.each(getUserTreeStr.result[comp_index].children, function(index, item) {
-                getQuyu.prepend('<option value="'+item.name+'">'+item.name+'</option>');
-            });
+            if(getUserTreeStr.result[comp_index]){
+                $.each(getUserTreeStr.result[comp_index].children, function(index, item) {
+                    getQuyu.append('<option value="'+item.deptId+'">'+item.name+'</option>');
+                });
+            }
         }else{
             $.each(getUserTreeStr.result, function(index, item) {
                 //alert(item.name);
@@ -59,7 +66,7 @@ function fun_get_quyu(){
                     optgroups=optgroups + '<option value="'+items.deptId+'">'+items.name+'</option>';
                 }); 
                 //alert(optgroups)
-                getQuyu.prepend('<optgroup label="'+item.name+'">'+optgroups+'</optgroup>');
+                getQuyu.append('<optgroup label="'+item.name+'">'+optgroups+'</optgroup>');
             });
         }
         if($(".get_user").length>0){
@@ -71,18 +78,32 @@ function fun_get_quyu(){
 function fun_get_user(){
     if($(".get_user").length>0){
         var getUser=$(".get_user");
-        var comp_index=$(".get_comp").prop('selectedIndex'),
-        quyu_index=$(".get_quyu").prop('selectedIndex'),
-        getUserTreeStr_User=getUserTreeStr.result[comp_index].children[quyu_index].children;
-        //alert(getUserTreeStr.result[comp_index].children[quyu_index].children);//输出root的子对象数量
+        var comp_index=$(".get_comp").prop('selectedIndex')-1,
+        quyu_index=$(".get_quyu").prop('selectedIndex')-1,
+        getUserTreeStr_User='';
         getUser.empty();
-        $.each(getUserTreeStr_User, function(index, item) {
-            getUser.prepend('<option value="'+item.userId+'">'+item.name+'</option>');
-        });
+        getUser.append('<option value="">请选择业务员</option>');
+        if(getUserTreeStr.result[comp_index] && getUserTreeStr.result[comp_index].children[quyu_index]){
+            getUserTreeStr_User=getUserTreeStr.result[comp_index].children[quyu_index].children;
+            //alert(getUserTreeStr.result[comp_index].children[quyu_index].children);//输出root的子对象数量
+            $.each(getUserTreeStr_User, function(index, item) {
+                getUser.append('<option value="'+item.userId+'">'+item.name+'</option>');
+            });
+        }
+        
     }
 }
 
 });
+
+
+
+
+
+/**
+ * [get_user 登陆时使用]
+ * @return {[type]} [description]
+ */
 function get_user(){
 var compStr=$('.company').find('option:selected').parent().attr('label'),
     compStrs=$('.company').val()
@@ -105,24 +126,6 @@ var compStr=$('.company').find('option:selected').parent().attr('label'),
         }
     });  
 }
-function get_company_quyu(){
-    //alert(1)
-    //var dataObj=eval("("+data+")");//转换为json对象 
-    //alert(data.result.length);//输出root的子对象数量 
-    $(".get_quyu").empty();
-    $.each(data.result, function(index, item) {
-        //alert(item.name);
-        var optgroups='';
-        $.each(item.children, function(indexs, items) {
-            //alert(items.name);
-            optgroups=optgroups + '<option value="'+items.deptId+'">'+items.name+'</option>';
-        }); 
-        //alert(optgroups)
-        var optgroup=$(".company").prepend('<optgroup label="'+item.name+'">'+optgroups+'</optgroup>');
-    });
-    if(didc){$(".company").val(didc);}
-    get_user();
-}
 function get_company(){
     //alert(1)
     //var dataObj=eval("("+data+")");//转换为json对象 
@@ -144,3 +147,10 @@ function get_company(){
 
 
 
+function formSerialize(form){
+    var quyuId=form.find('.get_comp').val();
+    var dianId=form.find('.get_quyu').val();
+    var userId=form.find('.get_user').val();
+    form.find('.userInput').val(quyuId + dianId + userId);
+    return form.serialize();
+}

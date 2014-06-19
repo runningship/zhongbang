@@ -8,13 +8,13 @@ public class ClientQuery extends AbstractQuery{
 	
 	public String tel;
 	
-	public Integer valid =1 ;
+	public Integer youxiao ;
 	
 	public String quyus;
 	
-	public String zhongyao;
+	public KeHuXingzhi kehuxingzhi;
 	
-	public String source;
+	public String kehulaiyuan;
 	
 	public String addtimeStart;
 	

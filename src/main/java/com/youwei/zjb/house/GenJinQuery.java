@@ -12,9 +12,10 @@ public class GenJinQuery extends AbstractQuery {
 	
 	public String addtimeEnd;
 	
-	public Integer review;
+	public ShenHe sh;
 	
 	public String bianhao;
 	
 	public String area;
+	
 }

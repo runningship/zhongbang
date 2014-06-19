@@ -30,7 +30,7 @@ public class Client {
 	public String tel;
 	
 	@Column(name="areas")
-	public String district;
+	public String area;
 	
 	@Column(name="luduanas")
 	public String luduan;
@@ -56,6 +56,9 @@ public class Client {
 	@Column(name="jiagebs")
 	public Integer jiageTo;
 
+	/**
+	 * 付佣方式
+	 */
 	public String fuyongs;
 	
 	/**

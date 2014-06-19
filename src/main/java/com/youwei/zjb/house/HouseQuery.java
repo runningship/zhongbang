@@ -28,4 +28,5 @@ public class HouseQuery extends AbstractQuery{
 	public String chanquan;
 	public Integer userId;
 	public Integer isdel = 0;
+	public Integer id;
 }

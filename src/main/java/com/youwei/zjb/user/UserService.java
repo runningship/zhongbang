@@ -43,7 +43,7 @@ public class UserService {
 		List<Map> users = dao.listAsMap(hql);
 		Map<String, JSONArray> quyus = groupByQuyu(users);
 		Map<String, JSONArray> depts = groupByDeptId(users);
-		JSONArray root = merge(quyus,depts);
+		JSONArray root = merge(quyus,depts,users);
 		mv.contentType="text/plain";
 		mv.data.put("result", root.toString());
 		return mv;
@@ -136,7 +136,7 @@ public class UserService {
 		return mv;
 	}
 
-	private JSONArray merge(Map<String, JSONArray> quyus ,Map<String, JSONArray> depts){
+	private JSONArray merge(Map<String, JSONArray> quyus ,Map<String, JSONArray> depts , List<Map> users){
 		JSONArray root = new JSONArray();
 		for(String key : quyus.keySet()){
 			JSONArray jarr = quyus.get(key);
@@ -146,10 +146,23 @@ public class UserService {
 			}
 			JSONObject jobj = new JSONObject();
 			jobj.put("name", key);
+			jobj.put("deptId", getDeptName(users,key));
 			jobj.put("children", jarr);
 			root.add(jobj);
 		}
 		return root;
+	}
+	
+	private String getDeptName(List<Map> users ,String deptName){
+		if(StringUtils.isEmpty(deptName)){
+			return "";
+		}
+		for(Map user : users){
+			if(deptName.equals(user.get("pname"))){
+				return user.get("qid").toString();
+			}
+		}
+		return "";
 	}
 	private Map<String,JSONArray>  groupByQuyu(List<Map> users){
 		Map<String,JSONArray> quyus = new HashMap<String,JSONArray>();

@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.GException;
 import org.bc.sdak.TransactionalServiceHelper;
@@ -89,11 +91,16 @@ public class GrandServlet extends HttpServlet{
 				}
 			}
 		}catch(InvocationTargetException ex){
+			
 			if(! (ex.getTargetException() instanceof GException)){
 				ex.getTargetException().printStackTrace();
 			}
-			String msg = ex.getTargetException().getMessage();
-			resp.getWriter().println(msg);
+			GException target = (GException) ex.getTargetException();
+			JSONObject jobj = new JSONObject();
+			jobj.put("result",target.getCode());
+			jobj.put("msg", target.getMessage());
+			resp.setStatus(500);
+			resp.getWriter().println(jobj.toString());
 		}catch(GException ex){
 			ex.printStackTrace();
 			String msg = ex.getMessage();

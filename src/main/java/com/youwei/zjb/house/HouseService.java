@@ -17,9 +17,12 @@ import org.bc.web.WebMethod;
 
 import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.ThreadSession;
+import com.youwei.zjb.client.KeHuXingzhi;
+import com.youwei.zjb.client.KeHuLaiYuan;
 import com.youwei.zjb.entity.House;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.util.JSONHelper;
+import com.youwei.zjb.work.PiYue;
 
 @Module(name="/house/")
 public class HouseService {
@@ -97,6 +100,11 @@ public class HouseService {
 		mv.data.put("louxing", LouXing.toJsonArray());
 		mv.data.put("quyu", QuYu.toJsonArray());
 		mv.data.put("zhuangtai", State.toJsonArray());
+		mv.data.put("shenhe", ShenHe.toJsonArray());
+		mv.data.put("zhuangxiu", ZhuangXiu.toJsonArray());
+		mv.data.put("kehu", KeHuXingzhi.toJsonArray());
+		mv.data.put("kehulaiyuan", KeHuLaiYuan.toJsonArray());
+		mv.data.put("piyue", PiYue.toJsonArray());
 		return mv;
 	}
 	
@@ -114,6 +122,11 @@ public class HouseService {
 		if(query.xingzhi!=null){
 			hql.append(" and xingzhi = ? ");
 			params.add(String.valueOf(query.xingzhi.getCode()));
+		}
+		
+		if(query.id!=null){
+			hql.append(" and id = ?");
+			params.add(query.id);
 		}
 		
 		if(query.quyus!=null){
@@ -144,7 +157,8 @@ public class HouseService {
 			hql.append(" )");
 		}
 		if(query.ztai!=null){
-			//TODO 不知道数据库字段
+			hql.append(" and flag = ?");
+			params.add(query.ztai.getCode());
 		}
 		if(StringUtils.isNotEmpty(query.leibie)){
 			hql.append(" and leibie = ? ");

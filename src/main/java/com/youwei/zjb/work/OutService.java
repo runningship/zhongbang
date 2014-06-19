@@ -2,22 +2,29 @@ package com.youwei.zjb.work;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.GException;
 import org.bc.sdak.Page;
 import org.bc.sdak.TransactionalServiceHelper;
+import org.bc.web.ModelAndView;
+import org.bc.web.Module;
+import org.bc.web.WebMethod;
 
 import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.House;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.HqlHelper;
+import com.youwei.zjb.util.JSONHelper;
 import com.youwei.zjb.work.entity.Journal;
 import com.youwei.zjb.work.entity.OutRecord;
 
+@Module(name="/out/")
 public class OutService {
 
 	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
@@ -39,11 +46,15 @@ public class OutService {
 		}
 	}
 	
-	public void delete(int id){
-		OutRecord po = dao.getUnique(OutRecord.class, id);
+	@WebMethod
+	public ModelAndView delete(int id){
+		ModelAndView mv = new ModelAndView();
+		OutRecord po = dao.get(OutRecord.class, id);
 		if(po!=null){
 			dao.delete(po);
 		}
+		mv.data.put("result", 0);
+		return mv;
 	}
 	
 	public void piyue(int id, String content){
@@ -79,21 +90,26 @@ public class OutService {
 		dao.saveOrUpdate(out);
 	}
 	
-	public void list(OutQuery query ,Page<Journal> page){
-		StringBuilder hql = new StringBuilder("from OutQuery where 1=1 ");
+	@WebMethod
+	public ModelAndView list(OutQuery query ,Page<Map> page){
+		ModelAndView mv = new ModelAndView();
+		StringBuilder hql = new StringBuilder("select o.id as id,d.namea as deptName ,q.namea as quyu, u.uname as uname, o.clientInfo as client ,o.houseInfo as house, "
+				+ "o.outTime as outTime, o.backTime as backTime ,o.outCont as outCont,o.reply as reply from OutRecord o , User u , Department d,Department q where o.userId=u.id and u.deptId=d.id and q.id=d.fid");
 		List<Object> params = new ArrayList<Object>();
-		hql.append(HqlHelper.buildDateSegment("addtime", query.addtimeStart, DateSeparator.After, params));
-		hql.append(HqlHelper.buildDateSegment("addtime", query.addtimeEnd, DateSeparator.Before, params));
+		hql.append(HqlHelper.buildDateSegment("o.outTime", query.addtimeStart, DateSeparator.After, params));
+		hql.append(HqlHelper.buildDateSegment("o.outTime", query.addtimeEnd, DateSeparator.Before, params));
 		if(query.category!=null){
-			hql.append(" and category=? ");
+			hql.append(" and o.category=? ");
 			params.add(query.category);
 		}
 		//默认只能看到自己的数据
-		User user = ThreadSession.getUser();
-		hql.append(" and uid = ?");
-		params.add(user.id);
+//		User user = ThreadSession.getUser();
+//		hql.append(" and uid = ?");
+//		params.add(user.id);
 		
-		page = dao.findPage(page, hql.toString(), params.toArray());
-		
+		page = dao.findPage(page, hql.toString(), true ,params.toArray());
+		DataHelper.fillDefaultValue(page.getResult(), "reply", PiYue.待批阅.getCode());
+		mv.data.put("page", JSONHelper.toJSON(page));
+		return mv;
 	}
 }

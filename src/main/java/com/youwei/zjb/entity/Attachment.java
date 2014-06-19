@@ -14,7 +14,7 @@ public class Attachment {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer id;
 	
-	public Integer bizType;
+	public String bizType;
 	
 	public Integer recordId;
 	

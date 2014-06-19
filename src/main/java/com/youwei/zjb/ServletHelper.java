@@ -31,6 +31,7 @@ import org.bc.web.WebParam;
 
 import com.youwei.zjb.house.HouseAttribute;
 
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class ServletHelper {
 
 	private static Map<String,Object> getData(HttpServletRequest req) {
@@ -47,6 +48,7 @@ public class ServletHelper {
 		}
 		return map;
 	}
+	
 	
 	public static Object[] buildParamters(CtMethod cm,HttpServletRequest req) {
 		Map<String, Object> data = ServletHelper.getData(req);
@@ -103,19 +105,24 @@ public class ServletHelper {
         			}else{
         				obj = pval[0];
         			}
+        		}else if("java.util.List".equals(typeName)){
+        			List list = new ArrayList();
+        			Collections.addAll(list, pval);
+        			obj = list;
         		}else{
 					obj = Class.forName(pTypes[i].getName()).newInstance();
 					setValue(obj,data);
 				}
         		values[i] = obj;
-			}catch(ClassNotFoundException ex){
+			}catch(Exception ex){
 				throw new GException(PlatformExceptionType.MethodParameterError,"parameter ("+pTypes[i].getName()
 						+ " " + paramName+") of method ("+cm.getDeclaringClass().getName()+"."+cm.getName()
 						+") is not support,method type should be primary type or vo",ex);
-			}catch (InstantiationException | IllegalAccessException ex) {
-				LogUtil.log(Level.SEVERE, "please check code or deployment.", ex);
-				return new Object[]{};
 			}
+//        	catch (InstantiationException | IllegalAccessException ex) {
+//				LogUtil.log(Level.SEVERE, "please check code or deployment.", ex);
+//				return new Object[]{};
+//			}
         }
         return values;
 	}
@@ -181,7 +188,7 @@ public class ServletHelper {
 					return (ModelAndView) result;
 				}
 			}
-			throw new GException(PlatformExceptionType.MethodReturnTypeError,manager.getClass().getName()+"."+method+" not found");
+			throw new GException(PlatformExceptionType.MethodReturnTypeError,manager.getClass().getName()+"."+method+" does not return a ModelAndView");
 		} catch (SecurityException | IllegalAccessException | IllegalArgumentException ex) {
 			throw new GException(PlatformExceptionType.ModuleInvokeError, "",ex);
 		}

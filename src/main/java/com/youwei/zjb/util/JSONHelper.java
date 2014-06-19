@@ -22,11 +22,23 @@ public class JSONHelper {
 		JsonConfig cfg = new JsonConfig();
 		cfg.setIgnorePublicFields(false);
 		cfg.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
+		cfg.registerJsonValueProcessor(Timestamp.class, new JsonDateValueProcessor());
 		for(Object obj : page.getResult()){
 			arr.add(JSONObject.fromObject(obj,cfg));
 		}
 		jobj.put("data", arr);
 		return jobj;
+	}
+	
+	public static JSONObject toJSON(Object obj){
+		if(obj==null){
+			return new JSONObject();
+		}
+		JsonConfig cfg = new JsonConfig();
+		cfg.setIgnorePublicFields(false);
+		cfg.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
+		cfg.registerJsonValueProcessor(Timestamp.class, new JsonDateValueProcessor());
+		return JSONObject.fromObject(obj, cfg);
 	}
 	
 	public static JSONArray toJSONArray(List<?> list){

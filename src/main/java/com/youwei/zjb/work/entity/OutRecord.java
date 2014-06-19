@@ -39,7 +39,7 @@ public class OutRecord {
 	public String onCont;
 	
 	/**
-	 * 1,已批阅，0或null 未批阅
+	 * 1,已完成，0或null 待批阅
 	 */
 	public Integer reply;
 	

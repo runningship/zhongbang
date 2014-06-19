@@ -2,17 +2,24 @@ package com.youwei.zjb.house;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
+import org.bc.sdak.GException;
 import org.bc.sdak.Page;
 import org.bc.sdak.TransactionalServiceHelper;
+import org.bc.web.ModelAndView;
+import org.bc.web.Module;
+import org.bc.web.WebMethod;
 
 import com.youwei.zjb.DateSeparator;
+import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.entity.GenJin;
 import com.youwei.zjb.util.HqlHelper;
+import com.youwei.zjb.util.JSONHelper;
 
-
+@Module(name="/genjin")
 public class GenJinService {
 
 	CommonDaoService service = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
@@ -23,37 +30,45 @@ public class GenJinService {
 		}
 	}
 	
-	public void delete(Integer houseId){
-		if(houseId!=null){
-			GenJin po = service.get(GenJin.class, houseId);
+	@WebMethod
+	public ModelAndView delete(Integer id){
+		ModelAndView mv = new ModelAndView();
+		if(id!=null){
+			GenJin po = service.get(GenJin.class, id);
 			if(po!=null){
 				service.delete(po);
 			}
 		}
+		mv.data.put("result", 0);
+		return mv;
 	}
 	
-	public void review(Integer houseId, Integer sh){
-		if(houseId!=null){
-			if(sh!=0 || sh!=1){
-				//无效的参数
-				return;
+	@WebMethod
+	public ModelAndView review(Integer id, Integer sh){
+		ModelAndView mv = new ModelAndView();
+		if(id!=null){
+			if(sh!=0 && sh!=1){
+				throw new GException(PlatformExceptionType.BusinessException, 2, "无效的参数");
 			}
-			GenJin po = service.get(GenJin.class, houseId);
+			GenJin po = service.get(GenJin.class, id);
 			if(po!=null){
 				po.sh = sh;
-				service.delete(po);
+				service.saveOrUpdate(po);
 			}
 		}
+		mv.data.put("result", 0);
+		return mv;
 	}
 	
-	public List<GenJin> list(GenJinQuery query){
-		StringBuilder hql = null;
+	@WebMethod
+	public ModelAndView list(GenJinQuery query , Page<Map> page){
+		ModelAndView mv = new ModelAndView();
+		StringBuilder hql = new StringBuilder(" select gj.id as id,gj.hid as houseId,gj.conts as conts,gj.addtime as addtime,gj.sh as sh,gj.chuzu as chuzu ,gj.area as area, gj.bianhao as bianhao, "
+				+ "u.uname as uname,dept.namea as deptName from  GenJin gj  ,User u,Department dept where gj.userId=u.id and u.id is not null and dept.id=u.deptId");
 		List<Object> params = new ArrayList<Object>();
 		if(StringUtils.isNotEmpty(query.xpath)){
-			hql = new StringBuilder(" select gj from  GenJin gj  ,User u where gj.userId=u.id and u.id is not null and u.orgpath like ? ");
+			hql.append(" and u.orgpath like ? ");
 			params.add(query.xpath+"%");
-		}else{
-			hql =  new StringBuilder("from GenJin gj where 1=1 ");
 		}
 		
 		if(query.houseId!=null){
@@ -61,9 +76,9 @@ public class GenJinService {
 			params.add(query.houseId);
 		}
 		
-		if(query.review!=null){
-			hql.append(" and sh=? ");
-			params.add(query.review);
+		if(query.sh!=null){
+			hql.append(" and gj.sh=? ");
+			params.add(query.sh.getCode());
 		}
 		
 		if(StringUtils.isNotEmpty(query.area)){
@@ -79,11 +94,8 @@ public class GenJinService {
 		hql.append(HqlHelper.buildDateSegment("addtime", query.addtimeEnd, DateSeparator.Before, params));
 		
 		hql.append(" order by gj.id ");
-		Page<GenJin> page = new Page<GenJin>();
-		page.setCurrentPageNo(1);
-		page.setPageSize(40);
-		page = service.findPage(page, hql.toString(),params.toArray());
-		List<GenJin> list = page.getResult();
-		return list;
+		page = service.findPage(page, hql.toString(), true,params.toArray());
+		mv.data.put("page", JSONHelper.toJSON(page));
+		return mv;
 	}
 }

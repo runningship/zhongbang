@@ -41,7 +41,8 @@ public class TestInitXPath {
 		}
 		Department parent = dept.getParent();
 		if(parent==null){
-			dept.path = dept.id.toString();
+//			dept.path = dept.id.toString();
+			dept.path="";
 		}else{
 			dept.path = parent.path+dept.id.toString();
 		}

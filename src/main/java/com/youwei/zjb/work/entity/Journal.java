@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -15,6 +17,7 @@ import javax.persistence.Table;
 public class Journal {
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer id;
 	
 	@Column(name="uid")
@@ -31,7 +34,6 @@ public class Journal {
 	/**
 	 * 1.请假 
 	 * 0.工作日志
-	 * 2.会议记录
 	 */
 	@Column(name="cate")
 	public Integer category;
