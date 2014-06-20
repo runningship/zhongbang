@@ -19,6 +19,9 @@ public class JiLu {
 	
 	public Date addtime;
 	
+	/**
+	 * 0 会议记录，1 优质房源 , 2 阅读总结, 3考勤表格
+	 */
 	@Column(name="cate")
 	public Integer category;
 	
@@ -26,7 +29,8 @@ public class JiLu {
 	
 	public String title;
 	
-	public Date datetime;
+	@Column(name="datetime")
+	public Date starttime;
 	
 	public Date endtime;
 	

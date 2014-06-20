@@ -29,7 +29,8 @@ public class IMServer extends WebSocketServer{
 	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
 	
 	private IMServer() throws UnknownHostException {
-		super(new InetSocketAddress(Inet4Address.getByName("localhost"), 9099));
+//		super(new InetSocketAddress(Inet4Address.getByName("localhost"), 9099));
+		super(new InetSocketAddress("192.168.1.125", 9099));
 	}
 
 	public static void startUp() throws UnknownHostException{
@@ -67,9 +68,13 @@ public class IMServer extends WebSocketServer{
 		if("login".equals(data.getString("type"))){
 			conns.put(data.getInt("userId"), conn);
 			User user = dao.get(User.class,data.getInt("userId"));
+			if(user.avatar==null){
+				user.avatar=0;
+			}
 			JSONObject jobj = new JSONObject();
 			jobj.put("username", user.uname);
 			jobj.put("type", "userprofile");
+			jobj.put("avatarId", user.avatar);
 			conn.send(jobj.toString());
 			nofityStatus(data.getInt("userId") , 1);
 		}else if("msg".equals(data.getString("type"))){
@@ -97,6 +102,9 @@ public class IMServer extends WebSocketServer{
 		}
 		for(Contact cont : contacts){
 			WebSocket conn = conns.get(cont.contactId);
+			if(conn==null){
+				continue;
+			}
 			jobj.put("contactId", cont.contactId);
 			conn.send(jobj.toString());
 		}

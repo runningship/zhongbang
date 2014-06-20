@@ -14,7 +14,7 @@
 
 .triangle {
     position:absolute;
-    top:50%;
+    top:25px;
     margin-top:2px;
     left:42px;
     display:block;
@@ -43,6 +43,7 @@
     background-image:-webkit-linear-gradient(top,#4D90FE,#4787ED);
     background-image:-moz-linear-gradient(center top , #4D90FE, #4787ED);
     background-image:linear-gradient(top,#4D90FE,#4787ED);
+    white-space: pre;
 }
 
 .fr { padding-left:0px; padding-right:50px; }

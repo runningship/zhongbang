@@ -87,6 +87,8 @@ public class User {
 	 */
 	public String dutypath;
 	
+	public Integer avatar;
+	
 	public Role getRole(){
 		return SimpDaoTool.getGlobalCommonDaoService().get(Role.class, roleId);
 	}

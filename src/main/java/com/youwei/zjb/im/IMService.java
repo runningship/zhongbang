@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
@@ -14,7 +15,9 @@ import org.bc.web.ModelAndView;
 import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
+import com.youwei.zjb.entity.User;
 import com.youwei.zjb.im.entity.Contact;
+import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.JSONHelper;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -28,7 +31,7 @@ public class IMService {
 	public ModelAndView getContacts(int userId) {
 		ModelAndView mv = new ModelAndView();
 		List<Map> list = dao.listAsMap("select c.id as id ,c.ownerId as ownerId ,c.contactId as contactId ,c.ugroup as group ,u.uname as contactName, "
-				+ " u.tel as contactTel from User u,Contact c where c.contactId=u.id and c.ownerId=?", new Object[] { userId });
+				+ " u.tel as contactTel,d.namea as deptName,u.avatar as avatar from User u,Contact c,Department d where c.contactId=u.id and d.id=u.deptId and c.ownerId=?", new Object[] { userId });
 		for(Map map : list){
 			int uid = (int) map.get("contactId");
 			if(IMServer.isUserOnline(uid)){
@@ -37,6 +40,7 @@ public class IMService {
 				map.put("state", "离线");
 			}
 		}
+		DataHelper.fillDefaultValue(list, "avatar", 0);
 		mv.data.put("contacts",JSONHelper.toJSONArray(list));
 		return mv;
 	}
@@ -49,7 +53,29 @@ public class IMService {
 	}
 	
 	@WebMethod
-	public ModelAndView search(int ownerId,String txt){
+	public ModelAndView allAvatars(){
+		ModelAndView mv = new ModelAndView();
+		JSONArray arr = new JSONArray();
+		for(int i=1;i<90;i++){
+			JSONObject jobj = new JSONObject();
+			jobj.put("avatarId", i);
+			arr.add(jobj);
+		}
+		mv.data.put("avatars",arr);
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView setAvatar(int userId,int avatarId){
+		ModelAndView mv = new ModelAndView();
+		User user = dao.get(User.class, userId);
+		user.avatar = avatarId;
+		dao.saveOrUpdate(user);
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView search(int ownerId,String txt , Page<Map> page){
 		ModelAndView mv = new ModelAndView();
 		List<Object> params = new ArrayList<Object>();
 		StringBuilder hql = new StringBuilder("select id as userId, uname as uname from User  where id<> "+ownerId);
@@ -58,7 +84,7 @@ public class IMService {
 			params.add("%"+txt+"%");
 			params.add("%"+txt+"%");
 		}
-		Page<Map> page = dao.findPage(new Page<Map>() ,hql.toString() ,true , params.toArray());
+		page = dao.findPage(page,hql.toString() ,true , params.toArray());
 		mv.data.put("contacts", JSONHelper.toJSON(page));
 		return mv;
 	}

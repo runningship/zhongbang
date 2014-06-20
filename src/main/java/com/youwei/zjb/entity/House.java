@@ -4,12 +4,15 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class House {
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer id;
 
 	/**
@@ -20,26 +23,20 @@ public class House {
 
 	@Column(name = "uid")
 	public Integer userId;
-	/**
-	 * 房产公司编号
-	 */
-	public Integer cid;
 
-	// /**
-	// * 状态：4 在售，6 已售，7 停售
-	// */
-	// public String ztai;
-
+	@Column(nullable=false)
 	public String quyu;
 
 	/**
 	 * 楼盘名称
 	 */
+	@Column(nullable=false)
 	public String area;
 
 	/**
 	 * 楼栋号
 	 */
+	@Column(nullable=false)
 	public String dhao;
 
 	/**
@@ -52,6 +49,7 @@ public class House {
 	/**
 	 * 楼层
 	 */
+	@Column(nullable=false)
 	public Integer lceng;
 
 	/**
@@ -125,8 +123,11 @@ public class House {
 	@Column(name = "yongtu")
 	public String leibie;
 
-	// 状态
-	public String flag;
+	 /**
+	 * 状态：4 在售，6 已售，7 停售
+	 */
+	@Column(name="flag")
+	public String ztai;
 
 	@Column(name = "biaoshi")
 	public String xingzhi;

@@ -91,23 +91,29 @@ public class GrandServlet extends HttpServlet{
 				}
 			}
 		}catch(InvocationTargetException ex){
-			
+			JSONObject jobj = new JSONObject();
+			resp.setStatus(500);
 			if(! (ex.getTargetException() instanceof GException)){
 				ex.getTargetException().printStackTrace();
+				jobj.put("result",500);
+				jobj.put("msg", ex.getTargetException().getMessage());
+			}else{
+				GException target = (GException) ex.getTargetException();
+				jobj.put("result",target.getCode());
+				jobj.put("msg", target.getMessage());
 			}
-			GException target = (GException) ex.getTargetException();
-			JSONObject jobj = new JSONObject();
-			jobj.put("result",target.getCode());
-			jobj.put("msg", target.getMessage());
-			resp.setStatus(500);
 			resp.getWriter().println(jobj.toString());
 		}catch(GException ex){
 			ex.printStackTrace();
+			JSONObject jobj = new JSONObject();
+			jobj.put("result",500);
+			resp.setStatus(500);
 			String msg = ex.getMessage();
 			if(StringUtils.isEmpty(msg)){
 				msg = ex.getStackTrace()[0].toString();
 			}
-			resp.getWriter().println(msg);
+			jobj.put("msg", msg);
+			resp.getWriter().println(jobj.toString());
 		} catch(Exception ex){
 			ex.printStackTrace();
 			ex.printStackTrace(resp.getWriter());

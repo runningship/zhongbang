@@ -114,6 +114,8 @@ public class ServletHelper {
 					setValue(obj,data);
 				}
         		values[i] = obj;
+			}catch(GException ex ){
+				throw ex;
 			}catch(Exception ex){
 				throw new GException(PlatformExceptionType.MethodParameterError,"parameter ("+pTypes[i].getName()
 						+ " " + paramName+") of method ("+cm.getDeclaringClass().getName()+"."+cm.getName()

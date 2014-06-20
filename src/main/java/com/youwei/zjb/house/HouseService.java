@@ -45,6 +45,15 @@ public class HouseService {
 		return mv;
 	}
 	
+	@WebMethod
+	public ModelAndView upoadte(House house){
+		ModelAndView mv = new ModelAndView();
+		service.saveOrUpdate(house);
+		mv.data.put("msg", "修改成功");
+		mv.data.put("result", 0);
+		return mv;
+	}
+	
 	public void softDelete(Integer houseId){
 		if(houseId==null){
 			return;

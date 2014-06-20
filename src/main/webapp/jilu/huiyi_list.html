@@ -20,7 +20,7 @@
 var queryOpts;
 
 function getList(search){
-  var url='/zb/journal/list?category=0';
+  var url='/zb/jilu/list?category=0';
   $.ajax({
     type: 'POST',
     url: url,
@@ -49,11 +49,11 @@ function doSearch(){
 function deleteOut(id){
   art.dialog({
     title:'提示',
-    content:'确定删除这条工作日志吗？',
+    content:'确定删除这条会议吗？',
     lock:true,
     ok:function(){
       $.ajax({
-        url:'/zb/journal/delete?id='+id,
+        url:'/zb/jilu/delete?id='+id,
         data:'',
         timeout:5000,
         dataType:'json',
@@ -95,9 +95,12 @@ $(function(){
     
     <form name="form1">
     <input type="hidden" class="userInput" name="xpath" value="">
-    
+    <div class="input-group input-group-max">
+        <span class="input-group-addon">参会人</span>
+        <input type="text" class="form-control" name="goin">
+      </div>
     <div class="input-group" style="width:400px">
-      <span class="input-group-addon">登记时间</span>
+      <span class="input-group-addon">日期</span>
       <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:150px;border-radius:0;">
       <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:150px">
     </div>
@@ -109,16 +112,16 @@ $(function(){
 <div class="mainer" style="position:relative;width:100%">
   <table class="table table-hover .table_bodyer" >
     <thead>
-      <th>内容</th>
+      <th>标题</th>
       <th>区域</th>
       <th>分公司</th>
       <th>业务员</th>
-      <th>日期</th>
+      <th>时间</th>
       <th>操作</th>
     </thead>
     <tbody id="id_list">
-    <tr>
-      <td>${conta}</td>
+    <tr style="display:none">
+      <td>${title}</td>
       <td>${quyu}</td>
       <td>${deptName}</td>
       <td>${uname}</td>

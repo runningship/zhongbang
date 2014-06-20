@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-import net.sf.json.JSONObject;
-
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.GException;
 import org.bc.sdak.Page;
@@ -22,7 +20,6 @@ import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.Attachment;
 import com.youwei.zjb.entity.User;
-import com.youwei.zjb.files.FileService;
 import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
@@ -32,7 +29,6 @@ import com.youwei.zjb.work.entity.Journal;
 public class JournalService {
 
 	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
-	FileService fs = TransactionalServiceHelper.getTransactionalService(FileService.class);
 	
 	@WebMethod
 	public ModelAndView add(Journal journal){
