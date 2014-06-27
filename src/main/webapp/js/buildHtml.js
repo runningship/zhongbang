@@ -16,6 +16,22 @@ function buildHtmlWithJsonArray(id,json,removeTemplate){
         subCatagory.prepend(jtemp);
     }
 
+    var shows = subCatagory.find('[show]');
+    shows.each(function(index,obj){
+        if(index>0){
+            var script = $(obj).attr('show');
+            try{
+                if(eval(script)){
+                    $(obj).css('display','');
+                }else{
+                    $(obj).css('display','none');
+                }
+            }catch(e){
+
+            }
+        }
+    });
+
     var runscripts = subCatagory.find('.runscript');
     runscripts.each(function(index,obj){
         if(index>0){
@@ -25,7 +41,8 @@ function buildHtmlWithJsonArray(id,json,removeTemplate){
                 if(obj.tagName=='INPUT'){
                     obj.value = val;        
                 }else{
-                    obj.textContent = val;    
+                    // obj.textContent = val;  
+                    obj.innerHTML = val;  
                 }
             }catch(e){
                 console.log(obj.textContent);

@@ -5,23 +5,24 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Examples</title>
-<link rel="stylesheet" href="../style/css.css">
-<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="../style/house.css">
-<script type="text/javascript" src="../js/jquery.js"></script>
-<script src="../bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../js/sysinfo.js"></script>
-<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=chrome"></script>
-<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
-<script type="text/javascript" src="../js/DatePicker/WdatePicker.js"></script>
-<script type="text/javascript" src="../js/jquery.timers.js"></script>
-<script type="text/javascript" src="../js/jquery.caozuobendi.js"></script>
-<script type="text/javascript" src="../js/buildHtml.js"></script>
-<script type="text/javascript" src="../js/jquery.xianshang.users.js"></script>
-<script type="text/javascript" src="../js/pagination.js"></script>
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/sysinfo.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=chrome"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/js/jquery.timers.js"></script>
+<script type="text/javascript" src="/js/jquery.caozuobendi.js"></script>
+<script type="text/javascript" src="/js/buildHtml.js"></script>
+<script type="text/javascript" src="/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/js/pagination.js"></script>
 <script type="text/javascript">
 
-  var QueryOptions='';
+  var getStr;
+  var QueryOptions='',getHid=getParam('hid');
 function getEnumText(category,code){
   var arr = QueryOptions[category];
   for(var i=0;i<arr.length;i++){
@@ -30,15 +31,58 @@ function getEnumText(category,code){
     }
   }
 }
+function getFav(){
+  var isFav=getStr['fav'],isFavStr;
+  if(isFav==1){
+    isFavStr='已收藏';
+  }else{
+    isFavStr='收藏';
+  }
+  return '<a href="#" class="j_btn_fav btn btn-mini btn-link">'+isFavStr+'</a>';
+}
+$(document).on('click', '.j_btn_edit', function(event) {
+  window.location.href="house_add.html?hid="+getHid
+  return false;
+}).on('click', '.j_btn_map', function(event) {
+  
+  return false;
+}).on('click', '.j_btn_fav', function(event) {
+  $.get('/zb/fav/add?userId=3&houseId='+getHid, function(data) {
+    getStr=JSON.parse(data);
+    art.dialog.tips(getStr['msg']);
+  });
+  return false;
+});
 $(function(){
+  $('.btn_submit_gj').on('click', function(event) {
+    var Thi=$(this),
+    ThiVal=Thi.parent().prev('input').val();
+    var param={
+    hid:getHid,
+    conts:ThiVal
+    }
+    $.post('/zb/genjin/add?order=id&orderBy=desc',param, function(data) {
+      setGJStr=JSON.parse(data);
+      art.dialog({
+          title: '警告',
+          content: setGJStr['msg']+'',
+          ok: function () {
+            location.reload();
+          },cancel:true
+        });
+    });
+  });
   $.get('/zb/house/getQueryOptions', function(data) {
     QueryOptions=JSON.parse(data);
   });
-  var getStr,
-      getHid=getParam('hid');
-  $.get('/zb/house/listAll?id='+getHid, function(data) {
+  $.get('/zb/house/view?userId=3&houseId='+getHid, function(data) {
     getStr=JSON.parse(data);
-    buildHtmlWithJsonArray("id_house_see",getStr['page']['data']);
+    buildHtmlWithJsonArray("id_house_see",getStr['house']);
+  });
+
+  $.get('/zb/genjin/list?houseId='+getHid, function(data) {
+    getGJStr=JSON.parse(data);
+    buildHtmlWithJsonArray("id_genjin_see",getGJStr['page']['data']);
   });
 
 });
@@ -50,6 +94,9 @@ $(function(){
 </style>
 </head>
 <body class="hsee bodyer">
+<table class="seeBox" width="100%">
+  <tr>
+    <td>
     <span id="id_house_see">
   <table class="table table-bordered">
     <thead>
@@ -57,9 +104,9 @@ $(function(){
         <td colspan="6">
           <div class="row-fluid">
             <div class="pull-right">
-              <a href="#" class="j_btn_fav btn btn-mini" rev="<%= ids %>">收藏</a>
-              <a href="#" class="j_btn_map btn btn-mini" rev="<%= areas %>" >地图</a>
-              <a href="house_add.html?ids=" class="j_btn_edit btn btn-mini btn-primary"><i class="icon-edit icon-white"></i> 修改</a>
+              <span class="runscript">getFav()</span>
+              <a href="#" class="j_btn_map btn btn-mini btn-link">地图</a>
+              <a href="#" class="j_btn_edit btn btn-mini btn-primary"><i class="icon-edit icon-white"></i> 修改</a>
               <br />
               <span class="posYuyue" style="display:none;">预约看房</span>
             </div>
@@ -140,5 +187,19 @@ $(function(){
     </tbody>
   </table>
     </span>
+    </td>
+    <td width="250" valign="top">
+      <div class="input-group">
+        <input type="text" class="genjin_text" class="form-control">
+        <span class="input-group-btn">
+          <button class="btn btn-default btn_submit_gj" type="button">提交</button>
+        </span>
+      </div>
+      <ul id="id_genjin_see" >
+        <li><p>${conts}<br>${addtime}</p>${deptName}${uname}</li>
+      </ul>
+    </td>
+  </tr>
+</table>
 </body>
 </html>

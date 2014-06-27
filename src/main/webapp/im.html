@@ -5,386 +5,51 @@
 <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
 <META HTTP-EQUIV="expires" CONTENT="0">
 <link rel="stylesheet" type="text/css" href="chat.css" />
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/jquery.hotkeys.js"></script>
-<script type="text/javascript" src="js/buildHtml.js"></script>
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/jquery.hotkeys.js"></script>
+<script type="text/javascript" src="/js/buildHtml.js"></script>
+<script type="text/javascript" src="/js/im.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=simple"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
 <script type="text/javascript">
-var contacts;
-var receiverId;
-var ws;
-var myId;
-var msgContainer;
-var defSearchStr = '手机号码/姓名拼音';
-var currentPageNo = 1;
-var avatarId;
-var defMsgInputHeight=36;
-var defMsgInputDivHeight=50;
-function showChild(parent){
-	var img = parent.children[0];
-	if(img.state=="open"){
-		img.src="";
-		img.state="close";
-		img.src="http://pub.idqqimg.com/smartqq/css/image/open_arrow.png";
-	}else{
-		img.state = "open";
-		img.src="http://pub.idqqimg.com/smartqq/css/image/open_arrow_fire.png";
-	}
-	var display=parent.nextElementSibling.style.display;
-	if(display=="none"){
-		parent.nextElementSibling.style.display="block";
-	}else{
-		parent.nextElementSibling.style.display="none";
-	}
-	
-}
-function loadContacts(){
-	$.ajax({
-        url:'/zb/im/getContacts?userId='+myId,
-        data:'',
-        timeout:30000,
-        dataType:'json',
-        beforeSend: function(XMLHttpRequest){
-            
-        },success:function (data, textStatus) {
-            contacts = data["contacts"];
-            contacts = sortContacts(contacts);
-            buildHtmlWithJsonArray("contact",contacts);
-            fixImg('contact');
-        },
-        complete: function(XMLHttpRequest, textStatus){},
-        error:function (XMLHttpRequest, textStatus, errorThrown) {
-        	console.error(XMLHttpRequest.responseText);
-        }
-    });
-}
-function sortContacts(contactArr){
-	var sorted = [];
-	for(var i=0;i<contactArr.length;i++){
-		if(contactArr[i].state=='离线'){
-			sorted.push(contactArr[i]);
-		}else{
-			var tmp = [];
-			tmp.push(contactArr[i]);
-			sorted = tmp.concat(sorted);
-		}
-	}
-	return sorted;
-}
+
+
 window.onload=function(){
-	myId = GetQueryString("userId");
-	msgContainer = $('#msgContainer');
-	$('#searchInput').val(defSearchStr);
-	loadContacts();
-
-	ws = new WebSocket("ws://192.168.1.125:9099");
-	ws.onopen = function() { 
-		console.log("open"); 
-		login(ws);
-	};
-	ws.onmessage = function(e) { 
-		var json = JSON.parse(e.data);
-		if(json['type']=='msg'){
-			onReceiveMsg(json);
-		}else if(json['type']=='history'){
-			buildHistory(json['history']);
-		}else if(json['type']=='userprofile'){
-			setUserProfile(json);
-		}else if(json['type']=='status'){
-			setUserStatus(json);
-		}
-	};
-	ws.onclose = function(e) {
-		console.log("closed"); 
-	};
-	ws.onerror = function(e){
-		console.log(e); 
-	}
-	
-	jQuery.hotkeys.add('ctrl+return',function(e){
-		send();
-	});
-
-
-	jQuery.hotkeys.add('return',{propagate: true},function(e){
-		increaseHeight();
-	});
+	IM.Init();
 };
 
-function increaseHeight(){
-	if(document.activeElement.id!='message'){
-		return ;
-	}
-	if(defMsgInputHeight>100){
-		return ;
-	}
-	defMsgInputHeight+=30;
-	defMsgInputDivHeight+=30;
-	$('#message').css('height',defMsgInputHeight);
-	$('#messageInputWrap').css('height',defMsgInputDivHeight);
-}
 
-function setUserStatus(json){
-	loadContacts();
-}
-function setUserProfile(profile){
-	$('#me').text(profile['username']);
-	avatarId = profile['avatarId'];
-	$('#myAvatar').attr('src','/style/image/avatar/'+avatarId+'.jpg');
-
-}
-function login(ws){
-	var data = JSON.parse("{}");
-	data["type"]="login";
-	data["userId"]=myId;
-	data["username"]="xzye";
-	ws.send(JSON.stringify(data));
-}
-function openChat(userId){
-	receiverId = userId;
-	var contact = getContact(userId);
-	$('#cname').text(contact["contactName"]);
-	$('#chatWindow').css('display','');	
-
-
-	var msgCount = $($('#'+receiverId).children(0)[1]);
-	msgCount.text(0);
-	msgCount.css('display','none');
-
-	loadHistory(userId);
-
-}
-function closeChat(){
-	$('#chatWindow').css('display','none');	
-}
-function getContact(cid){
-	for(var i=0;i<contacts.length;i++){
-		if(contacts[i]["contactId"]==cid){
-			return contacts[i];
-		}
-	}
-}
-function onReceiveMsg(data){
-	
-	var sender = getContact(data['senderId']);
-	if(receiverId==data['senderId']){
-		$('#recvAvatar').attr('src','style/image/avatar/'+sender['avatar']+'.jpg');
-		var dhtml = $('#recvTmp').html();
-		dhtml = dhtml.replace('${msg}',data['content']);
-		dhtml = dhtml.replace('${contact}',sender['contactName']);
-		dhtml = dhtml.replace('display:none','');
-		msgContainer.append(dhtml);
-		msgContainer.scrollTop(msgContainer.scroll(0)[0].scrollHeight);
-	}else{
-		var msgCount = $($('#'+data['senderId']).children(0)[1]);
-		var count = parseInt(msgCount.text());
-		count++;
-		msgCount.text(count);
-		msgCount.css('display','');	
-	}
-	
-}
-function send(){
-	var text = $('#message').val();
-	if(text==''){
-		return;
-	}
-	$('#message').val('');
-	$('#sendAvatar').attr('src','style/image/avatar/'+avatarId+'.jpg');
-	var dhtml = $('#sendTmp').html();
-	dhtml = dhtml.replace('${msg}',text);
-	// dhtml = dhtml.replace('${me}','我自己');
-	dhtml = dhtml.replace('display:none','');
-	msgContainer.append(dhtml);
-	msgContainer.scrollTop(msgContainer.scroll(0)[0].scrollHeight);
-	var data = JSON.parse('{}');
-	data['senderId']=myId;
-	data['type']='msg';
-	data['receiverId']=receiverId;
-	data['receiverType']=1;
-	data['content']=text;
-	if(ws!=null){
-		ws.send(JSON.stringify(data));
-	}
-}
-function buildHistory(list){
-	msgContainer.empty();
-	for(var i=0;i<list.length;i++){
-		var msg = list[i];
-		if(myId==msg['senderId']){
-			$('#sendAvatar').attr('src','style/image/avatar/'+avatarId+'.jpg');
-			var dhtml = $('#sendTmp').html();
-			dhtml = dhtml.replace('${msg}',msg['content']);
-			// dhtml = dhtml.replace('${me}','我自己');
-			dhtml = dhtml.replace('${avatarId}',avatarId);
-			dhtml = dhtml.replace('display:none','');
-			msgContainer.prepend(dhtml);
-
-		}else if(myId==msg['receiverId']){
-			var sender = getContact(msg['senderId']);
-			$('#recvAvatar').attr('src','style/image/avatar/'+sender['avatar']+'.jpg');
-			var dhtml = $('#recvTmp').html();
-			dhtml = dhtml.replace('${msg}',msg['content']);
-			dhtml = dhtml.replace('${contact}',sender['contactName']);
-			// dhtml = dhtml.replace('${avatarId}',sender['avatar']);
-			dhtml = dhtml.replace('display:none','');
-			msgContainer.prepend(dhtml);
-		}
-	}
-	msgContainer.scrollTop(msgContainer.scroll(0)[0].scrollHeight);
-}
-function loadHistory(cid){
-	var data = JSON.parse('{}');
-	data['type']='history';
-	data['myId'] = myId;
-	data['contactId']=cid;
-	ws.send(JSON.stringify(data));
-}
-var LocString=String(window.document.location.href);
-function GetQueryString(str){
-	var rs=new RegExp("(^|)"+str+"=([^&]*)(&|$)","gi").exec(LocString),tmp;
-	if(tmp=rs)return tmp[2];
-return "";
-}
-
-function search(){
-	var txt = $('#searchInput').val();
-	if(txt==defSearchStr){
-		return;
-	}
-	openSearchPanel();
-	$.ajax({
-        url:'/zb/im/search?ownerId='+myId+'&txt='+txt+'&currentPageNo='+currentPageNo,
-        timeout:10000,
-        dataType:'json',
-        type:'post',
-        beforeSend: function(XMLHttpRequest){
-            
-        },success:function (data, textStatus) {
-            var userSearchResult = data["contacts"]["data"];
-            buildHtmlWithJsonArray("userSearchResult",userSearchResult);
-        },
-        error:function (XMLHttpRequest, textStatus, errorThrown) {
-        	console.error(XMLHttpRequest.responseText);
-        }
-    });
-}
-function addContact(contactId){
-	// alert(contactId);
-	var url = '/zb/im/addContact?ownerId='+myId+'&contactId='+contactId;
-	$.ajax({
-        url:url,
-        data:'',
-        type:'post',
-        timeout:10000,
-        dataType:'json',
-        beforeSend: function(XMLHttpRequest){
-            
-        },success:function (data, textStatus) {
-            closeSearchPanel();
-            loadContacts();
-        },
-        complete: function(XMLHttpRequest, textStatus){},
-        error:function (XMLHttpRequest, textStatus, errorThrown) {
-        	console.error(XMLHttpRequest.responseText);
-        }
-    });
-}
-function delContact(contactId,e){
-	event.cancelBubble=true;
-	var url = '/zb/im/delContact?ownerId='+myId+'&contactId='+contactId;
-	$.ajax({
-        url:url,
-        data:'',
-        type:'post',
-        timeout:10000,
-        dataType:'json',
-        beforeSend: function(XMLHttpRequest){
-            
-        },success:function (data, textStatus) {
-            loadContacts();
-        },
-        complete: function(XMLHttpRequest, textStatus){},
-        error:function (XMLHttpRequest, textStatus, errorThrown) {
-        	console.error(XMLHttpRequest.responseText);
-        }
-    });
-}
-function closeSearchPanel(){
-	$('#searchPanel').css('display','none');
-	$('#searchBtn').css('display','');
-	$('#closeSearchBtn').css('display','none');
-}
-function openSearchPanel(){
-	$('#searchPanel').css('display','');
-	// $('#searchBtn').css('display','none');
-	$('#closeSearchBtn').css('display','');
-}
-function nextPage(){
-	currentPageNo++;
-	search();
-}
-function prePage(){
-	if(currentPageNo>1){
-		currentPageNo--;
-		search();	
-	}
-}
-
-function fixImg(container){
-	$('#'+container).find('img').each(function(index,obj){
-		var img = $(obj);
-		if(index>0){
-			img.attr('src',img.attr('srcx'));
-		}
-		
-	});
-}
-function openAvatarPanel(){
-	var url = '/zb/im/allAvatars?';
-	$.ajax({
-        url:url,
-        data:'',
-        type:'get',
-        timeout:10000,
-        dataType:'json',
-        beforeSend: function(XMLHttpRequest){
-            
-        },success:function (data, textStatus) {
-            buildHtmlWithJsonArray("avatars",data['avatars']);
-            fixImg('avatars');
-        },
-        error:function (XMLHttpRequest, textStatus, errorThrown) {
-        	console.error(XMLHttpRequest.responseText);
-        }
-    });
-}
-function setAvatar(aId){
-	avatarId = aId;
-	$('#myAvatar').attr('src','/style/image/avatar/'+avatarId+'.jpg');
-}
-function saveAvatar(){
-	$.ajax({
-        url:'/zb/im/setAvatar?userId='+myId+'&avatarId='+avatarId,
-        data:'',
-        type:'get',
-        timeout:10000,
-        dataType:'json',
-        beforeSend: function(XMLHttpRequest){
-            
-        },success:function (data, textStatus) {
-            alert('头像更新成功');
-        },
-        error:function (XMLHttpRequest, textStatus, errorThrown) {
-        	alert('头像更新失败');
-        }
-    });
-}
 </script>
+<style type="text/css">
+	.aui_nw{
+		display: none;
+	}
+	.aui_n{
+		display: none;
+	}
+	.aui_sw{
+		display: none;
+	}
+	.aui_w{
+		display: none;
+	}
+	.aui_e{
+		display: none;
+	}
+	.aui_ne{
+		display: none;
+	}
+	.aui_inner{
+		border:0px;
+		border-radius: 10px;
+	}
+</style>
 </head>
 <body>
-	<div style="float:left;">
+<div class="IM">
+	<div id="lxr" >
 		<div style="background-color:#555;width:252px;height:95px;border-radius:8px 8px 0px 0px;">
-			<img id="myAvatar" onclick="openAvatarPanel();" src="/style/image/avatar/0.jpg" style="width:64px;height:64px;margin-top:5px;margin-left:5px;float:left;cursor:pointer">
+			<img id="myAvatar" onclick="IM.openAvatarPanel();" src="/style/image/avatar/0.jpg" style="width:64px;height:64px;margin-top:5px;margin-left:5px;float:left;cursor:pointer">
 			<div id="me" style="font-size:18px;color:white;padding-top:4px;">&nbsp;</div>
 			<div style="padding-top:44px;">
 			
@@ -411,7 +76,7 @@ function saveAvatar(){
 			<div>
 				
 				<span id="contact">
-					<div onclick="openChat(${contactId});" id="${contactId}" style="display:none;padding-left:5px;background-color:whitesmoke;height:56px;border-bottom:1px solid #ddd;cursor:pointer">
+					<div onclick="IM.openChat(${contactId});" id="${contactId}" style="display:none;padding-left:5px;background-color:whitesmoke;height:56px;border-bottom:1px solid #ddd;cursor:pointer">
 						<span onclick="delContact(${contactId})" style="float:right;margin-right:10px;color:#aaa">x</span>
 						<div style="display:none;background:red;color:white;float:right;margin-right:10px;margin-top:10px;border-radius:8px;height:16px;width:25px;text-align:center;font-size:12px;">0</div>
 						<img src="" srcx="/style/image/avatar/${avatar}.jpg" style="width:40px;height:40px;margin-top:5px;margin-right:5px;float:left" />
@@ -430,17 +95,14 @@ function saveAvatar(){
 		</div>
 	</div>
 
-	<div id="chatWindow" style="float:left;margin-left:20px;width:652px;display:none">
-		<div style="background-color:#444;height:45px;border-radius:8px 8px 0px 0px;text-align:center" >
+	<div id="chatWindow" style="float:left;width:652px;display:none">
+		<div style="background-color:#444;height:45px;border-radius:8px 8px 0px 0px;text-align:center;" >
 			<div style="padding-top:14px;">
 			<span id="cname" style="font-size:22px;color:white;padding-left:20px;font-weight:bold"></span>
-			<span onclick="closeChat();" style="font-size:16px;color:white;border:1px solid #666;padding:4px 12px;border-radius:6px;margin-top:-4px;float:right;margin-right:20px;cursor:pointer">关闭</span>
 			</div>
 		</div>
 		<div id="msgContainer" style="height:452px;background-color:whitesmoke;overflow-y:scroll;" class="bubble">
 				
-		        
-
 		</div>
 		<div style="background-color:#555;height:50px;border-radius:0px 0px 8px 8px;" id="messageInputWrap">
 			<textarea id="message" style="height:36px;width:560px;border-radius:6px;margin:8px 0px 0px 20px;resize:none;padding-top:7px;font-size:18px;color:#666"></textarea>
@@ -464,17 +126,18 @@ function saveAvatar(){
 	        <div style="position:absolute;right:1px;"><img id="sendAvatar" style="width:30px;height:30px;" src=''/></div>
 	    </div>
     </span>
-    <div >
-    	<div>
-		<button onclick="saveAvatar()">确定</button>
-		</div>
+    <div id="chooseAvatarPanel" style="display:none">
 		<div style="width:670px;height:500px;overflow:auto" >
+			
 	    	<div id="avatars">
-		    	<img onclick="setAvatar(${avatarId})" srcx="/style/image/avatar/${avatarId}.jpg" src="" style="width:64px;height:64px;margin-top:5px;margin-left:5px;float:left;cursor:pointer;display:none" />
-		    	<!-- </span> -->
+		    	<img onclick="IM.setAvatar(${avatarId})" srcx="/style/image/avatar/${avatarId}.jpg" src="" style="width:64px;height:64px;margin-top:5px;margin-left:5px;float:left;cursor:pointer;display:none" />
+		    	
 	    	</div>
     	</div>
-    	
+    	<div>
+			<button onclick="IM.saveAvatar()">确定</button>
+		</div>
     </div>
+</div>
 </body>
 </html>

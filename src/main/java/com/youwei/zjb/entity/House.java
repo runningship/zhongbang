@@ -117,6 +117,7 @@ public class House {
 	public String beizhu;
 
 	// TODO
+	
 	@Column(name = "xxlb")
 	public Integer jiaoyi;
 

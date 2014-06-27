@@ -1,19 +1,23 @@
 package com.youwei.test.zjb.authpc;
 
 import java.util.Date;
+import java.util.Map;
 
 import junit.framework.Assert;
 
 import org.bc.sdak.GException;
 import org.bc.sdak.Page;
+import org.bc.web.ModelAndView;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.SimpDaoTool;
 import com.youwei.zjb.StartUpListener;
+import com.youwei.zjb.sys.PCQuery;
 import com.youwei.zjb.sys.PcService;
 import com.youwei.zjb.sys.entity.PC;
+import com.youwei.zjb.util.DebugHelper;
 import com.youwei.zjb.util.SecurityHelper;
 
 public class TestPcAuth {
@@ -66,9 +70,8 @@ public class TestPcAuth {
 	@Test
 	public void testAuthorizedList(){
 		PcService pas = new PcService();
-		Page<PC> page = new Page<PC>();
+		Page<Map> page = new Page<Map>();
 		page.setCurrentPageNo(1);
-		page = pas.authorizedList(page, 86);
-		System.out.println(page.getResult().size());
+		ModelAndView mv = pas.list(page, new PCQuery());
 	}
 }

@@ -20,10 +20,6 @@
 <script type="text/javascript" src="../js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="../js/pagination.js"></script>
 <script type="text/javascript">
-
-
-
-
 function fix(TableH,TableB){
   for(var i=0;i<=TableB.find('td:last').index();i++){
     TableH.find('th').eq(i).width(TableB.find('tr').eq(1).find('td').eq(i).width());
@@ -37,7 +33,20 @@ function setMainHeight(){
 }
 
 function getHuseList(a){
-  var url='/zb/house/listAll';
+  var url
+//  alert(getParam('chuzu'))
+  if(getParam('nav')=="chushou"){
+    url='/zb/house/listSell';
+  }else if(getParam('nav')=="chuzu"){
+    url='/zb/house/listRent';
+  }else if(getParam('nav')=="del"){
+    url='/zb/house/listRecycle';
+  }else if(getParam('nav')=="my"){
+    url='/zb/house/listMy';
+  }else{
+    url='/zb/house/listAll';
+  }
+//  alert(url)
   $.ajax({
     type: 'POST',
     url: url,
@@ -48,10 +57,15 @@ function getHuseList(a){
         buildHtmlWithJsonArray("id_House_list",getStr['page']['data']);
         Page.setPageInfo(getStr['page']);
         fix($('.TableH'),$('.TableB'));
+
+      if(getParam('nav')=="del"){
+        $('a.hidden').removeClass('hidden');
+      }
     }
   });
 }
 function onSubmit_Form(){
+
   $('form[name=form1]').on('submit', function(event) {
     getHuseList(formSerialize($(this)));
     return false;
@@ -65,6 +79,12 @@ function getEnumText(category,code){
       return arr[i]['name'];
     }
   }
+}
+function dialogs(id){
+    art.dialog.open('house_see.html?hid='+id,{
+      id:'SeeHouse'+id,
+      title:'查看房源详情'
+    })
 }
 $(function(){
     onSubmit_Form();
@@ -85,15 +105,75 @@ $(function(){
     Page.Init();
   });
 
-  $('#id_House_list').on('click', 'tr', function(event) {
+  $('#id_House_list').on('click', 'a', function(event) {
+    var Thi=$(this),
+    rel=Thi.data('rel'),
+    this_hid=Thi.data('hid');
+    //alert(rel);
+    if(rel=='edit'){
+      dialogs(this_hid);
+    }else if(rel=='del'){
+      if(getParam('nav')=="del"){
+        art.dialog({
+          title: '警告',
+          content: '删除后不可恢复，确定？',
+          ok: function () {
+            date="{id:"+this_hid+"}"
+            $.post('/zb/house/physicalDelete?houseId='+this_hid, function(data, textStatus, xhr) {
+              var getStr=JSON.parse(data);
+              if(getStr['msg']=='删除成功'){
+                art.dialog.tips('成功永久删除！')
+                Thi.parents('tr').remove();
+              }else{
+                art.dialog.tips('失败');
+              }
+            });
+          },cancel:true
+        });
+      }else{
+        art.dialog({
+          title: '警告',
+          content: '删除到回收站？',
+          ok: function () {
+            date="{id:"+this_hid+"}"
+            $.post('/zb/house/softDelete?houseId='+this_hid, function(data, textStatus, xhr) {
+              var getStr=JSON.parse(data);
+              if(getStr['msg']=='删除成功'){
+                art.dialog.tips('成功移动至回收站！');
+                Thi.parents('tr').remove();
+              }else{
+                art.dialog.tips('失败');
+              }
+            });
+          },cancel:true
+        });
+      }
+    }else if(rel=='revert'){
+      art.dialog({
+        title: '警告',
+        content: '恢复数据？',
+        ok: function () {
+          date="{id:"+this_hid+"}"
+          $.post('/zb/house/physicalDelete?houseId='+this_hid, function(data, textStatus, xhr) {
+            var getStr=JSON.parse(data);
+            if(getStr['msg']=='删除成功'){
+              art.dialog.tips('已恢复');
+              Thi.parents('tr').remove();
+            }else{
+              art.dialog.tips('失败');
+            }
+          });
+        },cancel:true
+      });
+    }
+    return false;
+  }).on('click', 'tr', function(event) {
     var Thi=$(this),
     this_hid=Thi.data('hid');
-    art.dialog.open('house_see.html?hid='+this_hid,{
-      id:'SeeHouse'+this_hid,
-      title:'查看房源详情'
-    })
+    dialogs(this_hid);
   });
 });
+
 </script>
 <style type="text/css">
   .table{ margin-bottom: 0px;}
@@ -122,7 +202,7 @@ $(function(){
           状 态 <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" id="id_zhuangtai">
-          <li><label><input type="radio" name="ztai" value="${name}"> ${name}</label>
+          <li><label><input type="radio" name="ztai" value="${name}"> ${name}</label></li>
         </ul>
       </div>
       <div class="btn-group">
@@ -246,7 +326,7 @@ $(function(){
       <th class="font_no_br">装潢</th>
       <th>年代</th>
       <th>发布时间</th>
-      <th>发布人</th>
+      <th>联系人</th>
       <th>性质</th>
       <th>状态</th>
       <th class="font_no_br">房配客</th>
@@ -272,9 +352,12 @@ $(function(){
       <td>${dateadd}</td>
       <td>${forlxr}</td>
       <td class='runscript'>getEnumText('xingzhi',${xingzhi})</td>
-      <td class='runscript'>getEnumText('zhuangtai',${flag})</td>
+      <td class='runscript'>getEnumText('zhuangtai',${ztai})</td>
       <td>有</td>
-      <td>修改 删除</td>
+      <td>
+        <a href="#" data-hid="${id}" data-rel="edit">修改</a>
+        <a href="##" data-hid="${id}" data-rel="del">删除</a>
+        <a href="###" data-hid="${id}" data-rel="revert" class="hidden">恢复</a></td>
     </tr>
     </tbody>
   </table>

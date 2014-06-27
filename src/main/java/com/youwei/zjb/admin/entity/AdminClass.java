@@ -20,8 +20,7 @@ public class AdminClass {
 	
 	public Integer fid;
 	
-	@Column(name="title")
-	public String name;
+	public String title;
 	
 	@Column(name="conts")
 	public String template;

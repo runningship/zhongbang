@@ -17,7 +17,38 @@
 },{
 	"name":"rs",
 	"type":"module",
-	"text":"人事管理"
+	"text":"人事管理",
+	"children":[{
+		"name":"xt_rz",
+		"text":"入职",
+		"type":"virtual",
+		"children":[{
+			"name":"xt_rz_shenhe",
+			"text":"审核列表",
+			"type":"menu",
+			"url":""
+		}]
+	},{
+		"name":"xt_lz",
+		"text":"离职",
+		"type":"virtual",
+		"children":[{
+			"name":"xt_lz_shenhe",
+			"text":"审核列表",
+			"type":"menu",
+			"url":""
+		}]
+	},{
+		"name":"xt_tz",
+		"text":"调整",
+		"type":"virtual",
+		"children":[{
+			"name":"xt_tz_shenhe",
+			"text":"审核列表",
+			"type":"menu",
+			"url":""
+		}]
+	}]
 },{
 	"name":"xz",
 	"type":"module",
@@ -36,9 +67,34 @@
 	"type":"module",
 	"children":[{
 		"name":"xt_zw",
-		"text":"职务信息",
-		"type":"menu",
-		"url":""
+		"text":"职务",
+		"type":"virtual",
+		"children":[{
+			"name":"xt_zw_list",
+			"text":"职务列表",
+			"type":"menu",
+			"url":""
+		},{
+			"name":"xt_zw_add",
+			"text":"添加职务",
+			"type":"menu",
+			"url":""
+		},{
+			"name":"xt_zw_del",
+			"text":"删除职务",
+			"type":"menu",
+			"url":""
+		},{
+			"name":"xt_zw_edit",
+			"text":"修改职务",
+			"type":"menu",
+			"url":""
+		},{
+			"name":"xt_zw_quanxian",
+			"text":"设置权限",
+			"type":"menu",
+			"url":""
+		}]
 	},{
 		"name":"xt_sq",
 		"text":"电脑授权",
@@ -51,6 +107,16 @@
 		},{
 			"name":"xt_sq_wsh",
 			"text":"未审核",
+			"type":"menu",
+			"url":""
+		},{
+			"name":"xt_sq_jinyong",
+			"text":"终止授权",
+			"type":"menu",
+			"url":""
+		},{
+			"name":"xt_sq_del",
+			"text":"删除授权",
 			"type":"menu",
 			"url":""
 		}]

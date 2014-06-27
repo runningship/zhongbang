@@ -30,7 +30,7 @@ public class Process {
 	 * 处理人
 	 */
 	@Column(name="title")
-	public String name;
+	public String uname;
 	
 	public String conts;
 	

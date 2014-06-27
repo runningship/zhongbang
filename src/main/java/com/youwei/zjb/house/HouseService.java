@@ -19,6 +19,7 @@ import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.client.KeHuXingzhi;
 import com.youwei.zjb.client.KeHuLaiYuan;
+import com.youwei.zjb.entity.Favorite;
 import com.youwei.zjb.entity.House;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.util.JSONHelper;
@@ -46,7 +47,7 @@ public class HouseService {
 	}
 	
 	@WebMethod
-	public ModelAndView upoadte(House house){
+	public ModelAndView update(House house){
 		ModelAndView mv = new ModelAndView();
 		service.saveOrUpdate(house);
 		mv.data.put("msg", "修改成功");
@@ -54,46 +55,58 @@ public class HouseService {
 		return mv;
 	}
 	
-	public void softDelete(Integer houseId){
-		if(houseId==null){
-			return;
+	@WebMethod
+	public ModelAndView softDelete(Integer houseId){
+		ModelAndView mv = new ModelAndView();
+		if(houseId!=null){
+			House po = service.get(House.class, houseId);
+			if(po!=null){
+				po.isdel= 1;
+				service.saveOrUpdate(po);
+			}
 		}
-		House po = service.get(House.class, houseId);
-		if(po!=null){
-			po.isdel= 1;
-			service.saveOrUpdate(po);
-		}
+		mv.data.put("msg", "删除成功");
+		return mv;
 	}
 	
-	public void recover(Integer houseId){
+	@WebMethod
+	public ModelAndView recover(Integer houseId){
+		ModelAndView mv = new ModelAndView();
 		if(houseId==null){
-			return;
+			House po = service.get(House.class, houseId);
+			if(po!=null){
+				po.isdel= 0;
+				service.saveOrUpdate(po);
+			}
 		}
-		House po = service.get(House.class, houseId);
-		if(po!=null){
-			po.isdel= 0;
-			service.saveOrUpdate(po);
-		}
+		mv.data.put("msg", "恢复成功");
+		return mv;
 	}
-	public void physicalDelete(Integer houseId){
+	
+	@WebMethod
+	public ModelAndView physicalDelete(Integer houseId){
+		ModelAndView mv = new ModelAndView();
 		//是否需要权限
-		if(houseId==null){
-			return;
+		if(houseId!=null){
+			House po = service.get(House.class, houseId);
+			if(po!=null){
+				service.delete(po);
+			}
 		}
-		House po = service.get(House.class, houseId);
-		if(po!=null){
-			service.delete(po);
-		}
+		mv.data.put("msg", "删除成功");
+		return mv;
 	}
 	
+	@WebMethod
 	public ModelAndView listMy(HouseQuery query ,Page<House> page){
-		User user = ThreadSession.getUser();
-		if(user==null){
-			ModelAndView mv = new ModelAndView();
-			mv.data.put("msg", "用户已经掉线");
-			return mv;
-		}
-		query.userId = user.id;
+//		User user = ThreadSession.getUser();
+//		if(user==null){
+//			ModelAndView mv = new ModelAndView();
+//			mv.data.put("msg", "用户已经掉线");
+//			return mv;
+//		}
+//		query.userId = user.id;
+		query.userId = 396;
 		return listAll(query ,page);
 	}
 	
@@ -114,6 +127,45 @@ public class HouseService {
 		mv.data.put("kehu", KeHuXingzhi.toJsonArray());
 		mv.data.put("kehulaiyuan", KeHuLaiYuan.toJsonArray());
 		mv.data.put("piyue", PiYue.toJsonArray());
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView listRent(HouseQuery query ,Page<House> page){
+		if(query.jiaoyis==null){
+			query.jiaoyis = new ArrayList<String>();
+		}
+		query.jiaoyis.add(JiaoYi.仅租.toString());
+		query.jiaoyis.add(JiaoYi.出租.toString());
+		query.jiaoyis.add(JiaoYi.租售.toString());
+		return listAll(query , page);
+	}
+	
+	@WebMethod
+	public ModelAndView listSell(HouseQuery query ,Page<House> page){
+		if(query.jiaoyis==null){
+			query.jiaoyis = new ArrayList<String>();
+		}
+		query.jiaoyis.add(JiaoYi.仅售.toString());
+		query.jiaoyis.add(JiaoYi.出售.toString());
+		return listAll(query , page);
+	}
+	
+	@WebMethod
+	public ModelAndView listRecycle(HouseQuery query ,Page<House> page){
+		query.isdel=1;
+		return listAll(query , page);
+	}
+	
+	@WebMethod
+	public ModelAndView view(int userId ,int houseId){
+		ModelAndView mv = new ModelAndView();
+		House house = service.get(House.class, houseId);
+		List<House> list = new ArrayList<House>();
+		list.add(house);
+		mv.data.put("house", JSONHelper.toJSONArray(list));
+		Favorite fav = service.getUniqueByParams(Favorite.class, new String[]{"userId" , "houseId"}, new Object[]{ userId , houseId });
+		mv.data.put("fav", fav==null ? 0:1);
 		return mv;
 	}
 	

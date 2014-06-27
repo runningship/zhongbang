@@ -15,7 +15,7 @@ import com.youwei.zjb.DateSeparator;
 
 public class HqlHelper {
 
-	static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	public static String buildDateSegment(String fieldName,String dateStr,DateSeparator sep,List<Object> params){
 		if(StringUtils.isEmpty(dateStr)){
 			return "";

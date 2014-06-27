@@ -32,8 +32,7 @@ public class AdminTable {
 	@Column(name="uid")
 	public Integer userId;
 	
-	@Column(name="title")
-	public String name;
+	public String title;
 	
 	@Basic(fetch=FetchType.LAZY)
 	public String conts;
@@ -41,7 +40,6 @@ public class AdminTable {
 	public Date addtime;
 	
 	@Column(name="claid")
-	
 	public Integer classId;
 	
 	public Integer sh;

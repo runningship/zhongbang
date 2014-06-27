@@ -26,4 +26,9 @@ public class UserQuery extends AbstractQuery{
 	
 	public String rqtimeEnd;
 	
+	public Integer sh = 1;
+	
+	public Integer lizhi;
+	
+	public String xpath;
 }

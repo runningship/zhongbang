@@ -1,6 +1,5 @@
 package com.youwei.zjb.im;
 
-import java.net.Inet4Address;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.Date;

@@ -6,17 +6,23 @@ import java.util.List;
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.Page;
 import org.bc.sdak.TransactionalServiceHelper;
+import org.bc.web.ModelAndView;
+import org.bc.web.Module;
+import org.bc.web.WebMethod;
 
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.Favorite;
 import com.youwei.zjb.entity.House;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.util.JSONHelper;
 
+@Module(name="/fav/")
 public class FavoriteService {
 
 	CommonDaoService service = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
 	
-	public void add(Integer userId, Integer houseId){
+	@WebMethod
+	public ModelAndView add(Integer userId, Integer houseId){
 		Favorite po = service.getUniqueByParams(Favorite.class, new String[]{"userId","houseId"}, new Object[]{userId,houseId});
 		if(po==null){
 			Favorite fav = new Favorite();
@@ -24,8 +30,10 @@ public class FavoriteService {
 			fav.userId = userId;
 			service.saveOrUpdate(fav);
 		}
+		return new ModelAndView();
 	}
 	
+	@WebMethod
 	public void delete(Integer userId,Integer houseId){
 		Favorite po = service.getUniqueByParams(Favorite.class, new String[]{"userId","houseId"}, new Object[]{userId,houseId});
 		if(po!=null){
@@ -33,16 +41,18 @@ public class FavoriteService {
 		}
 	}
 	
-	public List<House> list(HouseQuery query){
+	@WebMethod
+	public ModelAndView list(HouseQuery query){
+		ModelAndView mv = new ModelAndView();
 		User user = ThreadSession.getUser();
 		if(user==null){
-			return new ArrayList<House>();
+			user = service.get(User.class, 316);
 		}
 		StringBuilder hql = new StringBuilder("select h from House h,Favorite f where h.id=f.houseId and f.userId="+user.id);
 		Page<House> page = new Page<House>();
 		page.setCurrentPageNo(1);
 		page = service.findPage(page, hql.toString());
-		List<House> houses = page.getResult();
-		return houses;
+		mv.data.put("page", JSONHelper.toJSON(page));
+		return mv;
 	}
 }

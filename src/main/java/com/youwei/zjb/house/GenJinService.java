@@ -1,6 +1,7 @@
 package com.youwei.zjb.house;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,9 @@ import org.bc.web.WebMethod;
 
 import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.PlatformExceptionType;
+import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.GenJin;
+import com.youwei.zjb.entity.User;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
 
@@ -24,10 +27,21 @@ public class GenJinService {
 
 	CommonDaoService service = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
 	
-	public void add(GenJin gj){
+	@WebMethod
+	public ModelAndView add(GenJin gj){
+		ModelAndView mv = new ModelAndView();
+		User user = ThreadSession.getUser();
+		if(user==null){
+			gj.userId = 316;
+		}else{
+			gj.userId = user.id;
+		}
 		if(gj!=null){
+			gj.addtime = new Date();
 			service.saveOrUpdate(gj);
 		}
+		mv.data.put("msg", "保存成功");
+		return mv;
 	}
 	
 	@WebMethod

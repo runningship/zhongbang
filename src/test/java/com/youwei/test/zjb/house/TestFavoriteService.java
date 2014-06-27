@@ -3,6 +3,7 @@ package com.youwei.test.zjb.house;
 import java.util.List;
 
 import org.bc.sdak.utils.BeanUtil;
+import org.bc.web.ModelAndView;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,8 +32,8 @@ public class TestFavoriteService {
 		User user = new User();
 		user.id = 207;
 		ThreadSession.setUser(user);
-		List<House> list = service.list(null);
-		printResult(list);
+		ModelAndView mv = service.list(null);
+//		printResult(list);
 	}
 	
 	private void printResult(List<House> list){

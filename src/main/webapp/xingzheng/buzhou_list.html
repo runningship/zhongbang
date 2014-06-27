@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>处理步骤</title>
+<link rel="stylesheet" href="../style/css.css">
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="../style/house.css">
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script src="../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="../js/buildHtml.js"></script>
+<script type="text/javascript" src="../js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="../js/pagination.js"></script>
+<script type="text/javascript" src="../js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+var classId;
+function getList(search){
+  var url='/zb/admin/listProcessClass?classId='+classId;
+  $.ajax({
+    type: 'get',
+    url: url,
+    data:search,
+    success: function(data){
+      var getStr=JSON.parse(data);
+      dataArr = getStr['data'];
+      buildHtmlWithJsonArray("id_list",dataArr);
+      // Page.setPageInfo(getStr['page']);
+    }
+  });
+}
+
+
+$(function(){
+  classId = getParam('classId');
+  if(classId==""){
+    alert('未指定表格类比');
+    return;
+  }
+  $('#add_link').attr('href','buzhou_add.html?classId='+classId);
+  getList();
+  // $.get('/zb/house/getQueryOptions', function(data) {
+  //   queryOpts=JSON.parse(data);
+  // });
+  // Page.Init();
+});
+
+</script>
+<style type="text/css">
+  .table{ margin-bottom: 0px;}
+</style>
+</head>
+<body class="hlist bodyer" style="overflow:auto">
+
+<div class="header" style="position:relative;height:50px;width:100%">
+  <form name="form1">
+    
+  </form>
+  <div class="btn-group">
+    <a id="add_link" target="_blank" href="#"><button type="submit" class="btn btn-primary btn_subnmit">添加</button></a>
+  </div>
+</div>
+<div class="mainer" style="position:relative;width:100%">
+  <table class="table table-hover .table_bodyer" >
+    <thead>
+      <th>顺序</th>
+      <th>名称</th>
+      <th>操作</th>
+    </thead>
+    <tbody id="id_list">
+    <tr style="display:none">
+      <td>${ordera}</td>
+      <td>${username}</td>
+      <td><a target="_blank" href="">修改</a> <a href="javascript:void(0)" >删除</a></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="footer foot_page_box" style="position:relative;margin-top:10px;height:55px;"></div>
+</body>
+</html>

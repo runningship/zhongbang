@@ -64,6 +64,7 @@ document.addEventListener('mousemove', function (e) {
 }, false);
 $(document).ready(function() {
 //改善btn-group的操作感受
+if($('.btn-group').length>0){
 var btn_group_time=null;
 $('.btn-group').on('hide.bs.dropdown', function () {
   return false;
@@ -76,8 +77,20 @@ $('.btn-group').on('hide.bs.dropdown', function () {
     $(".btn-group").removeClass('open');
   },500);
 });
-    
+} 
+
 });
+
+
+
+
+//获取url里需要的值
+function getParam(name){
+var reg = new RegExp("(^|\\?|&)"+ name +"=([^&]*)(\\s|&|$)", "i");
+return (reg.test(location.search))? encodeURIComponent(decodeURIComponent(RegExp.$2.replace(/\+/g, " "))) : '';
+}
+
+
 
 
 //判断字符串长度

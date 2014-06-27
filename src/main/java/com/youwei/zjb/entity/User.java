@@ -39,7 +39,7 @@ public class User {
 	public Integer roleId;
 	
 	@Column(name="llock")
-	public String lock;
+	public Integer lock;
 	
 	public String tel;
 	
@@ -51,6 +51,9 @@ public class User {
 	 */
 	public Integer flag;
 	
+	/**
+	 * 入职登记是否审核
+	 */
 	public Integer sh;
 	
 	@Column(name="sex")
@@ -69,6 +72,11 @@ public class User {
 	 * 入企时间
 	 */
 	public Date rqsj;
+	
+	/**
+	 * 离职时间
+	 */
+	public Date lzsj;
 	
 	/**
 	 * 入企途径
@@ -93,4 +101,7 @@ public class User {
 		return SimpDaoTool.getGlobalCommonDaoService().get(Role.class, roleId);
 	}
 	
+	public Department Department(){
+		return SimpDaoTool.getGlobalCommonDaoService().get(Department.class, deptId);
+	}
 }

@@ -108,28 +108,23 @@ var Page={
       $('.foot_page_box').html(pageInfoStrs);
     },
     Init:function(){
-      $('form[name=form1]').append('<input type="hidden" class="pageInput" name="currentPageNo" value="" >');
+      $('form[name=form1]').append('<input type="hidden" class="pageInput" name="currentPageNo" value="">');
       $(document).on('click', '.btn_p_prev_no', function(event) {
         $('.pageInput').val(1);
-        $('.btn_subnmit').click();
+        if($('.btn_subnmit').length>0){$('.btn_subnmit').click();}else{$('form[name=form1]').submit();}
       }).on('click', '.btn_p_prev', function(event) {
-        if(Page.p-1>1){$('.pageInput').val(Page.p-1);$('.btn_subnmit').click();}
+        if($('.btn_subnmit').length>0){$('.btn_subnmit').click();}else{$('form[name=form1]').submit();}
       }).on('click', '.btn_p_next', function(event) {
-        if(Page.p+1<=Page.pn){$('.pageInput').val(Page.p+1);$('.btn_subnmit').click();}
+        if(Page.p+1<=Page.pn){$('.pageInput').val(Page.p+1);}
+        if($('.btn_subnmit').length>0){$('.btn_subnmit').click();}else{$('form[name=form1]').submit();}
       }).on('click', '.btn_p_next_no', function(event) {
-        alert(0)
         $('.pageInput').val(Page.pn);
-        alert(1)
-        $('.btn_subnmit').click();
-        alert(2)
+        if($('.btn_subnmit').length>0){$('.btn_subnmit').click();}else{$('form[name=form1]').submit();}
       }).on('click', '.btn_p_list', function(event) {
         var ThiVal=$(this).text();
-        alert(0)
       //  alert($(this).text())
         $('.pageInput').val(ThiVal);
-        alert(ThiVal)
-        $('.btn_subnmit').click();
-        alert(2)
+        if($('.btn_subnmit').length>0){$('.btn_subnmit').click();}else{$('form[name=form1]').submit();}
       });
     }
 }

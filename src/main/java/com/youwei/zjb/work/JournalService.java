@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.GException;
 import org.bc.sdak.Page;
@@ -63,7 +64,7 @@ public class JournalService {
 	@WebMethod
 	public ModelAndView list(OutQuery query ,Page<Map> page){
 		ModelAndView mv = new ModelAndView();
-		StringBuilder hql = new StringBuilder("select j.id as id,d.namea as deptName ,q.namea as quyu, u.uname as uname, j.conta as conta, "
+		StringBuilder hql = new StringBuilder("select j.id as id,d.namea as deptName ,q.namea as quyu, u.uname as uname, j.title as title, "
 				+ "j.addtime as addtime, j.reply as reply from Journal j , User u , Department d,Department q where j.userId=u.id and u.deptId=d.id and q.id=d.fid");
 		List<Object> params = new ArrayList<Object>();
 		hql.append(HqlHelper.buildDateSegment("j.addtime", query.addtimeStart, DateSeparator.After, params));
@@ -78,6 +79,7 @@ public class JournalService {
 //		params.add(user.id);
 		
 		page = dao.findPage(page, hql.toString(), true ,params.toArray());
+		DataHelper.escapeHtmlField(page.getResult(), "conta");
 		DataHelper.fillDefaultValue(page.getResult(), "reply", PiYue.待批阅.getCode());
 		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;

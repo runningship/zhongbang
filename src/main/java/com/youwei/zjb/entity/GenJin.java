@@ -27,6 +27,7 @@ public class GenJin {
 	/**
 	 * 房源id
 	 */
+	@Column(nullable=false)
 	public Integer hid;
 	
 	/**

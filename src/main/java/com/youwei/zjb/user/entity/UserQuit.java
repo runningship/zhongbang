@@ -3,6 +3,8 @@ package com.youwei.zjb.user.entity;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
@@ -12,6 +14,7 @@ import javax.persistence.Id;
 public class UserQuit {
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer id;
 	
 	public Integer userId;
@@ -27,6 +30,8 @@ public class UserQuit {
 	public Integer kyTo;
 	
 	public Date applyTime;
+	
+	public Date leaveTime;
 	
 	public Date passTime;
 	

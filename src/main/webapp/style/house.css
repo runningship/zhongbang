@@ -40,8 +40,11 @@ a:hover{text-decoration:none;}
 
 .hmain .mainer{ margin-left: 120px; height: 100%; overflow: hidden;}
 
-.hsee{ width: 700px; height: 500px;}
+.hsee{ width:800px; height: 460px;}
 .hsee td.biaoti{ width:15%; text-align:right; background:#F9F9F9;}
+.hsee .input-group{ width: auto; float: none;}
+.hsee #id_genjin_see{height:360px; overflow:auto; overflow-x: hidden;}
+.hsee #id_genjin_see li{ border-bottom: 1px solid #EEE; padding: 8px;}
 
 .hadd .input-group{ width: auto;}
 .hadd{ width: 800px; height: 310px;}

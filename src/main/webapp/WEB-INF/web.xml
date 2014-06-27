@@ -24,6 +24,15 @@
 	</servlet-mapping>
 	
 	<servlet>
+        <servlet-name>view</servlet-name>
+        <servlet-class>com.youwei.zjb.ViewServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>view</servlet-name>
+	    <url-pattern>/v/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
         <servlet-name>fileup</servlet-name>
         <servlet-class> com.youwei.zjb.files.FileUploadServlet</servlet-class>
 	</servlet>

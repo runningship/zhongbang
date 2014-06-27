@@ -23,13 +23,29 @@ $(document).on('click', '.btns', function(event) {
     var Thi=$(this),
     ThiType=Thi.data('type'),
     ThiUrl=Thi.attr('href');
-    if(ThiType=='addchuzu'){
+    if(ThiType=='addchushou'){
         art.dialog.open(ThiUrl,{
-            title:'添加出租房源'
+            id:'addchushou',
+            title:'添加出售房源',
+            width:800,
+            ok: function () {
+                var iframe = this.iframe.contentWindow;
+                var form = $('form',iframe.document);
+                form.submit();
+                return false;
+            },cancel: true
         })
-    }else if(ThiType=='addchushou'){
+    }else if(ThiType=='addchuzu'){
         art.dialog.open(ThiUrl,{
-            title:'添加出售房源'
+            id:'addchuzu',
+            title:'添加出租房源',
+            width:800,
+            ok: function () {
+                var iframe = this.iframe.contentWindow;
+                var form = $('form',iframe.document);
+                form.submit();
+                return false;
+            },cancel: true
         })
     }
     return false;
@@ -52,10 +68,10 @@ $(window).resize(function(event) {
         <div class="sider">
             <dl class="sidedl">
                 <dt>查看房源</dt>
-                <dd><a href="house_list.html"  target="house_iframe" >出售信息</a></dd>
-                <dd><a href="#">出租信息</a></dd>
-                <dd><a href="#">所有房源</a></dd>
-                <dd><a href="#">我的房源</a></dd>
+                <dd><a href="house_list.html?nav=chushou"  target="house_iframe" >出售信息</a></dd>
+                <dd><a href="house_list.html?nav=chuzu" target="house_iframe">出租信息</a></dd>
+                <dd><a href="house_list.html" target="house_iframe">所有房源</a></dd>
+                <dd><a href="house_list.html?nav=my" target="house_iframe">我的房源</a></dd>
             </dl>
             <dl class="sidedl">
                 <dt>添加房源</dt>
@@ -64,9 +80,9 @@ $(window).resize(function(event) {
             </dl>
             <dl class="sidedl">
                 <dt>其他</dt>
-                <dd><a href="#">跟进列表</a></dd>
-                <dd><a href="#">房源设置</a></dd>
-                <dd><a href="#">回收站</a></dd>
+                <dd><a href="genjin_list.html" target="house_iframe">跟进列表</a></dd>
+                <dd><a href="area_list.html" target="house_iframe">房源设置</a></dd>
+                <dd><a href="house_list.html?nav=del" target="house_iframe">回收站</a></dd>
             </dl>
         </div>
         <div class="mainer">

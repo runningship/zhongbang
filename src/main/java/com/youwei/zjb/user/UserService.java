@@ -1,6 +1,7 @@
 package com.youwei.zjb.user;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import com.youwei.zjb.KeyConstants;
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.Department;
+import com.youwei.zjb.entity.Role;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.sys.entity.PC;
 import com.youwei.zjb.util.HqlHelper;
@@ -38,8 +40,8 @@ public class UserService {
 	@WebMethod
 	public ModelAndView getUserTree(){
 		ModelAndView mv = new ModelAndView();
-		String hql = "select child.namea as cname,parent.namea as pname ,child.id as did ,child.fid as qid ,u.uname as user ,u.id as userId "+
-					"from Department child,Department parent , User u where child.fid = parent.id and child.id=u.deptId";
+		String hql = "select child.namea as cname,parent.namea as pname ,child.id as did ,child.fid as qid ,u.uname as user ,u.id as userId ,u.hunyin as hunyin "+
+					"from Department child,Department parent , User u where child.fid = parent.id and child.id=u.deptId and u.flag <> 1  ";
 		List<Map> users = dao.listAsMap(hql);
 		Map<String, JSONArray> quyus = groupByQuyu(users);
 		Map<String, JSONArray> depts = groupByDeptId(users);
@@ -49,7 +51,28 @@ public class UserService {
 		return mv;
 	}
 	
-	public void add(User user){
+	@WebMethod
+	public ModelAndView authorities(){
+		ModelAndView mv = new ModelAndView();
+		User user = ThreadSession.getUser();
+		if(user==null){
+			user = dao.get(User.class, 316);
+		}
+		mv.data.put("authorities", JSONHelper.toJSONArray(user.getRole().Authorities()));
+		return mv;
+	}
+	@WebMethod
+	public ModelAndView allRoles(){
+		ModelAndView mv = new ModelAndView();
+		List<Role> roles = dao.listByParams(Role.class, "from Role");
+		mv.data.put("roles", JSONHelper.toJSONArray(roles));
+		mv.data.put("rqtjs", RuQiTuJin.toJsonArray());
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView add(User user){
+		ModelAndView mv = new ModelAndView();
 		if(user.deptId==null){
 			user.deptId = -1;
 		}
@@ -57,18 +80,39 @@ public class UserService {
 		if(dept==null){
 			throw new GException(PlatformExceptionType.BusinessException, 1, "没有指定用户所属公司");
 		}
+		User po = dao.getUniqueByKeyValue(User.class, "sfz" , user.sfz);
+		if(po!=null){
+			throw new GException(PlatformExceptionType.BusinessException, 2, "身份证号已经存在");
+		}
+		user.addtime = new Date();
+		user.sh = 0;
+		user.lock = 0;
 		user.orgpath = dept.path+user.id;
 		dao.saveOrUpdate(user);
+		//TODO 添加审批项
+		mv.data.put("msg", "添加用户成功");
+		return mv;
 	}
 	
+	@WebMethod
 	public ModelAndView list(UserQuery query , Page<Map> page){
 		ModelAndView mv = new ModelAndView();
 		StringBuilder hql = new StringBuilder();
 		List<Object> params = new ArrayList<Object>();
-		hql.append("select u.uname as uname,r.title as title ,u.tel as tel, u.gender as gender,u.address as address from User  u, Role r where u.roleId = r.id");
+		hql.append("select u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName from User  u, Department d,Role r where u.roleId = r.id and d.id = u.deptId ");
 		if(StringUtils.isNotEmpty(query.name)){
 			hql.append(" and u.uname like ? ");
 			params.add("%"+query.name+"%");
+		}
+		if(StringUtils.isNotEmpty(query.xpath)){
+			hql.append(" and u.orgpath like ?");
+			params.add(query.xpath+"%");
+		}
+		if(query.lizhi!=null){
+			hql.append(" and u.flag=?");
+			params.add(query.lizhi);
+		}else{
+			hql.append(" and u.flag<>1 ");
 		}
 		if(StringUtils.isNotEmpty(query.sfz)){
 			hql.append(" and u.sfz like ? ");
@@ -86,6 +130,8 @@ public class UserService {
 			hql.append(" and u.roleId=?");
 			params.add(query.roleId);
 		}
+		hql.append(" and u.sh = ? ");
+		params.add(query.sh);
 		if(query.hunyin!=null){
 			hql.append(" and u.hunyin=?");
 			params.add(query.hunyin);
@@ -101,7 +147,7 @@ public class UserService {
 		hql.append(HqlHelper.buildDateSegment("rqsj", query.rqtimeStart, DateSeparator.After, params));
 		hql.append(HqlHelper.buildDateSegment("rqsj", query.rqtimeEnd, DateSeparator.Before, params));
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
-		mv.data.put("users", JSONHelper.toJSONArray(page.getResult()));
+		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;
 	}
 	

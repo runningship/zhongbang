@@ -15,9 +15,14 @@
 <script type="text/javascript" src="../js/uploadify/jquery.uploadify.js"></script>
 <script type="text/javascript" src="../js/buildHtml.js"></script>
 <link href="../js/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="../js/ueditor1_4_3/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../js/ueditor1_4_3/ueditor.all.js"> </script>
+<script type="text/javascript" charset="utf-8" src="../js/ueditor1_4_3/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript">
 var recordId;
+var ue;
 function save(){
+  $('#conta').val(ue.getAllHtml());
   var text = $('form[name=textForm]').serialize();
   $.ajax({
     type: 'POST',
@@ -90,21 +95,26 @@ $(function(){
   }
   $('#category').val(category);
 
+  ue = UE.getEditor('editor');
+  ue.addListener( 'ready', function( editor ) {
+    ue.setHeight(350);
+  });
 });
 
 </script>
-<style type="text/css">
-  .table{ margin-bottom: 0px;}
-</style>
 </head>
 <body class="hlist bodyer" style="overflow:auto">
   <form name="textForm">
-  <textarea name="conta" style="display:block">
-    
-  </textarea>
+  <div>
+    <span>标题</span><input name="title" />
+  </div>
+  <input id="conta" name="conta" type="hidden" />
   <input type="hidden" name="category" id="category" />
-  <button onclick="save();return false;">提交</button>
   </form>
+  <div>
+    <span id="editor" type="text/plain" style="width:1024px;height:500px;"></span>
+  </div>
+  <button onclick="save();return false;">提交</button>
 <div>
     <input id="file_upload" name="file_upload" style="display:none">
 </div>

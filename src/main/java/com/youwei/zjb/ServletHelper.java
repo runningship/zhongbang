@@ -3,8 +3,10 @@ package com.youwei.zjb;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +32,8 @@ import org.bc.web.ModelAndView;
 import org.bc.web.WebParam;
 
 import com.youwei.zjb.house.HouseAttribute;
+import com.youwei.zjb.util.DataHelper;
+import com.youwei.zjb.util.HqlHelper;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class ServletHelper {
@@ -170,6 +174,18 @@ public class ServletHelper {
         			List list = new ArrayList();
         			Collections.addAll(list, pval);
         			f.set(obj, list);
+        		}else if(java.util.Date.class.equals(f.getType())){
+        			try {
+						Date date = DataHelper.sdf.parse(pval[0]);
+						f.set(obj, date);
+					} catch (ParseException e) {
+						try {
+							Date date = DataHelper.dateSdf.parse(pval[0]);
+							f.set(obj, date);
+						} catch (ParseException e1) {
+							e1.printStackTrace();
+						}
+					}
         		}else{
 					f.set(obj, pval[0]);
 				}

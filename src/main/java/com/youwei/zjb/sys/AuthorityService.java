@@ -13,6 +13,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.GException;
+import org.bc.sdak.Page;
 import org.bc.sdak.Transactional;
 import org.bc.sdak.TransactionalServiceHelper;
 import org.bc.web.ModelAndView;
@@ -21,8 +22,10 @@ import org.bc.web.WebMethod;
 
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
+import com.youwei.zjb.entity.Role;
 import com.youwei.zjb.entity.RoleAuthority;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.user.RuQiTuJin;
 import com.youwei.zjb.util.JSONHelper;
 
 @Module(name="/sys/")
@@ -32,13 +35,22 @@ public class AuthorityService {
 	
 	@Transactional
 	@WebMethod
-	public void update(int roleId,String authData){
+	public ModelAndView update(int roleId,String authData){
 		if(StringUtils.isEmpty(authData)){
-			return;
+			throw new GException(PlatformExceptionType.BusinessException, 1, "数据不能为空");
 		}
 		JSONArray json = JSONArray.fromObject(authData);
 		dao.execute("delete from RoleAuthority where roleId=?", roleId);
 		addChildren(roleId , json);
+		return new ModelAndView();
+	}
+	
+	@WebMethod
+	public ModelAndView rolesList(Page<Role> page){
+		ModelAndView mv = new ModelAndView();
+		page = dao.findPage(page,  "from Role");
+		mv.data.put("page", JSONHelper.toJSON(page));
+		return mv;
 	}
 	
 	@WebMethod
