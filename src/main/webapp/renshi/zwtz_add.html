@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>职位调整</title>
+<link rel="stylesheet" href="../style/css.css">
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="../style/house.css">
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script src="../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="../js/buildHtml.js"></script>
+<script type="text/javascript" src="../js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="../js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+var queryOpts;
+
+function doSave(){
+  var data = formSerialize($('form[name=form1]'));
+  $.ajax({
+    type: 'POST',
+    url: '/zb/user/zwtz/add',
+    data:data,
+    success: function(data){
+      alert(data);
+    },
+    error:function(data){
+      alert(data.responseText);
+    }
+  });
+  return false;
+}
+
+
+$(function(){
+  $.get('/zb/user/allRoles', function(data) {
+    queryOpts=JSON.parse(data);
+    buildHtmlWithJsonArray("id_roles",queryOpts['roles'],true);
+    $('#id_roles').prepend('<option>请选择</option>');
+    fun_get_comp('to');
+    fun_get_comp('fy_to');
+    fun_get_comp('ky_to');
+  });
+});
+
+</script>
+</head>
+<body class="hlist bodyer" style="overflow:auto">
+
+<div class="header" style="position:relative;height:50px;width:100%">
+  
+  <form name="form1">
+     
+    <div class="input-group input-group-select" style="float:none;margin-top:15px;">
+      <span class="input-group-addon">被调人</span>
+      <select class="form-control get_comp" ></select>
+      <select class="form-control get_quyu" name="oldDeptId"></select>
+      <select class="form-control get_user" name="userId"></select>
+    </div>
+
+    <div class="input-group input-group-select" style="float:none;margin-top:15px;">
+      <span class="input-group-addon">调整到</span>
+      <select class="form-control get_comp_to" ></select>
+      <select class="form-control get_quyu_to" name="newDeptId"></select>
+    </div>
+    <div class="input-group input-group-select" style="float:none;margin-top:15px;">
+      <span class="input-group-addon">房源调整</span>
+      <select class="form-control get_comp_fy_to" ></select>
+      <select class="form-control get_quyu_fy_to" ></select>
+      <select class="form-control get_user" name="fyTo"></select>
+    </div>
+    <div class="input-group input-group-select" style="float:none;margin-top:15px;">
+      <span class="input-group-addon">客源调整</span>
+      <select class="form-control get_comp_ky_to" ></select>
+      <select class="form-control get_quyu_ky_to" ></select>
+      <select class="form-control get_user" name="kyTo"></select>
+    </div>
+
+    <div class="input-group" style="float:none;margin-top:15px;">
+      <span class="input-group-addon">职&nbsp;&nbsp;&nbsp;务</span>
+      <select class="form-control" name="newRoleId" id="id_roles" style="width:150px;">
+          <option value="${id}">${title}</option>
+      </select>
+    </div>
+    <div class="input-group " style="float:none;margin-top:15px;width:300px;">
+      <span class="input-group-addon">原&nbsp;&nbsp;&nbsp;由</span>
+      <input type="text" class="form-control" name="reason">
+    </div>
+    <div class="input-group " style="float:none;margin-top:15px;width:300px;">
+      <span class="input-group-addon">交&nbsp;&nbsp;&nbsp;接</span>
+      <input type="text" class="form-control" name="jiaojie">
+    </div>
+  </form>
+  <div class="btn-group" style="float:none;margin-top:15px;">
+    <button onclick="doSave()" class="btn btn-primary btn_subnmit">提交</button>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>离职审核</title>
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/buildHtml.js"></script>
+<script type="text/javascript" src="/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript">
+var queryOpts;
+var spList;
+var myId;
+var lizhiId;
+
+function fillData(data){
+    $('#uname').text(data['uname']);
+    $('#oldDeptName').text(data['oldDeptName']);
+    $('#oldTitle').text(data['oldTitle']);
+    $('#fyTo').text(data['fyTo']);
+    $('#kyTo').text(data['kyTo']);
+    $('#reason').text(data['reason']);
+    $('#jiaojie').text(data['jiaojie']);
+}
+
+function buildAction(rowIndex){
+  var sp = spList[rowIndex];
+  if(sp['sh']==1){
+    return "已通过"
+  }
+  if(sp['sprId']==myId){
+    return "<a href='javascript:void(0)' onclick='passSP("+sp['id']+")'>通过</a>";
+  }
+  return "待审批...";
+}
+
+function passSP(spId){
+  $.ajax({
+    type: 'get',
+    url: '/zb/user/lizhi/pass?lizhiId='+lizhiId+'&spId='+spId,
+    data:'',
+    success: function(data){
+      alert('审批成功');
+    },
+    error:function(data){
+      alert(data.responseText);
+    }
+  });
+}
+$(function(){
+  lizhiId = getParam('lizhiId');
+  if(lizhiId==""){
+    alert('没有指定数据');
+    return;
+  }
+
+  $.get('/zb/user/lizhi/init?lizhiId='+lizhiId, function(result) {
+    var data=JSON.parse(result);
+    fillData(data);
+    spList = data['spList'];
+    myId = data['myId'];
+    buildHtmlWithJsonArray("id_splist",spList);
+  });
+});
+
+</script>
+<style type="text/css">
+  input{
+    "readly"
+  }
+</style>
+</head>
+<body class="hlist bodyer" style="overflow:auto">
+
+<div class="header" style="position:relative;height:50px;width:100%">
+  
+  <form name="form1" >
+    <div class="input-group " style="float:none;">
+      <span class="input-group-addon">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</span>
+      <span type="text" class="form-control" id="uname" style="width:150px;" ></span>
+    </div>
+    <div class="input-group " style="float:none;margin-top:15px;">
+      <span class="input-group-addon">原部门&nbsp;&nbsp;&nbsp;</span>
+      <span type="text"  class="form-control" id="oldDeptName" style="width:150px;"></span>
+    </div>
+    <div class="input-group " style="float:none;margin-top:15px;">
+      <span class="input-group-addon">原职务&nbsp;&nbsp;&nbsp;</span>
+      <span type="text" class="form-control" id="oldTitle" style="width:150px;"></span>
+    </div>
+    
+    <div class="input-group " style="float:none;margin-top:15px;">
+      <span class="input-group-addon">房源调整</span>
+      <span type="text" class="form-control" id="fyTo" style="width:150px;"></span>
+    </div>
+    <div class="input-group " style="float:none;margin-top:15px;">
+      <span class="input-group-addon">客源调整</span>
+      <span type="text" class="form-control" id="kyTo" style="width:150px;"></span>
+    </div>
+    
+     <div class="input-group " style="float:none;margin-top:15px;width:300px;">
+      <span class="input-group-addon">原&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由</span>
+      <span type="text" class="form-control" id="reason"></span>
+    </div>
+     <div class="input-group " style="float:none;margin-top:15px;width:300px;">
+      <span class="input-group-addon">实物交接</span>
+      <span type="text" class="form-control" id="jiaojie"></span>
+    </div>
+    
+  </form>
+  
+  <div style="margin-top:10px;">
+    <table class="table" >
+    <tr>
+      <td colspan="2">签字审批</td>
+    </tr>
+    <tbody id="id_splist">
+    <tr style="display:none">
+      <td style="width:150px;">${spr}</td>
+      <td class="runscript">buildAction(${rowIndex})</td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+</div>
+
+</body>
+</html>

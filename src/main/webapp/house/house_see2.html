@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Examples</title>
+<link rel="stylesheet" href="../style/css.css">
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="../style/house.css">
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script src="../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/sysinfo.js"></script>
+<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=chrome"></script>
+<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="../js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="../js/jquery.timers.js"></script>
+<script type="text/javascript" src="../js/jquery.caozuobendi.js"></script>
+<script type="text/javascript" src="../js/buildHtml.js"></script>
+<script type="text/javascript" src="../js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="../js/pagination.js"></script>
+<script type="text/javascript">
+
+  var QueryOptions='',getHid=getParam('hid');;
+function getEnumText(category,code){
+  var arr = QueryOptions[category];
+  for(var i=0;i<arr.length;i++){
+    if(arr[i]['code']==code){
+      return arr[i]['name'];
+    }
+  }
+}
+$(function(){
+  $('.btn_submit_gj').on('click', function(event) {
+    var Thi=$(this),
+    ThiVal=Thi.parent().prev('input').val();
+    var param={
+    hid:getHid,
+    conts:ThiVal
+    }
+    $.post('/zb/genjin/add?order=id&orderBy=desc',param, function(data) {
+      getStr=JSON.parse(data);
+      art.dialog({
+          title: '警告',
+          content: getStr['msg']+'',
+          ok: function () {
+            location.reload();
+          },cancel:true
+        });
+    });
+  });
+  $.get('/zb/house/getQueryOptions', function(data) {
+    QueryOptions=JSON.parse(data);
+  });
+  var getStr;
+  $.get('/zb/house/listAll?id='+getHid, function(data) {
+    getStr=JSON.parse(data);
+    buildHtmlWithJsonArray("id_house_see",getStr['page']['data']);
+  });
+
+  $.get('/zb/genjin/list?houseId='+getHid, function(data) {
+    getStr=JSON.parse(data);
+    buildHtmlWithJsonArray("id_genjin_see",getStr['page']['data']);
+  });
+
+});
+</script>
+<style type="text/css">
+  .table{ margin-bottom: 0px;}
+  .pointerevents{pointer-events:none}
+  .font_no_br{white-space:nowrap;word-break: keep-all;}
+</style>
+</head>
+<body class="hsee bodyer">
+<table class="seeBox" width="100%">
+  <tr>
+    <td>
+    <span id="id_house_see">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <td colspan="6">
+          <div class="row-fluid">
+            <div class="pull-right">
+              <a href="#" class="j_btn_fav btn btn-mini" rev="<%= ids %>">收藏</a>
+              <a href="#" class="j_btn_map btn btn-mini" rev="<%= areas %>" >地图</a>
+              <a href="house_add.html?ids=" class="j_btn_edit btn btn-mini btn-primary"><i class="icon-edit icon-white"></i> 修改</a>
+              <br />
+              <span class="posYuyue" style="display:none;">预约看房</span>
+            </div>
+            <div>
+              <div class="row-fluid">
+                [${leibie}] 编号：${houseNumber}
+              </div>
+              <div class="row-fluid">
+                ${area} <b class="label label-info">${dhao}#${fhao}</b>
+              </div>
+              <div class="row-fluid">
+                由 <b>1</b> <b>2</b> <b>3</b> 发布
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="biaoti">交易</td>
+        <td class='runscript'>getEnumText('zhuangtai',${flag})</td>
+        <td class="biaoti">区域</td>
+        <td>${quyu}</td>
+        <td class="biaoti">房屋类别</td>
+        <td>${leibie}</td>
+      </tr>
+      <tr>
+        <td class="biaoti">装潢</td>
+        <td class='runscript'>getEnumText('zhuangxiu',${zhuangxiu})</td>
+        <td class="biaoti">年代</td>
+        <td colspan="3">${leibie}</td>
+      </tr>
+      <tr>
+        <td class="biaoti">楼型</td>
+        <td>${leibie}</td>
+        <td class="biaoti">户型</td>
+        <td colspan="3">
+          <div class="hxTip">${hxf}<span>室</span>${hxt}<span>厅</span>${hxw}<span>卫</span>${hxy}<span>阳台</span></div>
+        </td>
+      </tr>
+      <tr>
+        <td class="biaoti">楼层</td>
+        <td>${lceng}/${zceng}</td>
+        <td class="biaoti">面积</td>
+        <td colspan="3">${mianji} m²</td>
+      </tr>
+      <tr>
+        <td class="biaoti">价格</td>
+        <td colspan="5">
+        <div class="row-fluid span-no-min-height">
+          <span class="span4">售价：${sjia} 万元</span>
+          <span class="span4">单价：${djia} 元/m²</span>
+          <span class="span4">租金：${zjia} 元/月</span>
+        </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="biaoti">联系方式</td>
+        <td colspan="5" class="telSEE">
+        ${zjia}
+        </td>
+      </tr>
+      <tr>
+        <td class="biaoti">业务员</td>
+        <td colspan="5">${zjia}</td>
+      </tr>
+      <tr>
+        <td class="biaoti">备注</td>
+        <td colspan="5">${beizhu}</td>
+      </tr>
+      <tr>
+        <td class="biaoti">产权号</td>
+        <td colspan="2">${chanquan}</td>
+        <td class="biaoti">土地证</td>
+        <td colspan="2">${zjia}</td>
+      </tr>
+    </tbody>
+  </table>
+    </span>
+    </td>
+    <td width="250" valign="top">
+      <div class="input-group">
+        <input type="text" class="genjin_text" class="form-control">
+        <span class="input-group-btn">
+          <button class="btn btn-default btn_submit_gj" type="button">提交</button>
+        </span>
+      </div>
+      <ul id="id_genjin_see" >
+        <li><p>${conts}<br>${addtime}</p>${deptName}${uname}</li>
+      </ul>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

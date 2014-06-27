@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Examples</title>
+<link rel="stylesheet" href="../style/css.css">
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="../style/house.css">
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script src="../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/sysinfo.js"></script>
+<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=chrome"></script>
+<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="../js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="../js/jquery.timers.js"></script>
+<script type="text/javascript" src="../js/jquery.caozuobendi.js"></script>
+<script type="text/javascript" src="../js/buildHtml.js"></script>
+<script type="text/javascript" src="../js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="../js/pagination.js"></script>
+<script type="text/javascript">
+function fix(TableH,TableB){
+  for(var i=0;i<=TableB.find('td:last').index();i++){
+    TableH.find('th').eq(i).width(TableB.find('tr').eq(1).find('td').eq(i).width());
+  }
+}
+function setMainHeight(){
+  $('.mainer').css({
+    top: $('.header').height()+12,
+    bottom:$('.footer').height()+1
+  });
+}
+
+function getHuseList(a){
+  var url
+//  alert(getParam('chuzu'))
+  if(getParam('nav')=="chushou"){
+    url='/zb/house/listSell';
+  }else if(getParam('nav')=="chuzu"){
+    url='/zb/house/listRent';
+  }else if(getParam('nav')=="del"){
+    url='/zb/house/listRecycle';
+  }else if(getParam('nav')=="my"){
+    url='/zb/house/listMy';
+  }else{
+    url='/zb/house/listAll';
+  }
+//  alert(url)
+  $.ajax({
+    type: 'POST',
+    url: url,
+//    async:false,
+    data:a,
+    success: function(data){
+    var getStr=JSON.parse(data);
+        buildHtmlWithJsonArray("id_House_list",getStr['page']['data']);
+        Page.setPageInfo(getStr['page']);
+        fix($('.TableH'),$('.TableB'));
+
+      if(getParam('nav')=="del"){
+        $('a.hidden').removeClass('hidden');
+      }
+    }
+  });
+}
+function onSubmit_Form(){
+
+  $('form[name=form1]').on('submit', function(event) {
+    getHuseList(formSerialize($(this)));
+    return false;
+  });
+}
+var getStr;
+function getEnumText(category,code){
+  var arr = getStr[category];
+  for(var i=0;i<arr.length;i++){
+    if(arr[i]['code']==code){
+      return arr[i]['name'];
+    }
+  }
+}
+function dialogs(id){
+    art.dialog.open('house_see.html?hid='+id,{
+      id:'SeeHouse'+id,
+      title:'查看房源详情'
+    })
+}
+$(function(){
+    onSubmit_Form();
+    setMainHeight();
+    getHuseList('');
+    $.get('/zb/house/getQueryOptions', function(data) {
+    getStr=JSON.parse(data);
+    //  alert(getStr['datetype'])
+    buildHtmlWithJsonArray("id_chaoxiang",getStr['chaoxiang']); //朝向
+    buildHtmlWithJsonArray("id_fangxing",getStr['fangxing']);   //户型
+    buildHtmlWithJsonArray("id_leibie",getStr['leibie']);       //类别
+    buildHtmlWithJsonArray("id_louxing",getStr['louxing']);     //楼型
+    buildHtmlWithJsonArray("id_jiaoyi",getStr['jiaoyi']);       //交易
+    buildHtmlWithJsonArray("id_quyu",getStr['quyu']);           //区域
+    buildHtmlWithJsonArray("id_zhuangtai",getStr['zhuangtai']); //状态
+    buildHtmlWithJsonArray("id_xingzhi",getStr['xingzhi']); //房型
+    buildHtmlWithJsonArray("id_datetype",getStr['datetype'],true); //房型
+    Page.Init();
+  });
+
+  $('#id_House_list').on('click', 'a', function(event) {
+    var Thi=$(this),
+    rel=Thi.data('rel'),
+    this_hid=Thi.data('hid');
+    //alert(rel);
+    if(rel=='edit'){
+      dialogs(this_hid);
+    }else if(rel=='del'){
+      if(getParam('nav')=="del"){
+        art.dialog({
+          title: '警告',
+          content: '删除后不可恢复，确定？',
+          ok: function () {
+            date="{id:"+this_hid+"}"
+            $.post('/zb/house/physicalDelete?houseId='+this_hid, function(data, textStatus, xhr) {
+              var getStr=JSON.parse(data);
+              if(getStr['msg']=='删除成功'){
+                art.dialog.tips('成功永久删除！')
+                Thi.parents('tr').remove();
+              }else{
+                art.dialog.tips('失败');
+              }
+            });
+          },cancel:true
+        });
+      }else{
+        art.dialog({
+          title: '警告',
+          content: '删除到回收站？',
+          ok: function () {
+            date="{id:"+this_hid+"}"
+            $.post('/zb/house/softDelete?houseId='+this_hid, function(data, textStatus, xhr) {
+              var getStr=JSON.parse(data);
+              if(getStr['msg']=='删除成功'){
+                art.dialog.tips('成功移动至回收站！');
+                Thi.parents('tr').remove();
+              }else{
+                art.dialog.tips('失败');
+              }
+            });
+          },cancel:true
+        });
+      }
+    }else if(rel=='revert'){
+      art.dialog({
+        title: '警告',
+        content: '恢复数据？',
+        ok: function () {
+          date="{id:"+this_hid+"}"
+          $.post('/zb/house/physicalDelete?houseId='+this_hid, function(data, textStatus, xhr) {
+            var getStr=JSON.parse(data);
+            if(getStr['msg']=='删除成功'){
+              art.dialog.tips('已恢复');
+              Thi.parents('tr').remove();
+            }else{
+              art.dialog.tips('失败');
+            }
+          });
+        },cancel:true
+      });
+    }
+    return false;
+  }).on('click', 'tr', function(event) {
+    var Thi=$(this),
+    this_hid=Thi.data('hid');
+    dialogs(this_hid);
+  });
+});
+
+$(document).ready(function() {
+    fun_get_comp('a')
+});
+</script>
+<style type="text/css">
+  .table{ margin-bottom: 0px;}
+  .pointerevents{pointer-events:none}
+  .font_no_br{white-space:nowrap;word-break: keep-all;}
+</style>
+</head>
+<body class="hlist bodyer">
+<div class="header">
+  <form class="form-horizontal" role="form" name="form1">
+    <input type="hidden" class="userInput" name="xpath" value="">
+    <div class="clearfix">
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          时间段 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a href="#">今日房源</a></li>
+          <li><a href="#">三天内房源</a></li>
+          <li><a href="#">七天内房源</a></li>
+          <li><a href="#">一个月房源</a></li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          状 态 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_zhuangtai">
+          <li><label><input type="radio" name="ztai" value="${name}"> ${name}</label></li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          朝向 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_chaoxiang">
+          <li><label><input type="radio" name="chaoxiang" value="${name}"> ${name}</label></li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          房屋类别 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_leibie">
+          <li><label><input type="radio" name="leibie" value="${name}"> ${name}</label></li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          性质 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_xingzhi">
+          <li><label><input type="checkbox" name="xingzhi" value="${name}"> ${name}</label>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          交易 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_jiaoyi">
+          <li><label><input type="checkbox" name="jiaoyis" value="${name}"> ${name}</label>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          楼型 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_louxing">
+          <li><label><input type="checkbox" name="louxing" value="${name}"> ${name}</label></li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          房型 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_fangxing">
+          <li><label><input type="radio" name="fangxing" value="${name}"> ${name}</label></li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          区域 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_quyu">
+          <li><label><input type="checkbox" name="quyus" value="${name}"> ${name}</label>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary btn_subnmit">搜索提交</button>
+        <button type="submit" class="btn">清空</button>
+      </div>
+    </div>
+
+    <div class="clearfix">
+      <div class="input-group">
+        <span class="input-group-addon" style="padding:8px;">日期</span>
+        <select class="form-control" id="id_datetype" name="dateType">
+          <option value="${name}">${name}</option>
+        </select>
+        <input type="text" class="form-control" name="dateStart" id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})">
+        <input type="text" class="form-control" name="dateEnd" id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon">售价</span>
+        <input type="text" class="form-control" name="sjiaStart">
+        <input type="text" class="form-control" name="sjiaEnd">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon">面积</span>
+        <input type="text" class="form-control" name="mianjiStart">
+        <input type="text" class="form-control" name="mianjiEnd">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon">楼层</span>
+        <input type="text" class="form-control" name="lcengStart">
+        <input type="text" class="form-control" name="lcengEnd">
+      </div>
+      <div class="input-group input-group-max">
+        <span class="input-group-addon">智能</span>
+        <input type="text" class="form-control" name="">
+      </div>
+
+      <br><br>
+      <div class="input-group input-group-max input-group-mt2">
+        <span class="input-group-addon">产权证</span>
+        <input type="text" class="form-control" name="chanquan">
+      </div><br><br>
+
+      <div class="input-group input-group-mt3 input-group-select">
+        <span class="input-group-addon">发布人</span>
+        <select class="form-control get_comp" name="form_cid"></select>
+        <select class="form-control get_quyu" name="form_did"></select>
+        <select class="form-control get_user" name="form_uid"></select>
+      </div>
+      <div class="input-group input-group-mt3 input-group-select">
+        <span class="input-group-addon">发布人2</span>
+        <select class="form-control get_comp_a" name="form_cid"></select>
+        <select class="form-control get_quyu_a" name="form_did"></select>
+        <select class="form-control get_user_a" name="form_uid"></select>
+      </div>
+    </div>
+
+
+  </form>
+  <table class="table TableH">
+    <tr>
+      <th class="font_no_br">房源编号</th>
+      <th>类别</th>
+      <th>区域</th>
+      <th>楼盘名称</th>
+      <th class="font_no_br">室厅卫阳</th>
+      <th>楼层</th>
+      <th>面积</th>
+      <th>单价</th>
+      <th class="font_no_br">总价</th>
+      <th class="font_no_br">装潢</th>
+      <th>年代</th>
+      <th>发布时间</th>
+      <th>联系人</th>
+      <th>性质</th>
+      <th>状态</th>
+      <th class="font_no_br">房配客</th>
+      <th>操作</th>
+    </tr>
+  </table>
+</div>
+<div class="mainer">
+  <table class="table table-hover TableB" >
+    <tbody id="id_House_list">
+    <tr data-hid="${id}">
+      <td>${houseNumber}</td>
+      <td>${leibie}</td>
+      <td>${quyu}</td>
+      <td>${area} ${dhao}#${fhao}</td>
+      <td>${hxf}-${hxt}-${hxw}-${hxy}</td>
+      <td>${lceng}/${zceng}</td>
+      <td>${mianji}</td>
+      <td>${djia}</td>
+      <td>${zjia}</td>
+      <td class='runscript'>getEnumText('zhuangxiu',${zhuangxiu})</td>
+      <td>${dateyear}</td>
+      <td>${dateadd}</td>
+      <td>${forlxr}</td>
+      <td class='runscript'>getEnumText('xingzhi',${xingzhi})</td>
+      <td class='runscript'>getEnumText('zhuangtai',${ztai})</td>
+      <td>有</td>
+      <td>
+        <a href="#" data-hid="${id}" data-rel="edit">修改</a>
+        <a href="##" data-hid="${id}" data-rel="del">删除</a>
+        <a href="###" data-hid="${id}" data-rel="revert" class="hidden">恢复</a></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<div class="footer foot_page_box"></div>
+</body>
+</html>
