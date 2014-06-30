@@ -91,26 +91,26 @@ var IM = {
 		msgCount.css('display','none');
 
 		IM.loadHistory(userId);
-		
-		if(IM.chatWindow!=null && IM.chatWindowOpen){
-			// chatWindowLeft = chatWindow.DOM.wrap[0].offsetLeft;
-			// chatWindowTop = chatWindow.DOM.wrap[0].offsetTop;
-			IM.chatWindow.close();
-		}
-		IM.chatWindow = art.dialog({
-		    content: document.getElementById('chatWindow'),
-		    padding:0,
-		    resize:false,
-		    close:function(){
-		    	IM.chatWindowOpen=false;
-		    	IM.chatWindowLeft = IM.chatWindow.DOM.wrap[0].offsetLeft;
-				IM.chatWindowTop = IM.chatWindow.DOM.wrap[0].offsetTop;
-		    }
-		});
-		IM.chatWindowOpen = true;
-		if(IM.chatWindowLeft!=null && IM.chatWindowTop!=null){
-			IM.chatWindow.position(IM.chatWindowLeft , IM.chatWindowTop);
-		}
+		$('#chatWindow').css('display','');
+		// if(IM.chatWindow!=null && IM.chatWindowOpen){
+		// 	// chatWindowLeft = chatWindow.DOM.wrap[0].offsetLeft;
+		// 	// chatWindowTop = chatWindow.DOM.wrap[0].offsetTop;
+		// 	IM.chatWindow.close();
+		// }
+		// IM.chatWindow = art.dialog({
+		//     content: document.getElementById('chatWindow'),
+		//     padding:0,
+		//     resize:false,
+		//     close:function(){
+		//     	IM.chatWindowOpen=false;
+		//     	IM.chatWindowLeft = IM.chatWindow.DOM.wrap[0].offsetLeft;
+		// 		IM.chatWindowTop = IM.chatWindow.DOM.wrap[0].offsetTop;
+		//     }
+		// });
+		// IM.chatWindowOpen = true;
+		// if(IM.chatWindowLeft!=null && IM.chatWindowTop!=null){
+		// 	IM.chatWindow.position(IM.chatWindowLeft , IM.chatWindowTop);
+		// }
 	},
 	getContact : function(cid){
 		for(var i=0;i<IM.contacts.length;i++){
@@ -376,11 +376,12 @@ var IM = {
 			IM.increaseHeight();
 		});
 
-		art.dialog({
-		    content: document.getElementById('lxr'),
-		    padding:0,
-		    resize:false
-		});
-		$('#lxr').parents().find('.aui_close').css('display','none');
+		// art.dialog({
+		//     content: document.getElementById('lxr'),
+		//     padding:0,
+		//     resize:false,
+		//     zIndex:10
+		// });
+		// $('#lxr').parents().find('.aui_close').css('display','none');
 	}
 }

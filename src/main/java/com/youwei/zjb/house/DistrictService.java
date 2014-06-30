@@ -21,7 +21,8 @@ public class DistrictService {
 
 	CommonDaoService service = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
 	
-	public void add(District district){
+	public ModelAndView add(District district){
+		ModelAndView mv = new ModelAndView();
 		if(StringUtils.isEmpty(district.name)){
 			throw new GException(PlatformExceptionType.BusinessException, 1, "小区名不能为空");
 		}
@@ -30,6 +31,16 @@ public class DistrictService {
 			throw new GException(PlatformExceptionType.BusinessException, 2, "小区名重复");
 		}
 		service.saveOrUpdate(district);
+		mv.data.put("msg", "添加成功");
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView get(int areaId){
+		ModelAndView mv = new ModelAndView();
+		District area = service.get(District.class, areaId);
+		mv.data.put("area", JSONHelper.toJSON(area));
+		return mv;
 	}
 	
 	@WebMethod
@@ -50,11 +61,15 @@ public class DistrictService {
 		return mv;
 	}
 	
-	public void update(District district){
+	@WebMethod
+	public ModelAndView update(District district){
+		ModelAndView mv = new ModelAndView();
 		if(district.id==null){
-			return;
+			throw new GException(PlatformExceptionType.BusinessException, 1, "id不能为空");
 		}
 		service.saveOrUpdate(district);
+		mv.data.put("msg", "保存成功");
+		return mv;
 	}
 	
 	

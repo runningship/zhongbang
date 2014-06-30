@@ -15,13 +15,12 @@ public class OfficeSupply {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	public Integer Id;
-	
-	public String cla;
+	public Integer id;
 	
 	public Date addtime;
 	
-	public String names;
+	@Column(name="names")
+	public String title;
 	
 	@Column(name="num")
 	public Integer count;
@@ -35,6 +34,7 @@ public class OfficeSupply {
 	/**
 	 * 相关人
 	 */
+	@Column(name="uname")
 	public String xgr;
 	
 	/**

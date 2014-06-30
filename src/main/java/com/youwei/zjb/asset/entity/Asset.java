@@ -17,6 +17,7 @@ public class Asset {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer id;
 	
+	@Column(name="uid")
 	public Integer userId;
 	
 	@Column(name="cla")
@@ -29,6 +30,7 @@ public class Asset {
 	
 	public Date addtime;
 	
+	@Column(name="editime")
 	public Date edittime;
 	
 	public Float djia;

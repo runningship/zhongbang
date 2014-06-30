@@ -23,7 +23,7 @@ public class JiLu {
 	public Date addtime;
 	
 	/**
-	 * 0 会议记录，1 优质房源 , 2 阅读总结, 3考勤表格
+	 * 0 会议记录，1 优质房源 , 2 月度总结, 3考勤表格
 	 */
 	@Column(name="cate")
 	public Integer category;

@@ -43,100 +43,101 @@ window.onload=function(){
 		border:0px;
 		border-radius: 10px;
 	}
+
 </style>
 </head>
 <body>
-<div class="IM">
-	<div id="lxr" >
-		<div style="background-color:#555;width:252px;height:95px;border-radius:8px 8px 0px 0px;">
-			<img id="myAvatar" onclick="IM.openAvatarPanel();" src="/style/image/avatar/0.jpg" style="width:64px;height:64px;margin-top:5px;margin-left:5px;float:left;cursor:pointer">
-			<div id="me" style="font-size:18px;color:white;padding-top:4px;">&nbsp;</div>
-			<div style="padding-top:44px;">
-			
-			<div>
-			<input id='searchInput' onfocus="this.value='';" style="width:230px;line-height:18px;float:right;color:#eee" />
-			<span id="searchBtn" style="position:absolute;padding-top:5px;left:10px;" onclick="search()"><img style="float:right;width:14px;margin-right:20px;cursor:pointer" src="http://pub.idqqimg.com/smartqq/css/image/title_search_icon.png"/></span>
-			<span id="closeSearchBtn" style="color:#ccc;float: right;position: absolute;left: 245px;margin-top: 5px;display:none;cursor:pointer" onclick="closeSearchPanel();">x</span>
-			</div>
-			</div>
-		</div>
+<div class="IM" >
+  <div id="lxr" style="float:left;">
+    <div style="background-color:#555;width:252px;height:95px;border-radius:8px 8px 0px 0px;">
+      <img id="myAvatar" onclick="IM.openAvatarPanel();" src="/style/image/avatar/0.jpg" style="width:64px;height:64px;margin-top:5px;margin-left:5px;float:left;cursor:pointer">
+      <div id="me" style="font-size:18px;color:white;padding-top:4px;">&nbsp;</div>
+      <div style="padding-top:44px;">
+      
+      <div>
+      <input id='searchInput' onfocus="this.value='';" style="width:230px;line-height:18px;float:right;color:#eee" />
+      <span id="searchBtn" style="position:absolute;padding-top:5px;left:12px;" onclick="IM.search()"><img style="width:14px;cursor:pointer" src="http://pub.idqqimg.com/smartqq/css/image/title_search_icon.png"/></span>
+      <span id="closeSearchBtn" style="color:#ccc;float: right;position: absolute;left: 245px;margin-top: 5px;display:none;cursor:pointer" onclick="IM.closeSearchPanel();">x</span>
+      </div>
+      </div>
+    </div>
 
-		<div id="searchPanel" style="height:510px;border:solid 1px #eee;position:absolute;width:250px;background:white;display:none;overflow:auto">
-			<span id="userSearchResult">
-				<div style="height:30px;line-height:30px;">
-					<span style="margin-left:10px;">${uname}</span><a style="float:right;margin-right:20px;" href="javascript:addContact(${userId})" >开始聊天</a>
-				</div>
-			</span>
-			<div style="margin-top:20px">
-				<span onclick="prePage();" style="margin-left:10px;cursor:pointer"><-</span><span onclick="nextPage();" style="float:right;margin-right:10px;cursor:pointer">-></span>
-			</div>
-		</div>
+    <div id="searchPanel" style="height:510px;border:solid 1px #eee;position:absolute;width:250px;background:white;display:none;overflow:auto">
+      <span id="userSearchResult">
+        <div style="height:30px;line-height:30px;">
+          <span style="margin-left:10px;">${uname}</span><span style="float:right;margin-right:20px;text-decoration:underline;color:blue;cursor:pointer" onclick="IM.addContact(${userId})" >开始聊天</span>
+        </div>
+      </span>
+      <div style="margin-top:20px">
+        <span onclick="IM.prePage();" style="margin-left:10px;cursor:pointer"><-</span><span onclick="IM.nextPage();" style="float:right;margin-right:10px;cursor:pointer">-></span>
+      </div>
+    </div>
 
-		<div style="width:250px;height:450px;background-color:#eee;font-size:16px;font-family:微软雅黑;border:solid 1px #ccc;overflow-y:auto">
-			<div>
-				
-				<span id="contact">
-					<div onclick="IM.openChat(${contactId});" id="${contactId}" style="display:none;padding-left:5px;background-color:whitesmoke;height:56px;border-bottom:1px solid #ddd;cursor:pointer">
-						<span onclick="delContact(${contactId})" style="float:right;margin-right:10px;color:#aaa">x</span>
-						<div style="display:none;background:red;color:white;float:right;margin-right:10px;margin-top:10px;border-radius:8px;height:16px;width:25px;text-align:center;font-size:12px;">0</div>
-						<img src="" srcx="/style/image/avatar/${avatar}.jpg" style="width:40px;height:40px;margin-top:5px;margin-right:5px;float:left" />
-						<p title="${deptName}" style="line-height:0px;display:inline-block">${contactName}</p>
+    <div style="width:250px;height:450px;background-color:#eee;font-size:16px;font-family:微软雅黑;border:solid 1px #ccc;overflow-y:auto">
+      <div>
+        
+        <span id="contact">
+          <div onclick="IM.openChat(${contactId});" id="${contactId}" style="display:none;padding-left:5px;background-color:whitesmoke;height:56px;border-bottom:1px solid #ddd;cursor:pointer">
+            <span onclick="IM.delContact(${contactId})" style="float:right;margin-right:10px;color:#aaa">x</span>
+            <div style="display:none;background:red;color:white;float:right;margin-right:10px;margin-top:10px;border-radius:8px;height:16px;width:25px;text-align:center;font-size:12px;">0</div>
+            <img src="" srcx="/style/image/avatar/${avatar}.jpg" style="width:40px;height:40px;margin-top:5px;margin-right:5px;float:left" />
+            <p title="${deptName}" style="line-height:0px;display:inline-block">${contactName}</p>
 
-						<p style="font-size:8px;color:#aaa;line-height:15px;margin:0px"><span>[${state}]</span><span style="padding-left:5px;">${contactTel}</span>
-						</p>
+            <p style="font-size:8px;color:#aaa;line-height:15px;margin:0px"><span>[${state}]</span><span style="padding-left:5px;">${contactTel}</span>
+            </p>
 
-					</div>
-				</span>
-			</div>
-		</div>
+          </div>
+        </span>
+      </div>
+    </div>
 
-		<div style="background-color:#555;width:252px;height:50px;border-radius:0px 0px 8px 8px;">
-			
-		</div>
-	</div>
+    <div style="background-color:#555;width:252px;height:50px;border-radius:0px 0px 8px 8px;">
+      
+    </div>
+  </div>
 
-	<div id="chatWindow" style="float:left;width:652px;display:none">
-		<div style="background-color:#444;height:45px;border-radius:8px 8px 0px 0px;text-align:center;" >
-			<div style="padding-top:14px;">
-			<span id="cname" style="font-size:22px;color:white;padding-left:20px;font-weight:bold"></span>
-			</div>
-		</div>
-		<div id="msgContainer" style="height:452px;background-color:whitesmoke;overflow-y:scroll;" class="bubble">
-				
-		</div>
-		<div style="background-color:#555;height:50px;border-radius:0px 0px 8px 8px;" id="messageInputWrap">
-			<textarea id="message" style="height:36px;width:560px;border-radius:6px;margin:8px 0px 0px 20px;resize:none;padding-top:7px;font-size:18px;color:#666"></textarea>
-			<button onclick="send();" style="width:50px;height:38px;font-size:14px;vertical-align:middle;background:-webkit-linear-gradient(top,#5f9cc5,#396b9e);border-color:#044062;border:1px solid;border-radius:5px;float:right;margin-top:8px;margin-right:10px;">
-				<span style="color:white;text-align:center;">发送</span>
-			</button>
-		</div>
-	</div>
+  <div id="chatWindow" style="float:left;width:652px;display:none;margin-left:5px;">
+    <div style="background-color:#444;height:45px;border-radius:8px 8px 0px 0px;text-align:center;" >
+      <div style="padding-top:14px;">
+      <span id="cname" style="font-size:22px;color:white;padding-left:20px;font-weight:bold"></span>
+      </div>
+    </div>
+    <div id="msgContainer" style="height:502px;background-color:whitesmoke;overflow-y:scroll;" class="bubble">
+        
+    </div>
+    <div style="background-color:#555;height:50px;border-radius:0px 0px 8px 8px;" id="messageInputWrap">
+      <textarea id="message" style="height:36px;width:560px;border-radius:6px;margin:8px 0px 0px 20px;resize:none;padding-top:7px;font-size:18px;color:#666"></textarea>
+      <button onclick="IM.send();" style="width:50px;height:38px;font-size:14px;vertical-align:middle;background:-webkit-linear-gradient(top,#5f9cc5,#396b9e);border-color:#044062;border:1px solid;border-radius:5px;float:right;margin-top:8px;margin-right:10px;">
+        <span style="color:white;text-align:center;">发送</span>
+      </button>
+    </div>
+  </div>
 
-	<span id="recvTmp">
-		<div  class="chat clearfix" style="display:none">
-	    	<div style="position:absolute;left:8px;"><img id="recvAvatar" style="width:30px;height:30px;" src=''/></div>
-	        <span class="triangle"></span>
-	        <div class="article">${msg}</div>
-	    </div>
+  <span id="recvTmp">
+    <div  class="chat clearfix" style="display:none">
+        <div style="position:absolute;left:8px;"><img id="recvAvatar" style="width:30px;height:30px;" src=''/></div>
+          <span class="triangle"></span>
+          <div class="article">${msg}</div>
+      </div>
     </span>
     <span id="sendTmp">
-	    <div  class="chat clearfix fr" style="display:none">
-	        <span class="triangle right"></span>
-	        <span class="article">${msg}</span>
-	        <div style="position:absolute;right:1px;"><img id="sendAvatar" style="width:30px;height:30px;" src=''/></div>
-	    </div>
+      <div  class="chat clearfix fr" style="display:none">
+          <span class="triangle right"></span>
+          <span class="article">${msg}</span>
+          <div style="position:absolute;right:1px;"><img id="sendAvatar" style="width:30px;height:30px;" src=''/></div>
+      </div>
     </span>
     <div id="chooseAvatarPanel" style="display:none">
-		<div style="width:670px;height:500px;overflow:auto" >
-			
-	    	<div id="avatars">
-		    	<img onclick="IM.setAvatar(${avatarId})" srcx="/style/image/avatar/${avatarId}.jpg" src="" style="width:64px;height:64px;margin-top:5px;margin-left:5px;float:left;cursor:pointer;display:none" />
-		    	
-	    	</div>
-    	</div>
-    	<div>
-			<button onclick="IM.saveAvatar()">确定</button>
-		</div>
+    <div style="width:670px;height:500px;overflow:auto" >
+      
+        <div id="avatars">
+          <img onclick="IM.setAvatar(${avatarId})" srcx="/style/image/avatar/${avatarId}.jpg" src="" style="width:64px;height:64px;margin-top:5px;margin-left:5px;float:left;cursor:pointer;display:none" />
+          
+        </div>
+      </div>
+      <div>
+      <button onclick="IM.saveAvatar()">确定</button>
+    </div>
     </div>
 </div>
 </body>
