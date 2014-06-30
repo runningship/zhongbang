@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>请假登记</title>
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/uploadify/jquery.uploadify.js"></script>
+<script type="text/javascript" src="/js/buildHtml.js"></script>
+<link href="/js/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="/js/ueditor1_4_3/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/ueditor1_4_3/ueditor.all.js"> </script>
+<script type="text/javascript" charset="utf-8" src="/js/ueditor1_4_3/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="/js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+var recordId;
+var ue;
+function save(){
+  $('#conts').val(ue.getAllHtml());
+  var text = $('form[name=textForm]').serialize();
+  $.ajax({
+    type: 'POST',
+    url: '/zb/jilu/add',
+    data:text,
+    success: function(data){
+      alert('保存成功,您还可以添加附件.');
+      recordId = JSON.parse(data)['recordId'];
+      initFileUpload();
+    }
+  });
+  return false;
+}
+
+function initFileUpload(){
+  $('#file_upload').uploadify({
+      'swf'      : '/js/uploadify/uploadify.swf',
+      'uploader' : '/file/upload?bizType=jilu&recordId='+recordId,
+      'buttonText': '上传附件',
+      'removeTimeout': 0.1,
+      'fileSizeLimit' : '5MB',
+      'removeCompleted' : false,
+      'onUploadError' : function(file, errorCode, errorMsg, errorString){
+          console.log('The file ' + file.name + ' could not be uploaded: ' + errorString);
+      },
+      'onUploadComplete':function(file){
+          console.log('finish:'+file);
+          getAttachList();
+      },
+      'onUploadSuccess' : function(file, data, response) {
+        var json = JSON.parse(data);
+        if(json['result']!=0){
+          $('#' + file.id).find('.data').html('-文件上传失败,'+json['msg']);
+          // console('The file ' + file.name + ' was successfully uploaded with a response of ' + response + ':' + data);
+        }
+      },
+      'onQueueComplete' : function(queueData) {
+        console.log(queueData);
+      }
+  });
+}
+
+function getAttachList(){
+  $.ajax({
+    type: 'get',
+    url: '/zb/attachment/list?bizType=jilu&recordId='+recordId,
+    data:'',
+    success: function(result){
+      var data = JSON.parse(result)['data'];
+      buildHtmlWithJsonArray("attachList",data);
+    }
+  });
+}
+
+function deleteAttach(id){
+  $.ajax({
+    type: 'get',
+    url: '/zb/attachment/delete?id='+id,
+    data:'',
+    success: function(result){
+      getAttachList();
+    }
+  });
+}
+$(function(){
+  var category = getParam('category');
+  if(category==null || category==""){
+    alert("未指明的分类");
+  }
+  $('#category').val(category);
+  ue = UE.getEditor('editor');
+  ue.addListener( 'ready', function( editor ) {
+    ue.setHeight(350);
+  });
+});
+
+</script>
+
+</head>
+<body style="overflow:auto">
+  
+  <form name="textForm">
+    <div style="margin-top:10px;">
+    <span>标题: </span><input name="title" />
+    </div>
+    <input id="conts" name="conts" type="hidden" />
+    <input type="hidden" name="category" id="category" />
+  </form>
+  <div style="margin-top:10px;">
+  <span>内容: </span>
+  </div>
+  <div>
+    <span id="editor" type="text/plain" style="width:1024px;height:500px;"></span>
+  </div>
+  <button onclick="save();return false;">提交</button>
+<div style="margin-top:5px;">
+    <input id="file_upload" name="file_upload" style="display:none">
+</div>
+<div id="attachList">
+  <span style="display:none">
+    <div>
+      <a target="_blank" href="/file/download?bizType=${bizType}&recordId=${recordId}&file=${filename}">${filename}</a> <a href="javascript:void(0)" onclick="deleteAttach(${id})">删除</a>
+    </div>
+  </span>
+</div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>审核办公用品</title>
+<link rel="stylesheet" href="../style/css.css">
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="../style/house.css">
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script src="../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="../js/buildHtml.js"></script>
+<script type="text/javascript" src="../js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="../js/pagination.js"></script>
+<script type="text/javascript">
+var supplyId;
+function shenhe(shenhe){
+  $.ajax({
+    type: 'get',
+    url: '/zb/supply/shenhe?supplyId='+supplyId+'&shenhe='+shenhe,
+    data:'',
+    success: function(data){
+      alert('审核成功.');
+    },
+    error:function(data){
+      alert('审核失败,'+data.responseText);
+    }
+  });
+}
+
+function loadData(supplyId){
+  $.ajax({
+    type: 'POST',
+    url: '/zb/supply/get?supplyId='+supplyId,
+    data:'',
+    success: function(data){
+      var supply = JSON.parse(data)['supply'];
+      $('#supplyId').text(supply['id']);
+      $('#xgr').text(supply['xgr']);
+      $('#title').text(supply['title']);
+      $('#count').text(supply['count']);
+      $('#djia').text(supply['djia']);
+      $('#zjia').text(supply['zjia']);
+      $('#beizhu').text(supply['beizhu']);
+    },
+    error:function(data){
+      alert('保存失败,'+data.responseText);
+    }
+  });
+}
+
+$(function(){
+  supplyId = getParam('supplyId');
+  loadData(supplyId);
+});
+
+</script>
+</head>
+<body class="hlist bodyer" style="overflow:auto">
+
+<div class="header" style="position:relative;height:50px;width:100%">
+  <form name="form1">
+    <input type="hidden" name="id" id="supplyId" />
+    <div class="input-group input-group-max" style="float:none;margin-top:10px;">
+      <span class="input-group-addon">名称</span>
+      <span type="text" class="form-control" id="title" name="title" />
+    </div>
+    <div class="input-group input-group-max" style="float:none;margin-top:10px;">
+      <span class="input-group-addon">数量</span>
+      <span type="text" class="form-control" id="count" name="count" />
+    </div>
+    <div class="input-group input-group-max" style="float:none;margin-top:10px;">
+      <span class="input-group-addon">单价</span>
+      <span type="text" class="form-control" id="djia" name="djia"></span>
+    </div>
+    <div class="input-group input-group-max" style="float:none;margin-top:10px;">
+      <span class="input-group-addon">总价</span>
+      <span type="text" class="form-control" id="zjia" name="zjia" ></span>
+    </div>
+     <div class="input-group input-group-max" style="float:none;margin-top:10px;">
+      <span class="input-group-addon">相关人</span>
+      <span type="text" class="form-control" id="xgr" name="xgr" ></span>
+    </div>
+    <div class="input-group input-group-max" style="float:none;margin-top:10px;">
+      <span class="input-group-addon">备注</span>
+      <span type="text" class="form-control" id="beizhu" name="beizhu"></span>
+    </div>
+  </form>
+  <div class="btn-group" style="margin-top:10px;">
+    <button onclick="shenhe(1);" class="btn btn-primary btn_subnmit">通过</button>
+  </div>
+  <div class="btn-group" style="margin-top:10px;">
+    <button onclick="shenhe(2);" class="btn btn-primary btn_subnmit">不通过</button>
+  </div>
+</div>
+
+</body>
+</html>
