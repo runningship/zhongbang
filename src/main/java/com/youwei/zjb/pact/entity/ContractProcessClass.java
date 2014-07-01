@@ -6,7 +6,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="work_pack_process_class")
-public class PactProcessClass {
+public class ContractProcessClass {
 	
 	@Id
 	public Integer id;

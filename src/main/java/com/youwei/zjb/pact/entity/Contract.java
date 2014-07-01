@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="work_pack")
-public class Pact {
+public class Contract {
 
 	@javax.persistence.Id
 	public Integer Id;
