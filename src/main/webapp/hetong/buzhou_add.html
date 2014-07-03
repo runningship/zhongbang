@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>添加合同步骤</title>
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/buildHtml.js"></script>
+<script type="text/javascript" src="/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript">
+var queryOpts;
+
+function doSave(){
+  var data = formSerialize($('form[name=form1]'));
+  $.ajax({
+    type: 'POST',
+    url: '/zb/contract/buzhou/add',
+    data:data,
+    success: function(data){
+      alert('添加成功');
+    },
+    error:function(data){
+      alert(data.responseText);
+    }
+  });
+  return false;
+}
+
+
+$(function(){
+  var claId=getParam('claId');
+  if(claId==""){
+    alert('没有指定合同类别.');
+    return;
+  }
+  $('#claId').val(claId);
+});
+
+</script>
+</head>
+<body class="hlist bodyer" style="overflow:auto">
+
+<div class="header" style="position:relative;height:50px;width:100%">
+  
+  <form name="form1" onsubmit="return doSave();">
+    <input type="hidden" id="claId" name="claId" />
+    <div class="input-group " style="float:none;">
+      <span class="input-group-addon">步骤名称</span>
+      <input type="text" class="form-control" name="title" style="width:150px;" />
+    </div>
+    <div class="input-group " style="float:none;margin-top:15px;">
+      <span class="input-group-addon">序&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号</span>
+      <input type="text" class="form-control" name="ordera" style="width:150px;">
+    </div>
+    <div class="input-group " style="float:none;margin-top:15px;">
+      <span class="input-group-addon">交&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;接</span>
+      <select class="form-control " name="isqian" style="width:150px;">
+        <option value="1">是</option>
+        <option value="0">否</option>
+      </select>
+    </div>
+    <div class="input-group " style="float:none;margin-top:15px;">
+      <span class="input-group-addon">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注</span>
+      <input type="text" class="form-control" name="conts" style="width:150px;">
+    </div>
+  </form>
+  <div class="btn-group" style="float:none;margin-top:15px;">
+    <button onclick="doSave()" class="btn btn-primary btn_subnmit">提交</button>
+  </div>
+</div>
+
+</body>
+</html>

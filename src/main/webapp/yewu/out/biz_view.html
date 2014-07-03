@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>查看详细</title>
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/buildHtml.js"></script>
+<script type="text/javascript">
+
+var data;
+var recordId;
+function get(){
+  var url='/zb/out/get?id='+recordId;
+  $.ajax({
+    type: 'get',
+    url: url,
+    success: function(text){
+      data = JSON.parse(text);
+      fillData(data['out']);
+      buildHtmlWithJsonArray("content",data['attachs']);
+    }
+  });
+}
+
+function fillData(out){
+   $('#outTime').html(out['outTime']);
+   $('#backTime').html(out['backTime']);
+  $('#conts').html(out['conts']);
+}
+$(function(){
+  recordId = getParam('recordId');
+  if(recordId==null || recordId==""){
+    alert("加载数据失败");
+    return;
+  }
+  get();
+});
+
+</script>
+
+</head>
+<body class="hlist bodyer" style="overflow:auto">
+<span >
+  <div id="hy_time" style="display:none">
+    <div>
+      <span>外出时间: </span><span id="outTime" ></span>
+    </div>
+    <div>
+      <span>返回时间: </span><span id="backTime" ></span>
+    </div>
+  </div>
+  <div>
+    <span>内容: </span><p id="conts"></p>
+  </div>
+  <div>
+    <span>附件: </span>
+    <span id="content">
+      <div>
+        <a href="/file/download?bizType=${bizType}&recordId=${recordId}&file=${filename}" name="attachment">${filename}</a>
+      </div>
+    </span>
+  </div>
+</span>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+<meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<meta HTTP-EQUIV="expires" CONTENT="0">
+<title>行政管理</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/sysinfo.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/jquery.caozuobendi.js"></script>
+<script type="text/javascript">
+
+function setMainHeight(){
+    var bodyHeight=$('.body').height()
+    $('.sider').height(bodyHeight);
+    $('.mainer').height(bodyHeight);
+}
+$(function(){
+    setMainHeight();
+})
+$(window).resize(function(event) {
+    setMainHeight();
+});
+</script>
+</head>
+<body>
+    <div class="body hmain">
+        <div class="sider">
+            <dl auth="xz" class="sidedl">
+                <dt>行政管理</dt>
+                <dd auth="xz_class_list" ><a href="fenlei_list.html"  target="house_iframe" >分类列表</a></dd>
+                <dd auth="xz_table_list" ><a href="data_list.html"  target="house_iframe" >数据列表</a></dd>
+            </dl>
+        </div>
+        <div class="mainer">
+            <iframe src="http://www.baidu.com/" id="house_iframe" name="house_iframe" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+    </div>
+</body>
+</html>
