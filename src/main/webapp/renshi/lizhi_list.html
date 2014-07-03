@@ -20,7 +20,7 @@
 var queryOpts;
 var genderArr = [{"name":"男","code":1},{"name":"女","code":0}];
 function getList(search){
-  var url='/zb/user/list?lizhi=1';
+  var url='/zb/user/listLiZhi';
   $.ajax({
     type: 'POST',
     url: url,
@@ -40,6 +40,15 @@ function doSearch(){
   return false;
 }
 
+function openView(id){
+  art.dialog.open('user_detail.html?userId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1080
+  });
+}
 
 $(function(){
   getList();
@@ -147,7 +156,7 @@ $(function(){
       <td>${address}</td>
       <td>${rqsj}</td>
       <td>${lzsj}</td>
-      <td><a target="_blank" href="user_detail.html?userId=${uid}">查看</a> 
+      <td><a onclick="openView(${uid})" href="javascript:void(0)">查看</a> 
       </td>
     </tr>
     </tbody>

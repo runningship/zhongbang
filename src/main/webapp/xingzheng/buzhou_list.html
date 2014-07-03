@@ -5,17 +5,17 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>处理步骤</title>
-<link rel="stylesheet" href="../style/css.css">
-<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="../style/house.css">
-<script type="text/javascript" src="../js/jquery.js"></script>
-<script src="../bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
-<script type="text/javascript" src="../js/buildHtml.js"></script>
-<script type="text/javascript" src="../js/jquery.xianshang.users.js"></script>
-<script type="text/javascript" src="../js/pagination.js"></script>
-<script type="text/javascript" src="../js/DatePicker/WdatePicker.js"></script>
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/buildHtml.js"></script>
+<script type="text/javascript" src="/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/js/pagination.js"></script>
+<script type="text/javascript" src="/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 var classId;
 function getList(search){
@@ -33,6 +33,27 @@ function getList(search){
   });
 }
 
+function deleteBuZhou(id){
+  $.ajax({
+    type: 'get',
+    url: '/zb/admin/deleteProcessClass?pcId='+id,
+    data:'',
+    success: function(data){
+      alert('删除成功');
+      getList();
+    }
+  });
+}
+
+function openAdd(){
+  art.dialog.open('buzhou_add.html?classId='+classId,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:400,
+      width:600
+  });
+}
 
 $(function(){
   classId = getParam('classId');
@@ -40,7 +61,7 @@ $(function(){
     alert('未指定表格类比');
     return;
   }
-  $('#add_link').attr('href','buzhou_add.html?classId='+classId);
+  // $('#add_link').attr('href','buzhou_add.html?classId='+classId);
   getList();
   // $.get('/zb/house/getQueryOptions', function(data) {
   //   queryOpts=JSON.parse(data);
@@ -60,7 +81,7 @@ $(function(){
     
   </form>
   <div class="btn-group">
-    <a id="add_link" target="_blank" href="#"><button type="submit" class="btn btn-primary btn_subnmit">添加</button></a>
+    <a id="add_link" onclick="openAdd()" href="javascript:void(0)"><button type="submit" class="btn btn-primary btn_subnmit">添加</button></a>
   </div>
 </div>
 <div class="mainer" style="position:relative;width:100%">
@@ -74,7 +95,7 @@ $(function(){
     <tr style="display:none">
       <td>${ordera}</td>
       <td>${username}</td>
-      <td><a target="_blank" href="">修改</a> <a href="javascript:void(0)" >删除</a></td>
+      <td><a onclick="deleteBuZhou(${id})" href="javascript:void(0)" >删除</a></td>
     </tr>
     </tbody>
   </table>

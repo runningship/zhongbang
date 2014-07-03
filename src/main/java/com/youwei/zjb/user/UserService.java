@@ -28,6 +28,8 @@ import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.Role;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.sys.entity.PC;
+import com.youwei.zjb.user.entity.RenShiReview;
+import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
 import com.youwei.zjb.util.SecurityHelper;
@@ -84,14 +86,54 @@ public class UserService {
 		if(po!=null){
 			throw new GException(PlatformExceptionType.BusinessException, 2, "身份证号已经存在");
 		}
+		List<User> sprList = UserHelper.getUserWithAuthority("rs_rz_list");
+		if(sprList==null || sprList.size()==0){
+			throw new GException(PlatformExceptionType.BusinessException, 2, "没有用户拥有入职登记审核权限，请先在系统管理中设置入职登记审核人.或者联系系统管理员为您处理");
+		}
 		user.addtime = new Date();
 		user.sh = 0;
+		user.flag = 0;
 		user.lock = 0;
 		user.orgpath = dept.path+user.id;
+		user.pwd = SecurityHelper.Md5(DataHelper.User_Default_Password);
+		
 		dao.saveOrUpdate(user);
-		//TODO 添加审批项
+//		 添加审批项
+		for(User spr : sprList){
+			RenShiReview review = new RenShiReview();
+			review.category=RenShiReview.Join;
+			review.sh=0;
+			review.sprId = spr.id;
+			review.userId = user.id;
+			dao.saveOrUpdate(review);
+		}
 		mv.data.put("msg", "添加用户成功");
+		
 		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView listRuZhi(UserQuery query , Page<Map> page){
+		ModelAndView mv = new ModelAndView();
+		StringBuilder hql = new StringBuilder();
+		List<Object> params = new ArrayList<Object>();
+		User user = ThreadSession.getUser();
+		if(user==null){
+			user = dao.get(User.class, 316);
+		}
+		hql.append("select review.sh as rzsh, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
+				+ "from User  u, Department d,Role r , RenShiReview review where u.sh=0 and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? and review.category='join' ");
+		params.add(user.id);
+		page = dao.findPage(page, hql.toString(), true, params.toArray());
+		mv.data.put("page", JSONHelper.toJSON(page));
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView listLiZhi(UserQuery query , Page<Map> page){
+		query.sh=null;
+		query.lizhi=1;
+		return list(query,page);
 	}
 	
 	@WebMethod
@@ -99,7 +141,8 @@ public class UserService {
 		ModelAndView mv = new ModelAndView();
 		StringBuilder hql = new StringBuilder();
 		List<Object> params = new ArrayList<Object>();
-		hql.append("select u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName from User  u, Department d,Role r where u.roleId = r.id and d.id = u.deptId ");
+		hql.append("select u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
+				+ "from User  u, Department d,Role r where u.roleId = r.id and d.id = u.deptId ");
 		if(StringUtils.isNotEmpty(query.name)){
 			hql.append(" and u.uname like ? ");
 			params.add("%"+query.name+"%");
@@ -130,8 +173,10 @@ public class UserService {
 			hql.append(" and u.roleId=?");
 			params.add(query.roleId);
 		}
-		hql.append(" and u.sh = ? ");
-		params.add(query.sh);
+		if(query.sh!=null){
+			hql.append(" and u.sh = ? ");
+			params.add(query.sh);
+		}
 		if(query.hunyin!=null){
 			hql.append(" and u.hunyin=?");
 			params.add(query.hunyin);
@@ -178,7 +223,7 @@ public class UserService {
 		}
 		mv.data.put("result", "0");
 		mv.data.put("msg", "登录成功");
-		ThreadSession.getHttpServletRequest().getSession().setAttribute(KeyConstants.Session_User, user);
+		ThreadSession.getHttpServletRequest().getSession().setAttribute(KeyConstants.Session_User, po);
 		return mv;
 	}
 

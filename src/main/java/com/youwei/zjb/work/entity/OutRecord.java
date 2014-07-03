@@ -29,6 +29,9 @@ public class OutRecord {
 	@Column(name="onTime")
 	public Date backTime;
 	
+	/**
+	 * 0 带看，1 陪看，2 自看
+	 */
 	public Integer outHouse;
 	
 	/**

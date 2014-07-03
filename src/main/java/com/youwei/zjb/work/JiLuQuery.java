@@ -12,4 +12,6 @@ public class JiLuQuery extends AbstractQuery{
 	public String title;
 	
 	public String goin;
+	
+	public String xpath;
 }

@@ -1,14 +1,20 @@
 package com.youwei.zjb.user.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class RenShiReview {
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer id;
 	
+	/**
+	 * 入职人员
+	 */
 	public Integer userId;
 	
 	/**
@@ -25,4 +31,8 @@ public class RenShiReview {
 	//入职，调整，离职
 	//join , adjust , quit
 	public String category;
+	
+	public transient static final String Join = "join";
+	public transient static final String Adjust = "adjust";
+	public transient static final String Quit = "quit";
 }

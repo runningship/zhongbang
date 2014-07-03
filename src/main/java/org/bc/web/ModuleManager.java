@@ -18,9 +18,10 @@ public class ModuleManager {
 			Module xx = clazz.getAnnotation(Module.class);
 			if(xx!=null){
 				String moduleUrl = StringUtils.removeEnd(xx.name(),"/");
+				System.out.println("loaded module "+clazz.getName());
 				buildHandler(moduleUrl,clazz);
 //				modules.put(,clazz);
-				System.out.println("loaded module "+clazz.getName());
+				
 			}
 		}
 	}

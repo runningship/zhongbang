@@ -5,16 +5,17 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>area edit</title>
-<link rel="stylesheet" href="../style/css.css">
-<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="../style/house.css">
-<script type="text/javascript" src="../js/jquery.js"></script>
-<script src="../bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
-<script type="text/javascript" src="../js/buildHtml.js"></script>
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/buildHtml.js"></script>
 <script type="text/javascript">
 var areaId=getParam('areaId'),formAction;
+if(areaId){formAction='update';getArea();}else{formAction='add';}
 var lngs="117.260429",
 lats="31.881385",
 areas = "华府俊园",
@@ -33,7 +34,7 @@ function onSubmit_Form(){
 }
 function setArea(search){
   $.ajax({
-    type: 'get',
+    type: 'post',
     async:false,
     url: '/zb/areas/'+formAction,
     data:search,
@@ -51,7 +52,6 @@ function getArea(){
     url: '/zb/areas/get',
     data:param,
     success: function(data){
-      alert(0)
       var getAreas=JSON.parse(data);
       if(getAreas["area"]){
         buildHtmlWithJsonArray("arealist",[getAreas["area"]],true);
@@ -63,7 +63,6 @@ function getArea(){
 
 $(function(){
   onSubmit_Form();
-  if(areaId){formAction='upload';getArea();}{formAction='add';}
 });
 
 </script>
@@ -81,7 +80,7 @@ $(function(){
     <div id="mapIn info" style="position: absolute; top: 10px; right: 10px; z-index: 9999;">
     <form role="form" name="form1" id="arealist">
     <span>
-      <input type="text" class="form-control" name="id" value="${id}">
+      <input type="hidden" class="form-control" name="id" value="${id}">
       <div class="input-group input-group-max">
         <span class="input-group-addon">区域</span>
         <input type="text" class="form-control" name="quyu" value="${quyu}">

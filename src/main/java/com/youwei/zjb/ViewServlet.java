@@ -3,6 +3,7 @@ package com.youwei.zjb;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.logging.Level;
 
 import javassist.ClassClassPath;
@@ -30,7 +31,10 @@ import org.bc.web.ModelAndView;
 import org.bc.web.ModuleManager;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
+import com.youwei.zjb.entity.RoleAuthority;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.util.JSONHelper;
 
@@ -55,8 +59,24 @@ public class ViewServlet extends HttpServlet{
 		if(user==null){
 			user = SimpDaoTool.getGlobalCommonDaoService().get(User.class, 316);
 		}
-		JSONArray arr = JSONHelper.toJSONArray(user.getRole().Authorities());
+		List<RoleAuthority> authList = user.getRole().Authorities();
+		JSONArray arr = JSONHelper.toJSONArray(authList);
 		doc.body().append("<span id='authorities' style='display:none' >"+arr.toString()+"</span>");
+		
+		Elements list = doc.getElementsByAttribute("auth");
+		for(Element e : list){
+			String target = e.attr("auth");
+			boolean auth = false;
+			for(RoleAuthority ra : authList){
+				if(ra.name.equals(target)){
+					auth = true;
+					break;
+				}
+			}
+			if(auth==false){
+				e.remove();
+			}
+		}
 		resp.getWriter().write(doc.html());
 	}
 	

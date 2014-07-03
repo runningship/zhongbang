@@ -1,27 +1,40 @@
-package com.youwei.zjb.pact.entity;
+package com.youwei.zjb.contract.entity;
 
 import java.util.Date;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="work_pack")
+@Table(name="work_pact")
 public class Contract {
 
-	@javax.persistence.Id
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer Id;
 	
+	@Column(name="uid")
 	public Integer userId;
 	
+	@Column(name="did")
 	public Integer deptId;
 	
 	public String bianhao;
 	
+	/**
+	 * 房主
+	 */
 	public String lxr_f;
 	
 	public String tel_f;
 	
+	/**
+	 * 客户
+	 */
 	public String lxr_k;
 	
 	public String tel_k;
@@ -48,13 +61,20 @@ public class Contract {
 	
 	public Float shoufu;
 	
-	public Float daikun;
+	public Float daikuan;
 	
-	public String daikun_lx;
+	/**
+	 * 贷款类型
+	 */
+	public String daikuan_lx;
 	
 	public String yongtu;
 	
-	public Date datetime;
+	/**
+	 * 签约日期
+	 */
+	@Column(name="datetime")
+	public Date signdate;
 	
 	public String datetime_gh;
 	

@@ -11,7 +11,7 @@ public class DataHelper {
 
 	public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	public static SimpleDateFormat dateSdf = new SimpleDateFormat("yyyy-MM-dd");
-	
+	public static final String User_Default_Password = "123456";
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void fillDefaultValue(List<Map> list , String key,Object defValue){
 		for(Map map : list){

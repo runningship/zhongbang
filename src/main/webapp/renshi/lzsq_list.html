@@ -5,21 +5,21 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>离职审核列表</title>
-<link rel="stylesheet" href="../style/css.css">
-<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="../style/house.css">
-<script type="text/javascript" src="../js/jquery.js"></script>
-<script src="../bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
-<script type="text/javascript" src="../js/buildHtml.js"></script>
-<script type="text/javascript" src="../js/jquery.xianshang.users.js"></script>
-<script type="text/javascript" src="../js/pagination.js"></script>
-<script type="text/javascript" src="../js/DatePicker/WdatePicker.js"></script>
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/buildHtml.js"></script>
+<script type="text/javascript" src="/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/js/pagination.js"></script>
+<script type="text/javascript" src="/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 var genderArr = [{"name":"男","code":1},{"name":"女","code":0}];
 function getList(search){
-  var url='/zb/user/lizhi/list';
+  var url='/zb/user/lizhi/listQuitApply';
   $.ajax({
     type: 'POST',
     url: url,
@@ -33,6 +33,24 @@ function getList(search){
   });
 }
 
+function getAction(sh){
+  if(sh==0){
+    return "审核";
+  }
+  if(sh==1){
+    return "已审核";
+  }
+}
+
+function openReview(id){
+  art.dialog.open('lizhi_review.html?lizhiId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1080
+  });
+}
 
 $(function(){
   getList();
@@ -67,7 +85,7 @@ $(function(){
       <td>${title}</td>
       <td>${tel}</td>
       <td>${applyTime}</td>
-      <td><a target="_blank" href="lizhi_review.html?lizhiId=${id}">审核</a> 
+      <td><a onclick="openReview(${id})" class="runscript" href="javascript:void(0)">getAction(${lzsh})</a> 
       </td>
     </tr>
     </tbody>

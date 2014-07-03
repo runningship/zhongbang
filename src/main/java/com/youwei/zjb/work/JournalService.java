@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.GException;
 import org.bc.sdak.Page;
@@ -73,6 +74,10 @@ public class JournalService {
 			hql.append(" and j.category=? ");
 			params.add(query.category);
 		}
+		if(StringUtils.isNotEmpty(query.xpath)){
+			hql.append(" and u.orgpath like ? ");
+			params.add(query.xpath+"%");
+		}
 		//默认只能看到自己的数据
 //		User user = ThreadSession.getUser();
 //		hql.append(" and uid = ?");
@@ -91,8 +96,14 @@ public class JournalService {
 		if(journal.id==null){
 			throw new GException(PlatformExceptionType.BusinessException, 1, "id不能为空");
 		}
+		Journal po = dao.get(Journal.class, journal.id);
+		if(po==null){
+			throw new GException(PlatformExceptionType.BusinessException, 2, "记录已不存在");
+		}
 		try{
-			dao.saveOrUpdate(journal);
+			po.title=journal.title;
+			po.conta = journal.conta;
+			dao.saveOrUpdate(po);
 			mv.data.put("result", 0);
 		}catch(Exception ex){
 			LogUtil.log(Level.WARNING, "编辑工作日志失败", ex);

@@ -36,18 +36,19 @@ function buildAction(rowIndex){
     return "已通过"
   }
   if(sp['sprId']==myId){
-    return "<a href='javascript:void(0)' onclick='passSP("+sp['id']+")'>通过</a>";
+    return "<a href='javascript:void(0)' onclick='passSP("+rowIndex+","+sp['id']+")'>通过</a>";
   }
   return "待审批...";
 }
 
-function passSP(spId){
+function passSP(rowIndex,spId){
   $.ajax({
     type: 'get',
     url: '/zb/user/lizhi/pass?lizhiId='+lizhiId+'&spId='+spId,
     data:'',
     success: function(data){
       alert('审批成功');
+      $("#row_"+rowIndex).html('已通过');
     },
     error:function(data){
       alert(data.responseText);
@@ -123,7 +124,7 @@ $(function(){
     <tbody id="id_splist">
     <tr style="display:none">
       <td style="width:150px;">${spr}</td>
-      <td class="runscript">buildAction(${rowIndex})</td>
+      <td id="row_${rowIndex}" class="runscript">buildAction(${rowIndex})</td>
     </tr>
     </tbody>
     </table>

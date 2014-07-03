@@ -1,14 +1,17 @@
-package com.youwei.zjb.pact.entity;
+package com.youwei.zjb.contract.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="work_pack_process_class")
+@Table(name="work_pact_process_class")
 public class ContractProcessClass {
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer id;
 	
 	public Integer claId;

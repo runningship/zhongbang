@@ -40,7 +40,9 @@ public class GrandServlet extends HttpServlet{
 		resp.setContentType("text/html");
 		String path = req.getPathInfo();
 		User u = (User)req.getSession().getAttribute(KeyConstants.Session_User);
-		ThreadSession.setUser(u);
+		if(u!=null){
+			ThreadSession.setUser(u);
+		}
 		ThreadSession.setHttpServletRequest(req);
 		LogUtil.info(path);
 		if("/".equals(path)){

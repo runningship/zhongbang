@@ -16,6 +16,7 @@ import org.bc.web.WebMethod;
 
 import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.PlatformExceptionType;
+import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.Role;
 import com.youwei.zjb.entity.User;
@@ -45,11 +46,13 @@ public class UserAdjustService {
 		mv.data.put("newDeptName", newDept.namea);
 		
 		User fyTo = dao.get(User.class, adjust.fyTo);
-		mv.data.put("fyTo", fyTo.uname);
-		
+		if(fyTo!=null){
+			mv.data.put("fyTo", fyTo.uname);
+		}
 		User kyTo = dao.get(User.class, adjust.kyTo);
-		mv.data.put("kyTo", kyTo.uname);
-		
+		if(kyTo!=null){
+			mv.data.put("kyTo", kyTo.uname);
+		}
 		mv.data.put("reason", adjust.reason);
 		mv.data.put("jiaojie", adjust.jiaojie);
 		
@@ -68,14 +71,43 @@ public class UserAdjustService {
 		if(ua.userId.equals(ua.fyTo) || ua.userId.equals(ua.kyTo)){
 			throw new GException(PlatformExceptionType.BusinessException, 2, "客源或房源调整不正确");
 		}
+		List<User> sprList = UserHelper.getUserWithAuthority("rs_zwtz_list");
+		if(sprList==null || sprList.size()==0){
+			throw new GException(PlatformExceptionType.BusinessException, 2, "没有用户拥有职务审核权限，请先在系统管理中设置职务调整审核人.或者联系系统管理员为您处理");
+		}
 		ua.applyTime = new Date();
 		ua.pass =0;
 		User user = dao.get(User.class, ua.userId);
 		ua.oldRoleId = user.roleId;
 		dao.saveOrUpdate(ua);
+		for(User spr : sprList){
+			RenShiReview review = new RenShiReview();
+			review.category=RenShiReview.Adjust;
+			review.sh=0;
+			review.sprId = spr.id;
+			review.userId = user.id;
+			dao.saveOrUpdate(review);
+		}
 		ModelAndView mv = new ModelAndView();
 		mv.data.put("msg","申请成功");
 		return  mv;
+	}
+	
+	@WebMethod
+	public ModelAndView listAdjust(UserQuery query , Page<Map> page){
+		ModelAndView mv = new ModelAndView();
+		StringBuilder hql = new StringBuilder();
+		List<Object> params = new ArrayList<Object>();
+		User user = ThreadSession.getUser();
+		if(user==null){
+			user = dao.get(User.class, 316);
+		}
+		hql.append("select ud.id as id, review.sh as tzsh,ud.applyTime as applyTime, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
+				+ "from User  u, Department d,Role r ,UserAdjust ud, RenShiReview review where u.id=ud.userId and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? and review.category='"+RenShiReview.Adjust+"' ");
+		params.add(user.id);
+		page = dao.findPage(page, hql.toString(), true, params.toArray());
+		mv.data.put("page", JSONHelper.toJSON(page));
+		return mv;
 	}
 	
 	@WebMethod
@@ -101,15 +133,20 @@ public class UserAdjustService {
 	@Transactional
 	@WebMethod
 	public ModelAndView pass(int adjustId , int spId){
+		ModelAndView mv = new ModelAndView();
 		RenShiReview po = dao.get(RenShiReview.class, spId);
 		po.sh = 1;
 		dao.saveOrUpdate(po);
-		long count = dao.countHqlResult("from RenShiReview where userid=? and sh=0 and category='adjust' ", po.userId);
+		long count = dao.countHqlResult("from RenShiReview where userid=? and sh=0 and category='"+RenShiReview.Adjust+"' ", po.userId);
 		if(count==0){
 			UserAdjust adjust = dao.get(UserAdjust.class, adjustId);
 			adjust.passTime = new Date();
 			adjust.pass = 1;
 			dao.saveOrUpdate(adjust);
+			User user = dao.get(User.class, adjust.userId);
+			user.roleId = adjust.newRoleId;
+			user.deptId = adjust.newDeptId;
+			dao.saveOrUpdate(user);
 			if(adjust.fyTo!=null){
 				dao.execute("update House set uid = ? where uid = ?", adjust.fyTo , adjust.userId);
 			}
@@ -117,6 +154,7 @@ public class UserAdjustService {
 				dao.execute("update Client set uid = ? where uid = ?", adjust.kyTo , adjust.userId);
 			}
 		}
+		mv.data.put("msg", "审核成功");
 		return new ModelAndView();
 	}
 }

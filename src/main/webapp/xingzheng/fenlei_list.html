@@ -40,12 +40,28 @@ function doSearch(){
 }
 
 
+function openTemplate(id){
+  art.dialog.open('temp_edit.html?classId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1080
+  });
+}
+
+function openBuZhou(id){
+  art.dialog.open('buzhou_list.html?classId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1080
+  });
+}
 
 $(function(){
   getList();
-  // $.get('/zb/house/getQueryOptions', function(data) {
-  //   queryOpts=JSON.parse(data);
-  // });
   Page.Init();
 });
 
@@ -56,11 +72,10 @@ $(function(){
 </head>
 <body class="hlist bodyer" style="overflow:auto">
 
-<div class="header" style="position:relative;height:50px;width:100%">
+<div class="header" style="position:relative;height:10px;width:100%">
   <form name="form1">
     
   </form>
-  
 </div>
 <div class="mainer" style="position:relative;width:100%">
   <table class="table table-hover .table_bodyer" >
@@ -71,7 +86,7 @@ $(function(){
     <tbody id="id_list">
     <tr style="display:none">
       <td>${title}</td>
-      <td><a target="_blank" href="temp_edit.html?classId=${id}">模板</a> <a target="_blank" href="buzhou_list.html?classId=${id}" >步骤</a></td>
+      <td><a onclick="openTemplate(${id})" href="javascript:void(0)">模板</a> <a onclick="openBuZhou(${id})" href="javascript:void(0)" >步骤</a></td>
     </tr>
     </tbody>
   </table>

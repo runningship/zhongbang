@@ -14,6 +14,7 @@ import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
 import com.youwei.zjb.PlatformExceptionType;
+import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.Role;
 import com.youwei.zjb.entity.User;
@@ -38,11 +39,13 @@ public class UserQuitService {
 		mv.data.put("oldDeptName", user.Department().namea );
 		
 		User fyTo = dao.get(User.class, uq.fyTo);
-		mv.data.put("fyTo", fyTo.uname);
-		
+		if(fyTo!=null){
+			mv.data.put("fyTo", fyTo.uname);
+		}
 		User kyTo = dao.get(User.class, uq.kyTo);
-		mv.data.put("kyTo", kyTo.uname);
-		
+		if(kyTo!=null){
+			mv.data.put("kyTo", kyTo.uname);
+		}
 		mv.data.put("reason", uq.reason);
 		mv.data.put("jiaojie", uq.jiaojie);
 		
@@ -54,8 +57,10 @@ public class UserQuitService {
 	
 	@WebMethod
 	public ModelAndView add(UserQuit uq){
+		ModelAndView mv = new ModelAndView();
 		uq.pass = 0;
 		uq.applyTime = new Date();
+		
 		UserQuit po = dao.getUniqueByParams(UserQuit.class, new String[]{"userId" , "pass"}, new Object[]{uq.userId , uq.pass});
 		if(po!=null){
 			throw new GException(PlatformExceptionType.BusinessException, 1, "已提交过相同的离职申请");
@@ -66,8 +71,21 @@ public class UserQuitService {
 		if(uq.userId.equals(uq.fyTo) || uq.userId.equals(uq.kyTo)){
 			throw new GException(PlatformExceptionType.BusinessException, 3, "客源或房源调整不正确");
 		}
+		List<User> sprList = UserHelper.getUserWithAuthority("rs_lzsq_list");
+		if(sprList==null || sprList.size()==0){
+			throw new GException(PlatformExceptionType.BusinessException, 4, "没有用户拥有离职审核权限，请先在系统管理中设置离职整审核人.或者联系系统管理员为您处理");
+		}
 		dao.saveOrUpdate(uq);
-		return new ModelAndView();
+		for(User spr : sprList){
+			RenShiReview review = new RenShiReview();
+			review.category=RenShiReview.Quit;
+			review.sh=0;
+			review.sprId = spr.id;
+			review.userId = uq.userId;
+			dao.saveOrUpdate(review);
+		}
+		mv.data.put("msg", "申请成功");
+		return mv;
 	}
 	
 	public void delete(int quitId){
@@ -75,6 +93,23 @@ public class UserQuitService {
 		if(po!=null){
 			dao.delete(po);
 		}
+	}
+	
+	@WebMethod
+	public ModelAndView listQuitApply(UserQuery query , Page<Map> page){
+		ModelAndView mv = new ModelAndView();
+		StringBuilder hql = new StringBuilder();
+		List<Object> params = new ArrayList<Object>();
+		User user = ThreadSession.getUser();
+		if(user==null){
+			user = dao.get(User.class, 316);
+		}
+		hql.append("select uq.id as id, review.sh as lzsh,uq.applyTime as applyTime, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
+				+ "from User  u, Department d,Role r ,UserQuit uq, RenShiReview review where u.id=uq.userId and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? and review.category='"+RenShiReview.Quit+"' ");
+		params.add(user.id);
+		page = dao.findPage(page, hql.toString(), true, params.toArray());
+		mv.data.put("page", JSONHelper.toJSON(page));
+		return mv;
 	}
 	
 	@WebMethod

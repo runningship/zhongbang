@@ -20,7 +20,7 @@
 var queryOpts;
 
 function getList(search){
-  var url='/zb/admin/class/list';
+  var url='/zb/contract/list';
   $.ajax({
     type: 'get',
     url: url,
@@ -43,9 +43,11 @@ function doSearch(){
 
 $(function(){
   getList();
-  // $.get('/zb/house/getQueryOptions', function(data) {
-  //   queryOpts=JSON.parse(data);
-  // });
+  $.get('/zb/contract/proClassList?claid=5', function(data) {
+    queryOpts=JSON.parse(data);
+    buildHtmlWithJsonArray("id_proClassList",queryOpts['proClassList'],true);
+    $('#id_proClassList').prepend($('<option value="">所有</option>'));
+  });
   Page.Init();
 });
 
@@ -58,20 +60,72 @@ $(function(){
 
 <div class="header" style="position:relative;height:50px;width:100%">
   <form name="form1">
-    
+    <input type="hidden" name="xpath" />
+    <div class="input-group input-group-max input-group-mt2">
+      <span class="input-group-addon">合同编号</span>
+      <input type="text" class="form-control" name="bianhao">
+    </div>
+    <div class="input-group input-group-max input-group-mt2">
+      <span class="input-group-addon">地址</span>
+      <input type="text" class="form-control" name="addr">
+    </div>
+    <div class="input-group input-group-max input-group-mt2">
+      <span class="input-group-addon">姓名</span>
+      <input type="text" class="form-control" name="name">
+    </div>
+    <div class="input-group input-group-max input-group-mt2">
+      <span class="input-group-addon">电话</span>
+      <input type="text" class="form-control" name="tel">
+    </div>
+    <br /><br/>
+    <div class="input-group">
+      <span class="input-group-addon" style="padding:8px;">签约日期</span>
+      <input type="text" style="width:150" class="form-control" name="dateStart" id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})">
+      <input type="text" class="form-control" name="dateEnd" id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})">
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon">总价</span>
+      <input type="text" class="form-control" name="zjiaStart">
+      <input type="text" class="form-control" name="zjiaEnd">
+    </div>
+    <div class="input-group input-group-select">
+      <span class="input-group-addon">业务员</span>
+      <select class="form-control get_comp" name="form_cid"></select>
+      <select class="form-control get_quyu" name="form_did"></select>
+      <select class="form-control get_user" name="form_uid"></select>
+    </div>
+    <div class="input-group  ">
+      <span class="input-group-addon">待办理事项</span>
+      <select class="form-control" name="proClass" id="id_proClassList" style="width:150px;">
+          <option value="${id}">${title}</option>
+      </select>
+    </div>
   </form>
-  
+  <div class="btn-group">
+    <button onclick="doSearch()" class="btn btn-primary btn_subnmit">搜索提交</button>
+    <button class="btn">清空</button>
+  </div>
 </div>
 <div class="mainer" style="position:relative;width:100%">
   <table class="table table-hover .table_bodyer" >
     <thead>
-      <th>类别</th>
+      <th>签约日期</th>
+      <th>合同编号</th>
+      <th>总价</th>
+      <th>地址</th>
+      <th>房主</th>
+      <th>客户</th>
       <th>操作</th>
     </thead>
     <tbody id="id_list">
     <tr style="display:none">
-      <td>${title}</td>
-      <td><a target="_blank" href="temp_edit.html?classId=${id}">模板</a> <a target="_blank" href="buzhou_list.html?classId=${id}" >步骤</a></td>
+      <td>${signdate}</td>
+      <td>${zjia}</td>
+      <td>${bianhao}</td>
+      <td>${addr}</td>
+      <td>${lxr_f}</td>
+      <td>${lxr_k}</td>
+      <td><a target="_blank" href="temp_edit.html?classId=${id}">修改</a> <a onclick="deleteContract" href="javascript:void(0)" >删除</a></td>
     </tr>
     </tbody>
   </table>

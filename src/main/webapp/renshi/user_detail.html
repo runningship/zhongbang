@@ -5,16 +5,16 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>用户信息查看</title>
-<link rel="stylesheet" href="../style/css.css">
-<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="../style/house.css">
-<script type="text/javascript" src="../js/jquery.js"></script>
-<script src="../bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
-<script type="text/javascript" src="../js/buildHtml.js"></script>
-<script type="text/javascript" src="../js/jquery.xianshang.users.js"></script>
-<script type="text/javascript" src="../js/DatePicker/WdatePicker.js"></script>
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/buildHtml.js"></script>
+<script type="text/javascript" src="/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 var queryOpts;
 var genderArr = [{"name":"男","code":1},{"name":"女","code":0}];
@@ -160,7 +160,7 @@ $(function(){
     <div class="input-group" style="float:none;margin-top:15px;">
       <span class="input-group-addon">入企时间</span>
       <input type="text" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" id="rqsj" name="rqsj" style="width:150px;border-radius:0;">
-      <input type="text"  id="idTime" style="display:none" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" style="width:150px">
+      <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" style="width:150px;display:none">
     </div>
     <div class="input-group" style="float:none;margin-top:15px;">
       <span class="input-group-addon">入职途径</span>

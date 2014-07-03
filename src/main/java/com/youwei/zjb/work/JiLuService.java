@@ -20,7 +20,6 @@ import com.youwei.zjb.entity.User;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
 import com.youwei.zjb.work.entity.JiLu;
-import com.youwei.zjb.work.entity.Journal;
 
 @Module(name="/jilu")
 public class JiLuService {
@@ -56,6 +55,10 @@ public class JiLuService {
 		if(StringUtils.isNotEmpty(query.goin)){
 			hql.append(" and j.goin like ? ");
 			params.add("%"+query.goin+"%");
+		}
+		if(StringUtils.isNotEmpty(query.xpath)){
+			hql.append(" and u.orgpath like ? ");
+			params.add(query.xpath+"%");
 		}
 		hql.append(HqlHelper.buildDateSegment("j.addtime", query.addtimeStart, DateSeparator.After, params));
 		hql.append(HqlHelper.buildDateSegment("j.addtime", query.addtimeEnd, DateSeparator.Before, params));

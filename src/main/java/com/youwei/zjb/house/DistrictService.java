@@ -21,6 +21,7 @@ public class DistrictService {
 
 	CommonDaoService service = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
 	
+	@WebMethod
 	public ModelAndView add(District district){
 		ModelAndView mv = new ModelAndView();
 		if(StringUtils.isEmpty(district.name)){

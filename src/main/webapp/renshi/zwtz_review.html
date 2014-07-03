@@ -5,16 +5,16 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>职务调整审核</title>
-<link rel="stylesheet" href="../style/css.css">
-<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="../style/house.css">
-<script type="text/javascript" src="../js/jquery.js"></script>
-<script src="../bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
-<script type="text/javascript" src="../js/buildHtml.js"></script>
-<script type="text/javascript" src="../js/jquery.xianshang.users.js"></script>
-<script type="text/javascript" src="../js/DatePicker/WdatePicker.js"></script>
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/buildHtml.js"></script>
+<script type="text/javascript" src="/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 var queryOpts;
 var spList;
@@ -38,18 +38,19 @@ function buildAction(rowIndex){
     return "已通过"
   }
   if(sp['sprId']==myId){
-    return "<a href='javascript:void(0)' onclick='passSP("+sp['id']+")'>通过</a>";
+    return "<a href='javascript:void(0)' onclick='passSP("+rowIndex+","+sp['id']+")'>通过</a>";
   }
   return "待审批...";
 }
 
-function passSP(spId){
+function passSP(rowIndex,spId){
   $.ajax({
     type: 'get',
     url: '/zb/user/zwtz/pass?adjustId='+adjustId+'&spId='+spId,
     data:'',
     success: function(data){
       alert('审批成功');
+      $("#row_"+rowIndex).html('已通过');
     },
     error:function(data){
       alert(data.responseText);
@@ -132,7 +133,7 @@ $(function(){
     <tbody id="id_splist">
     <tr style="display:none">
       <td style="width:150px;">${spr}</td>
-      <td class="runscript">buildAction(${rowIndex})</td>
+      <td id="row_${rowIndex}" class="runscript">buildAction(${rowIndex})</td>
     </tr>
     </tbody>
     </table>

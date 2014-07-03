@@ -76,9 +76,6 @@ $(function(){
   getList();
   $.get('/zb/house/getQueryOptions', function(data) {
     queryOpts=JSON.parse(data);
-    // buildHtmlWithJsonArray("id_quyu",queryOpts['quyu']);       //区域
-    // buildHtmlWithJsonArray("id_kehu",queryOpts['kehu']);       //客户性质
-    // buildHtmlWithJsonArray("id_kehulaiyuan",queryOpts['kehulaiyuan']); //客户来源
   });
   Page.Init();
 });
@@ -97,14 +94,19 @@ $(function(){
     
     <div class="btn-group">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        外出开房 <span class="caret"></span>
+        外出看房 <span class="caret"></span>
       </button>
-      <ul class="dropdown-menu" role="menu" id="id_laiyuan">
-        <li><label><input type="radio" name="youxiao" value=""> 所有</label>
-        <li><label><input type="radio" name="youxiao" value="1"> 带看</label>
-        <li><label><input type="radio" name="youxiao" value="0"> 陪看</label>
-        <li><label><input type="radio" name="youxiao" value="0"> 自看</label>
+      <ul class="dropdown-menu" role="menu">
+        <li><label><input type="radio" name="kanfang" value=""> 所有</label>
+        <li><label><input type="radio" name="kanfang" value="0"> 带看</label>
+        <li><label><input type="radio" name="kanfang" value="1"> 陪看</label>
+        <li><label><input type="radio" name="kanfang" value="2"> 自看</label>
       </ul>
+    </div>
+    <div class="input-group input-group-select">
+      <span class="input-group-addon">分公司</span>
+      <select class="form-control get_comp" name="form_cid"></select>
+      <select class="form-control get_quyu" name="form_did"></select>
     </div>
     <div class="input-group" style="width:400px">
       <span class="input-group-addon">外出时间</span>

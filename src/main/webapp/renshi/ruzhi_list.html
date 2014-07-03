@@ -5,22 +5,22 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>入职登记审核</title>
-<link rel="stylesheet" href="../style/css.css">
-<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="../style/house.css">
-<script type="text/javascript" src="../js/jquery.js"></script>
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
 <script src="../bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
-<script type="text/javascript" src="../js/buildHtml.js"></script>
-<script type="text/javascript" src="../js/jquery.xianshang.users.js"></script>
-<script type="text/javascript" src="../js/pagination.js"></script>
-<script type="text/javascript" src="../js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/buildHtml.js"></script>
+<script type="text/javascript" src="/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/js/pagination.js"></script>
+<script type="text/javascript" src="/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 var queryOpts;
 var genderArr = [{"name":"男","code":1},{"name":"女","code":0}];
 function getList(search){
-  var url='/zb/user/list?sh=0';
+  var url='/zb/user/listRuZhi';
   $.ajax({
     type: 'POST',
     url: url,
@@ -40,7 +40,24 @@ function doSearch(){
   return false;
 }
 
+function openReview(id){
+  art.dialog.open('ruzhi_review.html?userId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1080
+  });
+}
 
+function getAction(rzsh){
+  if(rzsh==0){
+    return "审核";
+  }
+  if(rzsh==1){
+    return "已审核";
+  }
+}
 $(function(){
   getList();
   $.get('/zb/user/allRoles', function(data) {
@@ -148,7 +165,7 @@ $(function(){
       <td>${sfz}</td>
       <td>${address}</td>
       <td>${rqsj}</td>
-      <td><a target="_blank" href="rzsh.html?userId=${uid}">审核</a> 
+      <td><a onclick="openReview(${uid})" class="runscript" href="javascript:void(0)">getAction(${rzsh})</a> 
       </td>
     </tr>
     </tbody>

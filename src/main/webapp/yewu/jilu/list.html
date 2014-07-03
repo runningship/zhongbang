@@ -71,6 +71,25 @@ function deleteOut(id){
   
 }
 
+function openView(id){
+  art.dialog.open('jilu/view.html?category='+category+'&recordId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1080
+  });
+}
+
+function openAdd(){
+  art.dialog.open('jilu/add.html?category='+category,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1080
+  });
+}
 
 $(function(){
   category = getParam('category');
@@ -94,9 +113,12 @@ $(function(){
 <body class="hlist bodyer" style="overflow:auto">
 
 <div class="header" style="position:relative;height:50px;width:100%">
-    
+    <div class="btn-group">
+      <button onclick="openAdd();" class="btn btn-primary btn_subnmit">新增</button>
+    </div>
     <form name="form1">
     <input type="hidden" class="userInput" name="xpath" value="">
+
     <div class="input-group input-group-max">
       <span class="input-group-addon">参会人</span>
       <input type="text" class="form-control" name="goin">
@@ -105,6 +127,11 @@ $(function(){
       <span class="input-group-addon">日期</span>
       <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:150px;border-radius:0;">
       <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:150px">
+    </div>
+    <div class="input-group input-group-select">
+      <span class="input-group-addon">分公司</span>
+      <select class="form-control get_comp" name="form_cid"></select>
+      <select class="form-control get_quyu" name="form_did"></select>
     </div>
     <div class="btn-group">
       <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
@@ -128,7 +155,7 @@ $(function(){
       <td>${deptName}</td>
       <td>${uname}</td>
       <td>${addtime}</td>
-      <td><a target="_blank" href="view.html?category=${category}&recordId=${id}" >查看</a> <a href="javascript:void(0)" onclick="deleteOut(${id})">删除</a></td>
+      <td><a onclick="openView(${id})" href="javascrip:void(0)" >查看</a> <a href="javascript:void(0)" onclick="deleteOut(${id})">删除</a></td>
     </tr>
     </tbody>
   </table>

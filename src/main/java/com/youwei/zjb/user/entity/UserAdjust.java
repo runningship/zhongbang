@@ -2,6 +2,7 @@ package com.youwei.zjb.user.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,14 +22,17 @@ public class UserAdjust {
 	
 	public Integer oldDeptId;
 	
+	@Column(nullable=false)
 	public Integer newDeptId;
 	
 	public Integer oldRoleId;
 	
 	public Integer newRoleId;
 	
+	@Column(nullable=false)
 	public String reason;
 	
+	@Column(nullable=false)
 	public String jiaojie;
 	
 	public Date applyTime;

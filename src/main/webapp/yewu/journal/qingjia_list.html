@@ -77,15 +77,31 @@ function deleteQJ(id){
   
 }
 
+function openAdd(){
+  art.dialog.open('journal/add.html?category=1',{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1080
+  });
+}
+
+function openEdit(id){
+  art.dialog.open('journal/edit.html?category=1&recordId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1080
+  });
+}
 
 $(function(){
   onSubmit_Form();
   getList();
   $.get('/zb/house/getQueryOptions', function(data) {
     queryOpts=JSON.parse(data);
-    // buildHtmlWithJsonArray("id_quyu",queryOpts['quyu']);       //区域
-    // buildHtmlWithJsonArray("id_kehu",queryOpts['kehu']);       //客户性质
-    // buildHtmlWithJsonArray("id_kehulaiyuan",queryOpts['kehulaiyuan']); //客户来源
   });
   Page.Init();
 });
@@ -98,7 +114,9 @@ $(function(){
 <body class="hlist bodyer" style="overflow:auto">
 
 <div class="header" style="position:relative;height:50px;width:100%">
-    
+    <div class="btn-group">
+      <button onclick="openAdd();" class="btn btn-primary">新增</button>
+    </div>
     <form name="form1">
     <input type="hidden" class="userInput" name="xpath" value="">
     
@@ -106,6 +124,11 @@ $(function(){
       <span class="input-group-addon">登记时间</span>
       <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:150px;border-radius:0;">
       <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:150px">
+    </div>
+    <div class="input-group input-group-select">
+      <span class="input-group-addon">分公司</span>
+      <select class="form-control get_comp" name="form_cid"></select>
+      <select class="form-control get_quyu" name="form_did"></select>
     </div>
     <div class="btn-group">
       <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
@@ -131,7 +154,7 @@ $(function(){
       <td>${deptName}</td>
       <td>${uname}</td>
       <td>${addtime}</td>
-      <td><a href="javascript:void(0)" >修改</a> <a href="javascript:void(0)" onclick="deleteQJ(${id})">删除</a></td>
+      <td><a href="javascript:void(0)" onclick="openEdit(${id})" >修改</a> <a href="javascript:void(0)" onclick="deleteQJ(${id})">删除</a></td>
     </tr>
     </tbody>
   </table>

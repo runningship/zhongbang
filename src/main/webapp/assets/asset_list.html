@@ -4,18 +4,18 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>记录</title>
-<link rel="stylesheet" href="../style/css.css">
-<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="../style/house.css">
-<script type="text/javascript" src="../js/jquery.js"></script>
-<script src="../bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
-<script type="text/javascript" src="../js/buildHtml.js"></script>
-<script type="text/javascript" src="../js/jquery.xianshang.users.js"></script>
-<script type="text/javascript" src="../js/pagination.js"></script>
-<script type="text/javascript" src="../js/DatePicker/WdatePicker.js"></script>
+<title>固定资产</title>
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/buildHtml.js"></script>
+<script type="text/javascript" src="/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/js/pagination.js"></script>
+<script type="text/javascript" src="/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 var queryOpts;
 
@@ -67,19 +67,16 @@ $(function(){
 <body class="hlist bodyer" style="overflow:auto">
 
 <div class="header" style="position:relative;height:50px;width:100%">
-  <div class="btn-group">
-    <a href="asset_add.html" target="_blank"><button class="btn btn-primary btn_subnmit">添加</button></a>
-  </div>
-   <div class="btn-group" style="float:right">
-    <button onclick="doSearch();" class="btn btn-primary btn_subnmit">搜索</button>
-  </div>
-  <form name="form1" style="float:right">
+ 
+  <form name="form1" >
     <div class="input-group input-group-max">
       <span class="input-group-addon">标题</span>
       <input type="text" class="form-control" name="title">
     </div>
   </form>
- 
+ <div class="btn-group" >
+    <button onclick="doSearch();" class="btn btn-primary btn_subnmit">搜索</button>
+  </div>
 </div>
 <div class="mainer" style="position:relative;width:100%">
   <table class="table table-hover .table_bodyer" >

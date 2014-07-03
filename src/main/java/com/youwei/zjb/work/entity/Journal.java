@@ -40,6 +40,16 @@ public class Journal {
 	@Column(name="cate")
 	public Integer category;
 	
+	/**
+	 * 请假开始时间
+	 */
+	public Date starttime;
+	
+	/**
+	 * 请假结束时间
+	 */
+	public Date endtime;
+	
 	public Date addtime;
 	
 }

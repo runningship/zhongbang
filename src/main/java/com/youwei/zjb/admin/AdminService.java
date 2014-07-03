@@ -151,6 +151,20 @@ public class AdminService {
 	}
 	
 	@WebMethod
+	public ModelAndView deleteProcessClass(int pcId){
+		ModelAndView mv = new ModelAndView();
+		ProcessClass proClass = dao.get(ProcessClass.class, pcId);
+		if(proClass==null){
+			throw new GException(PlatformExceptionType.BusinessException, 1, "未指定步骤id，或步骤已不存在");
+		}
+		dao.delete(proClass);
+//		dao.execute("delete from Process where tableId=?", tableId);
+		mv.data.put("msg", "删除成功");
+		mv.data.put("result", 0);
+		return mv;
+	}
+	
+	@WebMethod
 	public ModelAndView updateTable(AdminTable vo){
 		ModelAndView mv = new ModelAndView();
 		AdminTable po = dao.get(AdminTable.class, vo.id);

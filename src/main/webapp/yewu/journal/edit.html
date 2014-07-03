@@ -97,6 +97,7 @@ function getContent(){
     data:'',
     success: function(result){
       var json = JSON.parse(result);
+      $('#title').val(json['journal']['title']);
       ue.setContent(json['journal']['conta'] ,false);
       initFileUpload();
       getAttachList();
@@ -127,15 +128,18 @@ $(function(){
 </script>
 </head>
 <body class="hlist bodyer" style="overflow:auto">
-  <div>
-  <script id="editor" type="text/plain" style="width:1024px;height:500px;"></script>
-  </div>
   <form name="textForm">
+    <div>
+      <span>标题</span><input type="text" id="title" name="title" />
+    </div>
     <input id="conta" name="conta" type="hidden" />
     <input type="hidden" name="category" id="category" />
     <input type="hidden" name="id" id="id" />
-    <button onclick="save();return false;">提交</button>
   </form>
+   <div style="margin-top:10px;">
+    <span id="editor" type="text/plain" style="width:1024px;height:500px;"></span>
+  </div>
+  <button onclick="save();return false;">提交</button>
   <br/>
 <div>
     <input id="file_upload" name="file_upload" style="display:none">

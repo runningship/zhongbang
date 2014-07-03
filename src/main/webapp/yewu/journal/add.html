@@ -18,11 +18,12 @@
 <script type="text/javascript" charset="utf-8" src="/js/ueditor1_4_3/ueditor.config.js"></script>
 <script type="text/javascript" charset="utf-8" src="/js/ueditor1_4_3/ueditor.all.js"> </script>
 <script type="text/javascript" charset="utf-8" src="/js/ueditor1_4_3/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 var recordId;
 var ue;
 function save(){
-  $('#conta').val(ue.getAllHtml());
+  $('#conta').val(ue.getContent());
   var text = $('form[name=textForm]').serialize();
   $.ajax({
     type: 'POST',
@@ -105,14 +106,21 @@ $(function(){
 </head>
 <body class="hlist bodyer" style="overflow:auto">
   <form name="textForm">
-  <div>
-    <span>标题</span><input name="title" />
-  </div>
+   <div class="input-group input-group-max">
+      <span class="input-group-addon">  标 题</span>
+      <input type="text" class="form-control" name="title">
+    </div>
   <input id="conta" name="conta" type="hidden" />
   <input type="hidden" name="category" id="category" />
+    <div class="input-group" style="width:500px;margin-left:10px;margin-top:0px">
+      <span class="input-group-addon" style="padding:1px 6px">外出时间</span>
+      <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="outTime" style="width:180px;border-radius:0;">
+      <span class="input-group-addon" style="padding:1px 6px">返回时间</span>
+      <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="backTime" style="width:180px">
+  </div>
   </form>
-  <div>
-    <span id="editor" type="text/plain" style="width:1024px;height:500px;"></span>
+  <div style="margin-top:35px;">
+    <span id="editor" type="text/plain" style="width:1024px;height:300px;"></span>
   </div>
   <button onclick="save();return false;">提交</button>
 <div>

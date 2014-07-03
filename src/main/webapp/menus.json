@@ -1,7 +1,59 @@
 [{
 	"name":"fy",
 	"type":"module",
-	"text":"房源管理"
+	"text":"房源管理",
+	"children":[{
+		"name":"fy_list",
+		"text":"查看房源",
+		"type":"virtual",
+		"children":[{
+			"name":"fy_list_sell",
+			"text":"出售信息",
+			"type":"menu"
+		},{
+			"name":"fy_list_rent",
+			"text":"出租信息",
+			"type":"menu"
+		},{
+			"name":"fy_list_all",
+			"text":"所有房源",
+			"type":"menu"
+		},{
+			"name":"fy_list_my",
+			"text":"我的房源",
+			"type":"menu"
+		}]
+	},{
+		"name":"fy_add",
+		"text":"添加房源",
+		"type":"virtual",
+		"children":[{
+			"name":"fy_add_sell",
+			"text":"添加出售",
+			"type":"menu"
+		},{
+			"name":"fy_add_rent",
+			"text":"添加出租",
+			"type":"menu"
+		}]
+	},{
+		"name":"fy_other",
+		"text":"其他",
+		"type":"virtual",
+		"children":[{
+			"name":"fy_other_genjin",
+			"text":"跟进列表",
+			"type":"menu"
+		},{
+			"name":"fy_other_setting",
+			"text":"房源设置",
+			"type":"menu"
+		},{
+			"name":"fy_other_recycle",
+			"text":"回收站",
+			"type":"menu"
+		}]
+	}]
 },{
 	"name":"ky",
 	"type":"module",
@@ -9,7 +61,40 @@
 },{
 	"name":"yw",
 	"type":"module",
-	"text":"业务管理"
+	"text":"业务管理",
+	"children":[{
+		"name":"yw_out_kf",
+		"text":"外出看房",
+		"type":"menu"
+	},{
+		"name":"yw_out_gs",
+		"text":"外出公事",
+		"type":"menu"
+	},{
+		"name":"yw_journal_qj",
+		"text":"请假登记",
+		"type":"menu"
+	},{
+		"name":"yw_journal_work",
+		"text":"工作日志",
+		"type":"menu"
+	},{
+		"name":"yw_jilu_hy",
+		"text":"会议记录",
+		"type":"menu"
+	},{
+		"name":"yw_jilu_fy",
+		"text":"优质房源",
+		"type":"menu"
+	},{
+		"name":"yw_jilu_zj",
+		"text":"月度总结",
+		"type":"menu"
+	},{
+		"name":"yw_jilu_kq",
+		"text":"考勤表格",
+		"type":"menu"
+	}]
 },{
 	"name":"ht",
 	"type":"module",
@@ -19,44 +104,110 @@
 	"type":"module",
 	"text":"人事管理",
 	"children":[{
-		"name":"xt_rz",
+		"name":"rs_users",
+		"text":"人员列表",
+		"type":"virtual",
+		"children":[{
+			"name":"rs_users_list",
+			"text":"人员列表",
+			"type":"menu"
+		}]
+	},{
+		"name":"rs_rz",
 		"text":"入职",
 		"type":"virtual",
 		"children":[{
-			"name":"xt_rz_shenhe",
-			"text":"审核列表",
-			"type":"menu",
-			"url":""
+			"name":"rs_rz_add",
+			"text":"入职登记提交",
+			"type":"menu"
+		},{
+			"name":"rs_rz_list",
+			"text":"入职登记审核",
+			"type":"menu"
 		}]
 	},{
-		"name":"xt_lz",
+		"name":"rs_zwtz",
+		"text":"职位调整",
+		"type":"virtual",
+		"children":[{
+			"name":"rs_zwtz_add",
+			"text":"职务调整申请",
+			"type":"menu"
+		},{
+			"name":"rs_zwtz_list",
+			"text":"待审核列表",
+			"type":"menu"
+		}]
+	},{
+		"name":"rs_lizhi",
 		"text":"离职",
 		"type":"virtual",
 		"children":[{
-			"name":"xt_lz_shenhe",
-			"text":"审核列表",
-			"type":"menu",
-			"url":""
-		}]
-	},{
-		"name":"xt_tz",
-		"text":"调整",
-		"type":"virtual",
-		"children":[{
-			"name":"xt_tz_shenhe",
-			"text":"审核列表",
-			"type":"menu",
-			"url":""
+			"name":"rs_lizhi_add",
+			"text":"离职申请",
+			"type":"menu"
+		},{
+			"name":"rs_lzsq_list",
+			"text":"待审核列表",
+			"type":"menu"
+		},{
+			"name":"rs_lizhi_list",
+			"text":"已离职人员",
+			"type":"menu"
 		}]
 	}]
 },{
 	"name":"xz",
 	"type":"module",
-	"text":"行政管理"
+	"text":"行政管理",
+	"children":[{
+		"name":"xz_class_list",
+		"text":"分类列表",
+		"type":"menu"
+	},{
+		"name":"xz_table_list",
+		"text":"数据列表",
+		"type":"menu"
+	}]
 },{
 	"name":"zc",
 	"type":"module",
-	"text":"资产管理"
+	"text":"资产管理",
+	"children":[{
+		"name":"zc_gd",
+		"text":"固定资产",
+		"type":"virtual",
+		"children":[{
+			"name":"zc_gd_add",
+			"text":"添加固定资产",
+			"type":"menu"
+		},{
+			"name":"zc_gd_list",
+			"text":"固定资产列表",
+			"type":"menu"
+		}]
+	},{
+		"name":"zc_bg",
+		"text":"办公用品",
+		"type":"virtual",
+		"children":[{
+			"name":"zc_bg_add",
+			"text":"申请办公用品",
+			"type":"menu"
+		},{
+			"name":"zc_bg_dsh",
+			"text":"待审核列表",
+			"type":"menu"
+		},{
+			"name":"zc_bg_ysh",
+			"text":"已审核列表",
+			"type":"menu"
+		},{
+			"name":"zc_bg_np",
+			"text":"审核不通过",
+			"type":"menu"
+		}]
+	}]
 },{
 	"name":"oa",
 	"type":"module",
@@ -72,53 +223,40 @@
 		"children":[{
 			"name":"xt_zw_list",
 			"text":"职务列表",
-			"type":"menu",
-			"url":""
+			"type":"menu"
 		},{
 			"name":"xt_zw_add",
 			"text":"添加职务",
-			"type":"menu",
-			"url":""
+			"type":"menu"
 		},{
 			"name":"xt_zw_del",
 			"text":"删除职务",
-			"type":"menu",
-			"url":""
+			"type":"menu"
 		},{
 			"name":"xt_zw_edit",
 			"text":"修改职务",
-			"type":"menu",
-			"url":""
+			"type":"menu"
 		},{
-			"name":"xt_zw_quanxian",
+			"name":"xt_zw_sq",
 			"text":"设置权限",
-			"type":"menu",
-			"url":""
+			"type":"menu"
 		}]
 	},{
-		"name":"xt_sq",
+		"name":"xt_pc",
 		"text":"电脑授权",
 		"type":"virtual",
 		"children":[{
-			"name":"xt_sq_ysh",
-			"text":"已审核",
-			"type":"menu",
-			"url":""
+			"name":"xt_pc_ysq",
+			"text":"已授权",
+			"type":"menu"
 		},{
-			"name":"xt_sq_wsh",
-			"text":"未审核",
-			"type":"menu",
-			"url":""
+			"name":"xt_pc_wsq",
+			"text":"未授权",
+			"type":"menu"
 		},{
-			"name":"xt_sq_jinyong",
-			"text":"终止授权",
-			"type":"menu",
-			"url":""
-		},{
-			"name":"xt_sq_del",
+			"name":"xt_pc_del",
 			"text":"删除授权",
-			"type":"menu",
-			"url":""
+			"type":"menu"
 		}]
 	},{
 		"name":"xt_czjl",

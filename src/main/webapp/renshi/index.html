@@ -9,15 +9,15 @@
 <title>人事管理</title>
 <meta name="description" content="">
 <meta name="keywords" content="">
-<link rel="stylesheet" href="../style/css.css">
-<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="../style/house.css">
-<script type="text/javascript" src="../js/jquery.js"></script>
-<script src="../bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../js/sysinfo.js"></script>
-<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=chrome"></script>
-<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
-<script type="text/javascript" src="../js/jquery.caozuobendi.js"></script>
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/sysinfo.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript">
 
 function setMainHeight(){
@@ -36,19 +36,25 @@ $(window).resize(function(event) {
 <body>
     <div class="body hmain">
         <div class="sider">
-            <dl class="sidedl">
+            <dl auth="rs_users" class="sidedl">
                 <dt>人员列表</dt>
-                <dd><a href="client_list.html?chuzu=0"  target="house_iframe" >人员列表</a></dd>
+                <dd auth="rs_users_list" ><a href="user_list.html"  target="house_iframe" >人员列表</a></dd>
             </dl>
-            <dl class="sidedl">
+            <dl auth="rs_rz" class="sidedl">
                 <dt>入职登记</dt>
-                <dd><a href="client_list.html?chuzu=0"  target="house_iframe" >登记提交</a></dd>
-                <dd><a href="client_list.html?chuzu=0"  target="house_iframe" >登记审核</a></dd>
+                <dd auth="rs_rz_add" ><a href="ruzhi_add.html"  target="house_iframe" >登记提交</a></dd>
+                <dd auth="rs_rz_list" ><a href="ruzhi_list.html"  target="house_iframe" >登记审核</a></dd>
             </dl>
-            <dl class="sidedl">
+            <dl auth="rs_zwtz" class="sidedl">
                 <dt>职位调整</dt>
-                <dd><a href="client_list.html?chuzu=0"  target="house_iframe" >职位调整提交</a></dd>
-                <dd><a href="client_list.html?chuzu=0"  target="house_iframe" >职位调整审核</a></dd>
+                <dd auth="rs_zwtz_add" ><a href="zwtz_add.html"  target="house_iframe" >申请调整</a></dd>
+                <dd auth="rs_zwtz_list" ><a href="zwtz_list.html"  target="house_iframe" >待审核审核</a></dd>
+            </dl>
+            <dl auth="rs_lizhi" class="sidedl">
+                <dt>离职登记</dt>
+                <dd auth="rs_lizhi_add" ><a href="lizhi_add.html"  target="house_iframe" >离职申请</a></dd>
+                <dd auth="rs_lzsq_list" ><a href="lzsq_list.html"  target="house_iframe" >待审核</a></dd>
+                <dd auth="rs_lizhi_list" ><a href="lizhi_list.html"  target="house_iframe" >已离职人员</a></dd>
             </dl>
         </div>
         <div class="mainer">

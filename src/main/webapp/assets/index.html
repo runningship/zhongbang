@@ -6,18 +6,18 @@
 <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
 <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
 <meta HTTP-EQUIV="expires" CONTENT="0">
-<title>房源</title>
+<title>资产管理</title>
 <meta name="description" content="">
 <meta name="keywords" content="">
-<link rel="stylesheet" href="../style/css.css">
-<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="../style/house.css">
-<script type="text/javascript" src="../js/jquery.js"></script>
-<script src="../bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../js/sysinfo.js"></script>
-<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=chrome"></script>
-<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
-<script type="text/javascript" src="../js/jquery.caozuobendi.js"></script>
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/sysinfo.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=chrome"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript">
 
 function setMainHeight(){
@@ -36,15 +36,17 @@ $(window).resize(function(event) {
 <body>
     <div class="body hmain">
         <div class="sider">
-            <dl class="sidedl">
+            <dl auth="zc_gd" class="sidedl">
                 <dt>固定资产管理</dt>
-                <dd><a href="asset_list.html"  target="house_iframe" >固定资产列表</a></dd>
+                <dd auth="zc_gd_add"><a href="asset_add.html"  target="house_iframe" >添加固定资产</a></dd>
+                <dd auth="zc_gd_list"><a href="asset_list.html"  target="house_iframe" >固定资产列表</a></dd>
             </dl>
-            <dl class="sidedl">
+            <dl auth="zc_bg" class="sidedl">
                 <dt>办公用品管理</dt>
-                <dd><a href="supply_sh_list.html?chuzu=0" target="house_iframe" >待审核</a></dd>
-                <dd><a href="supply_list.html" target="house_iframe" >已审核</a></dd>
-                <dd><a href="supply_np_list.html?pass=0" target="house_iframe" >审核不通过</a></dd>
+                <dd auth="zc_bg_add"><a href="supply_add.html"  target="house_iframe" >申请办公用品</a></dd>
+                <dd auth="zc_bg_dsh"><a href="supply_sh_list.html?chuzu=0" target="house_iframe" >待审核</a></dd>
+                <dd auth="zc_bg_ysh"><a href="supply_list.html" target="house_iframe" >已审核</a></dd>
+                <dd auth="zc_bg_np"><a href="supply_np_list.html?pass=0" target="house_iframe" >审核不通过</a></dd>
             </dl>
             
         </div>

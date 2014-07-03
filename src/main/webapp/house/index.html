@@ -9,22 +9,22 @@
 <title>房源</title>
 <meta name="description" content="">
 <meta name="keywords" content="">
-<link rel="stylesheet" href="../style/css.css">
-<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="../style/house.css">
-<script type="text/javascript" src="../js/jquery.js"></script>
-<script src="../bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../js/sysinfo.js"></script>
-<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=chrome"></script>
-<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
-<script type="text/javascript" src="../js/jquery.caozuobendi.js"></script>
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/sysinfo.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=chrome"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript">
 $(document).on('click', '.btns', function(event) {
     var Thi=$(this),
     ThiType=Thi.data('type'),
     ThiUrl=Thi.attr('href');
     if(ThiType=='addchushou'){
-        art.dialog.open(ThiUrl,{
+        art.dialog.open('/house/'+ThiUrl,{
             id:'addchushou',
             title:'添加出售房源',
             width:800,
@@ -55,8 +55,10 @@ function setMainHeight(){
     $('.sider').height(bodyHeight);
     $('.mainer').height(bodyHeight);
 }
-$(function(){
+
+$(document).ready(function(){
     setMainHeight();
+    $('.sider').find('a').eq(0).click();
 })
 $(window).resize(function(event) {
     setMainHeight();
@@ -66,27 +68,27 @@ $(window).resize(function(event) {
 <body>
     <div class="body hmain">
         <div class="sider">
-            <dl class="sidedl">
+            <dl auth="fy_list" class="sidedl">
                 <dt>查看房源</dt>
-                <dd><a href="house_list.html?nav=chushou"  target="house_iframe" >出售信息</a></dd>
-                <dd><a href="house_list.html?nav=chuzu" target="house_iframe">出租信息</a></dd>
-                <dd><a href="house_list.html" target="house_iframe">所有房源</a></dd>
-                <dd><a href="house_list.html?nav=my" target="house_iframe">我的房源</a></dd>
+                <dd auth="fy_list_all"><a href="house_list.html" target="house_iframe">所有房源</a></dd>
+                <dd auth="fy_list_sell"><a href="house_list.html?nav=chushou"  target="house_iframe" >出售房源</a></dd>
+                <dd auth="fy_list_rent"><a href="house_list.html?nav=chuzu" target="house_iframe">出租房源</a></dd>
+                <dd auth="fy_list_my"><a href="house_list.html?nav=my" target="house_iframe">我的房源</a></dd>
             </dl>
-            <dl class="sidedl">
+            <dl auth="fy_add" class="sidedl">
                 <dt>添加房源</dt>
-                <dd><a href="/house/house_add.html?chuzu=0" class="btns" data-type="addchushou">添加出售</a></dd>
-                <dd><a href="/house/house_add.html?chuzu=1" class="btns" data-type="addchuzu">添加出租</a></dd>
+                <dd auth="fy_add_sell"><a href="house_add.html?chuzu=0" target="house_iframe">添加出售</a></dd>
+                <dd auth="fy_add_rent"><a href="house_add.html?chuzu=1" target="house_iframe">添加出租</a></dd>
             </dl>
-            <dl class="sidedl">
+            <dl auth="fy_other" class="sidedl">
                 <dt>其他</dt>
-                <dd><a href="genjin_list.html" target="house_iframe">跟进列表</a></dd>
-                <dd><a href="area_list.html" target="house_iframe">房源设置</a></dd>
-                <dd><a href="house_list.html?nav=del" target="house_iframe">回收站</a></dd>
+                <dd auth="fy_other_genjin"><a href="genjin_list.html" target="house_iframe">跟进列表</a></dd>
+                <dd auth="fy_other_setting"><a href="area_list.html" target="house_iframe">房源设置</a></dd>
+                <dd auth="fy_other_recycle"><a href="house_list.html?nav=del" target="house_iframe">回收站</a></dd>
             </dl>
         </div>
         <div class="mainer">
-            <iframe src="http://www.baidu.com/" id="house_iframe" name="house_iframe" width="100%" height="100%" frameborder="0"></iframe>
+            <iframe src="house_list.html" id="house_iframe" name="house_iframe" width="100%" height="100%" frameborder="0"></iframe>
         </div>
     </div>
 </body>

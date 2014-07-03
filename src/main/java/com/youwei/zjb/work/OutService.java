@@ -29,14 +29,21 @@ public class OutService {
 
 	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
 	
-	public void add(OutRecord out){
-		if(out.userId==null || out.outTime==null || out.backTime==null){
+	@WebMethod
+	public ModelAndView add(OutRecord out){
+		User user = ThreadSession.getUser();
+		if(user==null){
+			out.userId = 316;
+		}else{
+			out.userId = user.id;
+		}
+		if(out.outTime==null || out.backTime==null){
 			throw new GException(PlatformExceptionType.BusinessException, 1, "您填写的数据不完整");
 		}
 		
 		String hql = "from OutRecord where userId=? and outTime>= ? and backTime<=? ";
 		long count = dao.countHqlResult(hql, out.userId,out.outTime,out.backTime);
-		if(count>=0){
+		if(count>0){
 			throw new GException(PlatformExceptionType.BusinessException, 2, "您在该时间段已经有外出记录了");
 		}
 		if(out.category==1){
@@ -44,6 +51,7 @@ public class OutService {
 		}else{
 			addOutHouse(out);
 		}
+		return new ModelAndView();
 	}
 	
 	@WebMethod
@@ -101,6 +109,14 @@ public class OutService {
 		if(query.category!=null){
 			hql.append(" and o.category=? ");
 			params.add(query.category);
+		}
+		if(query.kanfang!=null){
+			hql.append(" and o.outHouse=?");
+			params.add(query.kanfang);
+		}
+		if(StringUtils.isNotEmpty(query.xpath)){
+			hql.append(" and u.orgpath like ? ");
+			params.add(query.xpath+"%");
 		}
 		//默认只能看到自己的数据
 //		User user = ThreadSession.getUser();
