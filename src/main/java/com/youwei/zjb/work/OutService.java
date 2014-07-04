@@ -16,6 +16,7 @@ import org.bc.web.WebMethod;
 import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
+import com.youwei.zjb.entity.Attachment;
 import com.youwei.zjb.entity.House;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.util.DataHelper;
@@ -52,6 +53,16 @@ public class OutService {
 			addOutHouse(out);
 		}
 		return new ModelAndView();
+	}
+	
+	@WebMethod
+	public ModelAndView get(int id){
+		ModelAndView mv = new ModelAndView();
+		OutRecord out = dao.get(OutRecord.class,id);
+		List<Attachment> attachs = dao.listByParams(Attachment.class, new String[]{"bizType" , "recordId"}, new Object[]{"out" , id});
+		mv.data.put("attachs", JSONHelper.toJSONArray(attachs));
+		mv.data.put("out", JSONHelper.toJSON(out));
+		return mv;
 	}
 	
 	@WebMethod

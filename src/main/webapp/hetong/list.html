@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>出售合同</title>
+<title>合同列表</title>
 <link rel="stylesheet" href="/style/css.css">
 <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/style/house.css">
@@ -18,9 +18,9 @@
 <script type="text/javascript" src="/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 var queryOpts;
-
+var chushou;
 function getList(search){
-  var url='/zb/contract/list';
+  var url='/zb/contract/list?chushou='+chushou;
   $.ajax({
     type: 'get',
     url: url,
@@ -42,6 +42,7 @@ function doSearch(){
 
 
 $(function(){
+  chushou = getParam('chushou');
   getList();
   $.get('/zb/contract/proClassList?claid=5', function(data) {
     queryOpts=JSON.parse(data);
@@ -102,7 +103,7 @@ $(function(){
     </div>
   </form>
   <div class="btn-group">
-    <button onclick="doSearch()" class="btn btn-primary btn_subnmit">搜索提交</button>
+    <button onclick="doSearch()" class="btn btn-primary btn_subnmit">搜索</button>
     <button class="btn">清空</button>
   </div>
 </div>

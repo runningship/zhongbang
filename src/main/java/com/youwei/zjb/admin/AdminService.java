@@ -70,6 +70,8 @@ public class AdminService {
 			throw new GException(PlatformExceptionType.BusinessException, 1, "未指定表格id，或表格已不存在");
 		}
 		User user = dao.get(User.class, po.userId);
+		AdminClass cla = dao.get(AdminClass.class, po.classId);
+		mv.data.put("adminClass", cla.title);
 		mv.data.put("myId", po.userId);
 		mv.data.put("username", user.uname);
 		return mv;

@@ -40,6 +40,26 @@ function onSubmit_Form(){
   });
 }
 
+function openView(id){
+  art.dialog.open('out/see_house_view.html?recordId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1080
+  });
+}
+
+function openAdd(){
+  art.dialog.open('out/see_house_add.html?category=1',{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1080
+  });
+}
+
 function doSearch(){
   getList(formSerialize($('form[name=form1]')));
   return false;
@@ -76,6 +96,9 @@ $(function(){
   getList();
   $.get('/zb/house/getQueryOptions', function(data) {
     queryOpts=JSON.parse(data);
+    // buildHtmlWithJsonArray("id_quyu",queryOpts['quyu']);       //区域
+    // buildHtmlWithJsonArray("id_kehu",queryOpts['kehu']);       //客户性质
+    // buildHtmlWithJsonArray("id_kehulaiyuan",queryOpts['kehulaiyuan']); //客户来源
   });
   Page.Init();
 });
@@ -91,7 +114,9 @@ $(function(){
     
     <form name="form1">
     <input type="hidden" class="userInput" name="xpath" value="">
-    
+    <div class="btn-group">
+      <button onclick="openAdd();" class="btn btn-primary btn_subnmit">新增</button>
+    </div>
     <div class="btn-group">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
         外出看房 <span class="caret"></span>
@@ -142,7 +167,7 @@ $(function(){
       <td>${outTime}</td>
       <td>${backTime}</td>
       <td><a class="runscript">getEnumTextByCode(queryOpts['piyue'],${reply})</a></td>
-      <td><a href="javascript:void(0)" >查看</a> <a href="javascript:void(0)" onclick="deleteOut(${id})">删除</a></td>
+      <td><a onclick="openView(${id})" href="javascrip:void(0)" >查看</a> <a href="javascript:void(0)" onclick="deleteOut(${id})">删除</a></td>
       
     </tr>
     </tbody>

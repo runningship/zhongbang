@@ -33,7 +33,7 @@ function get(){
 function fillData(out){
    $('#outTime').html(out['outTime']);
    $('#backTime').html(out['backTime']);
-  $('#conts').html(out['conts']);
+  $('#outCont').html(out['outCont']);
 }
 $(function(){
   recordId = getParam('recordId');
@@ -49,7 +49,8 @@ $(function(){
 </head>
 <body class="hlist bodyer" style="overflow:auto">
 <span >
-  <div id="hy_time" style="display:none">
+
+  <div id="recordId" >
     <div>
       <span>外出时间: </span><span id="outTime" ></span>
     </div>
@@ -58,7 +59,7 @@ $(function(){
     </div>
   </div>
   <div>
-    <span>内容: </span><p id="conts"></p>
+    <span>外出原因: </span><p id="outCont"></p>
   </div>
   <div>
     <span>附件: </span>

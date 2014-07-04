@@ -6,4 +6,6 @@ public class SupplyQuery extends AbstractQuery{
 	public String title;
 	
 	public Integer shenhe;
+	
+	public String xpath;
 }

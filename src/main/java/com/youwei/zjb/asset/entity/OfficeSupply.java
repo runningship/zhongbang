@@ -17,6 +17,12 @@ public class OfficeSupply {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer id;
 	
+	@Column(name="uid")
+	public Integer userId;
+	
+	@Column(name="did")
+	public Integer deptId;
+	
 	public Date addtime;
 	
 	@Column(name="names")
@@ -38,7 +44,7 @@ public class OfficeSupply {
 	public String xgr;
 	
 	/**
-	 * 0 未审核，1 已审核
+	 * 0 未审核，1 已审核(通过),2 审核不通过
 	 */
 	public Integer shenhe;
 }

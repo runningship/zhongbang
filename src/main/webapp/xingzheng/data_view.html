@@ -50,6 +50,7 @@ function loadData(){
       // $('#editor').html(conts);
       ue.setContent(conts);
       $('#username').val(json['username']);
+      $('#adminClass').val(json['adminClass']);
       myId = json['myId'];
       $('#title').val(json['adminTable']['title']);
       processList = json['processList'];
@@ -61,9 +62,17 @@ function loadData(){
   });
 }
 
-function needShenHe(rowIndex){
+function buildBanliYiJian(rowIndex){
   var data = processList[rowIndex];
-  return (myId==data['processorId']) && (data['flag']==0);
+  if(myId==data['processorId'] && data['flag']==0){
+    return '<button onclick="banli('+data['id']+',this)">确定</button><input type="text"/>';
+  }else{
+    var txt = data['conts'];
+    if(txt==""){
+      txt = "等待完成...";
+    }
+    return txt;
+  }
 }
 
 function banli(pid , btn){
@@ -73,6 +82,7 @@ function banli(pid , btn){
     data:'',
     success: function(data){
       alert('保存成功.');
+      window.location.reload();
     },
     error:function(data){
       alert('保存失败,'+data.responseText);
@@ -115,6 +125,10 @@ $(function(){
       <span class="input-group-addon">制表人</span>
       <input type="text" readonly="true" class="form-control" id="username">
     </div>
+    <div class="input-group input-group-max" style="">
+      <span class="input-group-addon">分类</span>
+      <input type="text" readonly="true" class="form-control" id="adminClass">
+    </div>
     <div class="btn-group" >
       <button onclick="save();return false;" class="btn btn-primary btn_subnmit">提交</button>
     </div>
@@ -139,10 +153,10 @@ $(function(){
         <tr style="display:none">
           <td>${ordera}</td>
           <td>${uname}</td>
-          <td show="!needShenHe(${rowIndex})" >${conts}</td>
-          <td show="needShenHe(${rowIndex})">
+          <td class="runscript">buildBanliYiJian(${rowIndex})</td>
+          <!-- <td show="needShenHe(${rowIndex})">
             <button onclick="banli(${id},this)">确定</button><input type="text"/>
-          </td>
+          </td> -->
         </tr>
         </tbody>
       </table>

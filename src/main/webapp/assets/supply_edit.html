@@ -5,16 +5,16 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>修改办公用品</title>
-<link rel="stylesheet" href="../style/css.css">
-<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="../style/house.css">
-<script type="text/javascript" src="../js/jquery.js"></script>
-<script src="../bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
-<script type="text/javascript" src="../js/buildHtml.js"></script>
-<script type="text/javascript" src="../js/jquery.xianshang.users.js"></script>
-<script type="text/javascript" src="../js/pagination.js"></script>
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/buildHtml.js"></script>
+<script type="text/javascript" src="/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/js/pagination.js"></script>
 <script type="text/javascript">
 var classId;
 var ue;
@@ -59,6 +59,14 @@ $(function(){
 });
 
 </script>
+<style type="text/css">
+  .input-group-addon{
+    width:70px;
+  }
+  .yuan{
+    width:10px;
+  }
+</style>
 </head>
 <body class="hlist bodyer" style="overflow:auto">
 
@@ -66,27 +74,29 @@ $(function(){
   <form name="form1">
     <input type="hidden" name="id" id="supplyId" />
     <div class="input-group input-group-max" style="float:none;margin-top:10px;">
-      <span class="input-group-addon">名称</span>
+      <span class="input-group-addon">名&nbsp;&nbsp;称</span>
       <input type="text" class="form-control" id="title" name="title">
     </div>
     <div class="input-group input-group-max" style="float:none;margin-top:10px;">
-      <span class="input-group-addon">数量</span>
+      <span class="input-group-addon">数 量</span>
       <input type="text" class="form-control" id="count" name="count">
     </div>
     <div class="input-group input-group-max" style="float:none;margin-top:10px;">
-      <span class="input-group-addon">单价</span>
+      <span class="input-group-addon">单 价</span>
       <input type="text" class="form-control" id="djia" name="djia">
+      <span class="input-group-addon yuan">元</span>
     </div>
     <div class="input-group input-group-max" style="float:none;margin-top:10px;">
-      <span class="input-group-addon">总价</span>
+      <span class="input-group-addon">总&nbsp;&nbsp; 价</span>
       <input type="text" class="form-control" id="zjia" name="zjia" >
+      <span class="input-group-addon yuan">元</span>
     </div>
      <div class="input-group input-group-max" style="float:none;margin-top:10px;">
       <span class="input-group-addon">相关人</span>
       <input type="text" class="form-control" id="xgr" name="xgr" >
     </div>
     <div class="input-group input-group-max" style="float:none;margin-top:10px;">
-      <span class="input-group-addon">备注</span>
+      <span class="input-group-addon">备 注</span>
       <input type="text" class="form-control" id="beizhu" name="beizhu">
     </div>
   </form>

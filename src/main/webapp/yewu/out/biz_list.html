@@ -40,6 +40,16 @@ function onSubmit_Form(){
   });
 }
 
+function openView(id){
+  art.dialog.open('out/biz_view.html?recordId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1080
+  });
+}
+
 function openAdd(){
   art.dialog.open('out/biz_add.html?category=1',{
       padding:0,
@@ -140,7 +150,7 @@ $(function(){
       <td>${outTime}</td>
       <td>${backTime}</td>
       <td><a class="runscript">getEnumTextByCode(queryOpts['piyue'],${reply})</a></td>
-      <td><a target="_blank" href="biz_view.html?recordId=${id}" >查看</a> <a href="javascript:void(0)" onclick="deleteOut(${id})">删除</a></td>
+      <td><a onclick="openView(${id})" href="javascrip:void(0)" >查看</a> <a href="javascript:void(0)" onclick="deleteOut(${id})">删除</a></td>
       
     </tr>
     </tbody>

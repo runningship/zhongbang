@@ -3,6 +3,7 @@ package com.youwei.zjb.asset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
@@ -41,15 +42,20 @@ public class AssetService {
 	}
 	
 	@WebMethod
-	public ModelAndView list(Page<Asset> page, String title){
+	public ModelAndView list(Page<Map> page, String title , String xpath){
 		ModelAndView mv = new ModelAndView();
-		StringBuilder hql = new StringBuilder("from Asset where 1=1 ");
+		StringBuilder hql = new StringBuilder("select a.id as id, a.djia as djia, a.zjia as zjia ,a.count as count, a.beizhu as beizhu,a.name as name, a.edittime as edittime,"
+				+ " d.namea as deptName,q.namea as quyu from Asset a,Department d, Department q where d.id=a.deptId and q.id=d.fid");
 		List<Object> params = new ArrayList<Object>();
 		if(StringUtils.isNotEmpty(title)){
 			hql.append(" and name like ?");
 			params.add("%"+title+"%");
 		}
-		page = dao.findPage(page, hql.toString(), params.toArray());
+		if(StringUtils.isNotEmpty(xpath)){
+			hql.append(" and d.path like ?");
+			params.add(xpath+"%");
+		}
+		page = dao.findPage(page, hql.toString(), true, params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;
 	}
@@ -58,6 +64,9 @@ public class AssetService {
 	public ModelAndView update(Asset asset){
 		ModelAndView mv = new ModelAndView();
 		asset.edittime = new Date();
+		Asset po = dao.get(Asset.class, asset.id);
+		asset.addtime = po.addtime;
+		asset.deptId = po.deptId;
 		dao.saveOrUpdate(asset);
 		return mv;
 	}

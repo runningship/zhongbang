@@ -53,6 +53,13 @@ $(document).keydown(function(event){
         return false; //屏蔽alt+R   
     }  
 });  
+//相同class点击填充背景，导航选中状态
+function aBtnNavFun(a){
+    $(document).on('click', a, function(event) {
+        $(a).removeClass('acurr');
+        $(this).addClass('acurr');
+    });
+}
 //根据titile可拖动窗口
 document.addEventListener('mousemove', function (e) {
     if (e.target.classList.contains('title')) {
@@ -63,6 +70,7 @@ document.addEventListener('mousemove', function (e) {
     }
 }, false);
 $(document).ready(function() {
+  aBtnNavFun('.aNavBtn');
 //改善btn-group的操作感受
 if($('.btn-group').length>0){
 var btn_group_time=null;

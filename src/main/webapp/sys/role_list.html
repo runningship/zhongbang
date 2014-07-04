@@ -36,6 +36,16 @@ function getList(search){
   });
 }
 
+function openAdd(){
+  art.dialog.open('add.html?category=1',{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:100,
+      width:300
+  });
+}
+
 function doSearch(){
   getList(formSerialize($('form[name=form1]')));
 }
@@ -54,6 +64,9 @@ $(function(){
 <body class="hlist bodyer" style="overflow:auto">
 
 <div class="header" style="position:relative;height:10px;width:100%">
+  <div class="btn-group">
+    <button onclick="openAdd();" class="btn btn-primary">添加职务</button>
+  </div>
   <form name="form1" onsubmit="return on_submit();">
   </form>
   <div class="btn-group" style="display:none">
@@ -71,7 +84,7 @@ $(function(){
     <tr style="display:none">
       <td>${title}</td>
       <td>${cont}</td>
-      <td><a auth="xt_zw_sq" target="_blank" href="menuTree.html?roleId=${id}" >权限</a> <a auth="xt_zw_edit" target="_blank" href="menuTree.html?roleId=${id}" >修改</a> 
+      <td><a auth="xt_zw_sq" target="_blank" href="menuTree.html?roleId=${id}" >权限</a> <a auth="xt_zw_edit" target="_blank" href="role_edit.html?roleId=${id}" >修改</a> 
       </td>
     </tr>
     </tbody>

@@ -98,7 +98,47 @@
 },{
 	"name":"ht",
 	"type":"module",
-	"text":"合同管理"
+	"text":"合同管理",
+	"children":[{
+		"name":"ht_add",
+		"text":"添加合同",
+		"type":"virtual",
+		"children":[{
+			"name":"ht_add_sell",
+			"text":"出售合同",
+			"type":"menu"
+		},{
+			"name":"ht_add_rent",
+			"text":"出租合同",
+			"type":"menu"
+		}]
+	},{
+		"name":"ht_list",
+		"text":"合同列表",
+		"type":"virtual",
+		"children":[{
+			"name":"ht_list_sell",
+			"text":"出售合同",
+			"type":"menu"
+		},{
+			"name":"ht_list_rent",
+			"text":"出租合同",
+			"type":"menu"
+		}]
+	},{
+		"name":"ht_buzhou",
+		"text":"合同步骤",
+		"type":"virtual",
+		"children":[{
+			"name":"ht_buzhou_sell",
+			"text":"出售合同",
+			"type":"menu"
+		},{
+			"name":"ht_buzhou_rent",
+			"text":"出租合同",
+			"type":"menu"
+		}]
+	}]
 },{
 	"name":"rs",
 	"type":"module",
@@ -256,6 +296,15 @@
 		},{
 			"name":"xt_pc_del",
 			"text":"删除授权",
+			"type":"menu"
+		}]
+	},{
+		"name":"xt_other",
+		"text":"其他",
+		"type":"virtual",
+		"children":[{
+			"name":"xt_other_fk",
+			"text":"反馈信息",
 			"type":"menu"
 		}]
 	},{

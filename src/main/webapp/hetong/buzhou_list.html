@@ -48,13 +48,23 @@ function deleteBuZhou(buzhouId){
   });
 }
 
+function openAdd(){
+  art.dialog.open('buzhou_add.html?claId='+claid,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:300,
+      width:600
+  });
+}
+
 $(function(){
   claid = getParam('claid');
   if(claid==""){
     alert('没有指定合同类别');
     return;
   }
-  $('#addBtn').attr('href','buzhou_add.html?claId='+claid);
+  // $('#addBtn').attr('href','buzhou_add.html?claId='+claid);
   getList();
 });
 
@@ -70,7 +80,7 @@ $(function(){
     
   </form>
   <div class="btn-group">
-    <a target="_blank" id="addBtn" ><button class="btn btn-primary">添加</button></a>
+    <button onclick="openAdd()" class="btn btn-primary">添加</button>
   </div>
 </div>
 <div class="mainer" style="position:relative;width:100%">

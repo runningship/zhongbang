@@ -46,6 +46,16 @@ public class AuthorityService {
 	}
 	
 	@WebMethod
+	public ModelAndView addRole(Role role){
+		ModelAndView mv = new ModelAndView();
+		role.flag = 1;
+		role.sh = 1;
+		dao.saveOrUpdate(role);
+		mv.data.put("msg", "添加成功");
+		return mv;
+	}
+	
+	@WebMethod
 	public ModelAndView rolesList(Page<Role> page){
 		ModelAndView mv = new ModelAndView();
 		page = dao.findPage(page,  "from Role");

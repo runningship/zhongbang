@@ -59,32 +59,35 @@ function setMainHeight(){
 $(document).ready(function(){
     setMainHeight();
     $('.sider').find('a').eq(0).click();
+    
 })
 $(window).resize(function(event) {
     setMainHeight();
 });
 </script>
+<style type="text/css">
+</style>
 </head>
 <body>
     <div class="body hmain">
         <div class="sider">
             <dl auth="fy_list" class="sidedl">
-                <dt>查看房源</dt>
-                <dd auth="fy_list_all"><a href="house_list.html" target="house_iframe">所有房源</a></dd>
-                <dd auth="fy_list_sell"><a href="house_list.html?nav=chushou"  target="house_iframe" >出售房源</a></dd>
-                <dd auth="fy_list_rent"><a href="house_list.html?nav=chuzu" target="house_iframe">出租房源</a></dd>
-                <dd auth="fy_list_my"><a href="house_list.html?nav=my" target="house_iframe">我的房源</a></dd>
+                <dt>房源</dt>
+                <dd auth="fy_list_all"><a  class="aNavBtn" href="house_list.html" target="house_iframe">所有房源</a></dd>
+                <dd auth="fy_list_sell"><a class="aNavBtn" href="house_list.html?nav=chushou"  target="house_iframe" >出售房源</a></dd>
+                <dd auth="fy_list_rent"><a class="aNavBtn" href="house_list.html?nav=chuzu" target="house_iframe">出租房源</a></dd>
+                <dd auth="fy_list_my"><a   class="aNavBtn" href="house_list.html?nav=my" target="house_iframe">我的房源</a></dd>
             </dl>
             <dl auth="fy_add" class="sidedl">
-                <dt>添加房源</dt>
-                <dd auth="fy_add_sell"><a href="house_add.html?chuzu=0" target="house_iframe">添加出售</a></dd>
-                <dd auth="fy_add_rent"><a href="house_add.html?chuzu=1" target="house_iframe">添加出租</a></dd>
+                <dt>添加</dt>
+                <dd auth="fy_add_sell"><a class="aNavBtn" href="house_add.html?chuzu=0" target="house_iframe">添加出售</a></dd>
+                <dd auth="fy_add_rent"><a class="aNavBtn" href="house_add.html?chuzu=1" target="house_iframe">添加出租</a></dd>
             </dl>
             <dl auth="fy_other" class="sidedl">
                 <dt>其他</dt>
-                <dd auth="fy_other_genjin"><a href="genjin_list.html" target="house_iframe">跟进列表</a></dd>
-                <dd auth="fy_other_setting"><a href="area_list.html" target="house_iframe">房源设置</a></dd>
-                <dd auth="fy_other_recycle"><a href="house_list.html?nav=del" target="house_iframe">回收站</a></dd>
+                <dd auth="fy_other_genjin"><a  class="aNavBtn" href="genjin_list.html" target="house_iframe">跟进列表</a></dd>
+                <dd auth="fy_other_setting"><a class="aNavBtn" href="area_list.html" target="house_iframe">房源设置</a></dd>
+                <dd auth="fy_other_recycle"><a class="aNavBtn" href="house_list.html?nav=del" target="house_iframe">回收站</a></dd>
             </dl>
         </div>
         <div class="mainer">

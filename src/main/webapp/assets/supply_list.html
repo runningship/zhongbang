@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>办公用品</title>
+<title>待审核办公用品</title>
 <link rel="stylesheet" href="/style/css.css">
 <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/style/house.css">
@@ -18,9 +18,11 @@
 <script type="text/javascript" src="/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 var queryOpts;
-
+//  0 未审核，1 已审核(通过),2 审核不通过
+var shenhe;
+var dataArr;
 function getList(search){
-  var url='/zb/supply/list?shenhe=1';
+  var url='/zb/supply/list?shenhe='+shenhe;
   $.ajax({
     type: 'get',
     url: url,
@@ -54,7 +56,42 @@ function deleteSupply(id){
   });
 }
 
+function openEdit(id){
+  art.dialog.open('supply_edit.html?supplyId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:400,
+      width:600
+  });
+}
+
+function openShenHe(id){
+  art.dialog.open('supply_review.html?supplyId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:400,
+      width:600
+  });
+}
+
+function buildActionColumn(id){
+  if(shenhe==0){
+    return '<a onclick="openEdit('+id+')" href="javascript:void(0)" >修改</a> <a onclick="openShenHe('+id+')" href="javascript:void(0)" >审核</a>';
+  }else if(shenhe==1){
+    return '<a onclick="openEdit('+id+')" href="javascript:void(0)" >修改</a> <a onclick="deleteSupply('+id+')" href="javascript:void(0)" >删除</a>'
+  }else if(shenhe==2){
+    return '<a onclick="deleteSupply('+id+')" href="javascript:void(0)" >删除</a>'
+  }
+}
+
 $(function(){
+  shenhe = getParam('shenhe');
+  if(shenhe==""){
+    alert('未设置的审核类型');
+    return;
+  }
   getList();
   Page.Init();
 });
@@ -67,20 +104,27 @@ $(function(){
 <body class="hlist bodyer" style="overflow:auto">
 
 <div class="header" style="position:relative;height:50px;width:100%">
-   <div class="btn-group" style="float:right">
-    <button onclick="doSearch();" class="btn btn-primary btn_subnmit">搜索</button>
-  </div>
-  <form name="form1" style="float:right">
+  <form name="form1">
+    <input type="hidden" class="userInput" name="xpath" value=""/>
     <div class="input-group input-group-max">
       <span class="input-group-addon">标题</span>
       <input type="text" class="form-control" name="title">
     </div>
+    <div class="input-group input-group-select">
+      <span class="input-group-addon">分公司</span>
+      <select class="form-control get_comp" name="form_cid"></select>
+      <select class="form-control get_quyu" name="form_did"></select>
+    </div>
   </form>
- 
+  <div class="btn-group">
+    <button onclick="doSearch();" class="btn btn-primary btn_subnmit">搜索</button>
+  </div>
 </div>
 <div class="mainer" style="position:relative;width:100%">
   <table class="table table-hover .table_bodyer" >
     <thead>
+      <th>区域</th>
+      <th>分公司</th>
       <th>名称</th>
       <th>数量</th>
       <th>单价</th>
@@ -92,6 +136,8 @@ $(function(){
     </thead>
     <tbody id="id_list">
     <tr style="display:none">
+      <td>${quyu}</td>
+      <td>${deptName}</td>
       <td>${title}</td>
       <td>${count}</td>
       <td>${djia}</td>
@@ -99,7 +145,7 @@ $(function(){
       <td>${xgr}</td>
       <td>${beizhu}</td>
       <td>${addtime}</td>
-      <td><a onclick="deleteSupply(${id})" href="javascript:void(0)" >删除</a></td>
+      <td class="runscript">buildActionColumn(${id})</td>
     </tr>
     </tbody>
   </table>

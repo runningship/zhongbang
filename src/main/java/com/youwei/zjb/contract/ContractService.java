@@ -31,6 +31,10 @@ public class ContractService {
 		ModelAndView mv = new ModelAndView();
 		List<Object> params = new ArrayList<Object>();
 		StringBuilder hql = new StringBuilder("select c from Contract c,User u where u.id=c.userId ");
+		if(query.chushou!=null){
+			hql.append(" and c.flag = ? ");
+			params.add(query.chushou);
+		}
 		if(StringUtils.isNotEmpty(query.addr)){
 			hql.append(" and c.addr like ? ");
 			params.add("%"+query.addr+"%");

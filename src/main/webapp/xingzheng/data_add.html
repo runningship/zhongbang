@@ -48,6 +48,7 @@ function loadData(){
       ue.setContent(template);
       $('#username').val(json['user']['uname']);
       $('#userId').val(json['user']['id']);
+      $('#adminClass').val(json['adminClass']['title']);
     },
     error:function(data){
       alert('加载数据失败,'+data.responseText);
@@ -84,6 +85,10 @@ $(function(){
     <div class="input-group input-group-max" style="">
       <span class="input-group-addon">制表人</span>
       <input type="text" readonly="true" class="form-control" id="username">
+    </div>
+    <div class="input-group input-group-max" style="">
+      <span class="input-group-addon">分类</span>
+      <input type="text" readonly="true" class="form-control" id="adminClass">
     </div>
     <div class="btn-group" >
       <button onclick="save();return false;" class="btn btn-primary btn_subnmit">提交</button>

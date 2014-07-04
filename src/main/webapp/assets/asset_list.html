@@ -54,6 +54,16 @@ function deleteAsset(id){
   });
 }
 
+function openEdit(id){
+  art.dialog.open('asset_edit.html?assetId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:400,
+      width:600
+  });
+}
+
 $(function(){
   getList();
   Page.Init();
@@ -69,9 +79,15 @@ $(function(){
 <div class="header" style="position:relative;height:50px;width:100%">
  
   <form name="form1" >
+    <input type="hidden" class="userInput" name="xpath" value=""/>
     <div class="input-group input-group-max">
       <span class="input-group-addon">标题</span>
       <input type="text" class="form-control" name="title">
+    </div>
+    <div class="input-group input-group-select">
+      <span class="input-group-addon">分公司</span>
+      <select class="form-control get_comp" name="form_cid"></select>
+      <select class="form-control get_quyu" name="form_did"></select>
     </div>
   </form>
  <div class="btn-group" >
@@ -81,6 +97,8 @@ $(function(){
 <div class="mainer" style="position:relative;width:100%">
   <table class="table table-hover .table_bodyer" >
     <thead>
+      <th>区域</th>
+      <th>分公司</th>
       <th>分类名</th>
       <th>数量</th>
       <th>单价</th>
@@ -91,13 +109,15 @@ $(function(){
     </thead>
     <tbody id="id_list">
     <tr style="display:none">
+      <td>${quyu}</td>
+      <td>${deptName}</td>
       <td>${name}</td>
       <td>${count}</td>
       <td>${djia}</td>
       <td>${zjia}</td>
       <td>${beizhu}</td>
       <td>${edittime}</td>
-      <td><a target="_blank" href="asset_edit.html?assetId=${id}">修改</a> <a onclick="deleteAsset(${id})" href="javascript:void(0)" >删除</a></td>
+      <td><a onclick="openEdit(${id})" href="javascrip:void(0)">修改</a> <a onclick="deleteAsset(${id})" href="javascript:void(0)" >删除</a></td>
     </tr>
     </tbody>
   </table>

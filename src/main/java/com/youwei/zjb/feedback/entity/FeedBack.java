@@ -1,4 +1,4 @@
-package com.youwei.zjb.asset.entity;
+package com.youwei.zjb.feedback.entity;
 
 import java.util.Date;
 
@@ -10,9 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="work_assets")
-public class Asset {
-	
+@Table(name="plugin_fankui")
+public class FeedBack {
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer id;
@@ -20,23 +20,7 @@ public class Asset {
 	@Column(name="uid")
 	public Integer userId;
 	
-	@Column(name="did")
-	public Integer deptId;
-	
-	@Column(name="cla")
-	public String name;
-	
-	@Column(name="num")
-	public Integer count;
-	
-	public String beizhu;
+	public String conts;
 	
 	public Date addtime;
-	
-	@Column(name="editime")
-	public Date edittime;
-	
-	public Float djia;
-	
-	public Float zjia; 
 }

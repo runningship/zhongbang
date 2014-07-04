@@ -1,5 +1,8 @@
-package com.youwei.zjb.contract.entity;
+package com.youwei.zjb.oa.entity;
 
+import java.util.Date;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,27 +10,23 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="work_pact_process_class")
-public class ContractProcessClass {
-	
+@Table(name="work_oa_gg")
+public class Notice {
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer id;
 	
-	/**
-	 * 合同分类 
-	 * 5 出售，6 出租
-	 */
-	public Integer claId;
+	@Column(name="uid")
+	public Integer userId;
+	
+	public Integer claid;
 	
 	public String title;
 	
 	public String conts;
 	
-	public Integer isqian;
+	public Date addtime;
 	
-	public Integer cid;
-	
-	public Integer ordera;
-	
+	public Integer sh;
 }
