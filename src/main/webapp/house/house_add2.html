@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Examples</title>
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/sysinfo.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=chrome"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/js/jquery.timers.js"></script>
+<script type="text/javascript" src="/js/jquery.caozuobendi.js"></script>
+<script type="text/javascript" src="/js/buildHtml.js"></script>
+<script type="text/javascript" src="/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/js/pagination.js"></script>
+<script type="text/javascript">
+/*
+  $('form').on('submit', function() {alert('go')
+
+    var Thi=$(this),
+    djia=Thi.find('input[name=djia]'),
+    sjia=Thi.find('input[name=sjia]'),
+    mji=Thi.find('input[name=mianji]');
+    //djia.val(sjia.val()/mji.val());
+alert('exit')
+
+
+    return false;
+  });
+*/
+  var getStr,chuzu;
+      getHid=getParam('hid')
+      chuzu=getParam('chuzu');
+  var QueryOptions='';
+function getEnumText(category,code){
+  var arr = QueryOptions[category];
+  for(var i=0;i<arr.length;i++){
+    if(arr[i]['code']==code){
+      return arr[i]['name'];
+    }
+  }
+}
+var dialog;
+function TipErrs(a,b,c){
+  if(a='g'){icons='warning'}else if(a='c'){icons='error'}else if(a='d'){icons='succeed'}else{icons='warning'}/**/
+ // if(dialog){dialog.close();}
+  dialog = art.dialog({
+    id:'errors',
+    title:false,
+    content:b,
+    icon:icons,
+    time:1
+  })
+  if(c){$(c).focus()}
+  return false;
+}
+function funSubmit(){
+var Thi=$('form');
+    if(!Thi.find('[name=area]').val()){TipErrs('g','房源名称不能为空',Thi.find('[name=area]'));return false}
+    if(!Thi.find('[name=dhao]').val()){TipErrs('g','栋号不能为空',Thi.find('[name=dhao]'));return false}
+    if(!Thi.find('[name=fhao]').val()){TipErrs('g','房号不能为空',Thi.find('[name=fhao]'));return false}
+    if(!Thi.find('[name=lceng]').val()){TipErrs('g','房号不能为空',Thi.find('[name=lceng]'));return false}
+    if(!Thi.find('[name=zceng]').val()){TipErrs('g','房号不能为空',Thi.find('[name=zceng]'));return false}
+    if(!Thi.find('[name=lxr]').val()){TipErrs('g','客户姓名不能为空',Thi.find('[name=lxr]'));return false}
+    if(!Thi.find('[name=tel]').val()){TipErrs('g','客户电话不能为空',Thi.find('[name=tel]'));return false}
+    var url=$('form[name=form1]').attr('action');
+    $.ajax({
+      type: 'POST',
+      url: url,
+  //    async:false,
+      data:formSerialize(Thi),
+      success: function(data){
+      var getStr=JSON.parse(data);
+        if(getStr['result']==0){
+          art.dialog({title:'提示',content:'提交成功',ok: function () {art.dialog.close()
+            }
+          })
+        }else{
+          art.dialog.tips(getStr['msg']);
+        }
+      }
+    });
+    return false;
+}
+$(function(){
+
+  $.get('/zb/house/getQueryOptions', function(data) {
+    QueryOptions=JSON.parse(data);
+    buildHtmlWithJsonArray("id_chaoxiang",QueryOptions['chaoxiang'],true); //朝向
+    buildHtmlWithJsonArray("id_leibie",QueryOptions['leibie'],true);       //类别
+    buildHtmlWithJsonArray("id_louxing",QueryOptions['louxing'],true);     //楼型
+    buildHtmlWithJsonArray("id_jiaoyi",QueryOptions['jiaoyi'],true);       //交易
+    buildHtmlWithJsonArray("id_quyu",QueryOptions['quyu'],true);           //区域
+    buildHtmlWithJsonArray("id_zhuangtai",QueryOptions['zhuangtai'],true); //状态
+    buildHtmlWithJsonArray("id_xingzhi",QueryOptions['xingzhi'],true); //房型
+    buildHtmlWithJsonArray("id_zhuangxiu",QueryOptions['zhuangxiu'],true);   //装修
+      if(getHid){
+        $('form[name=form1]').attr('action', '/zb/house/update');
+        //alert($('form[name=form1]').attr('action'))
+        $.get('/zb/house/listAll?id='+getHid, function(data) {
+          getStr=JSON.parse(data);
+          buildHtmlWithJsonArray("id_house_see",getStr['page']['data'],true);
+        });
+      }else{alert(chuzu)
+        var gerStrNull={"page":{"autoCount":"","currentPageNo":"","firstOfPage":"","lastOfPage":"","pageSize":"","pageUrl":"","totalCount":"","totalPageCount":"","data":[{"id":"","deptId":"","userId":"","cid":"","quyu":"","area":"","dhao":"","fhao":"","luduan":"","lceng":"","zceng":"","lxing":"","hxf":"","hxt":"","hxw":"","hxy":"","chaoxiang":"","zhuangxiu":"","mianji":"","zjia":"","sjia":"","djia":"","lxr":"","tel":"","forlxr":"","fortel":"","beizhu":"","jiaoyi":chuzu,"leibie":"","flag":"","xingzhi":"","tuijie":"","dateyear":"","dateweituo":"","datejiaofang":"","dateadd":"","dategenjin":"","fav":"","houseNumber":"","isdel":"","sh":"","chanquan":"","tudizheng":"","fordlr":"","fordlrtel":""}]}}
+        //gerStrNull=JSON.parse(gerStrNull)
+        buildHtmlWithJsonArray("id_house_see",gerStrNull['page']['data'],true);
+      }
+  });
+});
+</script>
+<style type="text/css">
+  .table{ margin-bottom: 0px;}
+  .pointerevents{pointer-events:none}
+  .font_no_br{white-space:nowrap;word-break: keep-all;}
+  .w40b{ width: 40%;}
+  .w160px{ width: 160px;}
+ .hadd  .colspan2{ width: 300px;}
+ .hadd{ height: auto;}
+</style>
+</head>
+<body class="hadd bodyer" id="id_house_see">
+<form name="form1" method="post" action="/zb/house/add" onsubmit="return funSubmit();">
+  <input type="hidden" class="form-control" name="id" value="${id}">
+  <input type="hidden" class="form-control" name="deptId" value="${deptId}">
+  <input type="hidden" class="form-control" name="userId" value="${userId}">
+  <input type="hidden" class="form-control" name="djia" value="${djia}">
+  <table class="table table-condensed">
+    <tr>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon" style="padding:8px;">交易</span>
+          <select class="form-control" id="id_jiaoyi" name="jiaoyi">
+            <option value="${code}">${name}</option>
+          </select>
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon" style="padding:8px;">区域</span>
+          <select class="form-control" id="id_quyu" name="quyu">
+            <option value="${name}">${name}</option>
+          </select>
+        </div>
+      </td>
+      <td colspan="2">
+        <div class="input-group colspan2">
+          <span class="input-group-addon" style="padding:8px;">楼盘</span>
+          <input type="text" class="form-control" name="area" value="${area}" placeholder="楼盘名称">
+        </div>
+      </td>
+      <td colspan="2">
+          <input type="text" class="form-control pull-left w40b" name="dhao" value="${dhao}" placeholder="栋号"><span style="display: block;float: left;height:20px; line-height: 20px;">#&nbsp;</span>
+          <input type="text" class="form-control pull-left w40b" name="fhao" value="${fhao}" placeholder="房号">
+      </td>
+    </tr>
+    <tr>
+      <td class="w160px">
+        <div class="input-group">
+          <span class="input-group-addon" style="padding:8px;">楼型</span>
+          <select class="form-control" id="id_louxing" name="lxing">
+            <option value="${name}">${name}</option>
+          </select>
+        </div>
+      </td>
+      <td class="w160px">
+        <div class="input-group">
+          <span class="input-group-addon" style="padding:8px;">户型</span>
+          <input type="text" class="form-control" name="hxf" value="${hxf}" placeholder="室">
+          <span class="input-group-addon" style="padding:8px;">房</span>
+        </div>
+      </td>
+      <td class="w160px">
+        <div class="input-group">
+          <input type="text" class="form-control" name="hxt" value="${hxt}" placeholder="厅">
+          <span class="input-group-addon" style="padding:8px;">厅</span>
+        </div>
+      </td>
+      <td class="w160px">
+        <div class="input-group">
+          <input type="text" class="form-control" name="hxw" value="${hxw}" placeholder="卫">
+          <span class="input-group-addon" style="padding:8px;">卫</span>
+        </div>
+      </td>
+      <td class="w160px">
+        <div class="input-group">
+          <span class="input-group-addon">年代</span>
+          <input type="text" class="form-control" name="dateyear" value="${dateyear}" placeholder="楼盘年代">
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">楼层</span>
+          <input type="text" class="form-control" name="lceng" value="${lceng}" placeholder="所在楼层">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">总层</span>
+          <input type="text" class="form-control" name="zceng" value="${zceng}" placeholder="总楼层">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">面积</span>
+          <input type="text" class="form-control" name="mianji" value="${mianji}" placeholder="面积(平方)">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">价格</span>
+          <input type="text" class="form-control" name="sjia" value="${sjia}" placeholder="出售总价(万元)">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">租金</span>
+          <input type="text" class="form-control" name="zjia" value="${zjia}" placeholder="租金">
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon" style="padding:8px;">状态</span>
+          <select class="form-control" id="id_zhuangtai" name="ztai">
+            <option value="${name}">${name}</option>
+          </select>
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon" style="padding:8px;">性质</span>
+          <select class="form-control" id="id_xingzhi" name="xingzhi">
+            <option value="${name}">${name}</option>
+          </select>
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon" style="padding:8px;">类别</span>
+          <select class="form-control" id="id_leibie" name="leibie">
+            <option value="${name}">${name}</option>
+          </select>
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon" style="padding:8px;">装潢</span>
+          <select class="form-control" id="id_zhuangxiu" name="zhuangxiu">
+            <option value="${code}">${name}</option>
+          </select>
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon" style="padding:8px;">朝向</span>
+          <select class="form-control" id="id_chaoxiang" name="chaoxiang">
+            <option value="${name}">${name}</option>
+          </select>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">编号</span>
+          <input type="text" class="form-control" name="houseNumber" value="${houseNumber}" placeholder="房源编号">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon" style="padding:8px;">土地证</span>
+          <select class="form-control" id="id_chaoxiang" name="tudizheng">
+            <option value="0">无</option>
+            <option value="1">有</option>
+          </select>
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">业务员</span>
+          <input type="text" class="form-control" name="forlxr" value="${forlxr}" placeholder="姓名">
+        </div>
+      </td>
+      <td colspan="2">
+        <div class="input-group colspan2">
+          <span class="input-group-addon">电话</span>
+          <input type="text" class="form-control" name="fortel" value="${fortel}" placeholder="业务员电话">
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon" style="padding:8px;">推介房</span>
+          <select class="form-control" id="id_chaoxiang" name="dateType">
+            <option value="0">否</option>
+            <option value="1">是</option>
+          </select>
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">产权</span>
+          <input type="text" class="form-control" name="chanquan" value="${chanquan}" placeholder="产权号">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">客户名</span>
+          <input type="text" class="form-control" name="lxr" value="${lxr}" placeholder="姓名">
+        </div>
+      </td>
+      <td colspan="2">
+        <div class="input-group colspan2">
+          <span class="input-group-addon">客户电话</span>
+          <input type="text" class="form-control" name="tel" value="${tel}" placeholder="客户电话">
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="input-group colspan2">
+          <span class="input-group-addon">备注</span>
+          <input type="text" class="form-control" name="beizhu" value="${beizhu}"placeholder="备注">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">代理人</span>
+          <input type="text" class="form-control" name="fordlr" value="${fordlr}" placeholder="姓名">
+        </div>
+      </td>
+      <td colspan="2">
+        <div class="input-group colspan2">
+          <span class="input-group-addon">代理人电话</span>
+          <input type="text" class="form-control" name="fordlrtel" value="${fordlrtel}" placeholder="代理人电话">
+        </div>
+      </td>
+    </tr>
+      <td colspan="2"><input type="submit" value="提交"></td>
+    <tr>
+    </tr>
+  </table>
+  
+</form>
+</body>
+</html>

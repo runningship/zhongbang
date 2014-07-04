@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>反馈信息</title>
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/buildHtml.js"></script>
+<script type="text/javascript" src="/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/js/pagination.js"></script>
+<script type="text/javascript">
+var classId;
+function getList(search){
+  var url='/zb/feedback/list';
+  $.ajax({
+    type: 'get',
+    url: url,
+    data:search,
+    success: function(data){
+      var getStr=JSON.parse(data);
+      dataArr = getStr['page']['data'];
+      buildHtmlWithJsonArray("id_list",dataArr);
+    }
+  });
+}
+
+$(function(){
+
+  getList();
+  Page.Init();
+});
+
+</script>
+<style type="text/css">
+  .table{ margin-bottom: 0px;}
+</style>
+</head>
+<body class="hlist bodyer" style="overflow:auto">
+
+<div class="header" style="position:relative;height:10px;width:100%">
+  <form name="form1">
+    
+  </form>
+  
+</div>
+<div class="mainer" style="position:relative;width:100%">
+  <table class="table table-hover .table_bodyer" >
+    <thead>
+      <th>分公司</th>
+      <th>内容</th>
+      <th>时间</th>
+      <th>操作</th>
+    </thead>
+    <tbody id="id_list">
+    <tr style="display:none">
+      <td>${deptName}</td>
+      <td>${conts}</td>
+      <td>${addtime}</td>
+      <td><a href="javascript:void(0)">详细</a></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="footer foot_page_box" style="position:relative;margin-top:10px;height:55px;"></div>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>记录</title>
+<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/style/house.css">
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/js/buildHtml.js"></script>
+<script type="text/javascript" src="/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/js/pagination.js"></script>
+<script type="text/javascript" src="/js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+var queryOpts;
+
+function getList(search){
+  var url='/zb/admin/listTable';
+  $.ajax({
+    type: 'POST',
+    url: url,
+    data:search,
+    success: function(data){
+      var getStr=JSON.parse(data);
+      dataArr = getStr['page']['data'];
+      buildHtmlWithJsonArray("id_list",dataArr);
+      Page.setPageInfo(getStr['page']);
+    }
+  });
+}
+
+function selectType(id,title){
+  $('#btn_class_select').text(title);
+  $('#classId').val(id);
+  doSearch();
+}
+
+function doSearch(){
+  getList(formSerialize($('form[name=form1]')));
+  return false;
+}
+
+function deleteData(id){
+  $.ajax({
+    type: 'POST',
+    url: '/zb/admin/deleteTable?tableId='+id,
+    data:'',
+    success: function(data){
+      getList();
+    },
+    error:function(data){
+      alert(data.responseText);
+    }
+  });
+}
+
+function openAdd(id){
+  art.dialog.open('data_add.html?classId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1080
+  });
+}
+
+function openEdit(id){
+  art.dialog.open('data_edit.html?tableId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1080
+  });
+}
+
+function openView(id){
+  art.dialog.open('data_View.html?tableId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1080
+  });
+}
+
+$(function(){
+  getList();
+  $.get('/zb/admin/class/list', function(data) {
+    queryOpts=JSON.parse(data);
+    buildHtmlWithJsonArray("adminClassList",queryOpts['page']['data']);
+    buildHtmlWithJsonArray("adminClassList2",queryOpts['page']['data']);
+  });
+  Page.Init();
+});
+
+</script>
+<style type="text/css">
+  .table{ margin-bottom: 0px;}
+</style>
+</head>
+<body class="hlist bodyer" style="overflow:auto">
+
+<div class="header" style="position:relative;height:50px;width:100%">
+  <div class="btn-group">
+    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:30px;padding:0px 10px 0px 10px">添加 <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+      <span id="adminClassList">
+        <li><label><a onclick="openAdd(${id})" href="javascript:void(0)" style="color:black;padding-left:10px;line-height:30px;font-weight:normal">${title}</a></label></li>
+      </span>
+    </ul>
+  </div>
+
+  <div style="float:right;margin-right:20px;">
+  <form name="form1" onsubmit="return doSearch();">
+    <div class="btn-group">
+      <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:35px;padding:0px 10px 0px 10px;width:150px;"><span id="btn_class_select">分 类</span> <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        <li><label><span  onclick="selectType('','所有')" style="color:black;padding-left:10px;line-height:30px;font-weight:normal">所有</span></label></li>
+        <span id="adminClassList2">
+          <li><label><span onclick="selectType(${id},'${title}');" style="color:black;padding-left:10px;line-height:30px;font-weight:normal">${title}</span></label></li>
+        </span>
+      </ul>
+    </div>
+    <div class="input-group input-group-max">
+      <span class="input-group-addon">标题</span>
+      <input type="text" class="form-control" name="title">
+    </div>
+    <div class="input-group" style="width:355px">
+      <span class="input-group-addon">日期</span>
+      <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:150px;border-radius:0;">
+      <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:150px">
+    </div>
+    <div class="btn-group">
+      <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
+    </div>
+    <input type="hidden" id="classId" name="classId" />
+  </form>
+  </div>
+
+</div>
+<div class="mainer" style="position:relative;width:100%">
+  <table class="table table-hover .table_bodyer" >
+    <thead>
+      <th>标题</th>
+      <th>发布人</th>
+      <th>发布时间</th>
+      <th>分类</th>
+      <th>操作</th>
+    </thead>
+    <tbody id="id_list">
+    <tr style="display:none">
+      <td>${title}</td>
+      <td>${uname}</td>
+      <td>${addtime}</td>
+      <td>${classTitle}</td>
+      <td><a onclick="openView(${id})" href="javascript:void(0)">查看</a> <a onclick="openEdit(${id})" href="javascript:void(0)">修改</a> 
+      <a href="javascript:void(0)" onclick="deleteData(${id});">删除</a></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="footer foot_page_box" style="position:relative;margin-top:10px;height:55px;"></div>
+</body>
+</html>

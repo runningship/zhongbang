@@ -113,9 +113,9 @@ $(function(){
   <input id="conta" name="conta" type="hidden" />
   <input type="hidden" name="category" id="category" />
     <div class="input-group" style="width:500px;margin-left:10px;margin-top:0px">
-      <span class="input-group-addon" style="padding:1px 6px">外出时间</span>
+      <span class="input-group-addon" style="padding:1px 6px">开始时间</span>
       <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="outTime" style="width:180px;border-radius:0;">
-      <span class="input-group-addon" style="padding:1px 6px">返回时间</span>
+      <span class="input-group-addon" style="padding:1px 6px">结束时间</span>
       <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="backTime" style="width:180px">
   </div>
   </form>
