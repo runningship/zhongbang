@@ -4,13 +4,13 @@
 <META HTTP-EQUIV="pragma" CONTENT="no-cache"> 
 <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate"> 
 <META HTTP-EQUIV="expires" CONTENT="0">
-<link rel="stylesheet" type="text/css" href="chat.css" />
-<script type="text/javascript" src="/js/jquery.js"></script>
-<script type="text/javascript" src="/js/jquery.hotkeys.js"></script>
-<script type="text/javascript" src="/js/buildHtml.js"></script>
-<script type="text/javascript" src="/js/im.js"></script>
-<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=simple"></script>
-<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
+<link rel="stylesheet" type="text/css" href="/zb/chat.css" />
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.hotkeys.js"></script>
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<script type="text/javascript" src="/zb/js/im.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=simple"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
 <script type="text/javascript">
 
 
@@ -50,7 +50,7 @@ window.onload=function(){
 <div class="IM" >
   <div id="lxr" style="float:left;">
     <div style="background-color:#555;width:252px;height:95px;border-radius:8px 8px 0px 0px;">
-      <img id="myAvatar" onclick="IM.openAvatarPanel();" src="/style/image/avatar/0.jpg" style="width:64px;height:64px;margin-top:5px;margin-left:5px;float:left;cursor:pointer">
+      <img id="myAvatar" onclick="IM.openAvatarPanel();" src="/zb/style/image/avatar/0.jpg" style="width:64px;height:64px;margin-top:5px;margin-left:5px;float:left;cursor:pointer">
       <div id="me" style="font-size:18px;color:white;padding-top:4px;">&nbsp;</div>
       <div style="padding-top:44px;">
       
@@ -80,7 +80,7 @@ window.onload=function(){
           <div onclick="IM.openChat(${contactId});" id="${contactId}" style="display:none;padding-left:5px;background-color:whitesmoke;height:56px;border-bottom:1px solid #ddd;cursor:pointer">
             <span onclick="IM.delContact(${contactId})" style="float:right;margin-right:10px;color:#aaa">x</span>
             <div style="display:none;background:red;color:white;float:right;margin-right:10px;margin-top:10px;border-radius:8px;height:16px;width:25px;text-align:center;font-size:12px;">0</div>
-            <img src="" srcx="/style/image/avatar/${avatar}.jpg" style="width:40px;height:40px;margin-top:5px;margin-right:5px;float:left" />
+            <img src="" srcx="/zb/style/image/avatar/${avatar}.jpg" style="width:40px;height:40px;margin-top:5px;margin-right:5px;float:left" />
             <p title="${deptName}" style="line-height:0px;display:inline-block">${contactName}</p>
 
             <p style="font-size:8px;color:#aaa;line-height:15px;margin:0px"><span>[${state}]</span><span style="padding-left:5px;">${contactTel}</span>
@@ -131,7 +131,7 @@ window.onload=function(){
     <div style="width:670px;height:500px;overflow:auto" >
       
         <div id="avatars">
-          <img onclick="IM.setAvatar(${avatarId})" srcx="/style/image/avatar/${avatarId}.jpg" src="" style="width:64px;height:64px;margin-top:5px;margin-left:5px;float:left;cursor:pointer;display:none" />
+          <img onclick="IM.setAvatar(${avatarId})" srcx="/zb/style/image/avatar/${avatarId}.jpg" src="" style="width:64px;height:64px;margin-top:5px;margin-left:5px;float:left;cursor:pointer;display:none" />
           
         </div>
       </div>

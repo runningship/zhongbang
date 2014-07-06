@@ -20,6 +20,7 @@ public class Notice {
 	@Column(name="uid")
 	public Integer userId;
 	
+	@Column(nullable=false)
 	public Integer claid;
 	
 	public String title;

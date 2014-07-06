@@ -5,23 +5,23 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Examples</title>
-<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/zb/style/css.css">
 <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="/style/house.css">
-<script type="text/javascript" src="/js/jquery.js"></script>
-<script src="/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
-<script type="text/javascript" src="/js/buildHtml.js"></script>
+<link rel="stylesheet" href="/zb/style/house.css">
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.4"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
 <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
-<script type="text/javascript" src="/js/jquery.xianshang.users.js"></script>
-<script type="text/javascript" src="/js/pagination.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/zb/js/pagination.js"></script>
 <script type="text/javascript">
 var shEnums;
 function getGJList(search){
-  var url='/zb/genjin/list';
+  var url='/zb/c/genjin/list';
   $.ajax({
     type: 'POST',
     url: url,
@@ -54,7 +54,7 @@ function deleteGJ(id){
     lock:true,
     ok:function(){
       $.ajax({
-        url:'/zb/genjin/delete?id='+id,
+        url:'/zb/c/genjin/delete?id='+id,
         data:'',
         timeout:5000,
         dataType:'json',
@@ -81,7 +81,7 @@ function review(id,target){
     sh=0;
   }
   $.ajax({
-        url:'/zb/genjin/review?id='+id+'&sh='+sh,
+        url:'/zb/c/genjin/review?id='+id+'&sh='+sh,
         data:'',
         timeout:5000,
         dataType:'json',
@@ -107,7 +107,7 @@ $(function(){
   onSubmit_Form();
   getGJList();
   Page.Init();
-  $.get('/zb/house/getQueryOptions', function(data) {
+  $.get('/zb/c/house/getQueryOptions', function(data) {
     var queryOpts=JSON.parse(data);
     shEnums = queryOpts['shenhe'];
     buildHtmlWithJsonArray("id_jiaoyi",queryOpts['jiaoyi']);       //交易

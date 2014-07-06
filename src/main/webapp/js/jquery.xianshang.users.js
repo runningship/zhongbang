@@ -13,7 +13,7 @@ $(document).ready(function() {
 
 
     $.ajax({
-        url:'/zb/user/getUserTree',
+        url:'/zb/c/user/getUserTree',
         data:'',
         timeout:3000,
         async:false,

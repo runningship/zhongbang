@@ -1,5 +1,6 @@
 package com.youwei.zjb;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,17 +19,22 @@ import com.youwei.zjb.im.IMServer;
 public class StartUpListener implements ServletContextListener{
 
 	public void contextDestroyed(ServletContextEvent arg0) {
-		
+		try {
+//			IMServer.forceStop();
+			System.out.println("IM Server stop.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void contextInitialized(ServletContextEvent arg0) {
 		initDataSource();
 		initModule();
-		try {
-			IMServer.startUp();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			IMServer.startUp();
+//		} catch (UnknownHostException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	private void initModule() {

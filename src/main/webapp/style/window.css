@@ -96,7 +96,7 @@ a:active {
     height:40px;
     line-height:40px;
     position:absolute;
-    right:0;
+    /*right:0;*/
     bottom:0;
 }
 #leftBtn {
@@ -142,7 +142,7 @@ a:active {
     height:auto;
     position:absolute;
     top:0;
-    right:0;
+    /*right:0;*/
 }
 #task_lb a {
     display:inline-block;
@@ -153,7 +153,7 @@ a:active {
     background-repeat:no-repeat;
     text-align:center;
     line-height:40px;
-    float:right
+    /*float:right*/
 }
 #task_lb .defaultTab {
     background-position:right top;

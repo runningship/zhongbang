@@ -5,14 +5,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>area edit</title>
-<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/zb/style/css.css">
 <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="/style/house.css">
-<script type="text/javascript" src="/js/jquery.js"></script>
-<script src="/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
-<script type="text/javascript" src="/js/buildHtml.js"></script>
+<link rel="stylesheet" href="/zb/style/house.css">
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript">
 var areaId=getParam('areaId'),formAction;
 if(areaId){formAction='update';getArea();}else{formAction='add';}
@@ -36,7 +36,7 @@ function setArea(search){
   $.ajax({
     type: 'post',
     async:false,
-    url: '/zb/areas/'+formAction,
+    url: '/zb/c/areas/'+formAction,
     data:search,
     success: function(data){
       var getAreas=JSON.parse(data);
@@ -49,7 +49,7 @@ function getArea(){
   var param={areaId:areaId}
   $.ajax({
     type: 'post',
-    url: '/zb/areas/get',
+    url: '/zb/c/areas/get',
     data:param,
     success: function(data){
       var getAreas=JSON.parse(data);

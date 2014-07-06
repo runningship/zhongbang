@@ -5,22 +5,22 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>出售合同</title>
-<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/zb/style/css.css">
 <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="/style/house.css">
-<script type="text/javascript" src="/js/jquery.js"></script>
-<script src="/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
-<script type="text/javascript" src="/js/buildHtml.js"></script>
-<script type="text/javascript" src="/js/jquery.xianshang.users.js"></script>
-<script type="text/javascript" src="/js/pagination.js"></script>
-<script type="text/javascript" src="/js/DatePicker/WdatePicker.js"></script>
+<link rel="stylesheet" href="/zb/style/house.css">
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/zb/js/pagination.js"></script>
+<script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 var queryOpts;
 
 function getList(search){
-  var url='/zb/contract/list';
+  var url='/zb/c/contract/list';
   $.ajax({
     type: 'get',
     url: url,
@@ -43,7 +43,7 @@ function doSearch(){
 
 $(function(){
   getList();
-  $.get('/zb/contract/proClassList?claid=5', function(data) {
+  $.get('/zb/c/contract/proClassList?claid=5', function(data) {
     queryOpts=JSON.parse(data);
     buildHtmlWithJsonArray("id_proClassList",queryOpts['proClassList'],true);
     $('#id_proClassList').prepend($('<option value="">所有</option>'));

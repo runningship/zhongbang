@@ -7,15 +7,15 @@
 <meta name="description" content="">
 <meta name="keywords" content="">
 <link href="" rel="stylesheet">
-<link rel="stylesheet" href="../style/css.css">
+<link rel="stylesheet" href="../zb/style/css.css">
 <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="../style/login.css">
-<script type="text/javascript" src="../js/jquery.js"></script>
-<script src="../bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../js/sysinfo.js"></script>
-<script type="text/javascript" src="../js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="../js/Dialog/plugins/iframeTools.js"></script>
-<script type="text/javascript" src="../js/jquery.caozuobendi.js"></script>
+<link rel="stylesheet" href="../zb/style/login.css">
+<script type="text/javascript" src="../zb/js/jquery.js"></script>
+<script src="../zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../zb/js/sysinfo.js"></script>
+<script type="text/javascript" src="../zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="../zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="../zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript">
     hex.sizeTo(800,350);
 
@@ -59,7 +59,7 @@ var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
     }
     function get_company(){
         $.ajax({
-            url:'/zb/user/getUserTree',
+            url:'/zb/c/user/getUserTree',
             data:'',
             timeout:3000,
             dataType:'json',
@@ -104,7 +104,7 @@ var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
             mac:lm,
             uuid:lu,
             harddrive:ld
-        },urls="/zb/user/login";
+        },urls="/zb/c/user/login";
         if(uid==''){artdialog('请选择用户','warning','');$('.user').focus();return false;}
         if(pwd==''){artdialog('请输入密码','warning','');$('.password').focus();return false;}
                         SetCookie('zb_l_comp',did);
@@ -149,7 +149,7 @@ var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
             loginStart();
         });
         $('.btn_reg').on('click', function(event) {
-            $.post("/zb/pc/add",{
+            $.post("/zb/c/pc/add",{
                 authCode:$('.authCode').val(),
                 deptId:$('.deptr').val(),
                 beizhu:$('.beizhu').val(),
@@ -204,7 +204,7 @@ var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
         <a href="" class="">X</a>
     </div>
     <div class="header title">
-        <a href="#"><img src="../style/images/logo.png" alt="" class=" title"></a>
+        <a href="#"><img src="../zb/style/images/logo.png" alt="" class=" title"></a>
     </div>
     <div class="mainer">
         <div class="login_box lb_login">

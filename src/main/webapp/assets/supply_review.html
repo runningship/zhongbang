@@ -5,22 +5,22 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>审核办公用品</title>
-<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/zb/style/css.css">
 <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="/style/house.css">
-<script type="text/javascript" src="/js/jquery.js"></script>
-<script src="/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
-<script type="text/javascript" src="/js/buildHtml.js"></script>
-<script type="text/javascript" src="/js/jquery.xianshang.users.js"></script>
-<script type="text/javascript" src="/js/pagination.js"></script>
+<link rel="stylesheet" href="/zb/style/house.css">
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/zb/js/pagination.js"></script>
 <script type="text/javascript">
 var supplyId;
 function shenhe(shenhe){
   $.ajax({
     type: 'get',
-    url: '/zb/supply/shenhe?supplyId='+supplyId+'&shenhe='+shenhe,
+    url: '/zb/c/supply/shenhe?supplyId='+supplyId+'&shenhe='+shenhe,
     data:'',
     success: function(data){
       alert('审核成功.');
@@ -34,7 +34,7 @@ function shenhe(shenhe){
 function loadData(supplyId){
   $.ajax({
     type: 'POST',
-    url: '/zb/supply/get?supplyId='+supplyId,
+    url: '/zb/c/supply/get?supplyId='+supplyId,
     data:'',
     success: function(data){
       var supply = JSON.parse(data)['supply'];

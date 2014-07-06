@@ -55,10 +55,12 @@ $(document).keydown(function(event){
 });  
 //相同class点击填充背景，导航选中状态
 function aBtnNavFun(a){
+  if($(document).on!=undefined){
     $(document).on('click', a, function(event) {
         $(a).removeClass('acurr');
         $(this).addClass('acurr');
     });
+  }
 }
 //根据titile可拖动窗口
 document.addEventListener('mousemove', function (e) {

@@ -16,7 +16,7 @@ var IM = {
 
 	loadContacts : function(){
 		$.ajax({
-	        url:'/zb/im/getContacts?userId='+IM.myId,
+	        url:'/zb/c/im/getContacts?userId='+IM.myId,
 	        data:'',
 	        timeout:30000,
 	        dataType:'json',
@@ -204,7 +204,7 @@ var IM = {
 		}
 		IM.openSearchPanel();
 		$.ajax({
-	        url:'/zb/im/search?ownerId='+IM.myId+'&txt='+txt+'&currentPageNo='+IM.currentPageNo,
+	        url:'/zb/c/im/search?ownerId='+IM.myId+'&txt='+txt+'&currentPageNo='+IM.currentPageNo,
 	        timeout:10000,
 	        dataType:'json',
 	        type:'post',
@@ -220,7 +220,7 @@ var IM = {
 	    });
 	},
 	addContact : function(contactId){
-		var url = '/zb/im/addContact?ownerId='+IM.myId+'&contactId='+contactId;
+		var url = '/zb/c/im/addContact?ownerId='+IM.myId+'&contactId='+contactId;
 		$.ajax({
 	        url:url,
 	        data:'',
@@ -242,7 +242,7 @@ var IM = {
 
 	delContact : function(contactId){
 		event.cancelBubble=true;
-		var url = '/zb/im/delContact?ownerId='+IM.myId+'&contactId='+contactId;
+		var url = '/zb/c/im/delContact?ownerId='+IM.myId+'&contactId='+contactId;
 		$.ajax({
 	        url:url,
 	        data:'',
@@ -297,7 +297,7 @@ var IM = {
 		    padding:0,
 		    resize:false
 		});
-		var url = '/zb/im/allAvatars?';
+		var url = '/zb/c/im/allAvatars?';
 		$.ajax({
 	        url:url,
 	        data:'',
@@ -321,7 +321,7 @@ var IM = {
 	},
 	saveAvatar : function(){
 		$.ajax({
-	        url:'/zb/im/setAvatar?userId='+IM.myId+'&avatarId='+IM.avatarId,
+	        url:'/zb/c/im/setAvatar?userId='+IM.myId+'&avatarId='+IM.avatarId,
 	        data:'',
 	        type:'get',
 	        timeout:10000,

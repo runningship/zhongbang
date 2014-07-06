@@ -5,20 +5,20 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Examples</title>
-<link rel="stylesheet" href="/style/css.css">
+<link rel="stylesheet" href="/zb/style/css.css">
 <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" href="/style/house.css">
-<script type="text/javascript" src="/js/jquery.js"></script>
-<script src="/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/js/sysinfo.js"></script>
-<script type="text/javascript" src="/js/Dialog/jquery.artDialog.js?skin=chrome"></script>
-<script type="text/javascript" src="/js/Dialog/plugins/iframeTools.js"></script>
-<script type="text/javascript" src="/js/DatePicker/WdatePicker.js"></script>
-<script type="text/javascript" src="/js/jquery.timers.js"></script>
-<script type="text/javascript" src="/js/jquery.caozuobendi.js"></script>
-<script type="text/javascript" src="/js/buildHtml.js"></script>
-<script type="text/javascript" src="/js/jquery.xianshang.users.js"></script>
-<script type="text/javascript" src="/js/pagination.js"></script>
+<link rel="stylesheet" href="/zb/style/house.css">
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/sysinfo.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=chrome"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.timers.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/zb/js/pagination.js"></script>
 <script type="text/javascript">
 function fix(TableH,TableB){
   for(var i=0;i<=TableB.find('td:last').index();i++){
@@ -36,15 +36,15 @@ function getHuseList(a){
   var url
 //  alert(getParam('chuzu'))
   if(getParam('nav')=="chushou"){
-    url='/zb/house/listSell';
+    url='/zb/c/house/listSell';
   }else if(getParam('nav')=="chuzu"){
-    url='/zb/house/listRent';
+    url='/zb/c/house/listRent';
   }else if(getParam('nav')=="del"){
-    url='/zb/house/listRecycle';
+    url='/zb/c/house/listRecycle';
   }else if(getParam('nav')=="my"){
-    url='/zb/house/listMy';
+    url='/zb/c/house/listMy';
   }else{
-    url='/zb/house/listAll';
+    url='/zb/c/house/listAll';
   }
 //  alert(url)
   $.ajax({
@@ -90,7 +90,7 @@ $(function(){
     onSubmit_Form();
     setMainHeight();
     getHuseList('');
-    $.get('/zb/house/getQueryOptions', function(data) {
+    $.get('/zb/c/house/getQueryOptions', function(data) {
     getStr=JSON.parse(data);
     //  alert(getStr['datetype'])
     buildHtmlWithJsonArray("id_chaoxiang",getStr['chaoxiang']); //朝向
@@ -119,7 +119,7 @@ $(function(){
           content: '删除后不可恢复，确定？',
           ok: function () {
             date="{id:"+this_hid+"}"
-            $.post('/zb/house/physicalDelete?houseId='+this_hid, function(data, textStatus, xhr) {
+            $.post('/zb/c/house/physicalDelete?houseId='+this_hid, function(data, textStatus, xhr) {
               var getStr=JSON.parse(data);
               if(getStr['msg']=='删除成功'){
                 art.dialog.tips('成功永久删除！')
@@ -136,7 +136,7 @@ $(function(){
           content: '删除到回收站？',
           ok: function () {
             date="{id:"+this_hid+"}"
-            $.post('/zb/house/softDelete?houseId='+this_hid, function(data, textStatus, xhr) {
+            $.post('/zb/c/house/softDelete?houseId='+this_hid, function(data, textStatus, xhr) {
               var getStr=JSON.parse(data);
               if(getStr['msg']=='删除成功'){
                 art.dialog.tips('成功移动至回收站！');
@@ -154,7 +154,7 @@ $(function(){
         content: '恢复数据？',
         ok: function () {
           date="{id:"+this_hid+"}"
-          $.post('/zb/house/physicalDelete?houseId='+this_hid, function(data, textStatus, xhr) {
+          $.post('/zb/c/house/physicalDelete?houseId='+this_hid, function(data, textStatus, xhr) {
             var getStr=JSON.parse(data);
             if(getStr['msg']=='删除成功'){
               art.dialog.tips('已恢复');

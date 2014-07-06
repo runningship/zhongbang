@@ -1,5 +1,6 @@
 package com.youwei.zjb.im;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
@@ -26,10 +27,11 @@ public class IMServer extends WebSocketServer{
 	private static IMServer instance =null;
 	private static Map<Integer,WebSocket> conns = new HashMap<Integer,WebSocket>();
 	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
-	
+	private static InetSocketAddress socket = new InetSocketAddress("localhost", 9099); 
 	private IMServer() throws UnknownHostException {
 //		super(new InetSocketAddress(Inet4Address.getByName("localhost"), 9099));
-		super(new InetSocketAddress("192.168.1.125", 9099));
+//		super(new InetSocketAddress("192.168.1.125", 9099));
+		super(socket);
 	}
 
 	public static void startUp() throws UnknownHostException{
@@ -39,6 +41,14 @@ public class IMServer extends WebSocketServer{
 		instance.start();
 		LogUtil.info("IM server started on port 9099");
 	}
+	
+	public static void forceStop() throws IOException, InterruptedException{
+		if(instance!=null){
+			
+			instance.stop();
+		}
+	}
+	
 	@Override
 	public void onOpen(WebSocket conn, ClientHandshake handshake) {
 		System.out.println(conn);
