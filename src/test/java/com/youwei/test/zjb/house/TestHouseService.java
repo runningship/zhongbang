@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import com.youwei.zjb.StartUpListener;
 import com.youwei.zjb.ThreadSession;
-import com.youwei.zjb.entity.House;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.house.ChaoXiang;
 import com.youwei.zjb.house.DateType;
@@ -22,6 +21,7 @@ import com.youwei.zjb.house.HouseService;
 import com.youwei.zjb.house.HouseType;
 import com.youwei.zjb.house.JiaoYi;
 import com.youwei.zjb.house.LouXing;
+import com.youwei.zjb.house.entity.House;
 
 public class TestHouseService {
 

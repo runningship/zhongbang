@@ -45,16 +45,16 @@ public class Client {
 	public String zhaungxiu;
 	
 	@Column(name="mianjias")
-	public Integer mianjiFrom;
+	public Float mianjiFrom;
 	
 	@Column(name="mianjibs")
-	public Integer mianjiTo;
+	public Float mianjiTo;
 	
 	@Column(name="jiageas")
-	public Integer jiageFrom;
+	public Float jiageFrom;
 	
 	@Column(name="jiagebs")
-	public Integer jiageTo;
+	public Float jiageTo;
 
 	/**
 	 * 付佣方式

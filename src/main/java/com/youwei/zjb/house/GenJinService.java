@@ -17,8 +17,8 @@ import org.bc.web.WebMethod;
 import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
-import com.youwei.zjb.entity.GenJin;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.house.entity.GenJin;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
 

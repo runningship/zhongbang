@@ -24,9 +24,12 @@ import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.KeyConstants;
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
+import com.youwei.zjb.cache.UserSessionCache;
 import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.Role;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.oa.entity.NoticeClass;
+import com.youwei.zjb.oa.entity.NoticeReceiver;
 import com.youwei.zjb.sys.entity.PC;
 import com.youwei.zjb.user.entity.RenShiReview;
 import com.youwei.zjb.util.DataHelper;
@@ -48,8 +51,39 @@ public class UserService {
 		Map<String, JSONArray> quyus = groupByQuyu(users);
 		Map<String, JSONArray> depts = groupByDeptId(users);
 		JSONArray root = merge(quyus,depts,users);
-		mv.contentType="text/plain";
+//		mv.contentType="text/plain";
 		mv.data.put("result", root.toString());
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView getUserTree2(int noticeId){
+		ModelAndView mv = new ModelAndView();
+		String hql = "select child.namea as cname,parent.namea as pname ,child.id as did ,child.fid as qid ,u.uname as user ,u.id as userId ,u.hunyin as hunyin "+
+					"from Department child,Department parent , User u where child.fid = parent.id and child.id=u.deptId and u.flag <> 1  ";
+		List<Map> users = dao.listAsMap(hql);
+		Map<String, JSONArray> quyus = groupByQuyu(users);
+		Map<String, JSONArray> depts = groupByDeptId(users);
+		
+		List<NoticeReceiver> receivers = dao.listByParams(NoticeReceiver.class, new String[]{"noticeId"}, new Object[]{noticeId});
+		for(JSONArray arr : depts.values()){
+			for(int i=0;i<arr.size();i++){
+				JSONObject obj = arr.getJSONObject(i);
+				for(NoticeReceiver nr : receivers){
+					if(String.valueOf(nr.receiverId).equals(obj.getString("userId"))){
+						System.out.println(nr.receiverId);
+						JSONObject state = new JSONObject();
+						state.put("selected", true);
+						obj.put("state", state);
+					}
+				}
+				
+			}
+		}
+		JSONArray root = merge(quyus,depts,users);
+//		mv.contentType="text/plain";
+		mv.data.put("result", 0);
+		mv.data.put("data", root.toString());
 		return mv;
 	}
 	
@@ -226,6 +260,13 @@ public class UserService {
 		ThreadSession.getHttpServletRequest().getSession().setAttribute(KeyConstants.Session_User, po);
 		return mv;
 	}
+	
+	@WebMethod
+	public ModelAndView logout(User user,PC pc){
+		ModelAndView mv = new ModelAndView();
+		UserSessionCache.removeUserSession(user.id);
+		return mv;
+	}
 
 	private JSONArray merge(Map<String, JSONArray> quyus ,Map<String, JSONArray> depts , List<Map> users){
 		JSONArray root = new JSONArray();
@@ -233,10 +274,12 @@ public class UserService {
 			JSONArray jarr = quyus.get(key);
 			for(int i=0;i<jarr.size();i++){
 				JSONObject dept = jarr.getJSONObject(i);
-				dept.put("children", depts.get(dept.get("name")));
+				dept.put("children", depts.get(dept.get("text")));
+//				dept.put("children", depts.get(dept.get("name")));
 			}
 			JSONObject jobj = new JSONObject();
-			jobj.put("name", key);
+			jobj.put("text", key);
+//			jobj.put("name", key);
 			jobj.put("deptId", getDeptName(users,key));
 			jobj.put("children", jarr);
 			root.add(jobj);
@@ -263,7 +306,8 @@ public class UserService {
 			}
 			JSONArray arr = quyus.get(user.get("pname"));
 			JSONObject dept = new JSONObject();
-			dept.put("name", user.get("cname"));
+			dept.put("text", user.get("cname"));
+//			dept.put("name", user.get("cname"));
 			dept.put("deptId", user.get("did"));
 			if(!arr.contains(dept)){
 				quyus.get(user.get("pname")).add(dept);
@@ -278,7 +322,8 @@ public class UserService {
 				deptUsers.put(user.get("cname").toString(), new JSONArray());
 			}
 			JSONObject json = new JSONObject();
-			json.put("name", user.get("user"));
+			json.put("text", user.get("user"));
+//			json.put("name", user.get("user"));
 			json.put("userId", user.get("userId"));
 			deptUsers.get(user.get("cname")).add(json);
 		}

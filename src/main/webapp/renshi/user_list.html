@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>在职人员</title>
 <link rel="stylesheet" href="/zb/style/css.css">
-<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.hotkeys.js"></script>
@@ -17,12 +17,13 @@
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
 <script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/zb/js/ywAjax.js"></script>
 <script type="text/javascript">
 var queryOpts;
 var genderArr = [{"name":"男","code":1},{"name":"女","code":0}];
 function getList(search){
   var url='/zb/c/user/list';
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: url,
     data:search,

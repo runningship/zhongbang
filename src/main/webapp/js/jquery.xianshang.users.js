@@ -41,7 +41,7 @@ function fun_get_comp(a){
         getComp.empty();
         getComp.append('<option value="">请选择区域</option>');
         $.each(getUserTreeStr.result, function(index, item) {
-            getComp.append('<option value="'+item.deptId+'">'+item.name+'</option>');
+            getComp.append('<option value="'+item.deptId+'">'+item.text+'</option>');
         });
         if($(".get_quyu"+as).length>0){
             fun_get_quyu(a);
@@ -61,7 +61,7 @@ function fun_get_quyu(a){
             //alert(getUserTreeStr.result[comp_index].children)
             if(getUserTreeStr.result[comp_index]){
                 $.each(getUserTreeStr.result[comp_index].children, function(index, item) {
-                    getQuyu.append('<option value="'+item.deptId+'">'+item.name+'</option>');
+                    getQuyu.append('<option value="'+item.deptId+'">'+item.text+'</option>');
                 });
             }
         }else{
@@ -70,10 +70,10 @@ function fun_get_quyu(a){
                 var optgroups='';
                 $.each(item.children, function(indexs, items) {
                     //alert(items.name);
-                    optgroups=optgroups + '<option value="'+items.deptId+'">'+items.name+'</option>';
+                    optgroups=optgroups + '<option value="'+items.deptId+'">'+items.text+'</option>';
                 }); 
                 //alert(optgroups)
-                getQuyu.append('<optgroup label="'+item.name+'">'+optgroups+'</optgroup>');
+                getQuyu.append('<optgroup label="'+item.text+'">'+optgroups+'</optgroup>');
             });
         }
         if($(".get_user"+as).length>0){
@@ -95,7 +95,7 @@ function fun_get_user(a){
             getUserTreeStr_User=getUserTreeStr.result[comp_index].children[quyu_index].children;
             //alert(getUserTreeStr.result[comp_index].children[quyu_index].children);//输出root的子对象数量
             $.each(getUserTreeStr_User, function(index, item) {
-                getUser.append('<option value="'+item.userId+'">'+item.name+'</option>');
+                getUser.append('<option value="'+item.userId+'">'+item.text+'</option>');
             });
         }
         

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
+import org.bc.sdak.GException;
 import org.bc.sdak.Page;
 import org.bc.sdak.TransactionalServiceHelper;
 import org.bc.web.ModelAndView;
@@ -14,8 +15,12 @@ import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
 import com.youwei.zjb.DateSeparator;
+import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.entity.Client;
-import com.youwei.zjb.entity.GenJin;
+import com.youwei.zjb.house.HouseQuery;
+import com.youwei.zjb.house.JiaoYi;
+import com.youwei.zjb.house.entity.GenJin;
+import com.youwei.zjb.house.entity.House;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
 
@@ -44,16 +49,68 @@ public class ClientService {
 		return mv;
 	}
 	
-	public void assign(Integer clientId,Integer userId){
+	@WebMethod
+	public ModelAndView matchHouse(int clientId,int chuzu , Page<House> page){
+		ModelAndView mv = new ModelAndView();
+		Client client = dao.get(Client.class, clientId);
+		List<Object> params = new ArrayList<Object>();
+		StringBuilder hql = new StringBuilder("from House where area like ? and (isdel=0 or isdel is null) ");
+		params.add("%"+client.area +"%");
+		if(client.mianjiFrom!=null){
+			hql.append(" and mianji>=?");
+			params.add(client.mianjiFrom);
+		}
+		if(client.mianjiTo!=null){
+			hql.append(" and mianji<=?");
+			params.add(client.mianjiTo);
+		}
+		if(client.jiageFrom!=null){
+			hql.append(" and sjia>=?");
+			params.add(client.jiageFrom);
+		}
+		if(client.jiageTo!=null){
+			hql.append(" and sjia<=?");
+			params.add(client.jiageTo);
+		}
+		HouseQuery query = new HouseQuery();
+		query.jiaoyis = new ArrayList<String>();
+		if(chuzu==0){
+			query.jiaoyis.add(JiaoYi.仅租.toString());
+			query.jiaoyis.add(JiaoYi.出租.toString());
+			query.jiaoyis.add(JiaoYi.租售.toString());
+		}else{
+			query.jiaoyis.add(JiaoYi.仅售.toString());
+			query.jiaoyis.add(JiaoYi.出售.toString());
+		}
+		if(query.jiaoyis!=null){
+			hql.append(" and ( ");
+			for(int i=0;i<query.jiaoyis.size();i++){
+				hql.append(" jiaoyi = ? ");
+				if(i<query.jiaoyis.size()-1){
+					hql.append(" or ");
+				}
+				params.add(JiaoYi.valueOf(query.jiaoyis.get(i)).getCode());
+			}
+			hql.append(" )");
+		}
+		page = dao.findPage(page, hql.toString(), params.toArray());
+		mv.data.put("page", JSONHelper.toJSON(page));
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView assign(Integer clientId,Integer userId){
+		ModelAndView mv = new ModelAndView();
 		Client client = dao.get(Client.class, clientId);
 		if(client==null){
-			return;
+			throw new GException(PlatformExceptionType.BusinessException, 1, "客户不能为空");
 		}
 		if(userId==null){
-			return;
+			throw new GException(PlatformExceptionType.BusinessException, 2, "业务员不能为空");
 		}
 		client.salesman = userId;
 		dao.saveOrUpdate(client);
+		return mv;
 	}
 	
 	@WebMethod

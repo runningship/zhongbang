@@ -17,11 +17,29 @@ public class Contract {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer Id;
 	
+	/**
+	 * 添加人
+	 */
 	@Column(name="uid")
 	public Integer userId;
 	
+	/**
+	 * 业务员
+	 */
+	@Column(name="uid_yw")
+	public Integer ywUserId;
+	
+	/**
+	 * 添加人部门
+	 */
 	@Column(name="did")
 	public Integer deptId;
+	
+	/**
+	 * 业务员部门
+	 */
+	@Column(name="did_yw")
+	public Integer ywDeptId;
 	
 	public String bianhao;
 	
@@ -55,6 +73,9 @@ public class Contract {
 	
 	public String beizhu;
 	
+	/**
+	 * 5 出售,6 出租
+	 */
 	public Integer claid;
 	
 	public String chanquan;
@@ -76,7 +97,11 @@ public class Contract {
 	@Column(name="datetime")
 	public Date signdate;
 	
-	public String datetime_gh;
+	/**
+	 * 预约事项
+	 */
+	@Column(name="datetime_gh")
+	public String otherItems;
 	
 	public String remark;
 	
@@ -84,11 +109,23 @@ public class Contract {
 	
 	public Integer proid;
 	
+	/**
+	 * 甲方应收佣金
+	 */
 	public Integer yongjin_a1;
 	
+	/**
+	 * 甲方实收佣金
+	 */
 	public Integer yongjin_a2;
 	
+	/**
+	 * 乙方应收佣金
+	 */
 	public Integer yongjin_b1;
 	
+	/**
+	 * 乙方实收佣金
+	 */
 	public Integer yongjin_b2;
 }

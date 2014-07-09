@@ -12,15 +12,15 @@ import org.bc.sdak.SessionFactoryBuilder;
 import org.bc.web.ModuleManager;
 import org.hibernate.cfg.AvailableSettings;
 
-import com.youwei.zjb.entity.HouseRent;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.house.entity.HouseRent;
 import com.youwei.zjb.im.IMServer;
 
 public class StartUpListener implements ServletContextListener{
 
 	public void contextDestroyed(ServletContextEvent arg0) {
 		try {
-//			IMServer.forceStop();
+			IMServer.forceStop();
 			System.out.println("IM Server stop.");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -30,11 +30,11 @@ public class StartUpListener implements ServletContextListener{
 	public void contextInitialized(ServletContextEvent arg0) {
 		initDataSource();
 		initModule();
-//		try {
-//			IMServer.startUp();
-//		} catch (UnknownHostException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			IMServer.startUp();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initModule() {

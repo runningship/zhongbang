@@ -1,5 +1,6 @@
 package com.youwei.zjb.oa.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,5 +15,6 @@ public class NoticeClass {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer id;
 	
+	@Column(nullable=false)
 	public String title;
 }

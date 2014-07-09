@@ -6,12 +6,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>待审核办公用品</title>
 <link rel="stylesheet" href="/zb/style/css.css">
-<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -42,6 +42,11 @@ function doSearch(){
 }
 
 function deleteSupply(id){
+  art.dialog({
+    title:'提示',
+    content:'确定删除这条审核记录吗？',
+    lock:true,
+    ok:function(){
   $.ajax({
     type: 'get',
     url: '/zb/c/supply/delete?id='+id,
@@ -54,6 +59,10 @@ function deleteSupply(id){
       alert(data.responseText);
     }
   });
+  },
+    cancel:true
+  });
+  
 }
 
 function openEdit(id){

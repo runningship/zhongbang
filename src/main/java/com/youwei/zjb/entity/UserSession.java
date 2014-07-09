@@ -6,7 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Favorite {
+public class UserSession {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -14,5 +14,7 @@ public class Favorite {
 	
 	public Integer userId;
 	
-	public Integer houseId;
+	public String sessionId;
+	
+	public String ip;
 }

@@ -73,21 +73,21 @@ document.addEventListener('mousemove', function (e) {
 }, false);
 $(document).ready(function() {
   aBtnNavFun('.aNavBtn');
-//改善btn-group的操作感受
-if($('.btn-group').length>0){
-var btn_group_time=null;
-$('.btn-group').on('hide.bs.dropdown', function () {
-  return false;
-}).on('show.bs.dropdown', function () {
-  $(".btn-group:not(this)").removeClass('open');
-}).on('mousemove', function(event) {
-  clearTimeout(btn_group_time);
-}).on('mouseout', function () {
-  btn_group_time=setTimeout(function(){
-    $(".btn-group").removeClass('open');
-  },500);
-});
-} 
+  //改善btn-group的操作感受
+  if($('.btn-group').length>0){
+  var btn_group_time=null;
+  $('.btn-group').on('hide.bs.dropdown', function () {
+    return false;
+  }).on('show.bs.dropdown', function () {
+    $(".btn-group:not(this)").removeClass('open');
+  }).on('mousemove', function(event) {
+    clearTimeout(btn_group_time);
+  }).on('mouseout', function () {
+    btn_group_time=setTimeout(function(){
+      $(".btn-group").removeClass('open');
+    },500);
+  });
+  } 
 
 });
 

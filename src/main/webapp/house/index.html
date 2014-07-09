@@ -10,7 +10,7 @@
 <meta name="description" content="">
 <meta name="keywords" content="">
 <link rel="stylesheet" href="/zb/style/css.css">
-<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
@@ -50,6 +50,13 @@ $(document).on('click', '.btns', function(event) {
     }
     return false;
 });
+function iFrameA(a,b){
+    $(document).on('click', a, function(event) {
+        var aHref=$(this).attr( 'href');
+        $(b).attr('src',aHref);
+        return false;
+    });
+}
 function setMainHeight(){
     var bodyHeight=$('.body').height()
     $('.sider').height(bodyHeight);
@@ -61,6 +68,7 @@ $(document).ready(function(){
     $('.sider').find('a').eq(0).click();
     
 })
+iFrameA('.aNavBtn','.house_iframe');
 $(window).resize(function(event) {
     setMainHeight();
 });
@@ -91,7 +99,7 @@ $(window).resize(function(event) {
             </dl>
         </div>
         <div class="mainer">
-            <iframe src="house_list.html" id="house_iframe" name="house_iframe" width="100%" height="100%" frameborder="0"></iframe>
+            <iframe src="house_list.html" id="house_iframe" class="house_iframe" name="house_iframe" width="100%" height="100%" frameborder="0"></iframe>
         </div>
     </div>
 </body>

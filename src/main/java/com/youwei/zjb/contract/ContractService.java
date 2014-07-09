@@ -1,6 +1,7 @@
 package com.youwei.zjb.contract;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -14,9 +15,13 @@ import org.bc.web.WebMethod;
 
 import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.PlatformExceptionType;
+import com.youwei.zjb.ThreadSession;
+import com.youwei.zjb.client.DaiKuanType;
 import com.youwei.zjb.contract.entity.Contract;
 import com.youwei.zjb.contract.entity.ContractProcessClass;
 import com.youwei.zjb.entity.Role;
+import com.youwei.zjb.entity.User;
+import com.youwei.zjb.house.HouseType;
 import com.youwei.zjb.user.RuQiTuJin;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
@@ -27,13 +32,32 @@ public class ContractService {
 	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
 	
 	@WebMethod
+	public ModelAndView initAdd(){
+		ModelAndView mv = new ModelAndView();
+		mv.data.put("yongtu", HouseType.toJsonArray());
+		mv.data.put("daikuan_lx", DaiKuanType.toJsonArray());
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView add(Contract contract){
+		ModelAndView mv = new ModelAndView();
+		User user = ThreadSession.getUser();
+		contract.userId = user.id;
+		contract.deptId = user.deptId;
+		contract.addtime = new Date();
+		dao.saveOrUpdate(contract);
+		return mv;
+	}
+	
+	@WebMethod
 	public ModelAndView list(Page<Contract> page , ContractQuery query){
 		ModelAndView mv = new ModelAndView();
 		List<Object> params = new ArrayList<Object>();
 		StringBuilder hql = new StringBuilder("select c from Contract c,User u where u.id=c.userId ");
-		if(query.chushou!=null){
-			hql.append(" and c.flag = ? ");
-			params.add(query.chushou);
+		if(query.claid!=null){
+			hql.append(" and c.claid = ? ");
+			params.add(query.claid);
 		}
 		if(StringUtils.isNotEmpty(query.addr)){
 			hql.append(" and c.addr like ? ");
@@ -115,7 +139,7 @@ public class ContractService {
 		}
 		po = dao.getUniqueByKeyValue(ContractProcessClass.class, "ordera", proClass.ordera);
 		if(po!=null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "步骤序号重复");
+			throw new GException(PlatformExceptionType.BusinessException, 2, "步骤序号重复");
 		}
 		dao.saveOrUpdate(proClass);
 		mv.data.put("msg", "添加成功");

@@ -112,16 +112,23 @@ public class AuthorityService {
 		}
 	}
 
-	public void updateRole(int userId ,int roleId){
-		User user = ThreadSession.getUser();
-		if(user==null){
-			user = dao.get(User.class, userId);
+	@WebMethod
+	public ModelAndView getRole(int roleId){
+		ModelAndView mv = new ModelAndView();
+		Role role = dao.get(Role.class, roleId);
+		mv.data.put("role", JSONHelper.toJSON(role));
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView updateRole(int id,String title){
+		Role role = dao.get(Role.class, id);
+		if(role==null){
+			throw new GException(PlatformExceptionType.BusinessException, 1, "职务不存在");
 		}
-		if(user==null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "用户不存在");
-		}
-		user.roleId = roleId;
-		dao.saveOrUpdate(user);
+		role.title = title;
+		dao.saveOrUpdate(role);
+		return new ModelAndView();
 	}
 	
 	@WebMethod

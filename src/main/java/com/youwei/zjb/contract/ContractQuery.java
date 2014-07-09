@@ -27,5 +27,5 @@ public class ContractQuery extends AbstractQuery{
 	
 	public String xpath;
 	
-	public Integer chushou;
+	public Integer claid;
 }

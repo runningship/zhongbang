@@ -6,12 +6,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>公告分类</title>
 <link rel="stylesheet" href="/zb/style/css.css">
-<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -20,49 +20,62 @@
 var queryOpts;
 
 function getList(search){
-  var url='/zb/c/admin/class/list';
+  var url='/zb/c/oa/listFenLei';
   $.ajax({
     type: 'get',
     url: url,
     data:search,
     success: function(data){
       var getStr=JSON.parse(data);
-      dataArr = getStr['page']['data'];
+      dataArr = getStr['list'];
       buildHtmlWithJsonArray("id_list",dataArr);
-      Page.setPageInfo(getStr['page']);
+      // Page.setPageInfo(getStr['page']);
     }
   });
 }
 
-function doSearch(){
-  getList(formSerialize($('form[name=form1]')));
-  return false;
+function deleteFenLei(id){
+  art.dialog({
+    title:'提示',
+    content:'确定删除这条公告分类吗？',
+    lock:true,
+    ok:function(){
+      $.ajax({
+        type: 'get',
+        url: '/zb/c/oa/deleteFenLei?id='+id,
+        success: function(data){
+          art.dialog.tips('删除成功');
+          getList();
+        }
+      });
+    }
+  });
+  
 }
 
-
-function openTemplate(id){
-  art.dialog.open('temp_edit.html?classId='+id,{
+function openAdd(){
+  art.dialog.open('fenlei_add.html',{
       padding:0,
       resize:true,
       lock:1,
-      height:600,
-      width:1080
+      height:200,
+      width:500
   });
 }
 
-function openBuZhou(id){
-  art.dialog.open('buzhou_list.html?classId='+id,{
+function openEdit(id){
+  art.dialog.open('fenlei_edit.html?id='+id,{
       padding:0,
       resize:true,
       lock:1,
-      height:600,
-      width:1080
+      height:200,
+      width:500
   });
 }
 
 $(function(){
   getList();
-  Page.Init();
+  // Page.Init();
 });
 
 </script>
@@ -73,6 +86,9 @@ $(function(){
 <body class="hlist bodyer" style="overflow:auto">
 
 <div class="header" style="position:relative;height:10px;width:100%">
+  <div class="btn-group">
+    <button onclick="openAdd();" class="btn btn-primary ">新增</button>
+  </div>
   <form name="form1">
     
   </form>
@@ -86,12 +102,11 @@ $(function(){
     <tbody id="id_list">
     <tr style="display:none">
       <td>${title}</td>
-      <td><a onclick="openTemplate(${id})" href="javascript:void(0)">修改</a> <a onclick="openBuZhou(${id})" href="javascript:void(0)" >删除</a></td>
+      <td><a onclick="openEdit(${id})" href="javascript:void(0)">修改</a> <a onclick="deleteFenLei(${id})" href="javascript:void(0)" >删除</a></td>
     </tr>
     </tbody>
   </table>
 </div>
 
-<div class="footer foot_page_box" style="position:relative;margin-top:10px;height:55px;"></div>
 </body>
 </html>

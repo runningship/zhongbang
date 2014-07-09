@@ -10,7 +10,7 @@
 <meta name="description" content="">
 <meta name="keywords" content="">
 <link rel="stylesheet" href="/zb/style/css.css">
-<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
@@ -20,17 +20,9 @@
 <script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript">
 
-function setMainHeight(){
-    var bodyHeight=$('.body').height()
-    $('.sider').height(bodyHeight);
-    $('.mainer').height(bodyHeight);
-}
-$(function(){
-    setMainHeight();
+$(document).ready(function(){
+    $('.sider').find('a').eq(0).click();
 })
-$(window).resize(function(event) {
-    setMainHeight();
-});
 </script>
 </head>
 <body>
@@ -38,12 +30,12 @@ $(window).resize(function(event) {
         <div class="sider">
             <dl auth="xz" class="sidedl">
                 <dt>行政管理</dt>
-                <dd auth="xz_class_list" ><a href="fenlei_list.html"  target="house_iframe" >分类列表</a></dd>
-                <dd auth="xz_table_list" ><a href="data_list.html"  target="house_iframe" >数据列表</a></dd>
+                <dd auth="xz_class_list" ><a class="aNavBtn" href="fenlei_list.html"  target="house_iframe" >分类列表</a></dd>
+                <dd auth="xz_table_list" ><a class="aNavBtn" href="data_list.html"  target="house_iframe" >数据列表</a></dd>
             </dl>
         </div>
         <div class="mainer">
-            <iframe src="http://www.baidu.com/" id="house_iframe" name="house_iframe" width="100%" height="100%" frameborder="0"></iframe>
+            <iframe src="fenlei_list.html" id="house_iframe" name="house_iframe" width="100%" height="100%" frameborder="0"></iframe>
         </div>
     </div>
 </body>

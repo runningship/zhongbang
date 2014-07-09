@@ -11,9 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.youwei.zjb.StartUpListener;
-import com.youwei.zjb.entity.GenJin;
 import com.youwei.zjb.house.GenJinQuery;
 import com.youwei.zjb.house.GenJinService;
+import com.youwei.zjb.house.entity.GenJin;
 import com.youwei.zjb.util.DebugHelper;
 
 public class TestGenJinService {

@@ -39,7 +39,7 @@ public class TestIMService {
 	@Test
 	public void testAddMessage(){
 		Message dbMsg = new Message();
-		dbMsg.addtime = new Date();
+		dbMsg.sendtime = new Date();
 		dbMsg.content = "test";
 		dbMsg.senderId = 123;
 		dbMsg.receiverId = 456;

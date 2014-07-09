@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>area edit</title>
 <link rel="stylesheet" href="/zb/style/css.css">
-<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
@@ -15,13 +15,17 @@
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript">
 var areaId=getParam('areaId'),formAction;
-if(areaId){formAction='update';getArea();}else{formAction='add';}
-var lngs="117.260429",
-lats="31.881385",
-areas = "华府俊园",
-contall = "";
+var lngs="",
+    lats="",
+    areas = "",
+    contall = "";
+  if(areaId){formAction='update';getArea();}else{formAction='add';}
+  lngs="117.260429",
+  lats="31.881385",
+  areas = "华府俊园",
+  contall = "";
 
-var lngs="117.260429",
+  lngs="117.260429",
   lats="31.881385",
   contall="暂未添加此楼盘字典，<br>请拖动下面箭头选择楼盘标注坐标!";
 
@@ -44,7 +48,6 @@ function setArea(search){
     }
   })
 }
-
 function getArea(){
   var param={areaId:areaId}
   $.ajax({
@@ -62,7 +65,10 @@ function getArea(){
 }
 
 $(function(){
-  onSubmit_Form();
+    if(areaId){}else{
+      $('#arealist').find('input').val('')
+    }
+    onSubmit_Form();
 });
 
 </script>
@@ -102,7 +108,7 @@ $(function(){
         <input type="text" class="form-control" name="maplng" id="lng" value="${maplng}">
       </div>
       <div class="btn-group input-group-max">
-        <button type="submit" class="btn btn-primary btn-block">保存</button>
+        <button type="submit" class="btn btn-primary btn-block btn_submit">保存</button>
       </div>
       </span>
     </form>
@@ -113,33 +119,33 @@ $(function(){
 <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
 <script type="text/javascript">
 
-    //创建和初始化地图函数：
-    function initMap(){
-        createMap();//创建地图
-        setMapEvent();//设置地图事件
-        addMapControl();//向地图添加控件
-        addMarker();//向地图中添加marker
-        other();//其他
-    }
-    
-    //创建地图函数：
-    function createMap(){
-        var map = new BMap.Map("map");//在百度地图容器中创建一个地图
-        var point = new BMap.Point(lngs,lats);//定义一个中心点坐标
-        map.centerAndZoom(point,16);//设定地图的中心点和坐标并将地图显示在地图容器中
-        window.map = map;//将map变量存储在全局
-    }
-    
-    //地图事件设置函数：
-    function setMapEvent(){
-        map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
-        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
-        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
-        map.enableKeyboard();//启用键盘上下左右键移动地图
-    }
+//创建和初始化地图函数：
+function initMap(){
+  createMap();//创建地图
+  setMapEvent();//设置地图事件
+  addMapControl();//向地图添加控件
+  addMarker();//向地图中添加marker
+  other();//其他
+}
+
+//创建地图函数：
+function createMap(){
+  var map = new BMap.Map("map");//在百度地图容器中创建一个地图
+  var point = new BMap.Point(lngs,lats);//定义一个中心点坐标
+  map.centerAndZoom(point,16);//设定地图的中心点和坐标并将地图显示在地图容器中
+  window.map = map;//将map变量存储在全局
+}
+
+//地图事件设置函数：
+function setMapEvent(){
+  map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
+  map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+  map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+  map.enableKeyboard();//启用键盘上下左右键移动地图
+}
     
     //地图控件添加函数：
-    function addMapControl(){
+function addMapControl(){
         //向地图中添加缩放控件
   var ctrl_nav = new BMap.NavigationControl({anchor:BMAP_ANCHOR_TOP_LEFT,type:BMAP_NAVIGATION_CONTROL_LARGE});
   map.addControl(ctrl_nav);
@@ -149,7 +155,7 @@ $(function(){
         //向地图中添加比例尺控件
   var ctrl_sca = new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT});
   map.addControl(ctrl_sca);
-    }
+}
   
 function addMarker(){
   var content = contall;

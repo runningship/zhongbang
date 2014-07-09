@@ -17,8 +17,8 @@ import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.Attachment;
-import com.youwei.zjb.entity.House;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.house.entity.House;
 import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
@@ -32,16 +32,11 @@ public class OutService {
 	
 	@WebMethod
 	public ModelAndView add(OutRecord out){
-		User user = ThreadSession.getUser();
-		if(user==null){
-			out.userId = 316;
-		}else{
-			out.userId = user.id;
-		}
+		out.userId = ThreadSession.getUser().id;
 		if(out.outTime==null || out.backTime==null){
 			throw new GException(PlatformExceptionType.BusinessException, 1, "您填写的数据不完整");
 		}
-		
+		out.reply = 0;
 		String hql = "from OutRecord where userId=? and outTime>= ? and backTime<=? ";
 		long count = dao.countHqlResult(hql, out.userId,out.outTime,out.backTime);
 		if(count>0){
@@ -98,14 +93,14 @@ public class OutService {
 		if(StringUtils.isEmpty(out.houses)){
 			throw new GException(PlatformExceptionType.BusinessException, 4, "请选择房源信息");
 		}
-		List<User> clients = dao.listByParams(User.class, "from User where id in (?) ", (Object[])out.clients.split(","));
-		List<House> houses = dao.listByParams(House.class, "from House where id in (?) ", (Object[])out.houses.split(","));
-		for(User u : clients){
-			out.clientInfo+=u.uname+" "+u.tel+",";
-		}
-		for(House h : houses){
-			out.houseInfo+=h.quyu+" "+h.area+" "+h.dhao+h.fhao+",";
-		}
+//		List<User> clients = dao.listByParams(User.class, "from User where id in (?) ", (Object[])out.clients.split(","));
+//		List<House> houses = dao.listByParams(House.class, "from House where id in (?) ", (Object[])out.houses.split(","));
+//		for(User u : clients){
+//			out.clientInfo+=u.uname+" "+u.tel+",";
+//		}
+//		for(House h : houses){
+//			out.houseInfo+=h.quyu+" "+h.area+" "+h.dhao+h.fhao+",";
+//		}
 		dao.saveOrUpdate(out);
 	}
 	

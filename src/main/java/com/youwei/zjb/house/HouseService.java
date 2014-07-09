@@ -19,9 +19,9 @@ import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.client.KeHuXingzhi;
 import com.youwei.zjb.client.KeHuLaiYuan;
-import com.youwei.zjb.entity.Favorite;
-import com.youwei.zjb.entity.House;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.house.entity.Favorite;
+import com.youwei.zjb.house.entity.House;
 import com.youwei.zjb.util.JSONHelper;
 import com.youwei.zjb.work.PiYue;
 
@@ -39,6 +39,7 @@ public class HouseService {
 			mv.data.put("msg", "同一个房源已经存在");
 			mv.data.put("result", 2);
 		}else{
+			house.isdel = 0;
 			service.saveOrUpdate(house);
 			mv.data.put("msg", "发布成功");
 			mv.data.put("result", 0);
@@ -158,13 +159,17 @@ public class HouseService {
 	}
 	
 	@WebMethod
-	public ModelAndView view(int userId ,int houseId){
+	public ModelAndView view(int houseId){
+		User user = ThreadSession.getUser();
+		if(user==null){
+			user = service.get(User.class, 316);
+		}
 		ModelAndView mv = new ModelAndView();
 		House house = service.get(House.class, houseId);
 		List<House> list = new ArrayList<House>();
 		list.add(house);
 		mv.data.put("house", JSONHelper.toJSONArray(list));
-		Favorite fav = service.getUniqueByParams(Favorite.class, new String[]{"userId" , "houseId"}, new Object[]{ userId , houseId });
+		Favorite fav = service.getUniqueByParams(Favorite.class, new String[]{"userId" , "houseId"}, new Object[]{ user.id , houseId });
 		mv.data.put("fav", fav==null ? 0:1);
 		return mv;
 	}

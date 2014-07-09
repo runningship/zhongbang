@@ -251,7 +251,30 @@
 },{
 	"name":"oa",
 	"type":"module",
-	"text":"OA管理"
+	"text":"OA管理",
+	"children":[{
+		"name":"oa_desk",
+		"text":"我的桌面",
+		"type":"virtual",
+		"children":[{
+			"name":"oa_desk_mydesk",
+			"text":"我的桌面",
+			"type":"menu"
+		}]
+	},{
+		"name":"oa_notice",
+		"text":"公告管理",
+		"type":"virtual",
+		"children":[{
+			"name":"oa_notice_fenlei",
+			"text":"公告分类",
+			"type":"menu"
+		},{
+			"name":"oa_notice_list",
+			"text":"公告列表",
+			"type":"menu"
+		}]
+	}]
 },{
 	"name":"xt",
 	"text":"系统管理",

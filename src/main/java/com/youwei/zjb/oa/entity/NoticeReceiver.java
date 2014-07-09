@@ -16,5 +16,5 @@ public class NoticeReceiver {
 	
 	public Integer noticeId;
 	
-	public Integer read;
+	public Integer hasRead;
 }

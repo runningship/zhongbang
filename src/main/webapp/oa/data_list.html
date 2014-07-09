@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>记录</title>
+<title>系统公告</title>
 <link rel="stylesheet" href="/zb/style/css.css">
-<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -20,7 +20,7 @@
 var queryOpts;
 
 function getList(search){
-  var url='/zb/c/admin/listTable';
+  var url='/zb/c/oa/listNotice';
   $.ajax({
     type: 'POST',
     url: url,
@@ -36,7 +36,7 @@ function getList(search){
 
 function selectType(id,title){
   $('#btn_class_select').text(title);
-  $('#classId').val(id);
+  $('#claid').val(id);
   doSearch();
 }
 
@@ -46,21 +46,30 @@ function doSearch(){
 }
 
 function deleteData(id){
-  $.ajax({
-    type: 'POST',
-    url: '/zb/c/admin/deleteTable?tableId='+id,
-    data:'',
-    success: function(data){
-      getList();
-    },
-    error:function(data){
-      alert(data.responseText);
+   art.dialog({
+    title:'提示',
+    content:'确定删除这条公告吗？',
+    lock:true,
+    ok:function(){
+      $.ajax({
+        type: 'POST',
+        url: '/zb/c/oa/deleteNotice?noticeId='+id,
+        data:'',
+        success: function(data){
+          art.dialog.tips('删除成功');
+          getList();
+        },
+        error:function(data){
+          alert(data.responseText);
+        }
+      });
     }
   });
+  
 }
 
-function openAdd(id){
-  art.dialog.open('data_add.html?classId='+id,{
+function openAdd(id,name){
+  art.dialog.open('notice_add.html?claid='+id+'&claName='+name,{
       padding:0,
       resize:true,
       lock:1,
@@ -69,8 +78,8 @@ function openAdd(id){
   });
 }
 
-function openEdit(id){
-  art.dialog.open('data_edit.html?tableId='+id,{
+function openEdit(id,name){
+  art.dialog.open('notice_edit.html?recordId='+id+'&claName='+name,{
       padding:0,
       resize:true,
       lock:1,
@@ -91,10 +100,10 @@ function openView(id){
 
 $(function(){
   getList();
-  $.get('/zb/c/admin/class/list', function(data) {
+  $.get('/zb/c/oa/listFenLei', function(data) {
     queryOpts=JSON.parse(data);
-    buildHtmlWithJsonArray("adminClassList",queryOpts['page']['data']);
-    buildHtmlWithJsonArray("adminClassList2",queryOpts['page']['data']);
+    buildHtmlWithJsonArray("adminClassList",queryOpts['list']);
+    buildHtmlWithJsonArray("adminClassList2",queryOpts['list']);
   });
   Page.Init();
 });
@@ -111,7 +120,7 @@ $(function(){
     <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:30px;padding:0px 10px 0px 10px">添加 <span class="caret"></span></button>
     <ul class="dropdown-menu">
       <span id="adminClassList">
-        <li><label><a onclick="openAdd(${id})" href="javascript:void(0)" style="color:black;padding-left:10px;line-height:30px;font-weight:normal">${title}</a></label></li>
+        <li><label><a onclick="openAdd(${id},'${title}')" href="javascript:void(0)" style="color:black;padding-left:10px;line-height:30px;font-weight:normal">${title}</a></label></li>
       </span>
     </ul>
   </div>
@@ -127,19 +136,7 @@ $(function(){
         </span>
       </ul>
     </div>
-    <div class="input-group input-group-max">
-      <span class="input-group-addon">标题</span>
-      <input type="text" class="form-control" name="title">
-    </div>
-    <div class="input-group" style="width:355px">
-      <span class="input-group-addon">日期</span>
-      <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:150px;border-radius:0;">
-      <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:150px">
-    </div>
-    <div class="btn-group">
-      <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
-    </div>
-    <input type="hidden" id="classId" name="classId" />
+    <input type="hidden" id="claid" name="claid" />
   </form>
   </div>
 
@@ -159,7 +156,7 @@ $(function(){
       <td>${uname}</td>
       <td>${addtime}</td>
       <td>${classTitle}</td>
-      <td><a onclick="openView(${id})" href="javascript:void(0)">查看</a> <a onclick="openEdit(${id})" href="javascript:void(0)">修改</a> 
+      <td><a onclick="openView(${id})" href="javascript:void(0)">查看</a> <a onclick="openEdit(${id},'${classTitle}')" href="javascript:void(0)">修改</a> 
       <a href="javascript:void(0)" onclick="deleteData(${id});">删除</a></td>
     </tr>
     </tbody>

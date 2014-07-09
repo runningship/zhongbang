@@ -16,7 +16,7 @@ public class Message {
 	
 	public String content;
 	
-	public Date addtime;
+	public Date sendtime;
 	
 	public Integer senderId;
 	

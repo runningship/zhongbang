@@ -13,6 +13,8 @@ var IM = {
 	avatarId:null,
 	defMsgInputHeight:36,
 	defMsgInputDivHeight:50,
+	chats:[],
+
 
 	loadContacts : function(){
 		$.ajax({
@@ -35,6 +37,13 @@ var IM = {
 	    });
 	},
 
+	getChat:function(contactId){
+		for(var i=0;i<this.chats.length;i++){
+			if(this.chats[i].contactId==contactId){
+				return this.chats[i];
+			}
+		}
+	},
 	sortContacts : function(contactArr){
 		var sorted = [];
 		for(var i=0;i<contactArr.length;i++){
@@ -69,7 +78,7 @@ var IM = {
 	setUserProfile : function(profile){
 		$('#me').text(profile['username']);
 		IM.avatarId = profile['avatarId'];
-		$('#myAvatar').attr('src','/style/image/avatar/'+IM.avatarId+'.jpg');
+		$('#myAvatar').attr('src','/zb/style/image/avatar/'+IM.avatarId+'.jpg');
 	},
 
 	login : function(){
@@ -80,17 +89,32 @@ var IM = {
 		IM.ws.send(JSON.stringify(data));
 	},
 
-	openChat : function(userId){
-		IM.receiverId = userId;
-		var contact = IM.getContact(userId);
+	openChat : function(contactId){
+		
+		var oldChat = IM.getChat(IM.receiverId);
+		if(oldChat!=null){
+			oldChat.chatHistory = IM.msgContainer.html();
+		}
+		IM.receiverId = contactId;
+		var contact = IM.getContact(contactId);
 		$('#cname').text(contact["contactName"]);
-
 
 		var msgCount = $($('#'+IM.receiverId).children(0)[1]);
 		msgCount.text(0);
 		msgCount.css('display','none');
 
-		IM.loadHistory(userId);
+		IM.msgContainer.empty();
+
+		var openChat = IM.getChat(contactId);
+		if(openChat==null){
+			openChat = Object.create(Chat);
+			openChat.contactId = contactId;
+			IM.chats.push(openChat);
+			IM.loadHistory(contactId);
+		}else{
+			IM.msgContainer.html(openChat.chatHistory);
+		}
+		
 		$('#chatWindow').css('display','');
 		// if(IM.chatWindow!=null && IM.chatWindowOpen){
 		// 	// chatWindowLeft = chatWindow.DOM.wrap[0].offsetLeft;
@@ -122,7 +146,7 @@ var IM = {
 	onReceiveMsg : function(data){
 		var sender = IM.getContact(data['senderId']);
 		if(IM.receiverId==data['senderId']){
-			$('#recvAvatar').attr('src','style/image/avatar/'+sender['avatar']+'.jpg');
+			$('#recvAvatar').attr('src','/zb/style/image/avatar/'+sender['avatar']+'.jpg');
 			var dhtml = $('#recvTmp').html();
 			dhtml = dhtml.replace('${msg}',data['content']);
 			dhtml = dhtml.replace('${contact}',sender['contactName']);
@@ -144,7 +168,7 @@ var IM = {
 			return;
 		}
 		$('#message').val('');
-		$('#sendAvatar').attr('src','style/image/avatar/'+IM.avatarId+'.jpg');
+		$('#sendAvatar').attr('src','/zb/style/image/avatar/'+IM.avatarId+'.jpg');
 		var dhtml = $('#sendTmp').html();
 		dhtml = dhtml.replace('${msg}',text);
 		// dhtml = dhtml.replace('${me}','我自己');
@@ -162,12 +186,20 @@ var IM = {
 		}
 	},
 
-	buildHistory : function(list){
-		IM.msgContainer.empty();
+	buildHistory : function(contactId,list){
+		// IM.msgContainer.empty();
+		var lastTimelineSpan = IM.msgContainer.find('span[name=sendtime]');
+		var lastTimeline;
+		if(lastTimelineSpan.length==0){
+			lastTimeline = new Date().getTime();
+		}else{
+			lastTimeline = Date.parse(lastTimelineSpan[0].innerText);
+		}
+		
 		for(var i=0;i<list.length;i++){
 			var msg = list[i];
 			if(IM.myId==msg['senderId']){
-				$('#sendAvatar').attr('src','style/image/avatar/'+IM.avatarId+'.jpg');
+				$('#sendAvatar').attr('src','/zb/style/image/avatar/'+IM.avatarId+'.jpg');
 				var dhtml = $('#sendTmp').html();
 				dhtml = dhtml.replace('${msg}',msg['content']);
 				// dhtml = dhtml.replace('${me}','我自己');
@@ -177,7 +209,7 @@ var IM = {
 
 			}else if(IM.myId==msg['receiverId']){
 				var sender = IM.getContact(msg['senderId']);
-				$('#recvAvatar').attr('src','style/image/avatar/'+sender['avatar']+'.jpg');
+				$('#recvAvatar').attr('src','/zb/style/image/avatar/'+sender['avatar']+'.jpg');
 				var dhtml = $('#recvTmp').html();
 				dhtml = dhtml.replace('${msg}',msg['content']);
 				dhtml = dhtml.replace('${contact}',sender['contactName']);
@@ -185,15 +217,38 @@ var IM = {
 				dhtml = dhtml.replace('display:none','');
 				IM.msgContainer.prepend(dhtml);
 			}
+			var timeline = '<div style="text-align:center"><span name="sendtime" style="background-color:#ddd">'+msg['sendtime']+'</span></div>';
+			// IM.msgContainer.prepend(timeline);
+			var sendtime = Date.parse(msg['sendtime']);
+			if(lastTimeline-sendtime>=3600*1000){
+				IM.msgContainer.prepend(timeline);
+				lastTimeline = sendtime;
+			}
+			// if(i==0){
+			// 	IM.msgContainer.prepend(timeline);
+			// }else{
+			// 	var tnew = Date.parse(msg['sendtime']);
+			// 	var told = Date.parse(list[i-1]['sendtime']);
+			// 	if(tnew-told>=3600*1000){
+			// 		IM.msgContainer.prepend(timeline);
+			// 	}
+			// }
+		}
+		if(list.length>0){
+			IM.msgContainer.prepend('<div style="text-align:center"><a onclick="$(this).remove();IM.loadHistory('+contactId+')" href="javascript:void(0)">查看更多</a></div>');
 		}
 		IM.msgContainer.scrollTop(IM.msgContainer.scroll(0)[0].scrollHeight);
 	},
 
+
 	loadHistory : function(cid){
+		var chat = this.getChat(cid);
+		chat.page++;
 		var data = JSON.parse('{}');
 		data['type']='history';
 		data['myId'] = IM.myId;
 		data['contactId']=cid;
+		data['page']=chat.page;
 		IM.ws.send(JSON.stringify(data));
 	},
 
@@ -317,7 +372,7 @@ var IM = {
 	},
 	setAvatar : function(aId){
 		IM.avatarId = aId;
-		$('#myAvatar').attr('src','/style/image/avatar/'+IM.avatarId+'.jpg');
+		$('#myAvatar').attr('src','/zb/style/image/avatar/'+IM.avatarId+'.jpg');
 	},
 	saveAvatar : function(){
 		$.ajax({
@@ -353,7 +408,7 @@ var IM = {
 			if(json['type']=='msg'){
 				IM.onReceiveMsg(json);
 			}else if(json['type']=='history'){
-				IM.buildHistory(json['history']);
+				IM.buildHistory(json['contactId'],json['history']);
 			}else if(json['type']=='userprofile'){
 				IM.setUserProfile(json);
 			}else if(json['type']=='status'){
@@ -384,4 +439,10 @@ var IM = {
 		// });
 		// $('#lxr').parents().find('.aui_close').css('display','none');
 	}
+}
+
+var Chat = {
+	contactId:null,
+	chatHistory:null,
+	page:0
 }

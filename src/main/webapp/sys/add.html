@@ -6,7 +6,7 @@
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>新增职务</title>
 <link rel="stylesheet" href="/zb/style/css.css">
-<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
@@ -14,7 +14,7 @@
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" src="/zb/js/uploadify/jquery.uploadify.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
-<link href="../zb/js/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<link href="/zb/js/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.config.js"></script>
 <script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.all.js"> </script>
 <script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/lang/zh-cn/zh-cn.js"></script>
@@ -29,7 +29,9 @@ function save(){
     url: '/zb/c/sys/addRole',
     data:text,
     success: function(data){
-      alert('添加成功.');
+      art.dialog.close();
+      art.dialog.tips('添加成功');
+      art.dialog.opener.doSearch();
     },
     error:function(data){
       alert(data.responseText);
@@ -41,24 +43,12 @@ function save(){
 </script>
 </head>
 <body class="hlist bodyer" style="overflow:auto">
-  <form name="textForm" style="position:relative;height:40px;width:100%">
-  <div class="input-group input-group-max">
-      <span class="input-group-addon">  标 题</span>
+  <form name="textForm" style="position:relative;height:40px;">
+    <div class="input-group input-group-max">
+      <span class="input-group-addon">职务名称</span>
       <input type="text" class="form-control" name="title">
     </div>
-  <input id="outCont" name="outCont" type="hidden" />
-  <input type="hidden" name="category" id="category" />
   </form>
   <button onclick="save();return false;">确定</button>
-<div>
-    <input id="file_upload" name="file_upload" style="display:none">
-</div>
-<div id="attachList">
-  <span style="display:none">
-    <div>
-      <a target="_blank" href="/file/download?bizType=${bizType}&recordId=${recordId}&file=${filename}">${filename}</a> <a href="javascript:void(0)" onclick="deleteAttach(${id})">删除</a>
-    </div>
-  </span>
-</div>
 </body>
 </html>

@@ -196,7 +196,8 @@ artDialog.open = function (url, options, cache) {
 			$content = DOM.content;
 			
 			iframe = api.iframe = top.document.createElement('iframe');
-			iframe.src = url;
+			iframe.src = window.location.pathname+"/../"+url;
+			// iframe.src = url;
 			iframe.name = 'Open' + api.config.id;
 			iframe.style.cssText = initCss;
 			iframe.setAttribute('frameborder', 0, 0);

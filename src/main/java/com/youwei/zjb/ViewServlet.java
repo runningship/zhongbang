@@ -77,6 +77,19 @@ public class ViewServlet extends HttpServlet{
 				e.remove();
 			}
 		}
+		
+		//process include
+		list = doc.getElementsByTag("include");
+		for(Element e : list){
+			String src = e.attr("src");
+			try{
+				File f = new File(filePath);
+				String str = FileUtils.readFileToString(new File(f.getParentFile().getPath()+File.separator+src));
+				e.html(str);
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
+		}
 		resp.getWriter().write(doc.html());
 	}
 	

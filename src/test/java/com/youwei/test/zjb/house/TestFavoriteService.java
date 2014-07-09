@@ -9,10 +9,10 @@ import org.junit.Test;
 
 import com.youwei.zjb.StartUpListener;
 import com.youwei.zjb.ThreadSession;
-import com.youwei.zjb.entity.GenJin;
-import com.youwei.zjb.entity.House;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.house.FavoriteService;
+import com.youwei.zjb.house.entity.GenJin;
+import com.youwei.zjb.house.entity.House;
 
 public class TestFavoriteService {
 
@@ -24,7 +24,7 @@ public class TestFavoriteService {
 	
 	@Test
 	public void testAdd(){
-		service.add(207, 169);
+		service.add(169);
 	}
 	
 	@Test

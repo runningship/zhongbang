@@ -23,6 +23,7 @@ public class Notice {
 	@Column(nullable=false)
 	public Integer claid;
 	
+	@Column(nullable=false)
 	public String title;
 	
 	public String conts;

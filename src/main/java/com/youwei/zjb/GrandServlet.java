@@ -12,6 +12,7 @@ import javassist.NotFoundException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +27,9 @@ import org.bc.web.Handler;
 import org.bc.web.ModelAndView;
 import org.bc.web.ModuleManager;
 
+import com.youwei.zjb.cache.UserSessionCache;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.util.SessionHelper;
 
 
 public class GrandServlet extends HttpServlet{
@@ -39,12 +42,21 @@ public class GrandServlet extends HttpServlet{
 		resp.setCharacterEncoding("utf8");
 		resp.setContentType("text/html");
 		String path = req.getPathInfo();
-		User u = (User)req.getSession().getAttribute(KeyConstants.Session_User);
+		SessionHelper.updateSession(req);
+//		User u = (User)req.getSession().getAttribute(KeyConstants.Session_User);
+		User u = UserSessionCache.getUser(req.getSession().getId());
 		if(u==null){
 			//返回登录页面
-		}else{
-			ThreadSession.setUser(u);
+			if(u==null){
+				u = SimpDaoTool.getGlobalCommonDaoService().get(User.class, 316);
+				String ip = req.getHeader("x-forwarded-for");
+				if (ip == null) {
+					ip = req.getRemoteAddr();
+				}
+				UserSessionCache.putSession(req.getSession().getId(), u.id , ip);
+			}
 		}
+		ThreadSession.setUser(u);
 		ThreadSession.setHttpServletRequest(req);
 		LogUtil.info(path);
 		if("/".equals(path)){

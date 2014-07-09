@@ -1,4 +1,4 @@
-package com.youwei.zjb.entity;
+package com.youwei.zjb.house.entity;
 
 import java.util.Date;
 

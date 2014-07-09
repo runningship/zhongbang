@@ -6,13 +6,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Examples</title>
 <link rel="stylesheet" href="/zb/style/css.css">
-<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/sysinfo.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=chrome"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.timers.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
@@ -21,7 +21,7 @@
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
 <script type="text/javascript">
 
-  var getStr;
+  var getStr,isFavZT;
   var QueryOptions='',getHid=getParam('hid');
 function getEnumText(category,code){
   var arr = QueryOptions[category];
@@ -44,12 +44,22 @@ $(document).on('click', '.j_btn_edit', function(event) {
   window.location.href="house_add.html?hid="+getHid
   return false;
 }).on('click', '.j_btn_map', function(event) {
-  
+  art.dialog.open('areasee.html?area='+$(this).data('area'),{
+    height:450,
+    width:700,
+    title:'查看地图'
+  })
   return false;
 }).on('click', '.j_btn_fav', function(event) {
-  $.get('/zb/c/fav/add?userId=3&houseId='+getHid, function(data) {
+  if($(this).text()=="收藏"){ThiAction="add";$(this).text('已收藏');}else{ThiAction="delete";$(this).text('收藏');}
+  $.get('/zb/c/fav/'+ThiAction+'?houseId='+getHid, function(data) {
     getStr=JSON.parse(data);
-    art.dialog.tips(getStr['msg']);
+    if(ThiAction=="add"){
+      msg="已收藏";
+    }else{
+      msg="已取消收藏";
+    }
+    art.dialog.tips(msg);
   });
   return false;
 });
@@ -105,7 +115,7 @@ $(function(){
           <div class="row-fluid">
             <div class="pull-right">
               <span class="runscript">getFav()</span>
-              <a href="#" class="j_btn_map btn btn-mini btn-link">地图</a>
+              <a href="#" class="j_btn_map btn btn-mini btn-link" data-area="${area}">地图</a>
               <a href="#" class="j_btn_edit btn btn-mini btn-primary"><i class="icon-edit icon-white"></i> 修改</a>
               <br />
               <span class="posYuyue" style="display:none;">预约看房</span>

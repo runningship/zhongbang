@@ -10,7 +10,7 @@
 <meta name="description" content="">
 <meta name="keywords" content="">
 <link rel="stylesheet" href="/zb/style/css.css">
-<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
@@ -19,17 +19,8 @@
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript">
-
-function setMainHeight(){
-    var bodyHeight=$('.body').height()
-    $('.sider').height(bodyHeight);
-    $('.mainer').height(bodyHeight);
-}
 $(function(){
-    setMainHeight();
-})
-$(window).resize(function(event) {
-    setMainHeight();
+    $('.sider').find('a').eq(0).click();
 });
 </script>
 </head>
@@ -38,14 +29,14 @@ $(window).resize(function(event) {
         <div class="sider">
             <dl auth="yw" class="sidedl">
                 <dt>业务管理</dt>
-                <dd auth="yw_out_kf" ><a href="out/see_house_list.html"  target="house_iframe" >外出看房</a></dd>
-                <dd auth="yw_out_gs" ><a href="out/biz_list.html" target="house_iframe" >外出公事</a></dd>
-                <dd auth="yw_journal_qj" ><a href="journal/qingjia_list.html" target="house_iframe" >请假登记</a></dd>
-                <dd auth="yw_journal_work" ><a href="journal/work_list.html" target="house_iframe" >工作日志</a></dd>
-                <dd auth="yw_jilu_hy" ><a href="jilu/list.html?category=0" target="house_iframe" >会议记录</a></dd>
-                <dd auth="yw_jilu_fy" ><a href="jilu/list.html?category=1" target="house_iframe" >优质房源</a></dd>
-                <dd auth="yw_jilu_zj" ><a href="jilu/list.html?category=2" target="house_iframe" >月度总结</a></dd>
-                <dd auth="yw_jilu_kq" ><a href="jilu/list.html?category=3" target="house_iframe" >考勤表格</a></dd>
+                <dd auth="yw_out_kf" ><a class="aNavBtn" href="out/see_house_list.html"  target="house_iframe" >外出看房</a></dd>
+                <dd auth="yw_out_gs" ><a class="aNavBtn" href="out/biz_list.html" target="house_iframe" >外出公事</a></dd>
+                <dd auth="yw_journal_qj" ><a class="aNavBtn" href="journal/qingjia_list.html" target="house_iframe" >请假登记</a></dd>
+                <dd auth="yw_journal_work" ><a class="aNavBtn" href="journal/work_list.html" target="house_iframe" >工作日志</a></dd>
+                <dd auth="yw_jilu_hy" ><a class="aNavBtn" href="jilu/list.html?category=0" target="house_iframe" >会议记录</a></dd>
+                <dd auth="yw_jilu_fy" ><a class="aNavBtn" href="jilu/list.html?category=1" target="house_iframe" >优质房源</a></dd>
+                <dd auth="yw_jilu_zj" ><a class="aNavBtn" href="jilu/list.html?category=2" target="house_iframe" >月度总结</a></dd>
+                <dd auth="yw_jilu_kq" ><a class="aNavBtn" href="jilu/list.html?category=3" target="house_iframe" >考勤表格</a></dd>
             </dl>
         </div>
         <div class="mainer">

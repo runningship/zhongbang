@@ -11,9 +11,9 @@ import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
 import com.youwei.zjb.ThreadSession;
-import com.youwei.zjb.entity.Favorite;
-import com.youwei.zjb.entity.House;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.house.entity.Favorite;
+import com.youwei.zjb.house.entity.House;
 import com.youwei.zjb.util.JSONHelper;
 
 @Module(name="/fav/")
@@ -22,23 +22,34 @@ public class FavoriteService {
 	CommonDaoService service = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
 	
 	@WebMethod
-	public ModelAndView add(Integer userId, Integer houseId){
-		Favorite po = service.getUniqueByParams(Favorite.class, new String[]{"userId","houseId"}, new Object[]{userId,houseId});
+	public ModelAndView add(Integer houseId){
+		User user = ThreadSession.getUser();
+		if(user==null){
+			user = service.get(User.class, 316);
+		}
+		Favorite po = service.getUniqueByParams(Favorite.class, new String[]{"userId","houseId"}, new Object[]{user.id,houseId});
 		if(po==null){
 			Favorite fav = new Favorite();
 			fav.houseId = houseId;
-			fav.userId = userId;
+			fav.userId = user.id;
 			service.saveOrUpdate(fav);
 		}
 		return new ModelAndView();
 	}
 	
 	@WebMethod
-	public void delete(Integer userId,Integer houseId){
-		Favorite po = service.getUniqueByParams(Favorite.class, new String[]{"userId","houseId"}, new Object[]{userId,houseId});
+	public ModelAndView delete(Integer houseId){
+		ModelAndView mv = new ModelAndView();
+		User user = ThreadSession.getUser();
+		if(user==null){
+			user = service.get(User.class, 316);
+		}
+		Favorite po = service.getUniqueByParams(Favorite.class, new String[]{"userId","houseId"}, new Object[]{user.id,houseId});
 		if(po!=null){
 			service.delete(po);
 		}
+		mv.data.put("msg", "已取消关注");
+		return mv;
 	}
 	
 	@WebMethod

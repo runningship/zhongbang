@@ -6,12 +6,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>合同步骤</title>
 <link rel="stylesheet" href="/zb/style/css.css">
-<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -34,7 +34,12 @@ function getList(search){
 }
 
 function deleteBuZhou(buzhouId){
-  $.ajax({
+  art.dialog({
+    title:'提示',
+    content:'确定删除这条步骤记录吗？',
+    lock:true,
+    ok:function(){
+    $.ajax({
     type: 'get',
     url: '/zb/c/contract/buzhou/delete?pcId='+buzhouId,
     data:'',
@@ -45,7 +50,11 @@ function deleteBuZhou(buzhouId){
     error: function(data){
       alert('删除失败');
     }
+    });
+    },
+    cancel:true
   });
+  
 }
 
 function openAdd(){
@@ -75,14 +84,10 @@ $(function(){
 </head>
 <body class="hlist bodyer" style="overflow:auto">
 
-<div class="header" style="position:relative;height:50px;width:100%">
-  <form name="form1">
-    
-  </form>
-  <div class="btn-group">
-    <button onclick="openAdd()" class="btn btn-primary">添加</button>
+ <div class="btn-group">
+    <a id="add_link" onclick="openAdd()" href="javascript:void(0)"><button class="btn btn-primary">添加</button></a>
   </div>
-</div>
+
 <div class="mainer" style="position:relative;width:100%">
   <table class="table table-hover .table_bodyer" >
     <thead>

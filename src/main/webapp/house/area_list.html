@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Examples</title>
 <link rel="stylesheet" href="/zb/style/css.css">
-<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
@@ -16,7 +16,6 @@
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.4"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
 <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
-<script src="areamap.js"></script>
 <script type="text/javascript">
 var lngs="117.260429";
 var lats="31.881385";
@@ -46,6 +45,21 @@ function onSubmit_Form(){
 }
 
 function openEdit(rowIndex){
+  if(rowIndex){
+    art.dialog.open('house/areaedit.html?areaId='+rowIndex,{
+      height:450,
+      width:700,
+      title:'修改地图'
+    })
+  }else{
+    art.dialog.open('house/areaedit.html',{
+      height:450,
+      width:700,
+      title:'添加地图'
+    })
+  }
+}
+/*  return false;
   var json = dataArr[rowIndex];
   id=json['id'];
   lats=json['maplat'];
@@ -59,28 +73,16 @@ function openEdit(rowIndex){
   var mapDiv = $('#map');
   mapDiv.css({"width":"1080px","height":"600px"});
   addMarker();
-  // initMap();
-  art.dialog.open('areaedit.html?id='+id,{
-    padding: 0,
-    marging: 0,
-    width: 1080,
-    lock:true,
-    height: 600,
-    title: '地图',
-    close:function(){
-      $('#mapDiv').css('opacity',0);
-    }
   });
+*/
   // mapDiv.css('opacity',1);
 //  $('#mapDiv').css('opacity',1);
 //  mapDiv.parent()[0].parentElement.style.width='100%';
 //  mapDiv.parent()[0].parentElement.style.height='100%'
   // mapDiv.css({"width":"100%","height":"100%"});
-}
-$(function(){
+$(document).ready(function() {
   onSubmit_Form();
   getAreaList();
-  initMap();//创建和初始化地图
 });
 
 </script>
@@ -92,7 +94,7 @@ $(function(){
 
 <div class="header" style="position:relative;height:50px;width:100%">
     <div class="btn-group">
-      <button type="submit" class="btn btn-primary">添加</button>
+      <button type="submit" class="btn btn-primary" onclick="openEdit();">添加</button>
     </div>
     <form name="form1">
     <div class="input-group input-group-max">
@@ -123,7 +125,7 @@ $(function(){
       <td>${address}</td>
       <td>${pyShort}</td>
       <td>${pinyin}</td>
-      <td><a href="javascript:void(0)" onclick="openEdit(${rowIndex})">编辑<span>${maplat},</span><span>${maplng}</span></a></td>
+      <td><a href="javascript:void(0)" onclick="openEdit(${id})">编辑<span>${maplat},</span><span>${maplng}</span></a></td>
       
     </tr>
     </tbody>

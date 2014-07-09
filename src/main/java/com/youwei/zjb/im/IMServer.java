@@ -11,6 +11,7 @@ import java.util.Map;
 import net.sf.json.JSONObject;
 
 import org.bc.sdak.CommonDaoService;
+import org.bc.sdak.Page;
 import org.bc.sdak.TransactionalServiceHelper;
 import org.bc.sdak.utils.LogUtil;
 import org.java_websocket.WebSocket;
@@ -30,8 +31,8 @@ public class IMServer extends WebSocketServer{
 	private static InetSocketAddress socket = new InetSocketAddress("localhost", 9099); 
 	private IMServer() throws UnknownHostException {
 //		super(new InetSocketAddress(Inet4Address.getByName("localhost"), 9099));
-//		super(new InetSocketAddress("192.168.1.125", 9099));
-		super(socket);
+		super(new InetSocketAddress("192.168.1.125", 9099));
+//		super(socket);
 	}
 
 	public static void startUp() throws UnknownHostException{
@@ -89,9 +90,13 @@ public class IMServer extends WebSocketServer{
 		}else if("msg".equals(data.getString("type"))){
 			sendMsg(conn,data);
 		}else if("history".equals(data.getString("type"))){
-			List<Message> list = dao.listByParams(Message.class, "from Message where (senderId=? and  receiverId=?) or (senderId=? and  receiverId=?) order by addtime desc", 
-					data.getInt("myId"), data.getInt("contactId") ,data.getInt("contactId"), data.getInt("myId"));
-			data.put("history", JSONHelper.toJSONArray(list));
+			Page<Message> page = new Page<Message>();
+			page.setPageSize(5);
+			page.setCurrentPageNo(data.getInt("page"));
+			page = dao.findPage(page ,"from Message where (senderId=? and  receiverId=?) or (senderId=? and  receiverId=?) order by sendtime desc", 
+					data.getInt("myId"), data.getInt("contactId") ,data.getInt("contactId"), data.getInt("myId") );
+			data.put("history", JSONHelper.toJSONArray(page.getResult()));
+			data.put("contactId", data.getInt("contactId") );
 			conn.send(data.toString());
 		}else if("read".equals(data.getString("type"))){
 			dao.execute("update Message set read=1 where senderId=? and receiverId=? and read=0", data.getInt("contactId"), data.getInt("myId"));
@@ -130,7 +135,7 @@ public class IMServer extends WebSocketServer{
 		Integer recvType = data.getInt("receiverType");
 		
 		Message dbMsg = new Message();
-		dbMsg.addtime = new Date();
+		dbMsg.sendtime = new Date();
 		dbMsg.content = data.getString("content");
 		dbMsg.senderId = data.getInt("senderId");
 		dbMsg.receiverId = recvId;

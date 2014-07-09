@@ -6,7 +6,7 @@
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>请假登记</title>
 <link rel="stylesheet" href="/zb/style/css.css">
-<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
@@ -14,7 +14,7 @@
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" src="/zb/js/uploadify/jquery.uploadify.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
-<link href="../zb/js/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<link href="/zb/js/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.config.js"></script>
 <script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.all.js"> </script>
 <script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/lang/zh-cn/zh-cn.js"></script>
@@ -32,6 +32,7 @@ function save(){
     success: function(data){
       alert('保存成功,您还可以添加附件.');
       recordId = JSON.parse(data)['recordId'];
+      art.dialog.opener.doSearch();
       initFileUpload();
     }
   });

@@ -6,12 +6,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>职务列表</title>
 <link rel="stylesheet" href="/zb/style/css.css">
-<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -38,6 +38,16 @@ function getList(search){
 
 function openAdd(){
   art.dialog.open('add.html?category=1',{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:100,
+      width:300
+  });
+}
+
+function openEdit(id){
+  art.dialog.open('xt_zw_edit.html?category=1&roleId='+id,{
       padding:0,
       resize:true,
       lock:1,
@@ -84,7 +94,7 @@ $(function(){
     <tr style="display:none">
       <td>${title}</td>
       <td>${cont}</td>
-      <td><a auth="xt_zw_sq" target="_blank" href="menuTree.html?roleId=${id}" >权限</a> <a auth="xt_zw_edit" target="_blank" href="role_edit.html?roleId=${id}" >修改</a> 
+      <td><a auth="xt_zw_sq" target="_blank" href="menuTree.html?roleId=${id}" >权限</a> <a href="javascript:void(0)" onclick="openEdit(${id})" >修改</a>
       </td>
     </tr>
     </tbody>

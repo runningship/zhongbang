@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import com.youwei.zjb.SimpDaoTool;
 import com.youwei.zjb.StartUpListener;
-import com.youwei.zjb.entity.District;
 import com.youwei.zjb.house.DistrictService;
+import com.youwei.zjb.house.entity.District;
 
 public class TestDistrictService {
 
