@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>添加合同</title>
+<link rel="stylesheet" href="/zb/style/css.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/style/house.css">
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/sysinfo.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=chrome"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.timers.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/zb/js/pagination.js"></script>
+<script type="text/javascript">
+/*
+  $('form').on('submit', function() {alert('go')
+
+    var Thi=$(this),
+    djia=Thi.find('input[name=djia]'),
+    sjia=Thi.find('input[name=sjia]'),
+    mji=Thi.find('input[name=mianji]');
+    //djia.val(sjia.val()/mji.val());
+alert('exit')
+
+
+    return false;
+  });
+*/
+  var getStr,chuzu;
+      getHid=getParam('hid')
+      chuzu=getParam('chuzu');
+  var QueryOptions='';
+function getEnumText(category,code){
+  var arr = QueryOptions[category];
+  for(var i=0;i<arr.length;i++){
+    if(arr[i]['code']==code){
+      return arr[i]['name'];
+    }
+  }
+}
+var dialog;
+function TipErrs(a,b,c){
+  if(a='g'){icons='warning'}else if(a='c'){icons='error'}else if(a='d'){icons='succeed'}else{icons='warning'}/**/
+ // if(dialog){dialog.close();}
+  dialog = art.dialog({
+    id:'errors',
+    title:false,
+    content:b,
+    icon:icons,
+    time:1
+  })
+  if(c){$(c).focus()}
+  return false;
+}
+function funSubmit(){
+var Thi=$('form');
+    if(!Thi.find('[name=area]').val()){TipErrs('g','房源名称不能为空',Thi.find('[name=area]'));return false}
+    if(!Thi.find('[name=dhao]').val()){TipErrs('g','栋号不能为空',Thi.find('[name=dhao]'));return false}
+    if(!Thi.find('[name=fhao]').val()){TipErrs('g','房号不能为空',Thi.find('[name=fhao]'));return false}
+    if(!Thi.find('[name=lceng]').val()){TipErrs('g','房号不能为空',Thi.find('[name=lceng]'));return false}
+    if(!Thi.find('[name=zceng]').val()){TipErrs('g','房号不能为空',Thi.find('[name=zceng]'));return false}
+    if(!Thi.find('[name=lxr]').val()){TipErrs('g','客户姓名不能为空',Thi.find('[name=lxr]'));return false}
+    if(!Thi.find('[name=tel]').val()){TipErrs('g','客户电话不能为空',Thi.find('[name=tel]'));return false}
+    var url=$('form[name=form1]').attr('action');
+    $.ajax({
+      type: 'POST',
+      url: url,
+  //    async:false,
+      data:formSerialize(Thi),
+      success: function(data){
+      var getStr=JSON.parse(data);
+        if(getStr['result']==0){
+          art.dialog({title:'提示',content:'提交成功',ok: function () {art.dialog.close()
+            }
+          })
+        }else{
+          art.dialog.tips(getStr['msg']);
+        }
+      }
+    });
+    return false;
+}
+$(function(){
+
+  $.get('/zb/c/contract/initAdd', function(data) {
+    QueryOptions=JSON.parse(data);
+    buildHtmlWithJsonArray("id_yongtu",QueryOptions['yongtu'],true); //房屋类型
+    buildHtmlWithJsonArray("id_daikuan_lx",QueryOptions['daikuan_lx'],true); //房屋类型
+  });
+});
+</script>
+<style type="text/css">
+  .table{ margin-bottom: 0px;}
+  .pointerevents{pointer-events:none}
+  .font_no_br{white-space:nowrap;word-break: keep-all;}
+  .w40b{ width: 40%;}
+  .w160px{ width: 160px;}
+ .hadd  .colspan2{ width: 300px;}
+ .hadd{ height: auto;}
+ .input-group {
+  width: auto;
+  }
+</style>
+</head>
+<body class="bodyer" id="id_house_see">
+<form name="form1" method="post" action="/zb/c/house/add" onsubmit="return funSubmit();">
+  <input type="hidden" class="form-control" name="id" value="${id}">
+  <input type="hidden" class="form-control" name="deptId" value="${deptId}">
+  <input type="hidden" class="form-control" name="userId" value="${userId}">
+  <input type="hidden" class="form-control" name="djia" value="${djia}">
+  <table class="table table-condensed">
+    <tr>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">合同编号</span>
+          <input type="text" class="form-control" name="bianhao" >
+        </div>
+      </td>
+      <td>
+        <div class="input-group ">
+          <span class="input-group-addon" style="padding:8px;">地址</span>
+          <input type="text" class="form-control" name="addr" >
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon" style="padding:8px;">用途</span>
+          <select class="form-control" id="id_yongtu" name="yongtu">
+            <option value="${name}">${name}</option>
+          </select>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">房主姓名</span>
+          <input type="text" class="form-control" name="lxr_f" >
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">房主电话</span>
+          <input type="text" class="form-control" name="tel_f">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">客户姓名</span>
+          <input type="text" class="form-control" name="lxr_k">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">客户电话</span>
+          <input type="text" class="form-control" name="tel_k">
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon" style="padding:8px;">签证员</span>
+          <select class="form-control" id="id_leibie" name="leibie">
+            <option value="${name}">${name}</option>
+          </select>
+        </div>
+      </td>
+      <td colspan="3">
+        <div class="input-group input-group-select" style="width:700px;">
+          <span class="input-group-addon">业务员</span>
+          <select class="form-control get_comp" name="form_cid"></select>
+          <select class="form-control get_quyu" name="ywDeptId"></select>
+          <select class="form-control get_user" name="ywUserId"></select>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">面积</span>
+          <input type="text" class="form-control" name="mianji" >
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">总价</span>
+          <input type="text" class="form-control" name="zjia">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">单价</span>
+          <input type="text" class="form-control" name="djia">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">产权证号</span>
+          <input type="text" class="form-control" name="chanquan" >
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">首付</span>
+          <input type="text" class="form-control" name="shoufu">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">贷款</span>
+          <input type="text" class="form-control" name="daikuan">
+        </div>
+      </td>
+      <td>
+       <div class="input-group">
+          <span class="input-group-addon" style="padding:8px;">贷款类别</span>
+          <select class="form-control" id="id_daikuan_lx" name="daikuan_lx">
+            <option value="${name}">${name}</option>
+          </select>
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon" style="padding:8px;">签约日期</span>
+          <input type="text" class="form-control" name="signdate" id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})">
+          <input type="text" class="form-control" id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})"  style="display:none">
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">甲方应收佣金</span>
+          <input type="text" class="form-control" name="yongjin_a1">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">甲方实收佣金</span>
+          <input type="text" class="form-control" name="yongjin_a2">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">乙方应收佣金</span>
+          <input type="text" class="form-control" name="yongjin_b1">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">乙方实收佣金</span>
+          <input type="text" class="form-control" name="yongjin_b2">
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="4">
+        <div class="input-group" style="width:99%;">
+          <span class="input-group-addon">预约事项</span>
+          <input type="text" class="form-control" name="otherItems" >
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2">
+        <div class="input-group" style="width:99%;">
+          <span class="input-group-addon">备注</span>
+          <textarea type="text" class="form-control" name="conts" ></textarea>
+        </div>
+      </td>
+      <td colspan="2">
+        <div class="input-group" style="width:99%;">
+          <span class="input-group-addon">附属设施</span>
+          <textarea type="text" class="form-control" name="remark" ></textarea> 
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4"><input style="margin-left:10px;" type="submit" value="提交"></td>
+    </tr>
+  </table>
+  
+</form>
+</body>
+</html>
