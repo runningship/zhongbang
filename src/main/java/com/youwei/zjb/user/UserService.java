@@ -195,6 +195,10 @@ public class UserService {
 			hql.append(" and u.sfz like ? ");
 			params.add("%"+query.sfz+"%");
 		}
+		if(StringUtils.isNotEmpty(query.tel)){
+			hql.append(" and u.tel like ? ");
+			params.add("%"+query.tel+"%");
+		}
 		if(StringUtils.isNotEmpty(query.address)){
 			hql.append(" and u.address like ? ");
 			params.add("%"+query.address+"%");

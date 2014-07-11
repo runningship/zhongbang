@@ -34,6 +34,11 @@ function getList(search){
 }
 
 function deleteBuZhou(id){
+   art.dialog({
+    title:'提示',
+    content:'确定删除这条步骤吗？',
+    lock:true,
+    ok:function(){
   $.ajax({
     type: 'get',
     url: '/zb/c/admin/deleteProcessClass?pcId='+id,
@@ -43,6 +48,10 @@ function deleteBuZhou(id){
       getList();
     }
   });
+},
+    cancel:true
+  });
+  
 }
 
 function openAdd(){
@@ -53,6 +62,11 @@ function openAdd(){
       height:400,
       width:600
   });
+}
+
+function doSearch(){
+  getList(formSerialize($('form[name=form1]')));
+  return false;
 }
 
 $(function(){
@@ -79,11 +93,6 @@ $(function(){
   <div class="btn-group">
     <a id="add_link" onclick="openAdd()" href="javascript:void(0)"><button type="submit" class="btn btn-primary">添加</button></a>
   </div>
-<div class="header" style="position:relative;height:50px;width:100%">
-  <form name="form1">
-    
-  </form>
-</div>
 <div class="mainer" style="position:relative;width:100%">
   <table class="table table-hover .table_bodyer" >
     <thead>

@@ -8,7 +8,7 @@
 <title>Web桌面系统</title>
 <link rel="stylesheet" href="/zb/jsLib/themes/base/jquery.ui.all.css" />
 <link rel="stylesheet" href="/zb/jsLib/jquery-smartMenu/css/smartMenu.css" />
-<link rel="stylesheet" href="style/window.css" />
+<link rel="stylesheet" href="/zb/style/window.css" />
 <script type="text/javascript" src="/zb/jsLib/jquery-1.6.2.js"></script>
 <script type="text/javascript" src="/zb/jsLib/myLib.js"></script>
 <script type="text/javascript" src="/zb/jsLib/jquery-ui-1.8.16.custom.min.js"></script>
@@ -40,49 +40,49 @@ $(function(){
 
 </head>
 <body>
-<a href="#" class="powered_by">Powered by jWebOS</a>
+
 <ul id="deskIcon">
-  <li class="desktop_icon" id="win5" path="v/house/index.html"> <span class="icon"><img src="style/icon/ico_b_house_big.png"/></span>
+  <li auth="fy" class="desktop_icon" id="win5" path="/zb/v/house/index.html"> <span class="icon"><img src="/zb/style/icon/ico_b_house_big.png"/></span>
     <div class="text">房源管理
       <div class="right_cron"></div>
     </div>
   </li>
-  <li class="desktop_icon" id="win6" path="client/"> <span class="icon"><img src="style/icon/ico_b_client_big.png"/></span>
+  <li auth="ky" class="desktop_icon" id="win6" path="/zb/v/client/index.html"> <span class="icon"><img src="/zb/style/icon/ico_b_client_big.png"/></span>
     <div class="text">客源管理
       <div class="right_cron"></div>
     </div>
   </li>
-  <li class="desktop_icon" id="win7" path="v/yewu/index.html"> <span class="icon"><img src="style/icon/ico_b_yewu_big.png"/></span>
+  <li auth="yw" class="desktop_icon" id="win7" path="/zb/v/yewu/index.html"> <span class="icon"><img src="/zb/style/icon/ico_b_yewu_big.png"/></span>
     <div class="text">业务管理
       <div class="right_cron"></div>
     </div>
   </li>
-  <li class="desktop_icon" id="win8" path="v/hetong/index.html"> <span class="icon"><img src="style/icon/ico_b_hetong_big.png"/></span>
+  <li auth="ht" class="desktop_icon" id="win8" path="/zb/v/hetong/index.html"> <span class="icon"><img src="/zb/style/icon/ico_b_hetong_big.png"/></span>
     <div class="text">合同管理
       <div class="right_cron"></div>
     </div>
   </li>
-  <li class="desktop_icon" id="win9" path="v/renshi/index.html"> <span class="icon"><img src="style/icon/ico_b_renshi_big.png"/></span>
+  <li auth="rs" class="desktop_icon" id="win9" path="/zb/v/renshi/index.html"> <span class="icon"><img src="/zb/style/icon/ico_b_renshi_big.png"/></span>
     <div class="text">人事管理
       <div class="right_cron"></div>
     </div>
   </li>
-  <li class="desktop_icon" id="win10" path="v/xingzheng/index.html"> <span class="icon"><img src="style/icon/ico_b_xingzheng_big.png"/></span>
+  <li auth="xz" class="desktop_icon" id="win10" path="/zb/v/xingzheng/index.html"> <span class="icon"><img src="/zb/style/icon/ico_b_xingzheng_big.png"/></span>
     <div class="text">行政管理
       <div class="right_cron"></div>
     </div>
   </li>
-  <li class="desktop_icon" id="win11" path="v/assets/index.html"> <span class="icon"><img src="style/icon/ico_b_zichan_big.png"/></span>
+  <li auth="zc" class="desktop_icon" id="win11" path="/zb/v/assets/index.html"> <span class="icon"><img src="/zb/style/icon/ico_b_zichan_big.png"/></span>
     <div class="text">资产管理
       <div class="right_cron"></div>
     </div>
   </li>
-  <li class="desktop_icon" id="win12" path="v/oa/index.html"> <span class="icon"><img src="style/icon/ico_b_oa_big.png"/></span>
+  <li class="desktop_icon" id="win12" path="/zb/v/oa/index.html"> <span class="icon"><img src="/zb/style/icon/ico_b_oa_big.png"/></span>
     <div class="text">OA管理
       <div class="right_cron"></div>
     </div>
   </li>
-  <li class="desktop_icon" id="win13" path="v/sys/index.html"> <span class="icon"><img src="style/icon/ico_b_shezhi_big.png"/></span>
+  <li auth="xt" class="desktop_icon" id="win13" path="/zb/v/sys/index.html"> <span class="icon"><img src="/zb/style/icon/ico_b_shezhi_big.png"/></span>
     <div class="text">后台管理
       <div class="right_cron"></div>
     </div>
@@ -100,30 +100,5 @@ $(function(){
     <div id="task_lb"></div>
   </div>
 </div>
-<div id="lr_bar" style="display:none;">
-  <ul id="default_app">
-    <li id="app0"><img src="style/icons/icon1.png" title="Jquery API" path="#/api/api.html"/></li>
-    <li  id="app2"><img src="style/icons/icon0.png" title="学习资料库" path="#/Material.aspx"/></li>
-    <li id="app3"><img src="style/icons/icon2.png" title="QQ群堂" path="#/QQGroup.aspx"/></li>
-    <li id="app4"> <img src="style/icons/icon3.png" title="在线留言" path="#/Feedback.aspx"/></li>
-    <li id="app1"><img src="style/icons/icon11.png" title="Jquery学堂" path="#/Jquery.aspx"/></li>
-  </ul>
-  <div id="default_tools"> <span id="showZm_btn" title="显示桌面"></span><span id="shizhong_btn" title="时钟"></span><span id="weather_btn" title="天气"></span> <span id="them_btn" title="主题"></span></div>
-  <div id="start_block"> <a title="开始" id="start_btn"></a>
-    <div id="start_item">
-      <ul class="item admin">
-        <li><span class="adminImg"></span> Admin</li>
-      </ul>
-      <ul class="item">
-        <li><span class="sitting_btn"></span>系统设置</li>
-        <li><span class="help_btn"></span>使用指南 <b></b></li>
-        <li><span class="about_btn"></span>关于我们</li>
-        <li><span class="logout_btn"></span>退出系统</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-
 </body>
 </html>

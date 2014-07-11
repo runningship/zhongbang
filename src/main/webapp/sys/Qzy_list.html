@@ -4,77 +4,111 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>职务列表</title>
+<title>签证员</title>
 <link rel="stylesheet" href="/zb/style/css.css">
 <link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.hotkeys.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
-<script type="text/javascript" src="/zb/js/auth.js"></script>
 <script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
-var dataArr;
-var authorities;
+var queryOpts;
+var genderArr = [{"name":"男","code":1},{"name":"女","code":0}];
 function getList(search){
-  var url='/zb/c/sys/rolesList?';
+  var url='/zb/c/sys/listQzy';
   $.ajax({
     type: 'POST',
     url: url,
     data:search,
     success: function(data){
       var getStr=JSON.parse(data);
-      dataArr = getStr['page']['data'];
+      dataArr = getStr['data'];
       buildHtmlWithJsonArray("id_list",dataArr);
       Page.setPageInfo(getStr['page']);
-      // checkAuth();
     }
   });
 }
 
+
 function doSearch(){
   getList(formSerialize($('form[name=form1]')));
+  return false;
+}
+
+function openAdd(){
+  art.dialog.open('Qzy_add.html',{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:200,
+      width:300
+  });
+}
+
+function deleteQzy(id){
+  art.dialog({
+    title:'提示',
+    content:'确定删除该签证员？',
+    lock:true,
+    ok:function(){
+      $.ajax({
+        url:'/zb/c/sys/deleteQzy?id='+id,
+        data:'',
+        timeout:5000,
+        dataType:'json',
+        success:function (data, textStatus) {
+            doSearch();
+        },
+        complete: function(XMLHttpRequest, textStatus){},
+        error:function (XMLHttpRequest, textStatus, errorThrown) {
+          console.error(XMLHttpRequest.responseText);
+        }
+      });
+    },
+    cancel:true
+  });
+  
 }
 
 $(function(){
-  var url='/zb/c/user/authorities';
   getList();
-  Page.Init();
 });
-
 </script>
-<style type="text/css">
-  .table{ margin-bottom: 0px;}
-</style>
+
 </head>
 <body class="hlist bodyer" style="overflow:auto">
 
-<div class="header" style="position:relative;height:10px;width:100%">
-  <div class="btn-group">
-    <button onclick="openAdd();" class="btn btn-primary">添加职务</button>
+<div class="btn-group">
+    <button onclick="openAdd();" class="btn btn-primary">添加签证员</button>
   </div>
-  <form name="form1" onsubmit="return on_submit();">
-  </form>
-  <div class="btn-group" style="display:none">
-    <button onclick="doSearch();" class="btn btn-primary btn_subnmit"></button>
-  </div>
-</div>
-<div class="mainer" style="position:relative;width:100%;">
+<div class="mainer" style="position:relative;width:100%">
   <table class="table table-hover .table_bodyer" >
     <thead>
-      <th>职务名</th>
-      <th>描述</th>
+      <th>姓名/性别</th>
+      <th>公司</th>
+      <th>职务</th>
+      <th>电话</th>
+      <th>身份证</th>
+      <th>地址</th>
+      <th>入企时间</th>
       <th>操作</th>
     </thead>
     <tbody id="id_list">
     <tr style="display:none">
+      <td>${uname}(<span class='runscript'>getEnumTextByCode(genderArr,${gender})</span>)</td>
+      <td>${deptName}</td>
       <td>${title}</td>
-      <td>${cont}</td>
-      <td><a auth="xt_zw_sq" target="_blank" href="menuTree.html?roleId=${id}" >权限</a> <a auth="xt_zw_edit" target="_blank" href="role_edit.html?roleId=${id}" >修改</a> 
+      <td>${tel}</td>
+      <td>${sfz}</td>
+      <td>${address}</td>
+      <td>${rqsj}</td>
+      <td><a href="javascript:void(0)" onclick="deleteQzy(${id})">删除</a> 
       </td>
     </tr>
     </tbody>

@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import net.sf.json.JSONArray;
+
 import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.GException;
 import org.bc.sdak.Page;
+import org.bc.sdak.Transactional;
 import org.bc.sdak.TransactionalServiceHelper;
 import org.bc.web.ModelAndView;
 import org.bc.web.Module;
@@ -18,10 +21,14 @@ import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.client.DaiKuanType;
 import com.youwei.zjb.contract.entity.Contract;
+import com.youwei.zjb.contract.entity.ContractProcess;
 import com.youwei.zjb.contract.entity.ContractProcessClass;
+import com.youwei.zjb.contract.entity.YongJin;
+import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.Role;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.house.HouseType;
+import com.youwei.zjb.sys.entity.Qzy;
 import com.youwei.zjb.user.RuQiTuJin;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
@@ -36,17 +43,79 @@ public class ContractService {
 		ModelAndView mv = new ModelAndView();
 		mv.data.put("yongtu", HouseType.toJsonArray());
 		mv.data.put("daikuan_lx", DaiKuanType.toJsonArray());
+		mv.data.put("qzy", JSONHelper.toJSONArray(dao.listAsMap("select q.userId as userId , u.uname as name from Qzy q, User u where q.userId=u.id")));
 		return mv;
 	}
 	
 	@WebMethod
+	public ModelAndView initEdit(int contractId){
+		ModelAndView mv = initAdd();
+		Contract contract = dao.get(Contract.class, contractId);
+		mv.data.put("contract", JSONHelper.toJSON(contract));
+		if(contract.ywDeptId==null){
+			if(contract.ywUserId!=null){
+				User user = dao.get(User.class, contract.ywUserId);
+				contract.ywDeptId = user.deptId;
+				dao.saveOrUpdate(contract);
+			}
+		}
+		if(contract.ywDeptId!=null){
+			mv.data.getJSONObject("contract").put("quyu", dao.get(Department.class, contract.ywDeptId).getParent().id);
+		}
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView view(int contractId){
+		ModelAndView mv = initEdit(contractId);
+		Contract contract = dao.get(Contract.class, contractId);
+		List<ContractProcess> processList = dao.listByParams(ContractProcess.class, new String[]{"contractId"}, new Object[]{ contract.id });
+		mv.data.put("actions", JSONHelper.toJSONArray(processList));
+		//佣金收费
+		List<YongJin> yongjins = dao.listByParams(YongJin.class, "from YongJin where contractId = ? and flag=1", contractId);
+		mv.data.put("yongjins", JSONHelper.toJSONArray(yongjins));
+		//代收费
+		List<YongJin> yongjinProxys = dao.listByParams(YongJin.class, "from YongJin where contractId = ? and flag=3", contractId);
+		mv.data.put("yongjinProxys", JSONHelper.toJSONArray(yongjinProxys));
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView update(Contract contract){
+		ModelAndView mv = new ModelAndView();
+		Contract po = dao.get(Contract.class, contract.id);
+		if(po==null){
+			throw new GException(PlatformExceptionType.BusinessException, 1, "合同已不存在");
+		}
+		contract.addtime = po.addtime;
+		contract.userId = po.userId;
+		contract.deptId = po.deptId;
+		dao.saveOrUpdate(contract);
+		return mv;
+	}
+	
+	@WebMethod
+	@Transactional
 	public ModelAndView add(Contract contract){
 		ModelAndView mv = new ModelAndView();
 		User user = ThreadSession.getUser();
 		contract.userId = user.id;
 		contract.deptId = user.deptId;
 		contract.addtime = new Date();
+//		contract.proid=0;
 		dao.saveOrUpdate(contract);
+		//添加办理步骤
+		List<ContractProcessClass> cpcList = dao.listByParams(ContractProcessClass.class, "from ContractProcessClass where claid=?", contract.claid);
+		for(ContractProcessClass cpc : cpcList){
+			ContractProcess process = new ContractProcess();
+			process.bianhao = contract.bianhao;
+			process.buzhouId = cpc.id;
+			process.contractId = contract.id;
+			process.flag = 0;
+			process.ordera = cpc.ordera;
+			process.qian = cpc.isqian;
+			process.title = cpc.title;
+		}
 		return mv;
 	}
 	
@@ -54,7 +123,7 @@ public class ContractService {
 	public ModelAndView list(Page<Contract> page , ContractQuery query){
 		ModelAndView mv = new ModelAndView();
 		List<Object> params = new ArrayList<Object>();
-		StringBuilder hql = new StringBuilder("select c from Contract c,User u where u.id=c.userId ");
+		StringBuilder hql = new StringBuilder("select c from Contract c where 1=1 ");
 		if(query.claid!=null){
 			hql.append(" and c.claid = ? ");
 			params.add(query.claid);
@@ -133,11 +202,11 @@ public class ContractService {
 	@WebMethod(name="buzhou/add")
 	public ModelAndView addContractProcessClass(ContractProcessClass proClass){
 		ModelAndView mv = new ModelAndView();
-		ContractProcessClass po = dao.getUniqueByKeyValue(ContractProcessClass.class, "title", proClass.title);
+		ContractProcessClass po = dao.getUniqueByParams(ContractProcessClass.class, new String[]{"title","claid"}, new Object[] {proClass.title, proClass.claid});
 		if(po!=null){
 			throw new GException(PlatformExceptionType.BusinessException, 1, "步骤名称重复");
 		}
-		po = dao.getUniqueByKeyValue(ContractProcessClass.class, "ordera", proClass.ordera);
+		po =dao.getUniqueByParams(ContractProcessClass.class, new String[]{"ordera","claid"}, new Object[] {proClass.ordera, proClass.claid});
 		if(po!=null){
 			throw new GException(PlatformExceptionType.BusinessException, 2, "步骤序号重复");
 		}

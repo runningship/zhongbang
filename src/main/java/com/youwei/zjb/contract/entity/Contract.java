@@ -15,7 +15,7 @@ public class Contract {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	public Integer Id;
+	public Integer id;
 	
 	/**
 	 * 添加人
@@ -76,6 +76,7 @@ public class Contract {
 	/**
 	 * 5 出售,6 出租
 	 */
+	@Column(nullable=false)
 	public Integer claid;
 	
 	public String chanquan;
@@ -107,6 +108,9 @@ public class Contract {
 	
 	public String uid_yw_nm;
 	
+	/**
+	 * 当前步骤
+	 */
 	public Integer proid;
 	
 	/**

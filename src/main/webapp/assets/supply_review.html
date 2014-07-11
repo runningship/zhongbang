@@ -24,6 +24,8 @@ function shenhe(shenhe){
     data:'',
     success: function(data){
       alert('审核成功.');
+      art.dialog.close()
+      art.dialog.opener.doSearch();
     },
     error:function(data){
       alert('审核失败,'+data.responseText);

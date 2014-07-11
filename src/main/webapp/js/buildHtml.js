@@ -10,15 +10,10 @@ function buildHtmlWithJsonArray(id,json,removeTemplate){
         var html = buildHtmlWithJson(temp,json[i] ,i);
         subCatagory.append(html);
     }
-    
-    if(!removeTemplate){
-        jtemp.css('display','none');
-        subCatagory.prepend(jtemp);
-    }
 
     var shows = subCatagory.find('[show]');
     shows.each(function(index,obj){
-        if(index>0){
+        // if(index>0){
             var script = $(obj).attr('show');
             try{
                 if(eval(script)){
@@ -29,12 +24,12 @@ function buildHtmlWithJsonArray(id,json,removeTemplate){
             }catch(e){
 
             }
-        }
+        // }
     });
 
     var runscripts = subCatagory.find('.runscript');
     runscripts.each(function(index,obj){
-        if(index>0){
+        // if(index>0){
             var val="";
             try{
                 val = eval(obj.textContent);
@@ -48,11 +43,13 @@ function buildHtmlWithJsonArray(id,json,removeTemplate){
                 console.log(obj.textContent);
                 obj.textContent = "";
             }
-            
-        }
+        // }
     });
 
-    
+    if(!removeTemplate){
+        jtemp.css('display','none');
+        subCatagory.prepend(jtemp);
+    }
 }
 function buildHtmlWithJson(temp,json , rowIndex){
     temp.style.display='';

@@ -3,6 +3,7 @@ package com.youwei.zjb.sys;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,6 +26,7 @@ import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.Role;
 import com.youwei.zjb.entity.RoleAuthority;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.sys.entity.Qzy;
 import com.youwei.zjb.user.RuQiTuJin;
 import com.youwei.zjb.util.JSONHelper;
 
@@ -52,6 +54,40 @@ public class AuthorityService {
 		role.sh = 1;
 		dao.saveOrUpdate(role);
 		mv.data.put("msg", "添加成功");
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView addQzy(Qzy qzy){
+		ModelAndView mv = new ModelAndView();
+		Qzy po = dao.getUniqueByKeyValue(Qzy.class, "userId", qzy.userId);
+		if(po!=null){
+			throw new GException(PlatformExceptionType.BusinessException, 1, "不能添加重复的签证员");
+		}
+		dao.saveOrUpdate(qzy);
+		mv.data.put("msg", "添加成功");
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView deleteQzy(int id){
+		ModelAndView mv = new ModelAndView();
+		Qzy po = dao.get(Qzy.class, id);
+		if(po!=null){
+			dao.delete(po);
+		}
+		mv.data.put("msg", "添加成功");
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView listQzy(){
+		ModelAndView mv = new ModelAndView();
+		StringBuilder hql = new StringBuilder();
+		hql.append("select u.uname as uname,qzy.id as id ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
+				+ "from User  u, Department d,Role r ,Qzy qzy where u.roleId = r.id and d.id = u.deptId and u.id=qzy.userId");
+		List<Map> list = dao.listAsMap(hql.toString());
+		mv.data.put("data", JSONHelper.toJSONArray(list));
 		return mv;
 	}
 	

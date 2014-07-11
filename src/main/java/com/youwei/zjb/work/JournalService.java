@@ -100,16 +100,10 @@ public class JournalService {
 		if(po==null){
 			throw new GException(PlatformExceptionType.BusinessException, 2, "记录已不存在");
 		}
-		try{
-			po.title=journal.title;
-			po.conta = journal.conta;
-			dao.saveOrUpdate(po);
-			mv.data.put("result", 0);
-		}catch(Exception ex){
-			LogUtil.log(Level.WARNING, "编辑工作日志失败", ex);
-			mv.data.put("result", 1);
-			mv.data.put("msg", ex.getMessage());
-		}
+		po.title=journal.title;
+		po.conta = journal.conta;
+		dao.saveOrUpdate(po);
+		mv.data.put("result", 0);
 		return mv;
 	}
 	

@@ -2,7 +2,6 @@ package com.youwei.zjb;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Level;
 
 import javassist.ClassClassPath;
 import javassist.ClassPool;
@@ -20,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Level;
+import org.apache.log4j.Priority;
 import org.bc.sdak.GException;
 import org.bc.sdak.TransactionalServiceHelper;
 import org.bc.sdak.utils.LogUtil;
@@ -101,45 +102,42 @@ public class GrandServlet extends HttpServlet{
 				ServletHelper.fillMV(req,mv);
 				RequestDispatcher rd = req.getRequestDispatcher(mv.jsp);
 				if(rd==null){
+					resp.setStatus(404);
 					resp.getWriter().println("404 : page not found");
 				}else{
 					rd.forward(req, resp);
 				}
 			}
-		}catch(InvocationTargetException ex){
-			JSONObject jobj = new JSONObject();
+		}catch(Exception ex){
 			resp.setStatus(500);
-			if(! (ex.getTargetException() instanceof GException)){
-				ex.getTargetException().printStackTrace();
-				jobj.put("result",500);
-				jobj.put("msg", ex.getTargetException().getMessage());
-			}else{
-				GException target = (GException) ex.getTargetException();
-				jobj.put("result",target.getCode());
-				jobj.put("msg", target.getMessage());
-			}
-			resp.getWriter().println(jobj.toString());
-		}catch(GException ex){
-			ex.printStackTrace();
-			JSONObject jobj = new JSONObject();
-			jobj.put("result",500);
-			resp.setStatus(500);
-			String msg = ex.getMessage();
-			if(StringUtils.isEmpty(msg)){
-				msg = ex.getStackTrace()[0].toString();
-			}
-			jobj.put("msg", msg);
-			resp.getWriter().println(jobj.toString());
-		} catch(Exception ex){
-			ex.printStackTrace();
-			ex.printStackTrace(resp.getWriter());
 			//go to error page 
-			LogUtil.log(Level.SEVERE,"internal server error",ex);
-		} finally{
-			
+			if(ex instanceof GException){
+				processGException(resp, (GException)ex);
+			}else if (ex instanceof InvocationTargetException ){
+				InvocationTargetException iex = (InvocationTargetException)ex;
+				if(iex.getTargetException() instanceof GException ){
+					processGException(resp, (GException)iex.getTargetException());
+				}else{
+					LogUtil.log(Level.ERROR,"internal server error",ex);
+					ex.printStackTrace(resp.getWriter());
+				}
+			}else{
+				LogUtil.log(Level.ERROR,"internal server error",ex);
+				ex.printStackTrace(resp.getWriter());
+			}
 		}
 	}
 
+	private void processGException(HttpServletResponse resp ,GException ex){
+		JSONObject jobj = new JSONObject();
+		jobj.put("result",ex.getCode());
+		jobj.put("msg", ex.getMessage());
+		try {
+			resp.getWriter().println(jobj.toString());
+		} catch (IOException e) {
+			LogUtil.log(Level.WARN, "输出错误信息到客户端失败", e);;
+		}
+	}
 	private void processRootRequest(HttpServletRequest req,HttpServletResponse resp) throws IOException {
 		resp.getWriter().println("you are not allowed to access root url");
 	}
@@ -161,7 +159,7 @@ public class GrandServlet extends HttpServlet{
 				try {
 					cc = pool.getCtClass(manager.getClass().getSuperclass().getName());
 				} catch (NotFoundException e) {
-					LogUtil.log(Level.WARNING, "class not found", ex);
+					LogUtil.log(Level.WARN, "class not found", ex);
 					return new Object[]{};
 				}
 			}

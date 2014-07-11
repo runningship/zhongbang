@@ -17,6 +17,8 @@ import org.bc.web.WebMethod;
 
 import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.ThreadSession;
+import com.youwei.zjb.client.DaiKuanType;
+import com.youwei.zjb.client.FuKuan;
 import com.youwei.zjb.client.KeHuXingzhi;
 import com.youwei.zjb.client.KeHuLaiYuan;
 import com.youwei.zjb.entity.User;
@@ -128,6 +130,7 @@ public class HouseService {
 		mv.data.put("kehu", KeHuXingzhi.toJsonArray());
 		mv.data.put("kehulaiyuan", KeHuLaiYuan.toJsonArray());
 		mv.data.put("piyue", PiYue.toJsonArray());
+		mv.data.put("fukuan", FuKuan.toJsonArray());
 		return mv;
 	}
 	
@@ -183,22 +186,22 @@ public class HouseService {
 			hql = new StringBuilder(" select h from  House h  ,User u where h.userId=u.id and u.id is not null and u.orgpath like ? ");
 			params.add(query.xpath+"%");
 		}else{
-			hql = new StringBuilder("from House  where 1=1 ");
+			hql = new StringBuilder(" select h  from House  h where 1=1 ");
 		}
 		if(query.xingzhi!=null){
-			hql.append(" and xingzhi = ? ");
+			hql.append(" and h.xingzhi = ? ");
 			params.add(String.valueOf(query.xingzhi.getCode()));
 		}
 		
 		if(query.id!=null){
-			hql.append(" and id = ?");
+			hql.append(" and h.id = ?");
 			params.add(query.id);
 		}
 		
 		if(query.quyus!=null){
 			hql.append(" and ( ");
 			for(int i=0;i<query.quyus.size();i++){
-				hql.append(" quyu = ? ");
+				hql.append(" h.quyu = ? ");
 				if(i<query.quyus.size()-1){
 					hql.append(" or ");
 				}
@@ -214,7 +217,7 @@ public class HouseService {
 		if(query.jiaoyis!=null){
 			hql.append(" and ( ");
 			for(int i=0;i<query.jiaoyis.size();i++){
-				hql.append(" jiaoyi = ? ");
+				hql.append(" h. jiaoyi = ? ");
 				if(i<query.jiaoyis.size()-1){
 					hql.append(" or ");
 				}
@@ -223,19 +226,19 @@ public class HouseService {
 			hql.append(" )");
 		}
 		if(query.ztai!=null){
-			hql.append(" and flag = ?");
+			hql.append(" and h.flag = ?");
 			params.add(query.ztai.getCode());
 		}
 		if(StringUtils.isNotEmpty(query.leibie)){
-			hql.append(" and leibie = ? ");
+			hql.append(" and h.leibie = ? ");
 			params.add(query.leibie);
 		}
 		if(query.sjiaStart!=null){
-			hql.append(" and sjia>= ? ");
+			hql.append(" and h.sjia>= ? ");
 			params.add(query.sjiaStart);
 		}
 		if(query.sjiaEnd!=null){
-			hql.append(" and sjia<= ? ");
+			hql.append(" and h.sjia<= ? ");
 			params.add(query.sjiaEnd);
 		}
 		
@@ -246,36 +249,36 @@ public class HouseService {
 		hql.append(buildDateHql(query.dateType,query.dateEnd, DateSeparator.Before , params));
 		
 		if(StringUtils.isNotEmpty(query.louxing)){
-			hql.append(" and lxing= ? ");
+			hql.append(" and h.lxing= ? ");
 			params.add(query.louxing);
 		}
 		if(query.mianjiStart!=null){
-			hql.append(" and mianji>= ? ");
+			hql.append(" and h.mianji>= ? ");
 			params.add(query.mianjiStart);
 		}
 		if(query.mianjiEnd!=null){
-			hql.append(" and mianji<= ? ");
+			hql.append(" and h.mianji<= ? ");
 			params.add(query.mianjiEnd);
 		}
 		if(query.lcengStart!=null){
-			hql.append(" and lceng>= ? ");
+			hql.append(" and h.lceng>= ? ");
 			params.add(query.lcengStart);
 		}
 		if(query.lcengEnd!=null){
-			hql.append(" and lceng<= ? ");
+			hql.append(" and h.lceng<= ? ");
 			params.add(query.lcengEnd);
 		}
 		if(StringUtils.isNotEmpty(query.chaoxiang)){
-			hql.append(" and chaoxiang= ? ");
+			hql.append(" and h.chaoxiang= ? ");
 			params.add(query.chaoxiang);
 		}
 		if(StringUtils.isNotEmpty(query.chanquan)){
-			hql.append(" and chanquan like ?");
+			hql.append(" and h.chanquan like ?");
 			params.add("%"+query.chanquan+"%");
 		}
 		
 		if(query.userId!=null){
-			hql.append(" and userId= ? ");
+			hql.append(" and h.userId= ? ");
 			params.add(query.userId);
 		}
 		

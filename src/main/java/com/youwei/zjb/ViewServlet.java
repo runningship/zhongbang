@@ -60,8 +60,8 @@ public class ViewServlet extends HttpServlet{
 			user = SimpDaoTool.getGlobalCommonDaoService().get(User.class, 316);
 		}
 		List<RoleAuthority> authList = user.getRole().Authorities();
-		JSONArray arr = JSONHelper.toJSONArray(authList);
-		doc.body().append("<span id='authorities' style='display:none' >"+arr.toString()+"</span>");
+//		JSONArray arr = JSONHelper.toJSONArray(authList);
+//		doc.body().append("<span id='authorities' style='display:none' >"+arr.toString()+"</span>");
 		
 		Elements list = doc.getElementsByAttribute("auth");
 		for(Element e : list){

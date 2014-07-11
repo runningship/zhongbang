@@ -48,7 +48,7 @@ public class AssetService {
 				+ " d.namea as deptName,q.namea as quyu from Asset a,Department d, Department q where d.id=a.deptId and q.id=d.fid");
 		List<Object> params = new ArrayList<Object>();
 		if(StringUtils.isNotEmpty(title)){
-			hql.append(" and name like ?");
+			hql.append(" and a.name like ?");
 			params.add("%"+title+"%");
 		}
 		if(StringUtils.isNotEmpty(xpath)){

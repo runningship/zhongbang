@@ -11,7 +11,7 @@
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -72,7 +72,7 @@ function deleteOut(id){
 }
 
 function openAdd(){
-  art.dialog.open('journal/add.html?category=0',{
+  art.dialog.open('add.html?category=0',{
       padding:0,
       resize:true,
       lock:1,
@@ -82,7 +82,7 @@ function openAdd(){
 }
 
 function openEdit(id){
-  art.dialog.open('journal/edit.html?category=1&recordId='+id,{
+  art.dialog.open('edit.html?category=1&recordId='+id,{
       padding:0,
       resize:true,
       lock:1,

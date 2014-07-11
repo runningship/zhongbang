@@ -19,23 +19,36 @@ import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.entity.Client;
 import com.youwei.zjb.house.HouseQuery;
 import com.youwei.zjb.house.JiaoYi;
-import com.youwei.zjb.house.entity.GenJin;
 import com.youwei.zjb.house.entity.House;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
 
-@Module(name="/client")
+@Module(name="/client/")
 public class ClientService {
 
 	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
 	
-	public void add(Client client){
+	@WebMethod
+	public ModelAndView add(Client client){
+		ModelAndView mv = new ModelAndView();
 		client.addtime = new Date();
 		dao.saveOrUpdate(client);
+		return mv;
 	}
 	
-	public void update(Client client){
+	@WebMethod
+	public ModelAndView get(int clientId){
+		ModelAndView mv = new ModelAndView();
+		Client client = dao.get(Client.class, clientId);
+		mv.data.put("client", JSONHelper.toJSON(client));
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView update(Client client){
+		ModelAndView mv = new ModelAndView();
 		dao.saveOrUpdate(client);
+		return mv;
 	}
 	
 	@WebMethod
@@ -159,8 +172,8 @@ public class ClientService {
 			params.add(String.valueOf(query.kehuxingzhi.getCode()));
 		}
 		
-		hql.append(HqlHelper.buildDateSegment("addtime", query.addtimeStart, DateSeparator.After, params));
-		hql.append(HqlHelper.buildDateSegment("addtime", query.addtimeEnd, DateSeparator.Before, params));
+		hql.append(HqlHelper.buildDateSegment("c.addtime", query.addtimeStart, DateSeparator.After, params));
+		hql.append(HqlHelper.buildDateSegment("c.addtime", query.addtimeEnd, DateSeparator.Before, params));
 		if(StringUtils.isNotEmpty(query.orderBy)){
 			hql.append(" order by ").append(query.orderBy);
 		}

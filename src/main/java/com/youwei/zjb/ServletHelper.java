@@ -11,7 +11,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import javassist.CtClass;
 import javassist.CtMethod;
@@ -26,6 +25,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Level;
 import org.bc.sdak.GException;
 import org.bc.sdak.utils.LogUtil;
 import org.bc.web.ModelAndView;
@@ -65,7 +65,7 @@ public class ServletHelper {
 			pTypes = cm.getParameterTypes();
 		} catch (NotFoundException e1) {
 			//this should neven happen.
-			LogUtil.log(Level.SEVERE, "This should not happen at runtime,probably code issue.", e1);
+			LogUtil.log(Level.ERROR, "This should not happen at runtime,probably code issue.", e1);
 			return new Object[]{};
 		}
         Object[] values = new Object[pTypes.length];

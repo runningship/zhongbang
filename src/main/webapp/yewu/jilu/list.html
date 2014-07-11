@@ -11,7 +11,7 @@
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -72,7 +72,23 @@ function deleteOut(id){
 }
 
 function openView(id){
-  art.dialog.open('jilu/view.html?category='+category+'&recordId='+id,{
+  art.dialog.open('view.html?category='+category+'&recordId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:400,
+      width:600
+  });
+}
+
+function openAdd(){
+  var url = "";
+  if(category==0){
+    url = 'add_huiyi.html';
+  }else{
+    url = 'add.html?category='+category;
+  }
+  art.dialog.open(url,{
       padding:0,
       resize:true,
       lock:1,
@@ -81,14 +97,8 @@ function openView(id){
   });
 }
 
-function openAdd(){
-  art.dialog.open('jilu/add.html?category='+category,{
-      padding:0,
-      resize:true,
-      lock:1,
-      height:600,
-      width:1080
-  });
+function isHuiYi(){
+  return category==0;
 }
 
 $(function(){
@@ -96,6 +106,10 @@ $(function(){
   if(category==""){
     alert('没有设定类别编号');
     return;
+  }
+  if(category==0){
+    var str = '<div show="isHuiYi()" class="input-group input-group-max"><span class="input-group-addon">参会人</span><input type="text" class="form-control" name="goin"></div>';
+    $('#form1').prepend(str);
   }
   onSubmit_Form();
   getList();
@@ -116,13 +130,10 @@ $(function(){
     <div class="btn-group">
       <button onclick="openAdd();" class="btn btn-primary">新增</button>
     </div>
-    <form name="form1">
+    <form id="form1" name="form1">
     <input type="hidden" class="userInput" name="xpath" value="">
 
-    <div class="input-group input-group-max">
-      <span class="input-group-addon">参会人</span>
-      <input type="text" class="form-control" name="goin">
-    </div>
+    
     <div class="input-group" style="width:400px">
       <span class="input-group-addon">日期</span>
       <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:150px;border-radius:0;">

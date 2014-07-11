@@ -46,13 +46,13 @@ function onSubmit_Form(){
 
 function openEdit(rowIndex){
   if(rowIndex){
-    art.dialog.open('house/areaedit.html?areaId='+rowIndex,{
+    art.dialog.open('areaedit.html?areaId='+rowIndex,{
       height:450,
       width:700,
       title:'修改地图'
     })
   }else{
-    art.dialog.open('house/areaedit.html',{
+    art.dialog.open('areaedit.html',{
       height:450,
       width:700,
       title:'添加地图'

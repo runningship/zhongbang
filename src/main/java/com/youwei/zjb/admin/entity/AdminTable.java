@@ -32,6 +32,7 @@ public class AdminTable {
 	@Column(name="uid")
 	public Integer userId;
 	
+	@Column(nullable=false)
 	public String title;
 	
 	@Basic(fetch=FetchType.LAZY)

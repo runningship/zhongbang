@@ -11,7 +11,7 @@
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -41,7 +41,7 @@ function onSubmit_Form(){
 }
 
 function openView(id){
-  art.dialog.open('out/biz_view.html?recordId='+id,{
+  art.dialog.open('biz_view.html?recordId='+id,{
       padding:0,
       resize:true,
       lock:1,
@@ -51,7 +51,7 @@ function openView(id){
 }
 
 function openAdd(){
-  art.dialog.open('out/biz_add.html?category=1',{
+  art.dialog.open('biz_add.html?category=1',{
       padding:0,
       resize:true,
       lock:1,
@@ -106,11 +106,11 @@ $(function(){
 </style>
 </head>
 <body class="hlist bodyer" style="overflow:auto">
+    
+<div class="header" style="position:relative;height:50px;width:100%">
     <div class="btn-group">
       <button onclick="openAdd();" class="btn btn-primary ">新增</button>
     </div>
-<div class="header" style="position:relative;height:50px;width:100%">
-    
     <form name="form1">
     <input type="hidden" class="userInput" name="xpath" value="">
 

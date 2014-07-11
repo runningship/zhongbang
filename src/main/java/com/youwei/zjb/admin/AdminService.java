@@ -14,6 +14,7 @@ import org.bc.web.ModelAndView;
 import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
+import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.admin.entity.AdminClass;
@@ -91,6 +92,8 @@ public class AdminService {
 			hql.append(" and t.title like ? ");
 			params.add("%"+query.title+"%");
 		}
+		hql.append(HqlHelper.buildDateSegment("t.addtime", query.addtimeStart, DateSeparator.After, params));
+		hql.append(HqlHelper.buildDateSegment("t.addtime", query.addtimeEnd, DateSeparator.Before, params));
 		page= dao.findPage(page, hql.toString(), true , params.toArray());
 		mv.data.put("result", 0);
 		mv.data.put("page", JSONHelper.toJSON(page));

@@ -56,7 +56,7 @@ CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(Common
 				+ " o.xgr as xgr, d.namea as deptName, q.namea as quyu from OfficeSupply o,Department d , Department q where d.id=o.deptId and q.id=d.fid");
 		List<Object> params = new ArrayList<Object>();
 		if(StringUtils.isNotEmpty(query.title)){
-			hql.append(" and o.names like ?");
+			hql.append(" and o.title like ?");
 			params.add("%"+query.title+"%");
 		}
 		if(query.shenhe!=null){

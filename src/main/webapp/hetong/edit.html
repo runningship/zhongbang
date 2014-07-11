@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>添加合同</title>
+<title>编辑合同</title>
 <link rel="stylesheet" href="/zb/style/css.css">
 <link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
@@ -22,15 +22,14 @@
 <script type="text/javascript">
 
 var getStr;
-var QueryOptions='';
+var editPageData='';
 
 function funSubmit(){
-  var Thi=$('form');
   var url=$('form[name=form1]').attr('action');
   $.ajax({
     type: 'POST',
     url: url,
-    data:formSerialize(Thi),
+    data:formSerialize($('form')),
     success: function(data){
     var getStr=JSON.parse(data);
         art.dialog({title:'提示',content:'提交成功',ok: function (){
@@ -44,14 +43,33 @@ function funSubmit(){
   });
   return false;
 }
+
+function fillData(contract){
+  var arr = $('input');
+  arr = arr.add($('textarea'));
+  $(arr).each(function(index,obj){
+    var input = $(this);
+    if(input.attr('type')=='submit'){
+      return;
+    }
+    input.val(contract[input.attr('name')]);
+  });
+  
+   $('select').each(function(index,obj){
+    var select = $(this);
+    select.val(contract[select.attr('name')]);
+    select.change();
+  });
+}
+
 $(function(){
-  var claid = getParam('claid');
-  $('#claid').val(claid);
-  $.get('/zb/c/contract/initAdd', function(data) {
-    QueryOptions=JSON.parse(data);
-    buildHtmlWithJsonArray("id_yongtu",QueryOptions['yongtu'],true); //房屋类型
-    buildHtmlWithJsonArray("id_daikuan_lx",QueryOptions['daikuan_lx'],true); //贷款类型
-    buildHtmlWithJsonArray("id_qzy",QueryOptions['qzy'],true); //签证人
+  var contractId = getParam('contractId');
+  $.get('/zb/c/contract/initEdit?contractId='+contractId, function(data) {
+    editPageData=JSON.parse(data);
+    buildHtmlWithJsonArray("id_yongtu",editPageData['yongtu'],true); //房屋类型
+    buildHtmlWithJsonArray("id_daikuan_lx",editPageData['daikuan_lx'],true); //贷款类型
+    buildHtmlWithJsonArray("id_qzy",editPageData['qzy'],true); //签证人
+    fillData(editPageData['contract']);
   });
 });
 </script>
@@ -69,8 +87,9 @@ $(function(){
 </style>
 </head>
 <body class="bodyer" id="id_house_see">
-<form name="form1" method="post" action="/zb/c/contract/add" onsubmit="return funSubmit();">
+<form name="form1" method="post" action="/zb/c/contract/update" onsubmit="return funSubmit();">
   <input type="hidden" id="claid" name="claid" />
+  <input type="hidden" id="contractId" name="id" />
   <table class="table table-condensed">
     <tr>
       <td>
@@ -132,7 +151,7 @@ $(function(){
       <td colspan="3">
         <div class="input-group input-group-select" style="width:700px;">
           <span class="input-group-addon">业务员</span>
-          <select class="form-control get_comp" name="form_cid"></select>
+          <select class="form-control get_comp" name="quyu"></select>
           <select class="form-control get_quyu" name="ywDeptId"></select>
           <select class="form-control get_user" name="ywUserId"></select>
         </div>

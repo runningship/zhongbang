@@ -11,7 +11,7 @@
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -41,7 +41,7 @@ function onSubmit_Form(){
 }
 
 function openView(id){
-  art.dialog.open('out/see_house_view.html?recordId='+id,{
+  art.dialog.open('see_house_view.html?recordId='+id,{
       padding:0,
       resize:true,
       lock:1,
@@ -51,7 +51,7 @@ function openView(id){
 }
 
 function openAdd(){
-  art.dialog.open('out/see_house_add.html?category=1',{
+  art.dialog.open('see_house_add.html?category=1',{
       padding:0,
       resize:true,
       lock:1,
@@ -127,7 +127,6 @@ $(function(){
         <li><label><input type="radio" name="kanfang" value="1"> 陪看</label>
         <li><label><input type="radio" name="kanfang" value="2"> 自看</label>
       </ul>
-      art.dialog.opener.doSearch();
     </div>
     <div class="input-group input-group-select">
       <span class="input-group-addon">分公司</span>

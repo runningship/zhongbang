@@ -18,7 +18,7 @@ public class ContractProcessClass {
 	 * 合同分类 
 	 * 5 出售，6 出租
 	 */
-	public Integer claId;
+	public Integer claid;
 	
 	public String title;
 	

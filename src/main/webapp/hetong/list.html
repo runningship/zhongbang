@@ -39,6 +39,26 @@ function doSearch(){
   return false;
 }
 
+function openEdit(contractId){
+  art.dialog.open('edit.html?contractId='+contractId,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:500,
+      width:1080
+  });
+}
+
+function openView(contractId){
+  art.dialog.open('view.html?contractId='+contractId,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:500,
+      width:1080
+  });
+}
+
 function deletecontract(id){
   art.dialog({
     title:'提示',
@@ -150,7 +170,7 @@ $(function(){
       <td>${addr}</td>
       <td>${lxr_f}</td>
       <td>${lxr_k}</td>
-      <td><a target="_blank" href="temp_edit.html?classId=${id}">修改</a> <a href="javascript:void(0)" onclick="deletecontract(${id})">删除</a></td>
+      <td><a onclick="openView(${id});" href="javascript:void(0)">查看</a> <a onclick="openEdit(${id});" href="javascript:void(0)">修改</a> <a href="javascript:void(0)" onclick="deletecontract(${id})">删除</a></td>
     </tr>
     </tbody>
   </table>

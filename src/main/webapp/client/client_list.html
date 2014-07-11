@@ -4,20 +4,18 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Examples</title>
+<title>客源列表</title>
 <link rel="stylesheet" href="/zb/style/css.css">
 <link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.4"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
-<link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
+<script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 var shEnums;
 var queryOpts;
@@ -56,6 +54,16 @@ function selectHouse(clientId){
       lock:1,
       height:600,
       width:1500
+  });
+}
+
+function selectUname(clientId){
+  art.dialog.open('uname_edit.html?clientId='+clientId,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:300,
+      width:300
   });
 }
 
@@ -110,6 +118,27 @@ function deleteSelected(){
   });
 }
 
+function btnEdit(t){
+var Thi=t,
+    ThiId='',title;
+    if(Thi.parents('tr').length>0){
+      ThiId=Thi.parents('tr').find('input[name=ids]').val();
+      title='修改客源'
+    }else{
+      title='添加客源'
+    }
+    art.dialog.open('client_edit.html?clientId='+ThiId,{
+      height:460,
+      width:765,
+      title:title,
+        ok: function () {
+            var iframe = this.iframe.contentWindow;
+            var form = $('form',iframe.document);
+            form.submit();
+            return false;
+        },cancel: true
+    });
+}
 $(function(){
   chuzu = getParam('chuzu');
   if(chuzu==""){
@@ -181,10 +210,10 @@ $(function(){
       <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
     </div>
     <br/><br/>
-    <div class="input-group">
+    <div class="input-group" style="width:400px">
       <span class="input-group-addon">登记时间</span>
-      <input type="text" class="form-control" name="addtimeStart">
-      <input type="text" class="form-control" name="addtimeEnd">
+      <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:150px;border-radius:0;">
+      <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:150px">
     </div>
     <div class="input-group input-group-mt3 input-group-select" style="margin-top:1px;">
       <span class="input-group-addon">业务员</span>
@@ -195,7 +224,7 @@ $(function(){
     
     </form>
     <div class="btn-group" style="float:right">
-      <button  class="btn btn-primary btn_subnmit">登记</button>
+      <button  class="btn btn-primary btn_subnmit" onclick="btnEdit($(this));">登记</button>
     </div>
 </div>
 <div class="mainer" style="position:relative;width:100%">
@@ -226,8 +255,8 @@ $(function(){
       <td class='runscript'>getEnumTextByCode(queryOpts['kehu'],${kehu})</td>
       <td>${uname}</td>
       <td><a href="javascript:void(0)" onclick="selectHouse(${id});">房源</a></td>
-      <td><a>分配</a></td>
-      <td><a href="javascript:void(0)" >修改</a> <a href="javascript:void(0)" onclick="deleteClient(${id})">删除</a></td>
+      <td><a href="javascript:void(0)" onclick="selectUname(${id});">分配</a></td>
+      <td><a href="javascript:void(0)" onclick="btnEdit($(this));" >修改</a> <a href="javascript:void(0)" onclick="deleteClient(${id})">删除</a></td>
       
     </tr>
     </tbody>

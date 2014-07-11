@@ -20,7 +20,7 @@
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
 <script type="text/javascript" src="/zb/js/tagInput/bootstrap-tagsinput.min.js"></script>
-<link rel="stylesheet" href="/zb/js/tagInput//bootstrap-tagsinput.css">
+<link   rel="stylesheet"      href="/zb/js/tagInput/bootstrap-tagsinput.css">
 <script type="text/javascript">
 /*
   $('form').on('submit', function() {alert('go')
@@ -37,7 +37,7 @@ alert('exit')
   });
 */
   var getStr,chuzu;
-      getHid=getParam('hid')
+      getClientId=getParam('clientid')
       chuzu=getParam('chuzu');
   var QueryOptions='';
 function getEnumText(category,code){
@@ -93,28 +93,27 @@ var Thi=$('form');
 $(function(){
 
   $.get('/zb/c/house/getQueryOptions', function(data) {
-    QueryOptions=JSON.parse(data);
-    buildHtmlWithJsonArray("id_chaoxiang",QueryOptions['chaoxiang'],true); //朝向
-    buildHtmlWithJsonArray("id_leibie",QueryOptions['leibie'],true);       //类别
-    buildHtmlWithJsonArray("id_louxing",QueryOptions['louxing'],true);     //楼型
-    buildHtmlWithJsonArray("id_jiaoyi",QueryOptions['jiaoyi'],true);       //交易
-    buildHtmlWithJsonArray("id_quyu",QueryOptions['quyu'],true);           //区域
-    buildHtmlWithJsonArray("id_zhuangtai",QueryOptions['zhuangtai'],true); //状态
-    buildHtmlWithJsonArray("id_xingzhi",QueryOptions['xingzhi'],true); //房型
-    buildHtmlWithJsonArray("id_zhuangxiu",QueryOptions['zhuangxiu'],true);   //装修
-      if(getHid){
-        $('form[name=form1]').attr('action', '/zb/c/house/update');
-        //alert($('form[name=form1]').attr('action'))
-        $.get('/zb/c/house/listAll?id='+getHid, function(data) {
-          getStr=JSON.parse(data);
-          buildHtmlWithJsonArray("id_house_see",getStr['page']['data'],true);
-        });
-      }else{
-        var gerStrNull={"page":{"autoCount":"","currentPageNo":"","firstOfPage":"","lastOfPage":"","pageSize":"","pageUrl":"","totalCount":"","totalPageCount":"","data":[{"id":"","deptId":"","userId":"","cid":"","quyu":"","area":"","dhao":"","fhao":"","luduan":"","lceng":"","zceng":"","lxing":"","hxf":"","hxt":"","hxw":"","hxy":"","chaoxiang":"","zhuangxiu":"","mianji":"","zjia":"","sjia":"","djia":"","lxr":"","tel":"","forlxr":"","fortel":"","beizhu":"","jiaoyi":chuzu,"leibie":"","flag":"","xingzhi":"","tuijie":"","dateyear":"","dateweituo":"","datejiaofang":"","dateadd":"","dategenjin":"","fav":"","houseNumber":"","isdel":"","sh":"","chanquan":"","tudizheng":"","fordlr":"","fordlrtel":""}]}}
-        //gerStrNull=JSON.parse(gerStrNull)
-        buildHtmlWithJsonArray("id_house_see",gerStrNull['page']['data'],true);
-      }
+    queryOpts=JSON.parse(data);
+    buildHtmlWithJsonArray("id_quyu",queryOpts['quyu']);       //区域
+    buildHtmlWithJsonArray("id_kehu",queryOpts['kehu']);       //客户性质
+    buildHtmlWithJsonArray("id_kehulaiyuan",queryOpts['kehulaiyuan']); //客户来源
+    buildHtmlWithJsonArray("id_fangxing",queryOpts['fangxing']); //客户来源
+    buildHtmlWithJsonArray("id_zhuangxiu",queryOpts['zhuangxiu']);   //装修
+    buildHtmlWithJsonArray("id_louxing",queryOpts['louxing']);     //楼型
+    buildHtmlWithJsonArray("id_fikuans",queryOpts['fukuan']);     //楼型
   });
+    if(getClientId){
+      $('form[name=form1]').attr('action', '/zb/c/house/update');
+      //alert($('form[name=form1]').attr('action'))
+      $.get('/zb/c/client/get?clientId='+getClientId, function(data) {
+        getStr=JSON.parse(data);
+        buildHtmlWithJsonArray("id_client_see",[getStr['client']],true);
+      });
+    }else{
+      var gerStrNull={"client":{"id":"","salesman":"","djr":"","lxr":"","tel":"","area":"","luduan":"","louxing":"","huxing":"","zhaungxiu":"","mianjiFrom":"","mianjiTo":"","jiageFrom":"","jiageTo":"","fuyongs":"","zhongyaos":"","beizhu":"","addtime":"","chuzu":"","loucengFrom":"","loucengTo":"","quyu":"","source":"","valid":""}}
+      //gerStrNull=JSON.parse(gerStrNull)
+      buildHtmlWithJsonArray("id_client_see",gerStrNull['client'],true);
+    }
 
   $('.tag3').tagsinput({maxTags:3});
 });
@@ -126,10 +125,15 @@ $(function(){
   .w40b{ width: 40%;}
   .w160px{ width: 160px;}
  .hadd  .colspan2{ width: 300px;}
- .hadd{ height: auto;}
+ .hadd{ height: auto; width: 760px;}
+ input.inputW100{ width: 100px; display: inline-block;}
+ .bootstrap-tagsinput {
+margin-bottom: 0px;
+width: 100%;
+}
 </style>
 </head>
-<body class="hadd bodyer" id="id_house_see">
+<body class="hadd bodyer" id="id_client_see">
 <form class="form-inline" name="form1" method="post" action="/zb/c/house/add" onsubmit="return funSubmit();">
   <input type="hidden" class="form-control" name="id" value="${id}">
   <input type="hidden" class="form-control" name="deptId" value="${deptId}">
@@ -139,79 +143,131 @@ $(function(){
       <tbody class="j_tab_tr_hide" style="display: table-row-group; ">
       <tr>
         <th>姓名</th>
-        <td><input type="text" name="lxra" class="inputText" value=""></td>
-        <th>客户性质</th>
-        <td><div class="hideduo nobr"></div></td>
+        <td><input type="text" name="lxra" class="form-control inputW100" value=""></td>
+        <th>区域</th>
+        <td>
+          <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              区域 <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" id="id_quyu">
+              <li><label><input type="checkbox" name="quyus" value="${name}"> ${name}</label>
+            </ul>
+          </div>
+        </td>
       </tr>
       <tr>
         <th>电话</th>
         <td><input type="text" data-role="tagsinput" class="tag3" name="sda" value=""></td>
         <th>装潢</th>
-        <td><div class="hideduo nobr"></div></td>
+        <td>
+          <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              装潢 <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" id="id_zhuangxiu">
+              <li><label><input type="radio" name="zhuangxiu" value="${code}"> ${name}</label></li>
+            </ul>
+          </div>
+        </td>
       </tr>
       <tr>
         <th>楼盘</th>
         <td><input type="text" data-role="tagsinput" class="tag3" name="sda" value=""></td>
         <th>楼层</th>
-        <td><input type="text" name="loucenga" class="input-small" value=""> - <input type="text" name="loucengb" class="input-small" value=""> 层
-
-<div class="form-group">
-  <label class="sr-only" for="exampleInputEmail2">Email address</label>
-  <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
-</div> - 
-<div class="input-group">
-  <input type="text" class="form-control">
-  <span class="input-group-addon">.00</span>
-</div></td>
+        <td>
+          <input type="text" class="form-control inputW100" name="loucenga" placeholder="Enter email">-
+          <input type="text" class="form-control inputW100" name="loucengb">层
+        </td>
       </tr>
       <tr>
-        <th>区域</th>
-        <td><div class="hideduo nobr"></div></td>
+        <th>客户性质</th>
+        <td>
+          <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              性质 <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" id="id_kehu">
+              <li><label><input type="radio" name="kehuxingzhi" value="${name}"> ${name}</label></li>
+            </ul>
+          </div>
+        </td>
         <th>楼型</th>
-        <td><div class="hideduo nobr"></div></td>
+        <td>
+          <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              楼型 <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" id="id_louxing">
+              <li><label><input type="radio" name="louxing" value="${value}"> ${name}</label></li>
+            </ul>
+          </div>
+        </td>
       </tr>
       <tr>
         <th>户型</th>
-        <td><div class="hideduo nobr"></div></td>
+        <td>
+          <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              户型 <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" id="id_fangxing">
+              <li><label><input type="radio" name="fangxing" value="${name}"> ${name}</label></li>
+            </ul>
+          </div>
+        </td>
         <th>付款方式</th>
-        <td><div class="hideduo nobr"></div></td>
+        <td>
+          <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              付款方式 <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" id="id_fikuans">
+              <li><label><input type="radio" name="fikuan" value="${value}"> ${name}</label></li>
+            </ul>
+          </div>
+        </td>
       </tr>
       <tr>
         <th>面积</th>
-        <td><input type="text" name="mianjia" class="input-small" value=""> - <input type="text" name="mianjib" class="input-small" value=""> m<sup>2</sup></td>
+        <td><input type="text" class="form-control inputW100" name="mianjia" width="100" value=""> - <input type="text" class="form-control inputW100" name="mianjib" width="100" value=""> m<sup>2</sup></td>
         <th>价格</th>
-        <td><input type="text" name="jiagea" class="input-small" value=""> - <input type="text" name="jiageb" class="input-mini" value=""> 万</td>
+        <td><input type="text" class="form-control inputW100" name="jiagea" width="100" value=""> - <input type="text" class="form-control inputW100" name="jiageb" width="100" value=""> 万</td>
       </tr>
       <tr>
         <th>客户来源</th>
-        <td><div class="hideduo nobr"></div></td>
+        <td>
+          <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              来源 <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" id="id_kehulaiyuan">
+              <li><label><input type="checkbox" name="kehulaiyuan" value="${name}"> ${name}</label>
+            </ul>
+          </div>  
+        </td>
         <th>是否有效</th>
-        <td><div class="hideduo nobr"></div></td>
+        <td>
+          <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              是否有效 <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" id="id_laiyuan">
+              <li><label><input type="radio" name="youxiao" value=""> 所有</label>
+              <li><label><input type="radio" name="youxiao" value="1"> 有效</label>
+              <li><label><input type="radio" name="youxiao" value="0"> 无效</label>
+            </ul>
+          </div>
+        </td>
       </tr>
       <tr>
         <th>客户分配</th>
         <td colspan="3">
-<% if qx_ky_quyu=1 and qx_ky_dian=1 then %>
-<% else 
-hideq=" style=""display:none;"" "%>
-  默认本分公司所属区域
-<% end if %>
-          <select name="get_quyu" class="get_quyu input-medium" ></select>
-          
-<% if qx_ky_quyu=1 then %>
-<% else 
-hided=" style=""display:none;"" "%>
-  <%= getUsers(dids,"dname") %>
-<% end if %>
-          <select name="get_dian" class="get_dian input-medium" ></select>
-        
-<% if qx_ky_dian=1 or qx_ky_quyu=1 then %>
-  
-<% else 
-hideu=" style=""display:none;"" "%>
-  <%= getUsers(uids,"uname") %>
-<% end if %>
-          <select name="get_user" class="get_user input-medium" ></select>
+        <div class="input-group  input-group-select">
+          <select class="form-control get_comp" name="form_cid"></select>
+          <select class="form-control get_quyu" name="form_did"></select>
+          <select class="form-control get_user" name="form_uid"></select>
+        </div>
         </td>
       </tr>
       <tr>

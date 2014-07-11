@@ -49,6 +49,7 @@ function passSP(rowIndex,spId){
     success: function(data){
       alert('审批成功');
       $("#row_"+rowIndex).html('已通过');
+      art.dialog.opener.doSearch();
     },
     error:function(data){
       alert(data.responseText);

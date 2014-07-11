@@ -20,6 +20,7 @@
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
 <script type="text/javascript">
+var getStr;
 function fix(TableH,TableB){
   for(var i=0;i<=TableB.find('td:last').index();i++){
     TableH.find('th').eq(i).width(TableB.find('tr').eq(1).find('td').eq(i).width());
@@ -53,7 +54,7 @@ function getHuseList(a){
 //    async:false,
     data:a,
     success: function(data){
-      getStr=JSON.parse(data);
+       var  getStr=JSON.parse(data);
         buildHtmlWithJsonArray("id_House_list",getStr['page']['data']);
         Page.setPageInfo(getStr['page']);
         fix($('.TableH'),$('.TableB'));
@@ -71,7 +72,7 @@ function onSubmit_Form(){
     return false;
   });
 }
-var getStr;
+
 function getEnumText(category,code){
   var arr = getStr[category];
   for(var i=0;i<arr.length;i++){
@@ -251,7 +252,7 @@ function chooseHouse(){
         <input type="text" class="form-control" name="lcengEnd">
       </div>
       <div class="input-group input-group-max">
-        <span class="input-group-addon">智能</span>
+        <span class="input-group-addon" style="padding-right:26px;">智能</span>
         <input type="text" class="form-control" name="">
       </div>
 
@@ -271,10 +272,11 @@ function chooseHouse(){
 
 
   </form>
-  <table class="table TableH">
+</div>
+<div class="mainer">
+  <table class="table table-hover TableB" >
     <tr>
-      <td> <a href="javascript:void(0)" onclick="chooseHouse();">选择</a>
-    </td>
+      <th><a href="javascript:void(0)" onclick="chooseHouse();">选择</a></th>
       <th class="font_no_br">房源编号</th>
       <th>类别</th>
       <th>区域</th>
@@ -290,16 +292,11 @@ function chooseHouse(){
       <th>联系人</th>
       <th>性质</th>
       <th>状态</th>
-      <th class="font_no_br">房配客</th>
     </tr>
-  </table>
-</div>
-<div class="mainer">
-  <table class="table table-hover TableB" >
     <tbody id="id_House_list">
     <tr data-hid="${id}">
-    
-      <td><input style="margin-left:20px;margin-right:20px;" type="checkbox" name="ids" rowIndex="${rowIndex}" />${houseNumber}</td>
+      <td><input style="margin-left:20px;margin-right:20px;" type="checkbox" name="ids" rowIndex="${rowIndex}" /></td>
+      <td>${houseNumber}</td>
       <td>${leibie}</td>
       <td>${quyu}</td>
       <td name="lpmc">${area} ${dhao}#${fhao}</td>
@@ -314,7 +311,6 @@ function chooseHouse(){
       <td>${forlxr}</td>
       <td class='runscript'>getEnumText('xingzhi',${xingzhi})</td>
       <td class='runscript'>getEnumText('zhuangtai',${ztai})</td>
-      <td>有</td>
       </tr>
     </tbody>
   </table>

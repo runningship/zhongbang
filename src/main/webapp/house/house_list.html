@@ -12,7 +12,7 @@
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/sysinfo.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=chrome"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.timers.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
@@ -81,7 +81,7 @@ function getEnumText(category,code){
   }
 }
 function dialogs(id){
-    art.dialog.open('house/house_see.html?hid='+id,{
+    art.dialog.open('house_see.html?hid='+id,{
       id:'SeeHouse'+id,
       title:'查看房源详情'
     })
