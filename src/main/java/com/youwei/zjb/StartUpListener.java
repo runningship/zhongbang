@@ -32,7 +32,7 @@ public class StartUpListener implements ServletContextListener{
 		initModule();
 		try {
 			IMServer.startUp();
-		} catch (UnknownHostException e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 		}
 	}

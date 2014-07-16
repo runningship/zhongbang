@@ -27,7 +27,6 @@ import com.youwei.zjb.entity.Role;
 import com.youwei.zjb.entity.RoleAuthority;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.sys.entity.Qzy;
-import com.youwei.zjb.user.RuQiTuJin;
 import com.youwei.zjb.util.JSONHelper;
 
 @Module(name="/sys/")
@@ -58,11 +57,26 @@ public class AuthorityService {
 	}
 	
 	@WebMethod
+	@Transactional
+	public ModelAndView deleteRole(int roleId){
+		ModelAndView mv = new ModelAndView();
+		Role po = dao.get(Role.class,roleId);
+		if(po!=null){
+			dao.delete(po);
+			dao.execute("update User u set u.roleId=? where u.roleId=?", 0,roleId);
+		}
+		return mv;
+	}
+	
+	@WebMethod
 	public ModelAndView addQzy(Qzy qzy){
 		ModelAndView mv = new ModelAndView();
 		Qzy po = dao.getUniqueByKeyValue(Qzy.class, "userId", qzy.userId);
 		if(po!=null){
 			throw new GException(PlatformExceptionType.BusinessException, 1, "不能添加重复的签证员");
+		}
+		if(qzy.userId==null){
+			throw new GException(PlatformExceptionType.BusinessException, 1, "请先选择签证员");
 		}
 		dao.saveOrUpdate(qzy);
 		mv.data.put("msg", "添加成功");

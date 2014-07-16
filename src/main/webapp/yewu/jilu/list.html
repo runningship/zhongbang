@@ -21,7 +21,7 @@ var queryOpts;
 var category;
 function getList(search){
   var url='/zb/c/jilu/list?category='+category;
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: url,
     data:search,
@@ -52,7 +52,7 @@ function deleteOut(id){
     content:'确定删除这条会议吗？',
     lock:true,
     ok:function(){
-      $.ajax({
+      YW.ajax({
         url:'/zb/c/jilu/delete?id='+id,
         data:'',
         timeout:5000,

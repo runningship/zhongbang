@@ -11,7 +11,7 @@
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -20,23 +20,20 @@ var classId;
 var ue;
 function save(){
   var text = $('form[name=form1]').serialize();
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/assets/update',
     data:text,
     success: function(data){
-      alert('保存成功.');
       art.dialog.close()
       art.dialog.opener.doSearch();
-    },
-    error:function(data){
-      alert('保存失败,'+data.responseText);
+      alert('修改成功.');
     }
   });
 }
 
 function loadData(assetId){
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/assets/get?assetId='+assetId,
     data:'',
@@ -48,9 +45,6 @@ function loadData(assetId){
       $('#djia').val(asset['djia']);
       $('#zjia').val(asset['zjia']);
       $('#beizhu').val(asset['beizhu']);
-    },
-    error:function(data){
-      alert('保存失败,'+data.responseText);
     }
   });
 }

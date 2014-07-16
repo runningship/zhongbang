@@ -27,19 +27,12 @@ var QueryOptions='';
 function funSubmit(){
   var Thi=$('form');
   var url=$('form[name=form1]').attr('action');
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: url,
     data:formSerialize(Thi),
     success: function(data){
-    var getStr=JSON.parse(data);
-        art.dialog({title:'提示',content:'提交成功',ok: function (){
-            art.dialog.close()
-          }
-        });
-    },
-    error:function(data){
-      art.dialog.tips(data.responseText);
+      alert('添加成功');
     }
   });
   return false;
@@ -244,7 +237,7 @@ $(function(){
       </td>
     </tr>
     <tr>
-      <td colspan="4"><input style="margin-left:10px;" type="submit" value="提交"></td>
+      <td colspan="4"><button style="margin-left:10px;" type="submit" class="btn btn-primary">提交</button></td>
     </tr>
   </table>
   

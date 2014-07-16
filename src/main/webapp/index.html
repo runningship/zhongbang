@@ -16,14 +16,14 @@
 <script type="text/javascript" src="/zb/jsLib/jquery-smartMenu/js/mini/jquery-smartMenu-min.js"></script>
 <script type="text/javascript" src="/zb/jsLib/window.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
-<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=idialog"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
 <link rel="stylesheet" type="text/css" href="/zb/chat.css" />
 <script type="text/javascript" src="/zb/js/jquery.hotkeys.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/im.js"></script>
 <script type="text/javascript">
-//hex.maximize()
+hex.maximize();
 $(function(){
 	//存储桌面布局元素的jquery对象
 	myLib.desktop.desktopPanel();
@@ -34,13 +34,78 @@ $(function(){
 	//初始化侧边栏
 	myLib.desktop.lrBar.init();
 	//初始化桌面右键菜单
-	//myLib.desktop.contextMenu($(document.body),data,"body",10);
-})
-</script>
+	// myLib.desktop.contextMenu($(document.body),data,"body",10);
+  init();
+});
 
+function init(){
+  YW.ajax({
+    type: 'POST',
+    url: '/zb/c/user/initIndex',
+    data:'',
+    success: function(data){
+      var json = JSON.parse(data);
+      $('#userinfo').text(json.username+' ('+json.role+')');
+    }
+  });
+}
+function openFanKui(){
+  art.dialog.open('sys/fankui_add.html',{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:300,
+      width:505,
+      title:'意见反馈',
+      resize:false
+  });
+}
+function openPassword(){
+  art.dialog.open('sys/password_edit.html',{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:250,
+      width:400,
+      title:'修改密码',
+      resize:false
+  });
+}
+
+function openChat(){
+  art.dialog.open('im.html?userId=316',{
+      padding:0,
+      height:605,
+      width:930,
+      title:'QQ',
+      resize:false
+  });
+}
+</script>
+<style type="text/css">
+  .loading{
+    background:'';
+  }
+</style>
 </head>
 <body>
-
+<div id="rr_bar" >
+  
+  <div id="start_block" style="margin-left:110px;"> 
+    <a title="开始" id="start_btn"></a>
+    
+  </div>
+  <div id="start_item">
+      <ul class="item admin">
+        <li ><span class="adminImg" ></span><div id="userinfo"></div></li>
+      </ul>
+      <ul class="item">
+        <li onclick="openPassword()"><span class="sitting_btn"></span>修改密码</li>
+        <li onclick="openFanKui()"><span class="about_btn"></span>意见反馈</li>
+        <li><span class="logout_btn"></span>退出系统</li>
+      </ul>
+    </div>
+</div>
 <ul id="deskIcon">
   <li auth="fy" class="desktop_icon" id="win5" path="/zb/v/house/index.html"> <span class="icon"><img src="/zb/style/icon/ico_b_house_big.png"/></span>
     <div class="text">房源管理
@@ -77,7 +142,7 @@ $(function(){
       <div class="right_cron"></div>
     </div>
   </li>
-  <li class="desktop_icon" id="win12" path="/zb/v/oa/index.html"> <span class="icon"><img src="/zb/style/icon/ico_b_oa_big.png"/></span>
+  <li auth="oa" class="desktop_icon" id="win12" path="/zb/v/oa/index.html"> <span class="icon"><img src="/zb/style/icon/ico_b_oa_big.png"/></span>
     <div class="text">OA管理
       <div class="right_cron"></div>
     </div>
@@ -87,7 +152,7 @@ $(function(){
       <div class="right_cron"></div>
     </div>
   </li>
-  <li class="desktop_icon" id="win14" path="im.html?userId=316"> <span class="icon"><img src="http://www.oyyw.com/icon/icon2.png"/></span>
+  <li onclick="openChat();" class="desktop_icon" id="win14"> <span class="icon"><img src="http://www.oyyw.com/icon/icon2.png"/></span>
     <div class="text">chat
       <div class="right_cron"></div>
     </div>
@@ -100,5 +165,7 @@ $(function(){
     <div id="task_lb"></div>
   </div>
 </div>
+
+
 </body>
 </html>

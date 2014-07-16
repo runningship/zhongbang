@@ -21,7 +21,7 @@ var queryOpts;
 
 function getList(search){
   var url='/zb/c/oa/listFenLei';
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: url,
     data:search,
@@ -29,7 +29,6 @@ function getList(search){
       var getStr=JSON.parse(data);
       dataArr = getStr['list'];
       buildHtmlWithJsonArray("id_list",dataArr);
-      // Page.setPageInfo(getStr['page']);
     }
   });
 }
@@ -40,11 +39,11 @@ function deleteFenLei(id){
     content:'确定删除这条公告分类吗？',
     lock:true,
     ok:function(){
-      $.ajax({
+      YW.ajax({
         type: 'get',
         url: '/zb/c/oa/deleteFenLei?id='+id,
         success: function(data){
-          art.dialog.tips('删除成功');
+          alert('删除成功');
           getList();
         }
       });
@@ -58,8 +57,8 @@ function openAdd(){
       padding:0,
       resize:true,
       lock:1,
-      height:200,
-      width:500
+      height:140,
+      width:400
   });
 }
 
@@ -68,8 +67,8 @@ function openEdit(id){
       padding:0,
       resize:true,
       lock:1,
-      height:200,
-      width:500
+      height:140,
+      width:400
   });
 }
 

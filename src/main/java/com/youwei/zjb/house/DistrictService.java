@@ -3,6 +3,8 @@ package com.youwei.zjb.house;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.sourceforge.pinyin4j.PinyinHelper;
+
 import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.GException;
@@ -14,6 +16,7 @@ import org.bc.web.WebMethod;
 
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.house.entity.District;
+import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.JSONHelper;
 
 @Module(name="/areas/")
@@ -31,7 +34,9 @@ public class DistrictService {
 		if(po!=null){
 			throw new GException(PlatformExceptionType.BusinessException, 2, "小区名重复");
 		}
-		service.saveOrUpdate(district);
+		district.pinyin=DataHelper.toPinyin(district.name);
+		district.pyShort=DataHelper.toPinyinShort(district.name);
+//		service.saveOrUpdate(district);
 		mv.data.put("msg", "添加成功");
 		return mv;
 	}

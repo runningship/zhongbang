@@ -11,7 +11,7 @@
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -20,23 +20,20 @@ var classId;
 var ue;
 function save(){
   var text = $('form[name=form1]').serialize();
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/supply/update',
     data:text,
     success: function(data){
-      alert('保存成功.');
       art.dialog.close()
       art.dialog.opener.doSearch();
-    },
-    error:function(data){
-      alert('保存失败,'+data.responseText);
+      alert('修改成功.');
     }
   });
 }
 
 function loadData(supplyId){
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/supply/get?supplyId='+supplyId,
     data:'',
@@ -49,9 +46,6 @@ function loadData(supplyId){
       $('#djia').val(supply['djia']);
       $('#zjia').val(supply['zjia']);
       $('#beizhu').val(supply['beizhu']);
-    },
-    error:function(data){
-      alert('保存失败,'+data.responseText);
     }
   });
 }

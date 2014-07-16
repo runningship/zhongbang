@@ -24,7 +24,7 @@ var classId;
 function save(){
   $('#template').val(ue.getContent());
   var text = $('form[name=form1]').serialize();
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/admin/updateTemplate',
     data:text,
@@ -38,7 +38,7 @@ function save(){
 }
 
 function loadData(){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/admin/getAdminClass?classId='+classId,
     data:'',

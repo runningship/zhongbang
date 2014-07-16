@@ -1,5 +1,12 @@
 package org.bc.dietary.test.web;
 
+import net.sourceforge.pinyin4j.PinyinHelper;
+import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
+import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+
 import org.bc.sdak.Page;
 import org.junit.Before;
 import org.junit.Test;
@@ -120,5 +127,17 @@ public class ModuleTest {
 		page.setCurrentPageNo(1);
 		page = SimpDaoTool.getGlobalCommonDaoService().findPage(page, "from Client");
 		System.out.println(page.getResult().size());
+	}
+	
+	@Test
+	public void testPinyin() throws BadHanyuPinyinOutputFormatCombination{
+		HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
+		format.setVCharType(HanyuPinyinVCharType.WITH_V);
+		format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+		String[] arr = PinyinHelper.toHanyuPinyinStringArray('翠', format);
+//		String[] arr = PinyinHelper.toTongyongPinyinStringArray('翠');
+		for(String str : arr){
+			System.out.println(str);
+		}
 	}
 }

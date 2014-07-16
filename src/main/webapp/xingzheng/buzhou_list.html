@@ -11,7 +11,7 @@
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -20,7 +20,7 @@
 var classId;
 function getList(search){
   var url='/zb/c/admin/listProcessClass?classId='+classId;
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: url,
     data:search,
@@ -39,7 +39,7 @@ function deleteBuZhou(id){
     content:'确定删除这条步骤吗？',
     lock:true,
     ok:function(){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/admin/deleteProcessClass?pcId='+id,
     data:'',

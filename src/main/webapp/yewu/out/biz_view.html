@@ -19,7 +19,7 @@ var data;
 var recordId;
 function get(){
   var url='/zb/c/out/get?id='+recordId;
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: url,
     success: function(text){

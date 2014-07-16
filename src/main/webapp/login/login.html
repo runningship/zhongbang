@@ -16,6 +16,7 @@
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript">
     hex.sizeTo(800,350);
 
@@ -40,8 +41,7 @@ var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
         compStrs=$('.company').val()
         //alert(compStr)
         $.each(getUserTreeStr.result, function(index, item) {
-            //alert(item.name);
-            if(item.name==compStr){
+            if(item.text==compStr){
                 //alert(item.name)
                 var optgroups='';
                 $.each(item.children, function(index, items) {
@@ -49,7 +49,7 @@ var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
                         //alert(items.name)
                         $(".user").empty();
                         $.each(items.children, function(index, itemu) {
-                            $(".user").prepend('<option value="'+itemu.userId+'" >'+itemu.name+'</option>');
+                            $(".user").prepend('<option value="'+itemu.userId+'" >'+itemu.text+'</option>');
                         })
                     }
                 })
@@ -58,10 +58,9 @@ var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
         });  
     }
     function get_company(){
-        $.ajax({
+        YW.ajax({
             url:'/zb/c/user/getUserTree',
             data:'',
-            timeout:3000,
             dataType:'json',
             beforeSend: function(XMLHttpRequest){
                 $(".company").prepend('<option>加载中...</option>')
@@ -78,10 +77,10 @@ var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
                         var optgroups='';
                         $.each(item.children, function(indexs, items) {
                             //alert(items.name);
-                            optgroups=optgroups + '<option value="'+items.deptId+'">'+items.name+'</option>';
+                            optgroups=optgroups + '<option value="'+items.deptId+'">'+items.text+'</option>';
                         }); 
                         //alert(optgroups)
-                        var optgroup=$(".company").prepend('<optgroup label="'+item.name+'">'+optgroups+'</optgroup>');
+                        var optgroup=$(".company").prepend('<optgroup label="'+item.text+'">'+optgroups+'</optgroup>');
                     });
                     if(didc){$(".company").val(didc);}
 /**/                get_user();
@@ -92,7 +91,7 @@ var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
         })
     }
     function loginStart(){
-        function loginYes(){window.location='/index.html'}
+        function loginYes(){window.location='/zb/v/index.html'}
     var did=$('.deptl').val(),
         uid=$('.user').val(),
         pwd=$('.password').val(),
@@ -109,11 +108,10 @@ var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
         if(pwd==''){artdialog('请输入密码','warning','');$('.password').focus();return false;}
                         SetCookie('zb_l_comp',did);
                         SetCookie('zb_l_user',uid);
-        $.ajax({
+        YW.ajax({
             async: true,
             type:'POST',
             dataType:'html',
-            timeout: 3000,
             url: urls,
             data: param,
             beforeSend: function(XMLHttpRequest){

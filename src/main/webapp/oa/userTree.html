@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>jsTree test</title>
   <!-- 2 load the theme CSS file -->
-  <link rel="stylesheet" href="/zb/js/jstree/themes/default/style.min.css" />
+  <link rel="stylesheet" href="/zb/js/jstree/themes/default/style.css" />
 </head>
 <body>
   <!-- 3 setup a container element -->
@@ -23,7 +23,7 @@
     if(recordId==undefined){
       recordId = -1;
     }
-    $.ajax({
+    YW.ajax({
         url:'/zb/c/user/getUserTree2?noticeId='+recordId,
         data:'',
         timeout:30000,

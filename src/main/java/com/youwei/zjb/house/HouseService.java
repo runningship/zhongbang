@@ -226,8 +226,8 @@ public class HouseService {
 			hql.append(" )");
 		}
 		if(query.ztai!=null){
-			hql.append(" and h.flag = ?");
-			params.add(query.ztai.getCode());
+			hql.append(" and h.ztai = ?");
+			params.add(String.valueOf(query.ztai.getCode()));
 		}
 		if(StringUtils.isNotEmpty(query.leibie)){
 			hql.append(" and h.leibie = ? ");

@@ -81,3 +81,45 @@ function getParam(name){
 var reg = new RegExp("(^|\\?|&)"+ name +"=([^&]*)(\\s|&|$)", "i");
 return (reg.test(location.search))? encodeURIComponent(decodeURIComponent(RegExp.$2.replace(/\+/g, " "))) : '';
 }
+
+window.alert = function(data){
+    art.dialog.tips(data);
+}
+
+YW={
+    options:{
+        beforeSend: function(XMLHttpRequest){
+              $(document.body).append('<img src="/zb/style/image/ajax-loading.gif" style="display:block;margin-left:auto;margin-right:auto;" id="loading" />');
+        },
+        complete: function(XMLHttpRequest, textStatus){
+          $('#loading').remove();
+        },
+        error: function(data){
+            if(data.status==500){
+                alert('系统内部错误，请联系管理员.');
+            }else if(data.status==400){
+                json = JSON.parse(data.responseText);
+                alert(json['msg']);   
+            }else{
+                alert('请求服务失败，请稍后重试');
+            }
+        },
+        success:function(data){
+            alert('操作成功');
+        }
+    },
+    ajax:function(options){
+        if(options.beforeSend==undefined){
+            options.beforeSend = YW.options.beforeSend;
+        }
+        if(options.complete==undefined){
+            options.complete = YW.options.complete;
+        }
+        options.error = YW.options.error;
+        if(options.success==undefined){
+            options.success = YW.options.success;
+        }
+        $.ajax(options);
+    }
+}
+

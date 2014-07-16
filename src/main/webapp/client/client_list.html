@@ -22,7 +22,7 @@ var queryOpts;
 var chuzu;
 function getList(search){
   var url='/zb/c/client/list?chuzu='+chuzu;
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: url,
     data:search,
@@ -73,7 +73,7 @@ function deleteClient(id){
     content:'确定删除这条客户信息吗？',
     lock:true,
     ok:function(){
-      $.ajax({
+      YW.ajax({
         url:'/zb/c/client/delete?id='+id,
         data:'',
         timeout:5000,
@@ -99,7 +99,7 @@ function deleteSelected(){
     content:'确定批量删除客户信息吗？',
     lock:true,
     ok:function(){
-      $.ajax({
+      YW.ajax({
         url:'/zb/c/client/deleteBatch',
         data:ids,
         type:'POST',
@@ -118,18 +118,17 @@ function deleteSelected(){
   });
 }
 
-function btnEdit(t){
-var Thi=t,
-    ThiId='',title;
-    if(Thi.parents('tr').length>0){
-      ThiId=Thi.parents('tr').find('input[name=ids]').val();
+function btnEdit(id){
+var ThiId='',title;
+    if(id){
+      ThiId=id;
       title='修改客源'
     }else{
       title='添加客源'
     }
     art.dialog.open('client_edit.html?clientId='+ThiId,{
-      height:460,
-      width:765,
+      height:500,
+      width:960,
       title:title,
         ok: function () {
             var iframe = this.iframe.contentWindow;
@@ -154,6 +153,35 @@ $(function(){
     buildHtmlWithJsonArray("id_kehulaiyuan",queryOpts['kehulaiyuan']); //客户来源
   });
   Page.Init();
+
+  $(document).on('click', 'table .btn', function(event) {
+    var Thi=$(this),
+    ThiId=Thi.find('input[name=ids]').val(),
+    ThiFlag=Thi.data('flag');
+    if(ThiFlag=='fy'){
+      selectHouse(ThiId);
+    }else if(ThiFlag=='fp'){
+      selectUname(ThiId);
+    }else if(ThiFlag=='edit'){
+      btnEdit(ThiId);
+    }else if(ThiFlag=='del'){
+      deleteClient(ThiId);
+    }else{
+
+    }
+    return false;
+  }).on('click', 'table tr', function(event) {
+    var Thi=$(this),
+    ThiId=Thi.find('input[name=ids]').val()
+    if(ThiId){
+      art.dialog.open('client_see.html?clientId='+ThiId,{
+        height:460,
+        width:765,
+        title:'查看详细'
+      });
+    }
+  });
+
 });
 
 </script>
@@ -254,9 +282,9 @@ $(function(){
       <td>${addtime}</td>
       <td class='runscript'>getEnumTextByCode(queryOpts['kehu'],${kehu})</td>
       <td>${uname}</td>
-      <td><a href="javascript:void(0)" onclick="selectHouse(${id});">房源</a></td>
-      <td><a href="javascript:void(0)" onclick="selectUname(${id});">分配</a></td>
-      <td><a href="javascript:void(0)" onclick="btnEdit($(this));" >修改</a> <a href="javascript:void(0)" onclick="deleteClient(${id})">删除</a></td>
+      <td><a href="javascript:void(0)" class="btn" data-flag="fy">房源</a></td>
+      <td><a href="javascript:void(0)" class="btn" data-flag="fp">分配</a></td>
+      <td><a href="javascript:void(0)" class="btn" data-flag="edit">修改</a> <a href="javascript:void(0)"  class="btn" data-flag="del">删除</a></td>
       
     </tr>
     </tbody>

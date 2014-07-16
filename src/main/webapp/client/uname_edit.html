@@ -19,7 +19,7 @@
 var clientId;
 function save(){
   var text = $('form[name=form1]').serialize();
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/client/assign?clientId='+clientId,
     data:text,

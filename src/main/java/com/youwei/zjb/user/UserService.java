@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -53,6 +55,15 @@ public class UserService {
 		JSONArray root = merge(quyus,depts,users);
 //		mv.contentType="text/plain";
 		mv.data.put("result", root.toString());
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView initIndex(){
+		ModelAndView mv = new ModelAndView();
+		User user = ThreadSession.getUser();
+		mv.data.put("username", user.uname);
+		mv.data.put("role", user.getRole().title);
 		return mv;
 	}
 	
@@ -107,8 +118,38 @@ public class UserService {
 	}
 	
 	@WebMethod
+	public ModelAndView changePwd(String oldPwd,String newPwd, String newPwdRepeat){
+		ModelAndView mv = new ModelAndView();
+		if(StringUtils.isEmpty(oldPwd)){
+			throw new GException(PlatformExceptionType.BusinessException, "原密码不能为空");
+		}
+		if(StringUtils.isEmpty(newPwd)){
+			throw new GException(PlatformExceptionType.BusinessException, "新密码不能为空");
+		}
+		if(newPwd.length()<6 || newPwd.length()>20){
+			throw new GException(PlatformExceptionType.BusinessException, "密码长度应为6-20位");
+		}
+		if(StringUtils.isEmpty(newPwdRepeat)){
+			throw new GException(PlatformExceptionType.BusinessException, "重复新密码不能为空");
+		}
+		if(!newPwd.equals(newPwdRepeat)){
+			throw new GException(PlatformExceptionType.BusinessException, "两次输入的新密码不一样");
+		}
+		User po = dao.get(User.class, ThreadSession.getUser().id);
+		if(!SecurityHelper.Md5(oldPwd).equals(po.pwd)){
+			throw new GException(PlatformExceptionType.BusinessException, "原密码错误");
+		}
+		po.pwd = SecurityHelper.Md5(newPwd);
+		dao.saveOrUpdate(po);
+		return mv;
+	}
+	
+	@WebMethod
 	public ModelAndView add(User user){
 		ModelAndView mv = new ModelAndView();
+		if(StringUtils.isEmpty(user.uname)){
+			throw new GException(PlatformExceptionType.BusinessException, 3, "用户名不能为空");
+		}
 		if(user.deptId==null){
 			user.deptId = -1;
 		}
@@ -158,6 +199,8 @@ public class UserService {
 		hql.append("select review.sh as rzsh, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
 				+ "from User  u, Department d,Role r , RenShiReview review where u.sh=0 and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? and review.category='join' ");
 		params.add(user.id);
+		query.sh=null;
+		fillQuery(query,hql,params);
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;
@@ -170,13 +213,7 @@ public class UserService {
 		return list(query,page);
 	}
 	
-	@WebMethod
-	public ModelAndView list(UserQuery query , Page<Map> page){
-		ModelAndView mv = new ModelAndView();
-		StringBuilder hql = new StringBuilder();
-		List<Object> params = new ArrayList<Object>();
-		hql.append("select u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
-				+ "from User  u, Department d,Role r where u.roleId = r.id and d.id = u.deptId ");
+	private void fillQuery(UserQuery query,StringBuilder hql, List<Object> params){
 		if(StringUtils.isNotEmpty(query.name)){
 			hql.append(" and u.uname like ? ");
 			params.add("%"+query.name+"%");
@@ -229,6 +266,15 @@ public class UserService {
 		}
 		hql.append(HqlHelper.buildDateSegment("rqsj", query.rqtimeStart, DateSeparator.After, params));
 		hql.append(HqlHelper.buildDateSegment("rqsj", query.rqtimeEnd, DateSeparator.Before, params));
+	}
+	@WebMethod
+	public ModelAndView list(UserQuery query , Page<Map> page){
+		ModelAndView mv = new ModelAndView();
+		StringBuilder hql = new StringBuilder();
+		List<Object> params = new ArrayList<Object>();
+		hql.append("select u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
+				+ "from User  u, Department d,Role r where u.roleId = r.id and d.id = u.deptId ");
+		fillQuery(query,hql,params);
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;
@@ -261,7 +307,13 @@ public class UserService {
 		}
 		mv.data.put("result", "0");
 		mv.data.put("msg", "登录成功");
-		ThreadSession.getHttpServletRequest().getSession().setAttribute(KeyConstants.Session_User, po);
+		HttpServletRequest req = ThreadSession.getHttpServletRequest();
+		String ip = req.getHeader("x-forwarded-for");
+		if (ip == null) {
+			ip = req.getRemoteAddr();
+		}
+		UserSessionCache.putSession(ThreadSession.getHttpServletRequest().getSession().getId(), user.id, ip);
+//		ThreadSession.getHttpServletRequest().getSession().setAttribute(KeyConstants.Session_User, po);
 		return mv;
 	}
 	

@@ -24,7 +24,7 @@ var queryOpts;
 var chuzu;
 function getList(search){
   var url='/zb/c/client/list?chuzu='+chuzu;
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: url,
     data:search,
@@ -65,7 +65,7 @@ function deleteClient(id){
     content:'确定删除这条客户信息吗？',
     lock:true,
     ok:function(){
-      $.ajax({
+      YW.ajax({
         url:'/zb/c/client/delete?id='+id,
         data:'',
         timeout:5000,
@@ -91,7 +91,7 @@ function deleteSelected(){
     content:'确定批量删除客户信息吗？',
     lock:true,
     ok:function(){
-      $.ajax({
+      YW.ajax({
         url:'/zb/c/client/deleteBatch',
         data:ids,
         type:'POST',

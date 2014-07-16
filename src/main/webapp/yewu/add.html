@@ -25,7 +25,7 @@ var ue;
 function save(){
   $('#conta').val(ue.getAllHtml());
   var text = $('form[name=textForm]').serialize();
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/out/add',
     data:text,
@@ -68,7 +68,7 @@ function initFileUpload(){
 }
 
 function getAttachList(){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/attachment/list?bizType=journal&recordId='+recordId,
     data:'',
@@ -80,7 +80,7 @@ function getAttachList(){
 }
 
 function deleteAttach(id){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/attachment/delete?id='+id,
     data:'',

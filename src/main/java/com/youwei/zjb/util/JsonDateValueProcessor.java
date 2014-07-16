@@ -3,6 +3,8 @@ package com.youwei.zjb.util;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
+
 import net.sf.json.JsonConfig;
 import net.sf.json.processors.JsonValueProcessor;
 
@@ -14,7 +16,9 @@ public class JsonDateValueProcessor implements JsonValueProcessor{
 	    }  
 	    public JsonDateValueProcessor(String format) {  
 	        super();  
-	        this.datePattern = format;  
+	        if(StringUtils.isNotEmpty(format)){
+	        	this.datePattern = format;  
+	        }
 	    }  
 	    public Object processArrayValue(Object value, JsonConfig jsonConfig) {  
 	        return process(value);  

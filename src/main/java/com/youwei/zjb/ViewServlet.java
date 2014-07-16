@@ -34,6 +34,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.youwei.zjb.cache.UserSessionCache;
 import com.youwei.zjb.entity.RoleAuthority;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.util.JSONHelper;
@@ -52,17 +53,17 @@ public class ViewServlet extends HttpServlet{
 		if(!path.endsWith(".html")){
 			return;
 		}
+		User user = UserSessionCache.getUser(req.getSession().getId());
+		if(user==null){
+			//返回登录
+//			return;
+			user = SimpDaoTool.getGlobalCommonDaoService().get(User.class, 316);
+		}
 		String filePath = req.getServletContext().getRealPath("/")+path;
 		String html = FileUtils.readFileToString(new File(filePath));
 		Document doc = Jsoup.parse(html);
-		User user = ThreadSession.getUser();
-		if(user==null){
-			user = SimpDaoTool.getGlobalCommonDaoService().get(User.class, 316);
-		}
 		List<RoleAuthority> authList = user.getRole().Authorities();
 //		JSONArray arr = JSONHelper.toJSONArray(authList);
-//		doc.body().append("<span id='authorities' style='display:none' >"+arr.toString()+"</span>");
-		
 		Elements list = doc.getElementsByAttribute("auth");
 		for(Element e : list){
 			String target = e.attr("auth");

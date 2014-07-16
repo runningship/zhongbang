@@ -11,7 +11,7 @@
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/sysinfo.js"></script>
-<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=chrome"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.timers.js"></script>
@@ -47,7 +47,7 @@ function getHuseList(a){
     url='/zb/c/house/listAll';
   }
 //  alert(url)
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: url,
 //    async:false,
@@ -93,14 +93,14 @@ $(function(){
     $.get('/zb/c/house/getQueryOptions', function(data) {
     getStr=JSON.parse(data);
     //  alert(getStr['datetype'])
-    buildHtmlWithJsonArray("id_chaoxiang",getStr['chaoxiang']); //朝向
-    buildHtmlWithJsonArray("id_fangxing",getStr['fangxing']);   //户型
-    buildHtmlWithJsonArray("id_leibie",getStr['leibie']);       //类别
-    buildHtmlWithJsonArray("id_louxing",getStr['louxing']);     //楼型
-    buildHtmlWithJsonArray("id_jiaoyi",getStr['jiaoyi']);       //交易
-    buildHtmlWithJsonArray("id_quyu",getStr['quyu']);           //区域
-    buildHtmlWithJsonArray("id_zhuangtai",getStr['zhuangtai']); //状态
-    buildHtmlWithJsonArray("id_xingzhi",getStr['xingzhi']); //房型
+    buildHtmlWithJsonArray("id_chaoxiang",getStr['chaoxiang'],true); //朝向
+    buildHtmlWithJsonArray("id_fangxing",getStr['fangxing'],true);   //户型
+    buildHtmlWithJsonArray("id_leibie",getStr['leibie'],true);       //类别
+    buildHtmlWithJsonArray("id_louxing",getStr['louxing'],true);     //楼型
+    buildHtmlWithJsonArray("id_jiaoyi",getStr['jiaoyi'],true);       //交易
+    buildHtmlWithJsonArray("id_quyu",getStr['quyu'],true);           //区域
+    buildHtmlWithJsonArray("id_zhuangtai",getStr['zhuangtai'],true); //状态
+    buildHtmlWithJsonArray("id_xingzhi",getStr['xingzhi'],true); //房型
     buildHtmlWithJsonArray("id_datetype",getStr['datetype'],true); //房型
     Page.Init();
   });
@@ -197,21 +197,25 @@ $(function(){
           <li><a href="#">一个月房源</a></li>
         </ul>
       </div>
-      <div class="btn-group">
+     <!--  <div class="btn-group">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
           状 态 <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" id="id_zhuangtai">
           <li><label><input type="radio" name="ztai" value="${name}"> ${name}</label></li>
         </ul>
+      </div> -->
+      <div class="input-group ">
+        <span class="input-group-addon">状 态</span>
+        <select class="form-control " name="ztai" id="id_zhuangtai">
+          <option value="${name}">${name}</option>
+        </select>
       </div>
-      <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          朝向 <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" id="id_chaoxiang">
-          <li><label><input type="radio" name="chaoxiang" value="${name}"> ${name}</label></li>
-        </ul>
+      <div class="input-group ">
+        <span class="input-group-addon">朝向</span>
+        <select class="form-control " name="chaoxiang" id="id_chaoxiang">
+          <option value="${name}">${name}</option>
+        </select>
       </div>
       <div class="btn-group">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">

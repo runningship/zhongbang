@@ -22,7 +22,7 @@ var genderArr = [{"name":"男","code":1},{"name":"女","code":0}];
 
 function doSave(){
   var data = formSerialize($('form[name=form1]'));
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/user/add',
     data:data,

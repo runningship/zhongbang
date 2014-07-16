@@ -31,21 +31,22 @@ public class IMServer extends WebSocketServer{
 	private static InetSocketAddress socket = new InetSocketAddress("localhost", 9099); 
 	private IMServer() throws UnknownHostException {
 //		super(new InetSocketAddress(Inet4Address.getByName("localhost"), 9099));
-		super(new InetSocketAddress("192.168.1.125", 9099));
+		super(new InetSocketAddress("192.168.1.119", 9099));
 //		super(socket);
 	}
 
-	public static void startUp() throws UnknownHostException{
-		if(instance==null){
-			instance = new IMServer();
+	public static void startUp() throws Throwable{
+		if(instance!=null){
+			instance.stop();
+			instance.finalize();
 		}
+		instance = new IMServer();
 		instance.start();
 		LogUtil.info("IM server started on port 9099");
 	}
 	
 	public static void forceStop() throws IOException, InterruptedException{
 		if(instance!=null){
-			
 			instance.stop();
 		}
 	}
@@ -73,7 +74,7 @@ public class IMServer extends WebSocketServer{
 
 	@Override
 	public void onMessage(WebSocket conn, String message) {
-		System.out.println(message);
+		LogUtil.info(message);
 		JSONObject data = JSONObject.fromObject(message);
 		if("login".equals(data.getString("type"))){
 			conns.put(data.getInt("userId"), conn);

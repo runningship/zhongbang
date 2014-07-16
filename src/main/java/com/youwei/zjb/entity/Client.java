@@ -45,7 +45,7 @@ public class Client {
 	public String huxing;
 	
 	@Column(name="zhuangxiuas")
-	public String zhaungxiu;
+	public String zhuangxiu;
 	
 	@Column(name="mianjias")
 	public Float mianjiFrom;
@@ -85,7 +85,7 @@ public class Client {
 	public Integer loucengTo;
 	
 	@Column(name="quyuas")
-	public String quyu;
+	public String quyuas;
 	
 	public String source;
 	

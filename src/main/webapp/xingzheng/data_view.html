@@ -12,6 +12,8 @@
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/uploadify/jquery.uploadify.js"></script>
+<link href="/zb/js/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -23,24 +25,9 @@ var tableId;
 var myId;
 var processList;
 var ue;
-function save(){
-  $('#conts').val(ue.getContent());
-  var text = $('form[name=form1]').serialize();
-  $.ajax({
-    type: 'POST',
-    url: '/zb/c/admin/updateTable',
-    data:text,
-    success: function(data){
-      alert('保存成功.');
-    },
-    error:function(data){
-      alert('保存失败,'+data.responseText);
-    }
-  });
-}
 
 function loadData(){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/admin/getTable?tableId='+tableId,
     data:'',
@@ -54,7 +41,7 @@ function loadData(){
       myId = json['myId'];
       $('#title').val(json['adminTable']['title']);
       processList = json['processList'];
-      buildHtmlWithJsonArray("id_list",processList);
+      buildHtmlWithJsonArray("id_list",processList,data['attachs']);
     },
     error:function(data){
       alert('加载数据失败,'+data.responseText);
@@ -65,7 +52,7 @@ function loadData(){
 function buildBanliYiJian(rowIndex){
   var data = processList[rowIndex];
   if(myId==data['processorId'] && data['flag']==0){
-    return '<button onclick="banli('+data['id']+',this)">确定</button><input type="text"/>';
+    return '<input type="text"/><button onclick="banli('+data['id']+',this)">确定</button>';
   }else{
     var txt = data['conts'];
     if(txt==""){
@@ -76,7 +63,7 @@ function buildBanliYiJian(rowIndex){
 }
 
 function banli(pid , btn){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/admin/updateProcess?pid='+pid+'&conts='+$(btn).next().val(),
     data:'',
@@ -86,6 +73,18 @@ function banli(pid , btn){
     },
     error:function(data){
       alert('保存失败,'+data.responseText);
+    }
+  });
+}
+
+function getAttachList(){
+  YW.ajax({
+    type: 'get',
+    url: '/zb/c/attachment/list?bizType=xingzheng&recordId='+tableId,
+    data:'',
+    success: function(result){
+      var data = JSON.parse(result)['data'];
+      buildHtmlWithJsonArray("attachList",data);
     }
   });
 }
@@ -108,6 +107,7 @@ $(function(){
     loadData();
     ue.setDisabled();
   });
+  getAttachList();
 });
 
 </script>
@@ -129,9 +129,6 @@ $(function(){
       <span class="input-group-addon">分类</span>
       <input type="text" readonly="true" class="form-control" id="adminClass">
     </div>
-    <div class="btn-group" >
-      <button onclick="save();return false;" class="btn btn-primary btn_subnmit">提交</button>
-    </div>
     <input type="hidden" id="tableId" name="id" />
     <input type="hidden" id="conts" name="conts" />
   </form>
@@ -139,7 +136,16 @@ $(function(){
      <span id="editor" type="text/plain" style="width:1024px;height:500px;"></span>
     <!-- <span id="editor" style="margin-right:10px;border:1px solid #ddd"></span> -->
   </div>
-  
+  <div>
+    <span>附件: </span>
+    <div id="attachList">
+      <span style="display:none">
+        <div>
+          <a target="_blank" href="/zb/file/download?bizType=xingzheng&recordId=${recordId}&file=${filename}">${filename}</a> 
+        </div>
+      </span>
+    </div>
+  </div>
   <div style="margin-left:10px;">
     <div style="height:35px;background:#ddd;line-height:35px;margin-top:20px;"><span>办理意见</span></div>
     <div class="mainer" style="position:relative;width:100%">

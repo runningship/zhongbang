@@ -37,7 +37,7 @@ function onSubmit_Form(){
   });
 }
 function setArea(search){
-  $.ajax({
+  YW.ajax({
     type: 'post',
     async:false,
     url: '/zb/c/areas/'+formAction,
@@ -50,7 +50,7 @@ function setArea(search){
 }
 function getArea(){
   var param={areaId:areaId}
-  $.ajax({
+  YW.ajax({
     type: 'post',
     url: '/zb/c/areas/get',
     data:param,

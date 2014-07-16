@@ -30,6 +30,7 @@ import com.youwei.zjb.entity.User;
 import com.youwei.zjb.house.HouseType;
 import com.youwei.zjb.sys.entity.Qzy;
 import com.youwei.zjb.user.RuQiTuJin;
+import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
 
@@ -165,7 +166,7 @@ public class ContractService {
 			params.add(query.xpath+"%");
 		}
 		page = dao.findPage(page, hql.toString(), params.toArray());
-		mv.data.put("page", JSONHelper.toJSON(page));
+		mv.data.put("page", JSONHelper.toJSON(page , DataHelper.dateSdf.toPattern()));
 		return mv;
 	}
 	

@@ -19,22 +19,21 @@ var queryOpts;
 
 function doSave(){
   var data = formSerialize($('form[name=form1]'));
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/contract/buzhou/update',
     data:data,
     success: function(data){
+      art.dialog.close();
+      art.dialog.opener.getList();
       alert('添加成功');
-    },
-    error:function(data){
-      alert(data.responseText);
     }
   });
   return false;
 }
 
 function loadData(id){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/contract/buzhou/get?pcId='+id,
     data:'',

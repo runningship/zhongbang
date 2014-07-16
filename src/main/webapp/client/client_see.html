@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Examples</title>
+<link rel="stylesheet" href="/zb/style/css.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/style/house.css">
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/sysinfo.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=chrome"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.timers.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/zb/js/pagination.js"></script>
+<script type="text/javascript" src="/zb/js/tagInput/bootstrap-tagsinput.min.js"></script>
+<link   rel="stylesheet"      href="/zb/js/tagInput/bootstrap-tagsinput.css">
+<script type="text/javascript">
+  var getStr,chuzu;
+      getClientId=getParam('clientid')
+      chuzu=getParam('chuzu');
+function withJson(a,b,c){
+  /* withJson($('#ul'),'inputName','getAjaxValue') */
+//  alert(b +'|'+ c)
+//  alert(a.find('input[name='+b+']').length)
+//  alert(c.split(',').length)
+  alert(a.find('input[name='+b+']').val())
+  if(a.length<=0){return false;}
+  if(a.find('input[name='+b+']').length<=0){return false;}
+  if(!c){return false;}
+  if(c.split(',').length<=0){return false;}
+  var bs=a.find('input[name='+b+']'),
+      cs=c.split(',');
+      bs.each(function(index, obj) {
+        for(var i=0;i<cs.length;i++){
+          alert($(obj).val() +'|'+ cs[i])
+          if($(obj).val()==cs[i]){
+            $(obj).attr('checked', true);
+          }else{
+            $(obj).attr('checked',false);
+          }
+        }
+      });
+}
+$(function(){
+    if(getClientId){
+      $('form[name=form1]').attr('action', '/zb/c/house/update');
+      //alert($('form[name=form1]').attr('action'))
+      $.get('/zb/c/client/get?clientId='+getClientId, function(data) {
+        getStr=JSON.parse(data);
+        buildHtmlWithJsonArray("id_client_see",[getStr['client']],true);
+      });
+    }
+});
+</script>
+<style type="text/css">html, body, .body{overflow-y: auto;}
+.table{ margin-bottom: 0px;}
+table th{ width: 80px; text-align: right; background-color: #F5F5F5}
+.pointerevents{pointer-events:none}
+.font_no_br{white-space:nowrap;word-break: keep-all;}
+.w40b{ width: 40%;}
+.w160px{ width: 160px;}
+ .hadd  .colspan2{ width: 300px;}
+ .hadd{ height: auto; width: 760px;}
+ input.inputW100{ width: 100px; display: inline-block;}
+ .bootstrap-tagsinput {
+margin-bottom: 0px;
+width: 100%;
+}
+.checklist{}
+.checklist li{ float: left; margin:0 3px 3px 0; }
+.checklist label{display: inline-block; background-color: #EEE; color:#666;font-weight: normal; margin-bottom: 2px;}
+</style>
+</head>
+<body class="bodyer" id="id_client_see">
+    <table id="view_archive_table" class="j_tab_th table table-bordered">
+      <tbody class="j_tab_tr_hide" style="display: table-row-group; ">
+      <tr>
+        <th>姓名</th>
+        <td style="width:38%;">${tel}</td>
+        <th>区域</th>
+        <td style="width:38%;">${quyu}</td>
+      </tr>
+      <tr>
+        <th>电话</th>
+        <td>${tel}</td>
+        <th>装潢</th>
+        <td>${zhuangxiu}</td>
+      </tr>
+      <tr>
+        <th>楼盘</th>
+        <td>${area}</td>
+        <th>楼层</th>
+        <td>${zhuangxiu}-${loucengTo}层
+        </td>
+      </tr>
+      <tr>
+        <th>客户性质</th>
+        <td>111111111${name}</td>
+        <th>楼型</th>
+        <td>${louxing}</td>
+      </tr>
+      <tr>
+        <th>户型</th>
+        <td>${huxing}</td>
+        <th>付款方式</th>
+        <td>111111111111${name}</td>
+      </tr>
+      <tr>
+        <th>面积</th>
+        <td>${mianjiFrom} - ${mianjiTo} m<sup>2</sup></td>
+        <th>价格</th>
+        <td>${jiageFrom} - ${jiageTo} 万</td>
+      </tr>
+      <tr>
+        <th>客户来源</th>
+        <td>${source}</td>
+        <th>是否有效</th>
+        <td>111111111111111${name}</td>
+      </tr>
+      <tr>
+        <th>业务员</th>
+        <td colspan="3">${beizhu}</td>
+      </tr>
+      <tr>
+        <th>备注</th>
+        <td colspan="3">${beizhu}</td>
+      </tr>
+    </tbody>
+    </table>
+</body>
+</html>

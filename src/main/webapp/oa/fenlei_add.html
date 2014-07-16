@@ -19,7 +19,7 @@ var queryOpts;
 
 function doSave(){
   var data = formSerialize($('form[name=form1]'));
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/oa/addFenLei',
     data:data,

@@ -23,15 +23,12 @@ var spList;
 var myId;
 function doSave(){
   var data = formSerialize($('form[name=form1]'));
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/user/add',
     data:data,
     success: function(data){
       alert('添加成功');
-    },
-    error:function(data){
-      alert(data.responseText);
     }
   });
   return false;
@@ -66,17 +63,14 @@ function buildAction(rowIndex){
 }
 
 function passSP(rowIndex,spId){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/user/ruzhi/pass?spId='+spId,
     data:'',
     success: function(data){
-      alert('审批成功');
       $("#row_"+rowIndex).html('已通过');
       art.dialog.opener.doSearch();
-    },
-    error:function(data){
-      alert(data.responseText);
+      alert('审批成功');
     }
   });
 }

@@ -21,7 +21,7 @@ var queryOpts;
 var genderArr = [{"name":"男","code":1},{"name":"女","code":0}];
 function getList(search){
   var url='/zb/c/user/zwtz/listAdjust';
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: url,
     data:search,

@@ -185,30 +185,32 @@ a:active {
     background:url(image/skin.png) no-repeat center center
 }
 /*侧边浮动栏*/
-#lr_bar {
-    width:73px;
+#rr_bar {
+    /*width:73px;*/
     height:auto;
     position:absolute;
-    left:0;
-    top:30px;
-    background:url(image/dock_top.png) repeat-y left top;
+    /*right:50;*/
+    float:right;
+    /*top:0px;*/
+    /*background:url(image/dock_top.png) repeat-y left top;*/
     z-index:90;
     -moz-box-shadow: 0px 3px 15px #444;
-    -webkit-box-shadow: 0px 3px 15px #444;
-    box-shadow:0px 3px 15px #444;
+    /*-webkit-box-shadow: 0px 3px 15px #444;*/
+    /*box-shadow:0px 3px 15px #444;*/
+    right:0px;
     padding-top:5px;
 }
 /*开始按钮样式*/
 #start_block {
     width:73px;
     height:56px;
-    position:absolute;
+    /*position:absolute;*/
     left:0;
     bottom:-56px;
-    background:url(image/dock_b.png) no-repeat left bottom;
+    /*background:url(image/dock_b.png) no-repeat left bottom;*/
     -moz-box-shadow: 0px 5px 15px #444;
-    -webkit-box-shadow: 0px 5px 15px #444;
-    box-shadow:0px 5px 15px #444;
+    /*-webkit-box-shadow: 0px 5px 15px #444;*/
+    /*box-shadow:0px 5px 15px #444;*/
 }
 #start_btn {
     display:block;
@@ -227,9 +229,10 @@ a:active {
 #start_item {
     width:180px;
     height:auto;
-    padding:5px 0;
+    /*padding:5px 0;*/
+    /*margin-top:6px;*/
     background: url(image/start_item_bg.png) repeat;
-    position:absolute;
+    /*position:absolute;*/
     z-index:500;
     left:75px;
     bottom:0px;

@@ -18,23 +18,20 @@
 <script type="text/javascript">
 var supplyId;
 function shenhe(shenhe){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/supply/shenhe?supplyId='+supplyId+'&shenhe='+shenhe,
     data:'',
     success: function(data){
-      alert('审核成功.');
       art.dialog.close()
       art.dialog.opener.doSearch();
-    },
-    error:function(data){
-      alert('审核失败,'+data.responseText);
+      alert('审核成功.');
     }
   });
 }
 
 function loadData(supplyId){
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/supply/get?supplyId='+supplyId,
     data:'',
@@ -47,9 +44,6 @@ function loadData(supplyId){
       $('#djia').text(supply['djia']);
       $('#zjia').text(supply['zjia']);
       $('#beizhu').text(supply['beizhu']);
-    },
-    error:function(data){
-      alert('保存失败,'+data.responseText);
     }
   });
 }

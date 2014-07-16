@@ -42,7 +42,7 @@ function buildAction(rowIndex){
 }
 
 function passSP(rowIndex,spId){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/user/lizhi/pass?lizhiId='+lizhiId+'&spId='+spId,
     data:'',

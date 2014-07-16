@@ -24,7 +24,7 @@ var shenhe;
 var dataArr;
 function getList(search){
   var url='/zb/c/supply/list?shenhe='+shenhe;
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: url,
     data:search,
@@ -48,7 +48,7 @@ function deleteSupply(id){
     content:'确定删除这条审核记录吗？',
     lock:true,
     ok:function(){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/supply/delete?id='+id,
     data:'',
@@ -88,7 +88,7 @@ function openShenHe(id){
 
 function buildActionColumn(id){
   if(shenhe==0){
-    return '<a onclick="openEdit('+id+')" href="javascript:void(0)" >修改</a> <a onclick="openShenHe('+id+')" href="javascript:void(0)" >审核</a>';
+    return '<a onclick="openEdit('+id+')" href="javascript:void(0)" >修改</a> <a onclick="openShenHe('+id+')" href="javascript:void(0)" >审核</a> <a onclick="deleteSupply('+id+')" href="javascript:void(0)" >删除</a>';
   }else if(shenhe==1){
     return '<a onclick="openEdit('+id+')" href="javascript:void(0)" >修改</a> <a onclick="deleteSupply('+id+')" href="javascript:void(0)" >删除</a>'
   }else if(shenhe==2){

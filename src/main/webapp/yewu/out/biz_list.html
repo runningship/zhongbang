@@ -20,7 +20,7 @@
 var queryOpts;
 function getList(search){
   var url='/zb/c/out/list?category=1';
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: url,
     data:search,
@@ -55,7 +55,7 @@ function openAdd(){
       padding:0,
       resize:true,
       lock:1,
-      height:600,
+      height:500,
       width:1080
   });
 }
@@ -71,7 +71,7 @@ function deleteOut(id){
     content:'确定删除这条看房记录吗？',
     lock:true,
     ok:function(){
-      $.ajax({
+      YW.ajax({
         url:'/zb/c/out/delete?id='+id,
         data:'',
         timeout:5000,

@@ -17,22 +17,16 @@ var IM = {
 
 
 	loadContacts : function(){
-		$.ajax({
+		YW.ajax({
 	        url:'/zb/c/im/getContacts?userId='+IM.myId,
 	        data:'',
 	        timeout:30000,
 	        dataType:'json',
-	        beforeSend: function(XMLHttpRequest){
-	            
-	        },success:function (data, textStatus) {
+	        success:function (data, textStatus) {
 	            IM.contacts = data["contacts"];
 	            IM.contacts = IM.sortContacts(IM.contacts);
 	            buildHtmlWithJsonArray("contact",IM.contacts);
 	            IM.fixImg('contact');
-	        },
-	        complete: function(XMLHttpRequest, textStatus){},
-	        error:function (XMLHttpRequest, textStatus, errorThrown) {
-	        	console.error(XMLHttpRequest.responseText);
 	        }
 	    });
 	},
@@ -258,39 +252,28 @@ var IM = {
 			return;
 		}
 		IM.openSearchPanel();
-		$.ajax({
+		YW.ajax({
 	        url:'/zb/c/im/search?ownerId='+IM.myId+'&txt='+txt+'&currentPageNo='+IM.currentPageNo,
 	        timeout:10000,
 	        dataType:'json',
 	        type:'post',
-	        beforeSend: function(XMLHttpRequest){
-	            
-	        },success:function (data, textStatus) {
+	        success:function (data, textStatus) {
 	            var userSearchResult = data["contacts"]["data"];
 	            buildHtmlWithJsonArray("userSearchResult",userSearchResult);
-	        },
-	        error:function (XMLHttpRequest, textStatus, errorThrown) {
-	        	console.error(XMLHttpRequest.responseText);
 	        }
 	    });
 	},
 	addContact : function(contactId){
 		var url = '/zb/c/im/addContact?ownerId='+IM.myId+'&contactId='+contactId;
-		$.ajax({
+		YW.ajax({
 	        url:url,
 	        data:'',
 	        type:'post',
 	        timeout:10000,
 	        dataType:'json',
-	        beforeSend: function(XMLHttpRequest){
-	            
-	        },success:function (data, textStatus) {
+	        success:function (data, textStatus) {
 	            IM.closeSearchPanel();
 	            IM.loadContacts();
-	        },
-	        complete: function(XMLHttpRequest, textStatus){},
-	        error:function (XMLHttpRequest, textStatus, errorThrown) {
-	        	console.error(XMLHttpRequest.responseText);
 	        }
 	    });
 	},
@@ -298,20 +281,13 @@ var IM = {
 	delContact : function(contactId){
 		event.cancelBubble=true;
 		var url = '/zb/c/im/delContact?ownerId='+IM.myId+'&contactId='+contactId;
-		$.ajax({
+		YW.ajax({
 	        url:url,
 	        data:'',
 	        type:'post',
 	        timeout:10000,
-	        dataType:'json',
-	        beforeSend: function(XMLHttpRequest){
-	            
-	        },success:function (data, textStatus) {
+	        dataType:'json',success:function (data, textStatus) {
 	            IM.loadContacts();
-	        },
-	        complete: function(XMLHttpRequest, textStatus){},
-	        error:function (XMLHttpRequest, textStatus, errorThrown) {
-	        	console.error(XMLHttpRequest.responseText);
 	        }
 	    });
 	},
@@ -398,7 +374,7 @@ var IM = {
 		$('#searchInput').val(IM.defSearchStr);
 		IM.loadContacts();
 
-		IM.ws = new WebSocket("ws://192.168.1.125:9099");
+		IM.ws = new WebSocket("ws://192.168.1.119:9099");
 		IM.ws.onopen = function() { 
 			console.log("open"); 
 			IM.login(IM.ws);

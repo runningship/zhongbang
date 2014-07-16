@@ -21,6 +21,7 @@
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
 <script type="text/javascript">
 var getStr;
+var houseList;
 function fix(TableH,TableB){
   for(var i=0;i<=TableB.find('td:last').index();i++){
     TableH.find('th').eq(i).width(TableB.find('tr').eq(1).find('td').eq(i).width());
@@ -34,30 +35,16 @@ function setMainHeight(){
 }
 
 function getHuseList(a){
-  var url
-//  alert(getParam('chuzu'))
-  if(getParam('nav')=="chushou"){
-    url='/zb/c/house/listSell';
-  }else if(getParam('nav')=="chuzu"){
-    url='/zb/c/house/listRent';
-  }else if(getParam('nav')=="del"){
-    url='/zb/c/house/listRecycle';
-  }else if(getParam('nav')=="my"){
-    url='/zb/c/house/listMy';
-  }else{
-    url='/zb/c/house/listAll';
-  }
-//  alert(url)
-  $.ajax({
+  YW.ajax({
     type: 'POST',
-    url: url,
+    url: '/zb/c/house/listSell',
 //    async:false,
     data:a,
     success: function(data){
-       var  getStr=JSON.parse(data);
-        buildHtmlWithJsonArray("id_House_list",getStr['page']['data']);
-        Page.setPageInfo(getStr['page']);
-        fix($('.TableH'),$('.TableB'));
+      houseList=JSON.parse(data);
+      buildHtmlWithJsonArray("id_House_list",houseList['page']['data']);
+      Page.setPageInfo(houseList['page']);
+      fix($('.TableH'),$('.TableB'));
 
       if(getParam('nav')=="del"){
         $('a.hidden').removeClass('hidden');
@@ -127,7 +114,7 @@ function chooseHouse(){
       return;
     }
     var row = $(obj).attr('rowIndex');
-    var house = getStr['page']['data'][row];
+    var house = houseList['page']['data'][row];
     ids.push(house['id'])
     names.push(house['area']+' '+house['dhao']+' '+house['fhao']);
   });

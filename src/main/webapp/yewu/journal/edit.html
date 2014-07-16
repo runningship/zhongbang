@@ -24,12 +24,13 @@ var ue;
 function save(){
   $('#conta').val(ue.getContent());
   var text = $('form[name=textForm]').serialize();
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/journal/update',
     data:text,
     success: function(data){
       alert('保存成功');
+      initFileUpload();
     },
     error:function(error){
       var json = JSON.parse(error.responseText);
@@ -69,7 +70,7 @@ function initFileUpload(){
 }
 
 function getAttachList(){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/attachment/list?bizType=journal&recordId='+recordId,
     data:'',
@@ -81,7 +82,7 @@ function getAttachList(){
 }
 
 function deleteAttach(id){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/attachment/delete?id='+id,
     data:'',
@@ -91,7 +92,7 @@ function deleteAttach(id){
   });
 }
 function getContent(){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/journal/get?id='+recordId,
     data:'',
@@ -120,6 +121,7 @@ $(function(){
   
   ue = UE.getEditor('editor');
   ue.addListener( 'ready', function( editor ) {
+    ue.setHeight(350);
     getContent();
   });
   // getContent();
@@ -136,10 +138,10 @@ $(function(){
     <input type="hidden" name="category" id="category" />
     <input type="hidden" name="id" id="id" />
   </form>
-   <div style="margin-top:10px;">
+   <div style="margin-top:10px;margin-left:10px;">
     <span id="editor" type="text/plain" style="width:1024px;height:500px;"></span>
   </div>
-  <button onclick="save();return false;">提交</button>
+    <button onclick="save();" class="btn btn-primary " style="margin-left:10px;">提交</button>
   <br/>
 <div>
     <input id="file_upload" name="file_upload" style="display:none">

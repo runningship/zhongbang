@@ -21,7 +21,7 @@ var queryOpts;
 
 function getList(search){
   var url='/zb/c/journal/list?category=0';
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: url,
     data:search,
@@ -52,7 +52,7 @@ function deleteOut(id){
     content:'确定删除这条工作日志吗？',
     lock:true,
     ok:function(){
-      $.ajax({
+      YW.ajax({
         url:'/zb/c/journal/delete?id='+id,
         data:'',
         timeout:5000,

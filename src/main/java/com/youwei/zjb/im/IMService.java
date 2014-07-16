@@ -1,5 +1,6 @@
 package com.youwei.zjb.im;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,30 @@ public class IMService {
 		String hql = "select count(*) as total, senderId as contactId from Message where read=0 and receiverId=? group by senderId";
 		List<Map> list = dao.listAsMap(hql, userId);
 		mv.data.put("unreads",JSONHelper.toJSONArray(list));
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView close(){
+		ModelAndView mv = new ModelAndView();
+		try {
+			IMServer.forceStop();
+		} catch (Exception e) {
+			throw new RuntimeException("try to close IM Server fail.",e);
+		}
+		mv.data.put("msg","IM Server closed.");
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView start(){
+		ModelAndView mv = new ModelAndView();
+		try {
+			IMServer.startUp();
+		} catch (Throwable e) {
+			throw new RuntimeException("try to start IM Server fail.",e);
+		}
+		mv.data.put("msg","IM Server started.");
 		return mv;
 	}
 	

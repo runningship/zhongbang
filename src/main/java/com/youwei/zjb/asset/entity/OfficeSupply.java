@@ -25,7 +25,7 @@ public class OfficeSupply {
 	
 	public Date addtime;
 	
-	@Column(name="names")
+	@Column(name="names",nullable=false)
 	public String title;
 	
 	@Column(name="num")
@@ -33,6 +33,7 @@ public class OfficeSupply {
 	
 	public String beizhu;
 	
+	@Column
 	public Float djia;
 	
 	public Float zjia;
@@ -40,7 +41,7 @@ public class OfficeSupply {
 	/**
 	 * 相关人
 	 */
-	@Column(name="uname")
+	@Column(name="uname" ,nullable=false)
 	public String xgr;
 	
 	/**

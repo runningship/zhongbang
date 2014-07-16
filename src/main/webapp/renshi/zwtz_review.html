@@ -44,7 +44,7 @@ function buildAction(rowIndex){
 }
 
 function passSP(rowIndex,spId){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/user/zwtz/pass?adjustId='+adjustId+'&spId='+spId,
     data:'',

@@ -20,36 +20,33 @@
 <script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript">
 
-function setMainHeight(){
-    var bodyHeight=$('.body').height()
-    $('.sider').height(bodyHeight);
-    $('.mainer').height(bodyHeight);
-}
-$(function(){
-    setMainHeight();
-})
-$(window).resize(function(event) {
-    setMainHeight();
+$(document).ready(function(){
+    $(document).on('click', '.aNavBtn', function(event) {
+        var aHref=$(this).attr( 'href');
+        $('iframe').attr('src',aHref);
+        return false;
+    });
+    $('.sider').find('a').eq(0).click();
 });
 </script>
 </head>
 <body>
     <div class="body hmain">
         <div class="sider">
-            <dl auth="ht_add" class="sidedl">
-                <dt>添加合同</dt>
-                <dd auth="ht_add_sell" ><a href="add.html?claid=5"  target="house_iframe" >出售合同</a></dd>
-                <dd auth="ht_add_rent" ><a href="add.html?claid=6"  target="house_iframe" >出租合同</a></dd>
-            </dl>
             <dl auth="ht_list" class="sidedl">
                 <dt>合同列表</dt>
-                <dd auth="ht_list_sell" ><a href="list.html?claid=5"  target="house_iframe" >出售合同</a></dd>
-                <dd auth="ht_list_rent" ><a href="list.html?claid=6"  target="house_iframe" >出租合同</a></dd>
+                <dd auth="ht_list_sell" ><a class="aNavBtn" href="list.html?claid=5"  target="house_iframe" >出售合同</a></dd>
+                <dd auth="ht_list_rent" ><a class="aNavBtn" href="list.html?claid=6"  target="house_iframe" >出租合同</a></dd>
+            </dl>
+            <dl auth="ht_add" class="sidedl">
+                <dt>添加合同</dt>
+                <dd auth="ht_add_sell" ><a class="aNavBtn" href="add.html?claid=5"  target="house_iframe" >出售合同</a></dd>
+                <dd auth="ht_add_rent" ><a class="aNavBtn" href="add.html?claid=6"  target="house_iframe" >出租合同</a></dd>
             </dl>
             <dl auth="ht_buzhou" class="sidedl">
                 <dt>合同步骤</dt>
-                <dd auth="ht_buzhou_sell" ><a href="buzhou_list.html?claid=5"  target="house_iframe" >出售合同步骤</a></dd>
-                <dd auth="ht_buzhou_rent" ><a href="buzhou_list.html?claid=6"  target="house_iframe" >出租合同步骤</a></dd>
+                <dd auth="ht_buzhou_sell" ><a class="aNavBtn" href="buzhou_list.html?claid=5"  target="house_iframe" >出售合同步骤</a></dd>
+                <dd auth="ht_buzhou_rent" ><a class="aNavBtn" href="buzhou_list.html?claid=6"  target="house_iframe" >出租合同步骤</a></dd>
             </dl>
         </div>
         <div class="mainer">

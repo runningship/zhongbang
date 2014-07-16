@@ -1,16 +1,20 @@
 package com.youwei.zjb.feedback;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.bc.sdak.CommonDaoService;
+import org.bc.sdak.GException;
 import org.bc.sdak.Page;
 import org.bc.sdak.TransactionalServiceHelper;
 import org.bc.web.ModelAndView;
 import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
+import com.youwei.zjb.PlatformExceptionType;
+import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.feedback.entity.FeedBack;
 import com.youwei.zjb.util.JSONHelper;
 
@@ -30,7 +34,14 @@ public class FeedBackService {
 		return mv;
 	}
 	
-	public void add(FeedBack fb){
-		
+	@WebMethod
+	public ModelAndView add(FeedBack fb){
+		if(fb.conts==null){
+			throw new GException(PlatformExceptionType.BusinessException, 1, "请先填写反馈已经");
+		}
+		fb.addtime = new Date();
+		fb.userId = ThreadSession.getUser().id;
+		dao.saveOrUpdate(fb);
+		return new ModelAndView();
 	}
 }

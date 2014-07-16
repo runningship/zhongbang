@@ -45,17 +45,16 @@ public class GrandServlet extends HttpServlet{
 		String path = req.getPathInfo();
 		SessionHelper.updateSession(req);
 //		User u = (User)req.getSession().getAttribute(KeyConstants.Session_User);
+		req.getSession().getAttribute("user");
 		User u = UserSessionCache.getUser(req.getSession().getId());
 		if(u==null){
 			//返回登录页面
-			if(u==null){
-				u = SimpDaoTool.getGlobalCommonDaoService().get(User.class, 316);
-				String ip = req.getHeader("x-forwarded-for");
-				if (ip == null) {
-					ip = req.getRemoteAddr();
-				}
-				UserSessionCache.putSession(req.getSession().getId(), u.id , ip);
-			}
+//			u = SimpDaoTool.getGlobalCommonDaoService().get(User.class, 316);
+//			String ip = req.getHeader("x-forwarded-for");
+//			if (ip == null) {
+//				ip = req.getRemoteAddr();
+//			}
+//			UserSessionCache.putSession(req.getSession().getId(), u.id , ip);
 		}
 		ThreadSession.setUser(u);
 		ThreadSession.setHttpServletRequest(req);
@@ -118,8 +117,8 @@ public class GrandServlet extends HttpServlet{
 				if(iex.getTargetException() instanceof GException ){
 					processGException(resp, (GException)iex.getTargetException());
 				}else{
-					LogUtil.log(Level.ERROR,"internal server error",ex);
-					ex.printStackTrace(resp.getWriter());
+					LogUtil.log(Level.ERROR,"internal server error",iex.getTargetException());
+					iex.getTargetException().printStackTrace(resp.getWriter());
 				}
 			}else{
 				LogUtil.log(Level.ERROR,"internal server error",ex);
@@ -129,6 +128,7 @@ public class GrandServlet extends HttpServlet{
 	}
 
 	private void processGException(HttpServletResponse resp ,GException ex){
+		resp.setStatus(400);
 		JSONObject jobj = new JSONObject();
 		jobj.put("result",ex.getCode());
 		jobj.put("msg", ex.getMessage());

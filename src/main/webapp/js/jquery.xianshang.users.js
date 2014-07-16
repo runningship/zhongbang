@@ -12,23 +12,20 @@ $(document).ready(function() {
     
 
 
-    $.ajax({
+    YW.ajax({
         url:'/zb/c/user/getUserTree',
         data:'',
         timeout:3000,
         async:false,
         dataType:'json',
-        beforeSend: function(XMLHttpRequest){
-        },success:function (data, textStatus) {
+        success:function (data, textStatus) {
             if(data!=""){
                 getUserTreeStr=data;
                 //alert(getUserTreeStr.result)
                 //alert(getUserTreeStr.result[0].children)
                 fun_get_comp('');
             }
-        },
-        complete: function(XMLHttpRequest, textStatus){},
-        error:function (XMLHttpRequest, textStatus, errorThrown) {}
+        }
     })
 });
 

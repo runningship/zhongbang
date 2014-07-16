@@ -23,7 +23,7 @@ var spList;
 var myId;
 function doSave(){
   var data = formSerialize($('form[name=form1]'));
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/user/add',
     data:data,
@@ -66,7 +66,7 @@ function buildAction(rowIndex){
 }
 
 function passSP(spId){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/user/ruzhi/pass?spId='+spId,
     data:'',

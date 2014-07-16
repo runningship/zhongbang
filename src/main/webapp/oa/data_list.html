@@ -21,7 +21,7 @@ var queryOpts;
 
 function getList(search){
   var url='/zb/c/oa/listNotice';
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: url,
     data:search,
@@ -51,7 +51,7 @@ function deleteData(id){
     content:'确定删除这条公告吗？',
     lock:true,
     ok:function(){
-      $.ajax({
+      YW.ajax({
         type: 'POST',
         url: '/zb/c/oa/deleteNotice?noticeId='+id,
         data:'',
@@ -88,8 +88,8 @@ function openEdit(id,name){
   });
 }
 
-function openView(id){
-  art.dialog.open('data_View.html?tableId='+id,{
+function openView(id,name){
+  art.dialog.open('notice_view.html?recordId='+id+'&claName='+name,{
       padding:0,
       resize:true,
       lock:1,
@@ -156,7 +156,7 @@ $(function(){
       <td>${uname}</td>
       <td>${addtime}</td>
       <td>${classTitle}</td>
-      <td><a onclick="openView(${id})" href="javascript:void(0)">查看</a> <a onclick="openEdit(${id},'${classTitle}')" href="javascript:void(0)">修改</a> 
+      <td><a onclick="openView(${id},'${classTitle}')" href="javascript:void(0)">查看</a> <a onclick="openEdit(${id},'${classTitle}')" href="javascript:void(0)">修改</a> 
       <a href="javascript:void(0)" onclick="deleteData(${id});">删除</a></td>
     </tr>
     </tbody>

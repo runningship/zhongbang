@@ -57,7 +57,21 @@
 },{
 	"name":"ky",
 	"type":"module",
-	"text":"客源管理"
+	"text":"客源管理",
+	"children":[{
+		"name":"ky_client",
+		"text":"客源管理",
+		"type":"virtual",
+		"children":[{
+			"name":"ky_client_buy",
+			"text":"购房客户",
+			"type":"menu"
+		},{
+			"name":"ky_client_rent",
+			"text":"租房客户",
+			"type":"menu"
+		}]
+	}]
 },{
 	"name":"yw",
 	"type":"module",

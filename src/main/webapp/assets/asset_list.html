@@ -21,7 +21,7 @@ var queryOpts;
 
 function getList(search){
   var url='/zb/c/assets/list';
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: url,
     data:search,
@@ -45,7 +45,7 @@ function deleteAsset(id){
     content:'确定删除这条资产记录吗？',
     lock:true,
     ok:function(){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/assets/delete?id='+id,
     data:'',

@@ -21,7 +21,7 @@ var queryOpts;
 var claid;
 function getList(search){
   var url='/zb/c/contract/proClassList?claid='+claid;
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: url,
     data:'',
@@ -39,18 +39,15 @@ function deleteBuZhou(buzhouId){
     content:'确定删除这条步骤记录吗？',
     lock:true,
     ok:function(){
-    $.ajax({
-    type: 'get',
-    url: '/zb/c/contract/buzhou/delete?pcId='+buzhouId,
-    data:'',
-    success: function(data){
-      alert('删除成功');
-      getList();
-    },
-    error: function(data){
-      alert('删除失败');
-    }
-    });
+      YW.ajax({
+      type: 'get',
+      url: '/zb/c/contract/buzhou/delete?pcId='+buzhouId,
+      data:'',
+        success: function(data){
+          alert('删除成功');
+          getList();
+        }
+      });
     },
     cancel:true
   });
@@ -59,6 +56,16 @@ function deleteBuZhou(buzhouId){
 
 function openAdd(){
   art.dialog.open('buzhou_add.html?claId='+claid,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:300,
+      width:600
+  });
+}
+
+function openEdit(pcId){
+  art.dialog.open('buzhou_edit.html?pcId='+pcId,{
       padding:0,
       resize:true,
       lock:1,
@@ -99,7 +106,7 @@ $(function(){
     <tr style="display:none">
       <td>${ordera}</td>
       <td>${title}</td>
-      <td><a target="_blank" href="buzhou_edit.html?pcId=${id}">修改</a> <a onclick="deleteBuZhou(${id})" href="javascript:void(0)" >删除</a></td>
+      <td><a onclick="openEdit(${id})" href="javascript:void(0)">修改</a> <a onclick="deleteBuZhou(${id})" href="javascript:void(0)" >删除</a></td>
     </tr>
     </tbody>
   </table>

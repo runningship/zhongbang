@@ -12,7 +12,7 @@
 <script type="text/javascript" src="/zb/js/jquery.hotkeys.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -22,7 +22,7 @@ var queryOpts;
 var genderArr = [{"name":"男","code":1},{"name":"女","code":0}];
 function getList(search){
   var url='/zb/c/sys/listQzy';
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: url,
     data:search,
@@ -57,7 +57,7 @@ function deleteQzy(id){
     content:'确定删除该签证员？',
     lock:true,
     ok:function(){
-      $.ajax({
+      YW.ajax({
         url:'/zb/c/sys/deleteQzy?id='+id,
         data:'',
         timeout:5000,

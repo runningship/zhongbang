@@ -70,7 +70,7 @@ var Thi=$('form');
     if(!Thi.find('[name=lxr]').val()){TipErrs('g','客户姓名不能为空',Thi.find('[name=lxr]'));return false}
     if(!Thi.find('[name=tel]').val()){TipErrs('g','客户电话不能为空',Thi.find('[name=tel]'));return false}
     var url=$('form[name=form1]').attr('action');
-    $.ajax({
+    YW.ajax({
       type: 'POST',
       url: url,
   //    async:false,

@@ -20,16 +20,13 @@
 <script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript">
 
-function setMainHeight(){
-    var bodyHeight=$('.body').height()
-    $('.sider').height(bodyHeight);
-    $('.mainer').height(bodyHeight);
-}
-$(function(){
-    setMainHeight();
-})
-$(window).resize(function(event) {
-    setMainHeight();
+$(document).ready(function(){
+    $(document).on('click', '.aNavBtn', function(event) {
+        var aHref=$(this).attr( 'href');
+        $('iframe').attr('src',aHref);
+        return false;
+    });
+    $('.sider').find('a').eq(0).click();
 });
 </script>
 </head>
@@ -39,17 +36,17 @@ $(window).resize(function(event) {
             <dl auth="xt_zw" class="sidedl">
                 <dt>职务权限</dt>
                 <!-- <dd auth="xt_zw_add"><a href="role_add.html"  target="house_iframe" >添加职务</a></dd> -->
-                <dd auth="xt_zw_list"><a href="role_list.html"  target="house_iframe" >职务列表</a></dd>
-                <dd auth="xt_zw_list"><a href="Qzy_list.html"  target="house_iframe" >签证员</a></dd>
+                <dd auth="xt_zw_list"><a class="aNavBtn" href="role_list.html"  target="house_iframe" >职务列表</a></dd>
+                <dd auth="xt_zw_list"><a class="aNavBtn" href="Qzy_list.html"  target="house_iframe" >签证员</a></dd>
             </dl>
             <dl auth="xt_pc" class="sidedl">
                 <dt>电脑授权</dt>
-                <dd auth="xt_pc_ysq"><a href="pc_sq_list.html?lock=1"  target="house_iframe" >已授权</a></dd>
-                <dd auth="xt_pc_wsq"><a href="pc_sq_list.html?lock=0" target="house_iframe" >未授权</a></dd>
+                <dd auth="xt_pc_ysq"><a class="aNavBtn" href="pc_sq_list.html?lock=1"  target="house_iframe" >已授权</a></dd>
+                <dd auth="xt_pc_wsq"><a class="aNavBtn" href="pc_sq_list.html?lock=0" target="house_iframe" >未授权</a></dd>
             </dl>
             <dl auth="xt_other" class="sidedl">
                 <dt>其他</dt>
-                <dd auth="xt_other_fk"><a href="fankui_list.html"  target="house_iframe" >反馈信息</a></dd>
+                <dd auth="xt_other_fk"><a class="aNavBtn" href="fankui_list.html"  target="house_iframe" >反馈信息</a></dd>
             </dl>
         </div>
         <div class="mainer">

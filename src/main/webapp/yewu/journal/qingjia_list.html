@@ -27,7 +27,7 @@ var pizhu=[{
 }];
 function getList(search){
   var url='/zb/c/journal/list?category=1';
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: url,
     data:search,
@@ -58,7 +58,7 @@ function deleteQJ(id){
     content:'确定删除这条请假记录吗？',
     lock:true,
     ok:function(){
-      $.ajax({
+      YW.ajax({
         url:'/zb/c/journal/delete?id='+id,
         data:'',
         timeout:5000,
@@ -82,7 +82,7 @@ function openAdd(){
       padding:0,
       resize:true,
       lock:1,
-      height:600,
+      height:500,
       width:1080
   });
 }

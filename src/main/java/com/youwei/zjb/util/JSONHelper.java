@@ -13,6 +13,9 @@ import org.bc.sdak.Page;
 public class JSONHelper {
 
 	public static JSONObject toJSON(Page<?> page){
+		return toJSON(page,"");
+	}
+	public static JSONObject toJSON(Page<?> page,String timeFormat){
 		if(page==null){
 			return new JSONObject();
 		}
@@ -21,8 +24,8 @@ public class JSONHelper {
 		JSONArray arr = new JSONArray();
 		JsonConfig cfg = new JsonConfig();
 		cfg.setIgnorePublicFields(false);
-		cfg.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
-		cfg.registerJsonValueProcessor(Timestamp.class, new JsonDateValueProcessor());
+		cfg.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor(timeFormat));
+		cfg.registerJsonValueProcessor(Timestamp.class, new JsonDateValueProcessor(timeFormat));
 		for(Object obj : page.getResult()){
 			arr.add(JSONObject.fromObject(obj,cfg));
 		}

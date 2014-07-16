@@ -20,26 +20,23 @@
 <script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript">
 
-function setMainHeight(){
-    var bodyHeight=$('.body').height()
-    $('.sider').height(bodyHeight);
-    $('.mainer').height(bodyHeight);
-}
-$(function(){
-    setMainHeight();
-})
-$(window).resize(function(event) {
-    setMainHeight();
+$(document).ready(function(){
+    $(document).on('click', '.aNavBtn', function(event) {
+        var aHref=$(this).attr( 'href');
+        $('iframe').attr('src',aHref);
+        return false;
+    });
+    $('.sider').find('a').eq(0).click();
 });
 </script>
 </head>
 <body>
     <div class="body hmain">
         <div class="sider">
-            <dl class="sidedl">
+            <dl auth="ky_client" class="sidedl">
                 <dt>客户管理</dt>
-                <dd><a href="client_list.html?chuzu=0"  target="house_iframe" >购房客户</a></dd>
-                <dd><a href="client_list.html?chuzu=1"  target="house_iframe" >租房客户</a></dd>
+                <dd auth="ky_client_buy"><a class="aNavBtn" href="client_list.html?chuzu=0"  target="house_iframe" >购房客户</a></dd>
+                <dd auth="ky_client_rent"><a class="aNavBtn" href="client_list.html?chuzu=1"  target="house_iframe" >租房客户</a></dd>
             </dl>
             
         </div>

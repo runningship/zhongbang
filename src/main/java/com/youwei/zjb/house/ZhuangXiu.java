@@ -28,7 +28,7 @@ public enum ZhuangXiu {
 			JSONObject jobj = new JSONObject();
 			jobj.put("value", zx.name());
 			jobj.put("name", zx.name());
-			jobj.put("code", zx.code);
+//			jobj.put("code", zx.code);
 			arr.add(jobj);
 		}
 		return arr;

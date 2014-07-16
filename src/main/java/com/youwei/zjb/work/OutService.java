@@ -32,6 +32,7 @@ public class OutService {
 	
 	@WebMethod
 	public ModelAndView add(OutRecord out){
+		ModelAndView mv = new ModelAndView();
 		out.userId = ThreadSession.getUser().id;
 		if(out.outTime==null || out.backTime==null){
 			throw new GException(PlatformExceptionType.BusinessException, 1, "您填写的数据不完整");
@@ -47,7 +48,8 @@ public class OutService {
 		}else{
 			addOutHouse(out);
 		}
-		return new ModelAndView();
+		mv.data.put("recordId", out.id);
+		return mv;
 	}
 	
 	@WebMethod

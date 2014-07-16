@@ -24,7 +24,7 @@ var recordId;
 var ue;
 function save(){
   var text = $('form[name=textForm]').serialize();
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/sys/addRole',
     data:text,
@@ -32,9 +32,6 @@ function save(){
       art.dialog.close();
       art.dialog.tips('添加成功');
       art.dialog.opener.doSearch();
-    },
-    error:function(data){
-      alert(data.responseText);
     }
   });
   return false;
@@ -43,12 +40,12 @@ function save(){
 </script>
 </head>
 <body class="hlist bodyer" style="overflow:auto">
-  <form name="textForm" style="position:relative;height:40px;">
+  <form name="textForm" style="position:relative;height:40px;margin-top:10px;">
     <div class="input-group input-group-max">
       <span class="input-group-addon">职务名称</span>
       <input type="text" class="form-control" name="title">
     </div>
   </form>
-  <button onclick="save();return false;">确定</button>
+  <button onclick="save();return false;" class="btn btn-primary" style="margin-left:10px;">确定</button>
 </body>
 </html>

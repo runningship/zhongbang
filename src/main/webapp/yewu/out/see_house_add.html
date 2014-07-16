@@ -11,7 +11,7 @@
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/uploadify/jquery.uploadify.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <link href="/zb/js/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
@@ -23,7 +23,7 @@
 var recordId;
 function save(){
   var text = $('form[name=textForm]').serialize();
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/out/add?category=0',
     data:text,
@@ -41,7 +41,7 @@ function save(){
 }
 
 function getAttachList(){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/attachment/list?bizType=journal&recordId='+recordId,
     data:'',
@@ -53,7 +53,7 @@ function getAttachList(){
 }
 
 function openclient(){
-  art.dialog.open('out/client_list.html?chuzu=0',{
+  art.dialog.open('client_list.html?chuzu=0',{
       padding:0,
       resize:true,
       lock:1,
@@ -68,13 +68,21 @@ function clientseletion(cid,cname){
 }
 
 function openhouse(){
-  art.dialog.open('out/house_list.html?',{
+  art.dialog.open('house_list.html?',{
       padding:0,
       resize:true,
       lock:1,
       height:600,
       width:1300
   });
+}
+
+function changeOutHouse(obj){
+  if ($(obj).val()==0) {
+    $("#clientPanel").css('display','block');
+  }else{
+    $("#clientPanel").css('display','none');
+  }
 }
 
 function houseseletion(hids,hnames){
@@ -86,40 +94,44 @@ function houseseletion(hids,hnames){
 </head>
 <body class="hlist bodyer" style="overflow:auto">
   <form name="textForm" style="position:relative;width:100%">
-  <input id="cid" name="clients" type="hidden" />
-  <input type="hidden" name="houses" id="hids" />
-    <div class="input-group " style="float:left;margin-top:0px;">
-      <span class="input-group-addon">外出看房</span>
-      <select class="form-control " name="outHouse" style="width:150px;">
-        <option value="0">带看</option>
-        <option value="1">陪看</option>
-        <option value="2">自看</option>
-      </select>
-    </div>
+    <input id="cid" name="clients" type="hidden" />
+    <input type="hidden" name="houses" id="hids" />
+      <div class="input-group " style="float:left;margin-top:0px;">
+        <span class="input-group-addon">外出看房</span>
+        <select class="form-control " name="outHouse" onchange="changeOutHouse(this);" style="width:150px;">
+          <option value="0">带看</option>
+          <option value="1">陪看</option>
+          <option value="2">自看</option>
+        </select>
+      </div>
 
-   <div class="input-group" style="width:500px;margin-left:50px;margin-top:0px">
-      <span class="input-group-addon" style="padding:1px 6px">外出时间</span>
-      <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="outTime" style="width:180px;border-radius:0;">
-      <span class="input-group-addon" style="padding:1px 6px">返回时间</span>
-      <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="backTime" style="width:180px">
-  </div><br><br>
+      <div class="input-group" style="width:500px;margin-left:50px;margin-top:0px">
+          <span class="input-group-addon" style="padding:1px 6px">外出时间</span>
+          <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="outTime" style="width:180px;border-radius:0;">
+          <span class="input-group-addon" style="padding:1px 6px">返回时间</span>
+          <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="backTime" style="width:180px">
+      </div><br><br>
   
-    <div class="input-group input-group-max">
-      <span class="input-group-addon">选择客户</span>
-      <input type="text" class="form-control" id="cname" name="clientInfo">
+      <span id="clientPanel">
+        <div class="input-group input-group-max">
+          <span class="input-group-addon">选择客户</span>
+          <input type="text" class="form-control" id="cname" name="clientInfo">
+        </div>
+        <div class="btn-group">
+          <button onclick="openclient();return false;" class="btn btn-primary ">选择客源</button>
+        </div><br><br>
+      </span>
+      <div class="input-group input-group-max">
+        <span class="input-group-addon">选择房源</span>
+        <input style="width:700px" type="text" class="form-control" id="hnames" name="houseInfo">
+      </div>
+      <div class="btn-group" >
+        <button onclick="openhouse();return false;" class="btn btn-primary " style="">选择房源</button>
+      </div>
+  </form><br><br>
+    <div class="btn-group">
+      <button onclick="save();" class="btn btn-primary ">提交</button>
     </div>
-  <div class="btn-group">
-      <button onclick="openclient();return false;" class="btn btn-primary ">选择客源</button>
-    </div><br><br>
-    <div class="input-group input-group-max">
-      <span class="input-group-addon">选择房源</span>
-      <input style="width:700px" type="text" class="form-control" id="hnames" name="houseInfo">
-    </div>
-    <div class="btn-group" >
-      <button onclick="openhouse();return false;" class="btn btn-primary " style="">选择房源</button>
-    </div>
-    </form><br><br>
-  <div><button onclick="save();return false;" style="margin-left:10px">保存</button></div>
 <div>
     <input id="file_upload" name="file_upload" style="display:none">
 </div>

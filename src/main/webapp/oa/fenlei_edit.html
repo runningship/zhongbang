@@ -17,21 +17,20 @@
 <script type="text/javascript">
 function doSave(){
   var data = formSerialize($('form[name=form1]'));
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/oa/addFenLei',
     data:data,
     success: function(data){
-      alert(data);
-    },
-    error:function(data){
-      alert(data.responseText);
+      art.dialog.close();
+      art.dialog.opener.getList();
+      alert('修改成功');
     }
   });
 }
 
 function loadData(id){
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/oa/getFenLei?id='+id,
     data:'',
@@ -39,9 +38,6 @@ function loadData(id){
       var fenlei = JSON.parse(data)['fenlei'];
       $('#id').val(fenlei['id']);
       $('#title').val(fenlei['title']);
-    },
-    error:function(data){
-      alert(data.responseText);
     }
   });
 }

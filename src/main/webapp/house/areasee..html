@@ -34,7 +34,7 @@ function onSubmit_Form(){
 
 function getArea(){
   var param={areaId:areaId}
-  $.ajax({
+  YW.ajax({
     type: 'post',
     url: '/zb/c/areas/get',
     data:param,

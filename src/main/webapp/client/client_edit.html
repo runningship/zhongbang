@@ -90,6 +90,29 @@ var Thi=$('form');
     });
     return false;
 }
+function withJson(a,b,c){
+  /* withJson($('#ul'),'inputName','getAjaxValue') */
+  alert(b +'|'+ c)
+//  alert(a.find('input[name='+b+']').length)
+//  alert(c.split(',').length)
+  alert(a.find('input[name='+b+']').val())
+  if(a.length<=0){return false;}
+  if(a.find('input[name='+b+']').length<=0){return false;}
+  if(!c){return false;}
+  if(c.split(',').length<=0){return false;}
+  var bs=a.find('input[name='+b+']'),
+      cs=c.replace(' ','').split(',');
+      bs.each(function(index, obj) {
+        for(var i=0;i<cs.length;i++){
+          alert($(obj).val() +'|'+ cs[i])
+          if($(obj).val()==cs[i]){
+            $(obj).attr('checked', true);
+          }else{
+            $(obj).attr('checked',false);
+          }
+        }
+      });
+}
 $(function(){
 
   $.get('/zb/c/house/getQueryOptions', function(data) {
@@ -100,7 +123,7 @@ $(function(){
     buildHtmlWithJsonArray("id_fangxing",queryOpts['fangxing']); //客户来源
     buildHtmlWithJsonArray("id_zhuangxiu",queryOpts['zhuangxiu']);   //装修
     buildHtmlWithJsonArray("id_louxing",queryOpts['louxing']);     //楼型
-    buildHtmlWithJsonArray("id_fikuans",queryOpts['fukuan']);     //楼型
+    buildHtmlWithJsonArray("id_fukuans",queryOpts['fukuan']);     //楼型
   });
     if(getClientId){
       $('form[name=form1]').attr('action', '/zb/c/house/update');
@@ -108,22 +131,38 @@ $(function(){
       $.get('/zb/c/client/get?clientId='+getClientId, function(data) {
         getStr=JSON.parse(data);
         buildHtmlWithJsonArray("id_client_see",[getStr['client']],true);
+//        alert(getStr['client']['quyu'])
+        withJson($('#id_xingzhi'),'kehuxingzhi',getStr['client']['xingzhi']);
+        withJson($('#id_fangxing'),'fangxing',getStr['client']['huxing']);
+        withJson($('#id_kehulaiyuan'),'kehulaiyuan',getStr['client']['source']);
+
+        withJson($('#id_quyu'),'quyuas',getStr['client']['quyuas']);
+        withJson($('#id_zhuangxiu'),'zhuangxiu',getStr['client']['zhuangxiu']);
+        withJson($('#id_louxing'),'louxing',getStr['client']['louxing']);
+        withJson($('#id_fukuans'),'fukuan',getStr['client']['fuyongs']);
+
+          $('select').each(function(index,obj){
+            var select = $(this);
+            select.val(getStr['client'][select.attr('name')]);
+            select.change();
+          });
       });
     }else{
       var gerStrNull={"client":{"id":"","salesman":"","djr":"","lxr":"","tel":"","area":"","luduan":"","louxing":"","huxing":"","zhaungxiu":"","mianjiFrom":"","mianjiTo":"","jiageFrom":"","jiageTo":"","fuyongs":"","zhongyaos":"","beizhu":"","addtime":"","chuzu":"","loucengFrom":"","loucengTo":"","quyu":"","source":"","valid":""}}
       //gerStrNull=JSON.parse(gerStrNull)
-      buildHtmlWithJsonArray("id_client_see",gerStrNull['client'],true);
+      buildHtmlWithJsonArray("id_client_see",[gerStrNull['client']],true);
     }
 
   $('.tag3').tagsinput({maxTags:3});
 });
 </script>
-<style type="text/css">
-  .table{ margin-bottom: 0px;}
-  .pointerevents{pointer-events:none}
-  .font_no_br{white-space:nowrap;word-break: keep-all;}
-  .w40b{ width: 40%;}
-  .w160px{ width: 160px;}
+<style type="text/css">html, body, .body{overflow-y: auto;}
+.table{ margin-bottom: 0px;}
+table th{ width: 80px; text-align: right;}
+.pointerevents{pointer-events:none}
+.font_no_br{white-space:nowrap;word-break: keep-all;}
+.w40b{ width: 40%;}
+.w160px{ width: 160px;}
  .hadd  .colspan2{ width: 300px;}
  .hadd{ height: auto; width: 760px;}
  input.inputW100{ width: 100px; display: inline-block;}
@@ -131,10 +170,13 @@ $(function(){
 margin-bottom: 0px;
 width: 100%;
 }
+.checklist{}
+.checklist li{ float: left; margin:0 3px 3px 0; }
+.checklist label{display: inline-block; background-color: #EEE; color:#666;font-weight: normal; margin-bottom: 2px;}
 </style>
 </head>
-<body class="hadd bodyer" id="id_client_see">
-<form class="form-inline" name="form1" method="post" action="/zb/c/house/add" onsubmit="return funSubmit();">
+<body class="bodyer" id="id_client_see">
+<form class="form" name="form1" method="post" action="/zb/c/house/add" onsubmit="return funSubmit();">
   <input type="hidden" class="form-control" name="id" value="${id}">
   <input type="hidden" class="form-control" name="deptId" value="${deptId}">
   <input type="hidden" class="form-control" name="userId" value="${userId}">
@@ -143,37 +185,27 @@ width: 100%;
       <tbody class="j_tab_tr_hide" style="display: table-row-group; ">
       <tr>
         <th>姓名</th>
-        <td><input type="text" name="lxra" class="form-control inputW100" value=""></td>
+        <td style="width:38%;"><input type="text" name="lxra" class="form-control inputW100" value="${lxr}"></td>
         <th>区域</th>
-        <td>
-          <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-              区域 <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" id="id_quyu">
-              <li><label><input type="checkbox" name="quyus" value="${name}"> ${name}</label>
-            </ul>
-          </div>
+        <td style="width:38%;">
+          <ul class="checklist" id="id_quyu">
+            <li><label class="label"><input type="checkbox" name="quyuas" value="${value}">${name}</label>
+          </ul>
         </td>
       </tr>
       <tr>
         <th>电话</th>
-        <td><input type="text" data-role="tagsinput" class="tag3" name="sda" value=""></td>
+        <td><input type="text" data-role="tagsinput" class="tag3" name="sda" value="${tel}" placeholder="Add"></td>
         <th>装潢</th>
         <td>
-          <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-              装潢 <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" id="id_zhuangxiu">
-              <li><label><input type="radio" name="zhuangxiu" value="${code}"> ${name}</label></li>
-            </ul>
-          </div>
+          <ul class="checklist" id="id_zhuangxiu">
+            <li><label class="label"><input type="checkbox" name="zhuangxiu" value="${value}">${name}</label></li>
+          </ul>
         </td>
       </tr>
       <tr>
         <th>楼盘</th>
-        <td><input type="text" data-role="tagsinput" class="tag3" name="sda" value=""></td>
+        <td><input type="text" data-role="tagsinput" class="tag3" name="sda2" value=""></td>
         <th>楼层</th>
         <td>
           <input type="text" class="form-control inputW100" name="loucenga" placeholder="Enter email">-
@@ -183,49 +215,29 @@ width: 100%;
       <tr>
         <th>客户性质</th>
         <td>
-          <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-              性质 <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" id="id_kehu">
-              <li><label><input type="radio" name="kehuxingzhi" value="${name}"> ${name}</label></li>
-            </ul>
-          </div>
+          <ul class="checklist" id="id_kehu">
+            <li><label class="label"><input type="checkbox" name="kehuxingzhi" value="${name}"> ${name}</label></li>
+          </ul>
         </td>
         <th>楼型</th>
         <td>
-          <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-              楼型 <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" id="id_louxing">
-              <li><label><input type="radio" name="louxing" value="${value}"> ${name}</label></li>
-            </ul>
-          </div>
+          <ul class="checklist" id="id_louxing">
+            <li><label class="label"><input type="checkbox" name="louxing" value="${value}"> ${name}</label></li>
+          </ul>
         </td>
       </tr>
       <tr>
         <th>户型</th>
         <td>
-          <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-              户型 <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" id="id_fangxing">
-              <li><label><input type="radio" name="fangxing" value="${name}"> ${name}</label></li>
-            </ul>
-          </div>
+          <ul class="checklist" id="id_fangxing">
+            <li><label class="label"><input type="checkbox" name="fangxing" value="${name}"> ${name}</label></li>
+          </ul>
         </td>
         <th>付款方式</th>
         <td>
-          <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-              付款方式 <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" id="id_fikuans">
-              <li><label><input type="radio" name="fikuan" value="${value}"> ${name}</label></li>
-            </ul>
-          </div>
+          <ul class="checklist" id="id_fukuans">
+            <li><label class="label"><input type="checkbox" name="fukuan" value="${value}"> ${name}</label></li>
+          </ul>
         </td>
       </tr>
       <tr>
@@ -237,42 +249,32 @@ width: 100%;
       <tr>
         <th>客户来源</th>
         <td>
-          <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-              来源 <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" id="id_kehulaiyuan">
-              <li><label><input type="checkbox" name="kehulaiyuan" value="${name}"> ${name}</label>
-            </ul>
-          </div>  
+          <ul class="checklist" id="id_kehulaiyuan">
+            <li><label class="label"><input type="checkbox" name="kehulaiyuan" value="${name}"> ${name}</label>
+          </ul> 
         </td>
         <th>是否有效</th>
         <td>
-          <div class="btn-group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-              是否有效 <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu" id="id_laiyuan">
-              <li><label><input type="radio" name="youxiao" value=""> 所有</label>
-              <li><label><input type="radio" name="youxiao" value="1"> 有效</label>
-              <li><label><input type="radio" name="youxiao" value="0"> 无效</label>
-            </ul>
-          </div>
+          <ul class="checklist" id="id_laiyuan">
+            <li><label class="label"><input type="checkbox" name="youxiao" value=""> 所有</label>
+            <li><label class="label"><input type="checkbox" name="youxiao" value="1"> 有效</label>
+            <li><label class="label"><input type="checkbox" name="youxiao" value="0"> 无效</label>
+          </ul>
         </td>
       </tr>
       <tr>
         <th>客户分配</th>
         <td colspan="3">
         <div class="input-group  input-group-select">
-          <select class="form-control get_comp" name="form_cid"></select>
-          <select class="form-control get_quyu" name="form_did"></select>
-          <select class="form-control get_user" name="form_uid"></select>
+          <select class="form-control get_comp" name="salesmanQuyu"></select>
+          <select class="form-control get_quyu" name="salesmanDeptId"></select>
+          <select class="form-control get_user" name="salesmanName"></select>
         </div>
         </td>
       </tr>
       <tr>
         <th>备注</th>
-        <td colspan="3"><div class="hideduo"><textarea name="beizhua" class="textarea" style="width:96%"><%= beizhus %></textarea></div></td>
+        <td colspan="3"><div class="hideduo"><textarea name="beizhua" class="form-control textarea" style="width:96%">${beizhu}</textarea></div></td>
       </tr><input type="submit" value="提交" id="submits" style="display:none;">
     </tbody>
     </table>

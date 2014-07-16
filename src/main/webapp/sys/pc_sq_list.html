@@ -22,7 +22,7 @@ var dataArr;
 var lock;
 function getList(search){
   var url='/zb/c/pc/list?lock='+lock;
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: url,
     data:search,
@@ -41,7 +41,7 @@ function doSearch(){
 
 function ShenHe(rowIndex){
   var obj = dataArr[rowIndex];
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/pc/shenhe?pcId='+obj['id'],
     data:'',

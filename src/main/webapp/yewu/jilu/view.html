@@ -20,7 +20,7 @@ var recordId;
 var category;
 function get(){
   var url='/zb/c/jilu/get?id='+recordId;
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: url,
     success: function(text){

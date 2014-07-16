@@ -19,17 +19,13 @@
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript">
-
-function setMainHeight(){
-    var bodyHeight=$('.body').height()
-    $('.sider').height(bodyHeight);
-    $('.mainer').height(bodyHeight);
-}
-$(function(){
-    setMainHeight();
-})
-$(window).resize(function(event) {
-    setMainHeight();
+$(document).ready(function(){
+    $(document).on('click', '.aNavBtn', function(event) {
+        var aHref=$(this).attr( 'href');
+        $('iframe').attr('src',aHref);
+        return false;
+    });
+    $('.sider').find('a').eq(0).click();
 });
 </script>
 </head>
@@ -38,15 +34,15 @@ $(window).resize(function(event) {
         <div class="sider">
             <dl auth="zc_gd" class="sidedl">
                 <dt>固定资产管理</dt>
-                <dd auth="zc_gd_add"><a href="asset_add.html"  target="house_iframe" >添加固定资产</a></dd>
-                <dd auth="zc_gd_list"><a href="asset_list.html"  target="house_iframe" >固定资产列表</a></dd>
+                <dd auth="zc_gd_list"><a class="aNavBtn" href="asset_list.html"  target="house_iframe" >固定资产列表</a></dd>
+                <dd auth="zc_gd_add"><a class="aNavBtn" href="asset_add.html"  target="house_iframe" >添加固定资产</a></dd>
             </dl>
             <dl auth="zc_bg" class="sidedl">
                 <dt>办公用品管理</dt>
-                <dd auth="zc_bg_add"><a href="supply_add.html"  target="house_iframe" >申请办公用品</a></dd>
-                <dd auth="zc_bg_dsh"><a href="supply_list.html?shenhe=0" target="house_iframe" >待审核</a></dd>
-                <dd auth="zc_bg_ysh"><a href="supply_list.html?shenhe=1" target="house_iframe" >已审核</a></dd>
-                <dd auth="zc_bg_np"><a href="supply_list.html?shenhe=2" target="house_iframe" >审核不通过</a></dd>
+                <dd auth="zc_bg_add"><a class="aNavBtn" href="supply_add.html"  target="house_iframe" >申请办公用品</a></dd>
+                <dd auth="zc_bg_dsh"><a class="aNavBtn" href="supply_list.html?shenhe=0" target="house_iframe" >待审核</a></dd>
+                <dd auth="zc_bg_ysh"><a class="aNavBtn" href="supply_list.html?shenhe=1" target="house_iframe" >已审核</a></dd>
+                <dd auth="zc_bg_np"><a class="aNavBtn" href="supply_list.html?shenhe=2" target="house_iframe" >审核不通过</a></dd>
             </dl>
             
         </div>

@@ -22,7 +22,7 @@ var dataArr;
 var authorities;
 function getList(search){
   var url='/zb/c/sys/rolesList?';
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: url,
     data:search,
@@ -56,6 +56,36 @@ function openEdit(id){
   });
 }
 
+function openAuth(roleId){
+  art.dialog.open('menuTree.html?roleId='+roleId,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:600
+  });
+}
+
+function deleteRole(roleId){
+  art.dialog({
+    title:'提示',
+    content:'删除职务后，该职务对应的用户将变成一般用户。确定删除该职务吗？',
+    lock:true,
+    ok:function(){
+      YW.ajax({
+        url:'/zb/c/sys/deleteRole?roleId='+roleId,
+        data:'',
+        timeout:5000,
+        dataType:'json',
+        success:function (data, textStatus) {
+            doSearch();
+            alert('删除成功');
+        }
+      });
+    },
+    cancel:true
+  });
+}
 function doSearch(){
   getList(formSerialize($('form[name=form1]')));
 }
@@ -94,7 +124,7 @@ $(function(){
     <tr style="display:none">
       <td>${title}</td>
       <td>${cont}</td>
-      <td><a auth="xt_zw_sq" target="_blank" href="menuTree.html?roleId=${id}" >权限</a> <a href="javascript:void(0)" onclick="openEdit(${id})" >修改</a>
+      <td><a auth="xt_zw_sq" onclick="openAuth(${id})" href="javascript:void(0)" >权限</a> <a href="javascript:void(0)" onclick="openEdit(${id})" >修改</a> <a href="javascript:void(0)" onclick="deleteRole(${id})" >删除</a>
       </td>
     </tr>
     </tbody>

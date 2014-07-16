@@ -138,6 +138,7 @@ public class AdminService {
 			dao.saveOrUpdate(pro);
 		}
 		mv.data.put("msg", "添加成功");
+		mv.data.put("recordId", table.id);
 		return mv;
 	}
 	

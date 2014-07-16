@@ -26,7 +26,7 @@ var editPageData='';
 var actions;
 function funSubmit(){
   var url=$('form[name=form1]').attr('action');
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: url,
     data:formSerialize($('form')),
@@ -107,7 +107,7 @@ function buildZj(rowIndex){
 
 function ignoreAction(rowIndex){
   var action = actions[rowIndex];
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/contract/process/ignore?id='+action.id,
     success: function(data){
@@ -125,7 +125,7 @@ function ignoreAction(rowIndex){
 function doProcess(rowIndex){
   var action = actions[rowIndex];
   var data = 'blr='+$('#blr_'+rowIndex).val()+'&conts='+$('#conts_'+rowIndex).val()+'&endtime='+$('#endtime_'+rowIndex).val();
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/contract/process/doProcess?id='+action.id,
     data:data,

@@ -22,7 +22,7 @@ var queryOpts;
 
 function getList(search){
   var url='/zb/c/admin/listTable';
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: url,
     data:search,
@@ -52,7 +52,7 @@ function deleteData(id){
     content:'确定删除这条记录吗？',
     lock:true,
     ok:function(){
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/admin/deleteTable?tableId='+id,
     data:'',
@@ -90,7 +90,7 @@ function openEdit(id){
 }
 
 function openView(id){
-  art.dialog.open('data_View.html?tableId='+id,{
+  art.dialog.open('data_view.html?tableId='+id,{
       padding:0,
       resize:true,
       lock:1,

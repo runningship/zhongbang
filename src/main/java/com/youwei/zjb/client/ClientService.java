@@ -17,6 +17,7 @@ import org.bc.web.WebMethod;
 import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.entity.Client;
+import com.youwei.zjb.entity.User;
 import com.youwei.zjb.house.HouseQuery;
 import com.youwei.zjb.house.JiaoYi;
 import com.youwei.zjb.house.entity.House;
@@ -40,7 +41,13 @@ public class ClientService {
 	public ModelAndView get(int clientId){
 		ModelAndView mv = new ModelAndView();
 		Client client = dao.get(Client.class, clientId);
+		User salesman = dao.get(User.class, client.salesman);
 		mv.data.put("client", JSONHelper.toJSON(client));
+		if(salesman!=null){
+			mv.data.getJSONObject("client").put("salesmanDeptId",salesman.deptId);
+			mv.data.getJSONObject("client").put("salesmanName",salesman.uname);
+			mv.data.getJSONObject("client").put("salesmanQuyu",salesman.Department().getParent().id);
+		}
 		return mv;
 	}
 	

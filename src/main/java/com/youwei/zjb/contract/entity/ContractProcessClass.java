@@ -1,5 +1,6 @@
 package com.youwei.zjb.contract.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +21,7 @@ public class ContractProcessClass {
 	 */
 	public Integer claid;
 	
+	@Column(nullable=false)
 	public String title;
 	
 	public String conts;
@@ -28,6 +30,7 @@ public class ContractProcessClass {
 	
 	public Integer cid;
 	
+	@Column(nullable=false)
 	public Integer ordera;
 	
 }

@@ -71,6 +71,7 @@ document.addEventListener('mousemove', function (e) {
         hex.setAsNonBorderAreas(-1, -1);
     }
 }, false);
+
 $(document).ready(function() {
   aBtnNavFun('.aNavBtn');
   //改善btn-group的操作感受

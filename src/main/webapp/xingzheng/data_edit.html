@@ -12,6 +12,8 @@
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/uploadify/jquery.uploadify.js"></script>
+<link href="/zb/js/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -20,15 +22,17 @@
 <script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript">
 var tableId;
+var recordId;
 
 function save(){
   $('#conts').val(ue.getContent());
   var text = $('form[name=form1]').serialize();
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/admin/updateTable',
     data:text,
     success: function(data){
+      art.dialog.opener.doSearch();
       alert('保存成功.');
     },
     error:function(data){
@@ -37,8 +41,60 @@ function save(){
   });
 }
 
+function initFileUpload(){
+  $('#file_upload').uploadify({
+      'swf'      : '/zb/js/uploadify/uploadify.swf',
+      'uploader' : '/zb/file/upload?bizType=xingzheng&recordId='+tableId,
+      'buttonText': '上传附件',
+      'removeTimeout': 0.1,
+      'fileSizeLimit' : '5MB',
+      'removeCompleted' : false,
+      'onUploadError' : function(file, errorCode, errorMsg, errorString){
+          console.log('The file ' + file.name + ' could not be uploaded: ' + errorString);
+      },
+      'onUploadComplete':function(file){
+          console.log('finish:'+file);
+          getAttachList();
+      },
+      'onUploadSuccess' : function(file, data, response) {
+        var json = JSON.parse(data);
+        if(json['result']!=0){
+          $('#' + file.id).find('.data').html('-文件上传失败,'+json['msg']);
+          // console('The file ' + file.name + ' was successfully uploaded with a response of ' + response + ':' + data);
+        }
+      },
+      'onQueueComplete' : function(queueData) {
+        console.log(queueData);
+      }
+      // Put your options here
+  });
+}
+
+function getAttachList(){
+  YW.ajax({
+    type: 'get',
+    url: '/zb/c/attachment/list?bizType=xingzheng&recordId='+tableId,
+    data:'',
+    success: function(result){
+      var data = JSON.parse(result)['data'];
+      buildHtmlWithJsonArray("attachList",data);
+    }
+  });
+}
+
+function deleteAttach(id){
+  YW.ajax({
+    type: 'get',
+    url: '/zb/c/attachment/delete?id='+id,
+    data:'',
+    success: function(result){
+      getAttachList();
+    }
+  });
+}
+
 function loadData(){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/admin/getTable?tableId='+tableId,
     data:'',
@@ -68,14 +124,15 @@ $(function(){
     ue.setHeight(350);
     loadData();
   });
-  
+  initFileUpload();
+  getAttachList();
 });
 
 </script>
 </head>
 <body class="hlist bodyer" style="overflow:auto">
 
-<div class="header" style="position:relative;height:50px;width:100%">
+<div class="header" style="position:relative;width:100%">
   <form name="form1">
     
     <div class="input-group input-group-max" style="">
@@ -99,8 +156,16 @@ $(function(){
   <div style="margin-left:10px;margin-top:50px;">
     <span id="editor" type="text/plain" style="width:1024px;height:500px;"></span>
   </div>
-  
 </div>
-
+<div>
+    <input id="file_upload" name="file_upload" style="display:none">
+</div>
+<div id="attachList">
+  <span style="display:none">
+    <div>
+      <a target="_blank" href="/zb/file/download?bizType=xingzheng&recordId=${recordId}&file=${filename}">${filename}</a> <a href="javascript:void(0)" onclick="deleteAttach(${id})">删除</a>
+    </div>
+  </span>
+</div>
 </body>
 </html>

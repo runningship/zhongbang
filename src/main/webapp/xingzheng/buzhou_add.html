@@ -21,18 +21,14 @@ var classId;
 
 function save(){
   var text = $('form[name=form1]').serialize();
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/admin/addProcessClass',
     data:text,
     success: function(data){
-      alert('保存成功.');
       art.dialog.close()
       art.dialog.opener.doSearch();
-      //close window
-    },
-    error:function(data){
-      alert('保存失败,'+data.responseText);
+      alert('保存成功.');
     }
   });
 }

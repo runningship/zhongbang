@@ -20,15 +20,12 @@ var classId;
 var ue;
 function save(){
   var text = $('form[name=form1]').serialize();
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/assets/add',
     data:text,
     success: function(data){
       alert('保存成功.');
-    },
-    error:function(data){
-      alert('保存失败,'+data.responseText);
     }
   });
 }

@@ -2,22 +2,18 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>jsTree test</title>
+  <title></title>
   <!-- 2 load the theme CSS file -->
-  <link rel="stylesheet" href="/zb/js/jstree/themes/default/style.min.css" />
-</head>
-<body>
-  <!-- 3 setup a container element -->
-  <div id="jstree" style="font:12px/1.5 \5b8b\4f53,arial,sans-serif;">
-  </div>
-  <button>保存</button>
-
+  <link rel="stylesheet" href="/zb/js/jstree/themes/default/style.css" />
+  
   <!-- 4 include the jQuery library -->
   <script src="/zb/js/jquery.js"></script>
   <!-- 5 include the minified jstree source -->
   <script src="/zb/js/jstree/jstree.js"></script>
+  <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
   <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
-  <script>
+
+<script>
   var tree;
   var roleId;
   $(function () {
@@ -26,20 +22,15 @@
       alert('没有指定职务');
       return;
     }
-    $.ajax({
+    YW.ajax({
         url:'/zb/c/sys/getRoleMenus?roleId='+roleId,
         data:'',
         timeout:30000,
         dataType:'json',
-        beforeSend: function(XMLHttpRequest){
-            
-        },success:function (data, textStatus) {
+        success:function (data, textStatus) {
             if(data['result']==0){
               buildTree(data['data']);
             }
-        },
-        error:function (XMLHttpRequest, textStatus, errorThrown) {
-          console.error(XMLHttpRequest.responseText);
         }
     });
 
@@ -85,7 +76,7 @@
       }
       console.log(JSON.stringify(jsonArr));
 
-      $.ajax({
+      YW.ajax({
         type: 'POST',
         url: '/zb/c/sys/update',
         data: {
@@ -93,6 +84,7 @@
           'authData':JSON.stringify(jsonArr)
         },
         success:function (data, textStatus) {
+            art.dialog.close();
             alert('success');
         },
         dataType: 'json'
@@ -101,5 +93,12 @@
     });
   }
   </script>
+</head>
+<body>
+  <!-- 3 setup a container element -->
+  <div id="jstree" style="font:12px/1.5 \5b8b\4f53,arial,sans-serif;">
+  </div>
+  <button>保存</button>
+
 </body>
 </html>

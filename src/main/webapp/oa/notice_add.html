@@ -25,7 +25,7 @@ var ue;
 function save(){
   $('#conts').val(ue.getContent());
   var text = $('form[name=textForm]').serialize();
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: '/zb/c/oa/addNotice',
     data:text,
@@ -72,7 +72,7 @@ function initFileUpload(){
 }
 
 function getAttachList(){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/attachment/list?bizType=oa&recordId='+recordId,
     data:'',
@@ -84,7 +84,7 @@ function getAttachList(){
 }
 
 function deleteAttach(id){
-  $.ajax({
+  YW.ajax({
     type: 'get',
     url: '/zb/c/attachment/delete?id='+id,
     data:'',

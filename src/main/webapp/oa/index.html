@@ -19,7 +19,12 @@
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript">
-$(function(){
+$(document).ready(function(){
+    $(document).on('click', '.aNavBtn', function(event) {
+        var aHref=$(this).attr( 'href');
+        $('iframe').attr('src',aHref);
+        return false;
+    });
     $('.sider').find('a').eq(0).click();
 });
 </script>

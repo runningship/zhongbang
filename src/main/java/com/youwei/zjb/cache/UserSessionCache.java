@@ -48,6 +48,7 @@ public class UserSessionCache {
 			dao.saveOrUpdate(po);
 			map.put(sessionId, user);
 		}
+		//清理过期session id.
 	}
 	
 	public static void removeUserSession(int userId){

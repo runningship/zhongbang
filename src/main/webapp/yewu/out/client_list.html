@@ -23,7 +23,7 @@ var chuzu;
 var getStr;
 function getList(search){
   var url='/zb/c/client/list?chuzu='+chuzu;
-  $.ajax({
+  YW.ajax({
     type: 'POST',
     url: url,
     data:search,
@@ -71,7 +71,7 @@ function deleteSelected(){
     content:'确定批量删除客户信息吗？',
     lock:true,
     ok:function(){
-      $.ajax({
+      YW.ajax({
         url:'/zb/c/client/deleteBatch',
         data:ids,
         type:'POST',
