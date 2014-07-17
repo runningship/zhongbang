@@ -112,33 +112,37 @@ function revert(){
 
 </script>
 <style type="text/css">
-  .loading{
-    background:'';
-  }
-#tool{background: #eee;width:100%;position: absolute;right: 0px;height: 20px;top:0px;}
-#tool a,a.open{float:left;width:21px;height:19px;display:block;margin-left:5px;background:url('/zb/style/image/winBtn.png') no-repeat;}
-a.open{position:absolute;top:10px;left:50%;margin-left:-10px;background-position:0 0;}
-a.open:hover{background-position:0 -29px;}
-#tool a.min{background-position:-29px 0;}
-#tool a.min:hover{background-position:-29px -29px;}
-#tool a.max{background-position:-60px 0;}
-#tool a.max:hover{background-position:-60px -29px;}
-#tool a.revert{background-position:-149px 0;display:none;}
-#tool a.revert:hover{background-position:-149px -29px;}
-#tool a.close{background-position:-89px 0;}
-#tool a.close:hover{background-position:-89px -29px;}
+.loading{background:'';}
+.tool{ background-color: ;position: absolute;right:0px;}
+.tbtn{ display: inline-block; height: 20px; width: 30px;margin-right: -10px;-webkit-transition:all .3s;}
+.tbtn i{ display: inline-block; height: 100%; width: 100%; background: url(/zb/style/image/winBtn.png) no-repeat left top;}
+.tbtn.tbtnMenu i{background-position: -10px 0 }
+.tbtn.tbtnMin i{background-position:-60px 0 }
+.tbtn.tbtnMax i{background-position:-110px 0 }
+.tbtn.tbtnClose{ width:50px;}
+.tbtn.tbtnClose i{background-position:-150px 0 }
+.tbtn.tbtnMenu:hover,.tbtn.tbtnMin:hover,.tbtn.tbtnMax:hover{background-image:linear-gradient(to bottom,rgba(0,153,255,0.9) 0%,rgba(0,153,255,0) 100%);}
+.tbtn.tbtnClose:hover{background-image:linear-gradient(to bottom,rgba(255,0,0,0.9) 0%,rgba(255,0,0,0) 100%);}
 </style>
 </head>
-<body style="background:none">
-<div id="tool">
+<body>
+<div class="tool">
+    <div class="btnbox">
+        <a href="" class="tbtn tbtnMenu" data-q="menu"><i></i></a>
+        <a href="" class="tbtn tbtnMin" data-q="min"><i></i></a>
+        <a href="" class="tbtn tbtnMax" data-q="max"><i></i></a>
+        <a href="" class="tbtn tbtnClose" data-q="close"><i></i></a>
+    </div>
+</div>
+<!-- <div id="tool">
   <div style="float:right">
     <a class="min" onclick="hex.minimize();" href="javascript:;" title="最小化"></a>
     <a class="max" onclick="maximize();" href="javascript:;" title="最大化"></a>
     <a class="revert" onclick="revert();" href="javascript:;" title="还原"></a>
     <a class="close" onclick="logout()" href="javascript:;" title="关闭"></a>
   </div>
-</div>
-<div style="background:#06C url(/zb/style/wallpapers/menglong2.jpg) repeat scroll center center;margin-top:-5px;height:100%">
+</div> -->
+<div style="">
 <div id="rr_bar" >
   
   <div id="start_block" style="margin-left:110px;"> 
