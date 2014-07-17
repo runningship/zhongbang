@@ -1,5 +1,6 @@
 package com.youwei.zjb.cache;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,10 +46,12 @@ public class UserSessionCache {
 			po.sessionId = sessionId;
 			po.userId = userId;
 			po.ip = remoteIP;
+			po.addtime = new Date();
 			dao.saveOrUpdate(po);
 			map.put(sessionId, user);
 		}
 		//清理过期session id.
+		dao.execute("delete from UserSession where userId=? and sessionId<>? ", userId, sessionId);
 	}
 	
 	public static void removeUserSession(int userId){

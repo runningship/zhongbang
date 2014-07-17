@@ -92,19 +92,22 @@ var Thi=$('form');
 }
 function withJson(a,b,c){
   /* withJson($('#ul'),'inputName','getAjaxValue') */
-  alert(b +'|'+ c)
+//  alert(b +'|'+ c)
 //  alert(a.find('input[name='+b+']').length)
-//  alert(c.split(',').length)
-  alert(a.find('input[name='+b+']').val())
+//alert(c.split(','))
+//alert(a.find('input[name='+b+']').val())
+//    c=c.replace(' ','')
   if(a.length<=0){return false;}
   if(a.find('input[name='+b+']').length<=0){return false;}
+    c=String(c);
   if(!c){return false;}
   if(c.split(',').length<=0){return false;}
   var bs=a.find('input[name='+b+']'),
-      cs=c.replace(' ','').split(',');
+      cs=c.replace(' ','')
+      cs=cs.split(',');
       bs.each(function(index, obj) {
         for(var i=0;i<cs.length;i++){
-          alert($(obj).val() +'|'+ cs[i])
+//          alert($(obj).val() +'|'+ cs[i])
           if($(obj).val()==cs[i]){
             $(obj).attr('checked', true);
           }else{
@@ -118,7 +121,7 @@ $(function(){
   $.get('/zb/c/house/getQueryOptions', function(data) {
     queryOpts=JSON.parse(data);
     buildHtmlWithJsonArray("id_quyu",queryOpts['quyu']);       //区域
-    buildHtmlWithJsonArray("id_kehu",queryOpts['kehu']);       //客户性质
+    buildHtmlWithJsonArray("id_kehuxingzhi",queryOpts['kehu']);       //客户性质
     buildHtmlWithJsonArray("id_kehulaiyuan",queryOpts['kehulaiyuan']); //客户来源
     buildHtmlWithJsonArray("id_fangxing",queryOpts['fangxing']); //客户来源
     buildHtmlWithJsonArray("id_zhuangxiu",queryOpts['zhuangxiu']);   //装修
@@ -131,15 +134,17 @@ $(function(){
       $.get('/zb/c/client/get?clientId='+getClientId, function(data) {
         getStr=JSON.parse(data);
         buildHtmlWithJsonArray("id_client_see",[getStr['client']],true);
-//        alert(getStr['client']['quyu'])
-        withJson($('#id_xingzhi'),'kehuxingzhi',getStr['client']['xingzhi']);
+/*       alert(getStr['client']['quyu'])*/
+        withJson($('#id_kehuxingzhi'),'kehuxingzhi',getStr['client']['zhongyaos']);
         withJson($('#id_fangxing'),'fangxing',getStr['client']['huxing']);
         withJson($('#id_kehulaiyuan'),'kehulaiyuan',getStr['client']['source']);
 
         withJson($('#id_quyu'),'quyuas',getStr['client']['quyuas']);
+        withJson($('#id_quyu'),'quyuas',getStr['client']['quyuas']);
         withJson($('#id_zhuangxiu'),'zhuangxiu',getStr['client']['zhuangxiu']);
         withJson($('#id_louxing'),'louxing',getStr['client']['louxing']);
         withJson($('#id_fukuans'),'fukuan',getStr['client']['fuyongs']);
+        withJson($('#id_valid'),'valid',getStr['client']['valid']);
 
           $('select').each(function(index,obj){
             var select = $(this);
@@ -147,13 +152,16 @@ $(function(){
             select.change();
           });
       });
+      $('.tag3').tagsinput({maxTags:3});
     }else{
-      var gerStrNull={"client":{"id":"","salesman":"","djr":"","lxr":"","tel":"","area":"","luduan":"","louxing":"","huxing":"","zhaungxiu":"","mianjiFrom":"","mianjiTo":"","jiageFrom":"","jiageTo":"","fuyongs":"","zhongyaos":"","beizhu":"","addtime":"","chuzu":"","loucengFrom":"","loucengTo":"","quyu":"","source":"","valid":""}}
+//      var gerStrNull={"client":{"id":"","salesman":"","djr":"","lxr":"","tel":"","area":"","luduan":"","louxing":"","huxing":"","zhaungxiu":"","mianjiFrom":"","mianjiTo":"","jiageFrom":"","jiageTo":"","fuyongs":"","zhongyaos":"","beizhu":"","addtime":"","chuzu":"","loucengFrom":"","loucengTo":"","quyu":"","source":"","valid":""}}
       //gerStrNull=JSON.parse(gerStrNull)
-      buildHtmlWithJsonArray("id_client_see",[gerStrNull['client']],true);
+//      buildHtmlWithJsonArray("id_client_see",[gerStrNull['client']],true);
+      $('#id_client_see').find('input,textarea').val('');
+      $('.tag3').tagsinput('removeAll');
+      $('.tag3').tagsinput({maxTags:3});
     }
 
-  $('.tag3').tagsinput({maxTags:3});
 });
 </script>
 <style type="text/css">html, body, .body{overflow-y: auto;}
@@ -195,7 +203,7 @@ width: 100%;
       </tr>
       <tr>
         <th>电话</th>
-        <td><input type="text" data-role="tagsinput" class="tag3" name="sda" value="${tel}" placeholder="Add"></td>
+        <td><input type="text" data-role="tagsinput" class="tag3" name="tel" value="${tel}" placeholder="Add"></td>
         <th>装潢</th>
         <td>
           <ul class="checklist" id="id_zhuangxiu">
@@ -205,18 +213,18 @@ width: 100%;
       </tr>
       <tr>
         <th>楼盘</th>
-        <td><input type="text" data-role="tagsinput" class="tag3" name="sda2" value=""></td>
+        <td><input type="text" data-role="tagsinput" class="tag3" name="area" value="${area}" placeholder="Add"></td>
         <th>楼层</th>
         <td>
-          <input type="text" class="form-control inputW100" name="loucenga" placeholder="Enter email">-
-          <input type="text" class="form-control inputW100" name="loucengb">层
+          <input type="text" class="form-control inputW100" name="loucengFrom" value="${loucengFrom}">-
+          <input type="text" class="form-control inputW100" name="loucengTo" value="${loucengTo}">层
         </td>
       </tr>
       <tr>
         <th>客户性质</th>
         <td>
-          <ul class="checklist" id="id_kehu">
-            <li><label class="label"><input type="checkbox" name="kehuxingzhi" value="${name}"> ${name}</label></li>
+          <ul class="checklist" id="id_kehuxingzhi">
+            <li><label class="label"><input type="checkbox" name="kehuxingzhi" value="${code}"> ${name}</label></li>
           </ul>
         </td>
         <th>楼型</th>
@@ -230,35 +238,35 @@ width: 100%;
         <th>户型</th>
         <td>
           <ul class="checklist" id="id_fangxing">
-            <li><label class="label"><input type="checkbox" name="fangxing" value="${name}"> ${name}</label></li>
+            <li><label class="label"><input type="checkbox" name="fangxing" value="${value}">${name}</label></li>
           </ul>
         </td>
         <th>付款方式</th>
         <td>
           <ul class="checklist" id="id_fukuans">
-            <li><label class="label"><input type="checkbox" name="fukuan" value="${value}"> ${name}</label></li>
+            <li><label class="label"><input type="checkbox" name="fukuan" value="${value}">${name}</label></li>
           </ul>
         </td>
       </tr>
       <tr>
         <th>面积</th>
-        <td><input type="text" class="form-control inputW100" name="mianjia" width="100" value=""> - <input type="text" class="form-control inputW100" name="mianjib" width="100" value=""> m<sup>2</sup></td>
+        <td><input type="text" class="form-control inputW100" name="mianjiFrom" width="100" value="${mianjiFrom}"> - <input type="text" class="form-control inputW100" name="mianjiTo" width="100" value="${mianjiTo}"> m<sup>2</sup></td>
         <th>价格</th>
-        <td><input type="text" class="form-control inputW100" name="jiagea" width="100" value=""> - <input type="text" class="form-control inputW100" name="jiageb" width="100" value=""> 万</td>
+        <td><input type="text" class="form-control inputW100" name="jiageFrom" width="100" value="${jiageFrom}"> - <input type="text" class="form-control inputW100" name="jiageTo" width="100" value="${jiageTo}"> 万</td>
       </tr>
       <tr>
         <th>客户来源</th>
         <td>
           <ul class="checklist" id="id_kehulaiyuan">
-            <li><label class="label"><input type="checkbox" name="kehulaiyuan" value="${name}"> ${name}</label>
+            <li><label class="label"><input type="checkbox" name="kehulaiyuan" value="${name}">${name}</label>
           </ul> 
         </td>
         <th>是否有效</th>
         <td>
-          <ul class="checklist" id="id_laiyuan">
-            <li><label class="label"><input type="checkbox" name="youxiao" value=""> 所有</label>
-            <li><label class="label"><input type="checkbox" name="youxiao" value="1"> 有效</label>
-            <li><label class="label"><input type="checkbox" name="youxiao" value="0"> 无效</label>
+          <ul class="checklist" id="id_valid">
+            <li><label class="label"><input type="checkbox" name="valid" value=""> 所有</label>
+            <li><label class="label"><input type="checkbox" name="valid" value="1"> 有效</label>
+            <li><label class="label"><input type="checkbox" name="valid" value="0"> 无效</label>
           </ul>
         </td>
       </tr>

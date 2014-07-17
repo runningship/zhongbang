@@ -56,7 +56,8 @@ public class DistrictService {
 		List<Object> params = new ArrayList<Object>();
 		if(StringUtils.isNotEmpty(search)){
 			search = "%"+search+"%";
-			hql.append(" and name like ?  or quyu like ? or pyShort like ?");
+			hql.append(" and (name like ?  or quyu like ? or pinyin like ? or pyShort like ?)");
+			params.add(search);
 			params.add(search);
 			params.add(search);
 			params.add(search);

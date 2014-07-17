@@ -27,6 +27,13 @@ $(document).ready(function(){
     });
     $('.sider').find('a').eq(0).click();
 });
+
+function select(fenleiId){
+    var oldHref= $('#data_list').attr('href');
+    $('#data_list').attr('href',oldHref+"?claid="+fenleiId);
+    $('#data_list').click();
+    $('#data_list').attr('href',oldHref);
+}
 </script>
 </head>
 <body>
@@ -34,12 +41,12 @@ $(document).ready(function(){
         <div class="sider">
             <dl auth="oa_desk" class="sidedl">
                 <dt>我的桌面</dt>
-                <dd auth="oa_desk_mydesk"><a class="aNavBtn" href="role_list.html"  target="house_iframe" >我的桌面</a></dd>
+                <dd auth="oa_desk_mydesk"><a class="aNavBtn" href="desk.html"  target="house_iframe" >我的桌面</a></dd>
             </dl>
             <dl auth="oa_notice" class="sidedl">
                 <dt>系统公告</dt>
                 <dd auth="oa_notice_fenlei"><a class="aNavBtn" href="fenlei_list.html"  target="house_iframe" >公告分类</a></dd>
-                <dd auth="oa_notice_list"><a class="aNavBtn" href="data_list.html" target="house_iframe" >公告列表</a></dd>
+                <dd auth="oa_notice_list"><a id="data_list" class="aNavBtn" href="data_list.html" target="house_iframe" >公告列表</a></dd>
             </dl>
         </div>
         <div class="mainer">

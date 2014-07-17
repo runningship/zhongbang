@@ -38,6 +38,7 @@ import com.youwei.zjb.cache.UserSessionCache;
 import com.youwei.zjb.entity.RoleAuthority;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.util.JSONHelper;
+import com.youwei.zjb.util.SessionHelper;
 
 
 public class ViewServlet extends HttpServlet{
@@ -49,6 +50,7 @@ public class ViewServlet extends HttpServlet{
 			throws ServletException, IOException {
 		resp.setCharacterEncoding("utf8");
 		String path = req.getPathInfo();
+		SessionHelper.updateSession(req);
 		resp.setContentType(getMimeType(path));
 		if(!path.endsWith(".html")){
 			return;
@@ -58,6 +60,7 @@ public class ViewServlet extends HttpServlet{
 			//返回登录
 //			return;
 			user = SimpDaoTool.getGlobalCommonDaoService().get(User.class, 316);
+			UserSessionCache.putSession(req.getSession().getId(), user.id, "test");
 		}
 		String filePath = req.getServletContext().getRealPath("/")+path;
 		String html = FileUtils.readFileToString(new File(filePath));

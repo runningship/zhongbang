@@ -22,10 +22,6 @@
 
 //alert(hex.formResized)
 var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
-    getPcMac(function(result){lm=result;});
-    getCpuNumber(function(result){lc=result;});
-    getDiskNumber(function(result){ld=result;});
-    getUUID(function(result){lu=result;});
 
     function artdialog(conts,icon,callback){
         art.dialog({
@@ -53,7 +49,8 @@ var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
                         })
                     }
                 })
-                if(uidc){$(".user ").val(uidc);$('.password').focus();}
+                if(uidc){$(".user ").val(uidc);}
+                $('#password').focus();
             }
         });  
     }
@@ -85,9 +82,7 @@ var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
                     if(didc){$(".company").val(didc);}
 /**/                get_user();
                 }
-            },
-            complete: function(XMLHttpRequest, textStatus){},
-            error:function (XMLHttpRequest, textStatus, errorThrown) {}
+            }
         })
     }
     function loginStart(){
@@ -114,21 +109,8 @@ var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
             dataType:'html',
             url: urls,
             data: param,
-            beforeSend: function(XMLHttpRequest){
-            },success: function(json){
-                //alert(json)
-                if(json!=""){
-                    var datas=eval('(' + unescape(json) + ')');
-                    if(datas.result==0){
-                        artdialog(datas.msg,'succeed',loginYes);
-                    }else{
-                        artdialog(datas.msg,'warning','');
-                    }
-                }else{
-                    //lTip('网络故障2，请稍后重试...',''); return false;
-                }
-            },complete: function(XMLHttpRequest, textStatus){
-            },error: function(XMLHttpRequest, textStatus, errorThrown){
+            success: function(json){
+               loginYes();
             }
         });
     }
@@ -136,6 +118,14 @@ var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
         didc=GetCookie('zb_l_comp');
         uidc=GetCookie('zb_l_user');
         get_company();
+    try{
+        getPcMac(function(result){lm=result;});
+        getCpuNumber(function(result){lc=result;});
+        getDiskNumber(function(result){ld=result;});
+        getUUID(function(result){lu=result;});
+    }catch(e){
+        alert(e);
+    }
         //$('.btn_go_reg').text(didc+'|'+uidc)
         $('.company').on('change', function(event) {
             get_user();
@@ -183,7 +173,8 @@ var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
             $('.lb_login').toggle();
             $('.deptr').focus();
         });
-    })
+
+    });
     $('form').on('submit', function(event) {
         loginStart();
         return false;
@@ -223,7 +214,7 @@ var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
               <div class="form-group">
                 <label for="password" class="col-sm-3 control-label">密码</label>
                 <div class="col-sm-9">
-                  <input type="password" class="form-control password" placeholder="Password" value="">
+                  <input type="password" id="password" class="form-control password" placeholder="请输入密码" value="">
                 </div>
               </div>
               <div class="form-group">
@@ -245,7 +236,7 @@ var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
               <div class="form-group">
                 <label for="password" class="col-sm-3 control-label">授权码</label>
                 <div class="col-sm-9">
-                  <input type="password" name="authCode" class="form-control authCode" placeholder="Password" value="">
+                  <input type="password" name="authCode" class="form-control authCode" placeholder="授权码" value="">
                 </div>
               </div>
               <div class="form-group">

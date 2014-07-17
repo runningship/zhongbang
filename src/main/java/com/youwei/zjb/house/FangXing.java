@@ -39,7 +39,7 @@ public enum FangXing {
 		for(FangXing fx : FangXing.values()){
 			JSONObject jobj = new JSONObject();
 			jobj.put("name", fx.name());
-			jobj.put("value", fx.name());
+			jobj.put("value", fx.name);
 			arr.add(jobj);
 		}
 		return arr;

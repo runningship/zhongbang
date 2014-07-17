@@ -1,4 +1,4 @@
-package com.youwei.zjb.entity;
+package com.youwei.zjb.oa.entity;
 
 import java.util.Date;
 
@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class UserSession {
+public class Attence {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -16,9 +16,10 @@ public class UserSession {
 	
 	public Integer userId;
 	
-	public String sessionId;
+	/**
+	 * 1 上午上班，2上午下班，3下午上班 ，4下午下班
+	 */
+	public Integer type;
 	
-	public String ip;
-	
-	public Date addtime;
+	public Date checktime;
 }

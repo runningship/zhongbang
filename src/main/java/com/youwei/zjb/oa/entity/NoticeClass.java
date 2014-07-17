@@ -15,6 +15,6 @@ public class NoticeClass {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer id;
 	
-	@Column(nullable=false)
-	public String title;
+	@Column(nullable=false,name="title")
+	public String fenlei;
 }

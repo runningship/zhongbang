@@ -78,7 +78,7 @@ public class SecurityHelper {
 			return false;
 		}
 		for(PC pc : list){
-			if(pc.cpu!=null && pc.mac.contains(target.cpu)){
+			if(pc.cpu!=null && pc.cpu.contains(target.cpu)){
 				return true;
 			}
 		}
@@ -90,7 +90,7 @@ public class SecurityHelper {
 			return false;
 		}
 		for(PC pc : list){
-			if(pc.harddrive!=null && pc.mac.contains(target.harddrive)){
+			if(pc.harddrive!=null && pc.harddrive.contains(target.harddrive)){
 				return true;
 			}
 		}
@@ -102,7 +102,7 @@ public class SecurityHelper {
 			return false;
 		}
 		for(PC pc : list){
-			if(pc.uuid!=null && pc.mac.contains(target.uuid)){
+			if(pc.uuid!=null && pc.uuid.contains(target.uuid)){
 				return true;
 			}
 		}

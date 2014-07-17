@@ -23,6 +23,7 @@ import com.youwei.zjb.entity.User;
 import com.youwei.zjb.oa.entity.Notice;
 import com.youwei.zjb.oa.entity.NoticeClass;
 import com.youwei.zjb.oa.entity.NoticeReceiver;
+import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.JSONHelper;
 
 @Module(name="/oa/")
@@ -43,6 +44,24 @@ public class OAService {
 		ModelAndView mv = new ModelAndView();
 		NoticeClass po = dao.get(NoticeClass.class, id);
 		mv.data.put("fenlei", JSONHelper.toJSON(po));
+		return mv;
+	}
+	
+	@WebMethod(name="desk/init")
+	public ModelAndView deskInit(){
+		ModelAndView mv = new ModelAndView();
+		List<NoticeClass> fenLeiList = dao.listByParams(NoticeClass.class, "from NoticeClass");
+		mv.data.put("fenlei", JSONHelper.toJSONArray(fenLeiList));
+		Page<Map> page = new Page<Map>();
+		page.setPageSize(5);
+		for(NoticeClass fenlei: fenLeiList){
+			Page<Map> noticeList = dao.findPage(page, "select title as title , addtime as addtime from Notice where claid=? order by addtime desc",true, new Object[]{fenlei.id});
+			mv.data.put(fenlei.fenlei, JSONHelper.toJSONArray(noticeList.getResult()));
+		}
+		AttenceService as = new AttenceService();
+		ModelAndView asmv = as.listMy();
+		mv.data.put("attences", asmv.data.getJSONArray("attences"));
+		mv.data.put("now", DataHelper.sdf.format(new Date()));
 		return mv;
 	}
 	
@@ -131,7 +150,7 @@ public class OAService {
 		if(user==null){
 			user = dao.get(User.class, 316);
 		}
-		StringBuilder hql = new StringBuilder("select n.id as id, n.title as title, n.addtime as addtime, nc.title as classTitle, u.uname as uname from Notice n, NoticeReceiver nr , NoticeClass nc , User u where n.id=nr.noticeId and n.claid=nc.id and u.id=n.userId and nr.receiverId=?");
+		StringBuilder hql = new StringBuilder("select n.id as id, n.title as title, n.addtime as addtime, nc.fenlei as classTitle, u.uname as uname from Notice n, NoticeReceiver nr , NoticeClass nc , User u where n.id=nr.noticeId and n.claid=nc.id and u.id=n.userId and nr.receiverId=?");
 		params.add(user.id);
 		if(query.claid!=null){
 			hql.append("  and n.claid=? ");

@@ -130,8 +130,13 @@ public class GrandServlet extends HttpServlet{
 	private void processGException(HttpServletResponse resp ,GException ex){
 		resp.setStatus(400);
 		JSONObject jobj = new JSONObject();
-		jobj.put("result",ex.getCode());
-		jobj.put("msg", ex.getMessage());
+		if(ex.getType()==PlatformExceptionType.ParameterMissingError){
+			jobj.put("result",PlatformExceptionType.ParameterMissingError.toString());
+			jobj.put("field", ex.getMessage());
+		}else{
+			jobj.put("result",ex.getCode());
+			jobj.put("msg", ex.getMessage());
+		}
 		try {
 			resp.getWriter().println(jobj.toString());
 		} catch (IOException e) {

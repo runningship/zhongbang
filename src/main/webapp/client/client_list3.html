@@ -118,17 +118,18 @@ function deleteSelected(){
   });
 }
 
-function btnEdit(id){
-var ThiId='',title;
-    if(id){
-      ThiId=id;
+function btnEdit(t){
+var Thi=t,
+    ThiId='',title;
+    if(Thi.parents('tr').length>0){
+      ThiId=Thi.parents('tr').find('input[name=ids]').val();
       title='修改客源'
     }else{
       title='添加客源'
     }
     art.dialog.open('client_edit.html?clientId='+ThiId,{
-      height:500,
-      width:960,
+      height:460,
+      width:765,
       title:title,
         ok: function () {
             var iframe = this.iframe.contentWindow;
@@ -153,29 +154,7 @@ $(function(){
     buildHtmlWithJsonArray("id_kehulaiyuan",queryOpts['kehulaiyuan']); //客户来源
   });
   Page.Init();
-
-  $(document).on('click', '.btn', function(event) {
-    var Thi=$(this),
-    ThiId,    ThiFlag=Thi.data('flag');
-    if(Thi.parents('tr').find('input[name=ids]').length){
-      ThiId=ThiId=Thi.parents('tr').find('input[name=ids]').val()
-    }
-    
-    if(ThiFlag=='fy'){
-      selectHouse(ThiId);
-    }else if(ThiFlag=='fp'){
-      selectUname(ThiId);
-    }else if(ThiFlag=='edit'){
-      btnEdit(ThiId);
-    }else if(ThiFlag=='add'){
-      btnEdit('');
-    }else if(ThiFlag=='del'){
-      deleteClient(ThiId);
-    }else{
-
-    }
-    return false;
-  }).on('click', 'table tr', function(event) {
+  $(document).on('click', 'table tr', function(event) {
     var Thi=$(this),
     ThiId=Thi.find('input[name=ids]').val()
     if(ThiId){
@@ -186,7 +165,6 @@ $(function(){
       });
     }
   });
-
 });
 
 </script>
@@ -257,7 +235,7 @@ $(function(){
     
     </form>
     <div class="btn-group" style="float:right">
-      <button  class="btn btn-primary btn_subnmit" data-flag="add">登记</button>
+      <button  class="btn btn-primary btn_subnmit" onclick="btnEdit($(this));">登记</button>
     </div>
 </div>
 <div class="mainer" style="position:relative;width:100%">
@@ -287,9 +265,9 @@ $(function(){
       <td>${addtime}</td>
       <td class='runscript'>getEnumTextByCode(queryOpts['kehu'],${kehu})</td>
       <td>${uname}</td>
-      <td><a href="javascript:void(0)" class="btn" data-flag="fy">房源</a></td>
-      <td><a href="javascript:void(0)" class="btn" data-flag="fp">分配</a></td>
-      <td><a href="javascript:void(0)" class="btn" data-flag="edit">修改</a> <a href="javascript:void(0)"  class="btn" data-flag="del">删除</a></td>
+      <td><a href="javascript:void(0)" onclick="selectHouse(${id});">房源</a></td>
+      <td><a href="javascript:void(0)" onclick="selectUname(${id});return false;">分配</a></td>
+      <td><a href="javascript:void(0)" onclick="btnEdit($(this));" >修改</a> <a href="javascript:void(0)" onclick="deleteClient(${id})">删除</a></td>
       
     </tr>
     </tbody>

@@ -31,7 +31,7 @@ public class IMServer extends WebSocketServer{
 	private static InetSocketAddress socket = new InetSocketAddress("localhost", 9099); 
 	private IMServer() throws UnknownHostException {
 //		super(new InetSocketAddress(Inet4Address.getByName("localhost"), 9099));
-		super(new InetSocketAddress("192.168.1.119", 9099));
+		super(new InetSocketAddress("192.168.1.125", 9099));
 //		super(socket);
 	}
 

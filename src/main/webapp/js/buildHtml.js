@@ -99,7 +99,21 @@ YW={
                 alert('系统内部错误，请联系管理员.');
             }else if(data.status==400){
                 json = JSON.parse(data.responseText);
-                alert(json['msg']);   
+                if(json.result=='ParameterMissingError'){
+                    var field = json.field;
+                    var arr = $('[name="'+field+'"]');
+                    var desc;
+                    if(arr!=null && arr.length>0){
+                        desc = $(arr[0]).attr('desc');
+                    }
+                    if(desc==undefined){
+                        desc = field;
+                    }
+                    alert("请先填写 "+ desc);
+                }else{
+                    alert(json['msg']);   
+                }
+                
             }else{
                 alert('请求服务失败，请稍后重试');
             }
@@ -115,7 +129,10 @@ YW={
         if(options.complete==undefined){
             options.complete = YW.options.complete;
         }
-        options.error = YW.options.error;
+        if(options.error==undefined){
+            options.error = YW.options.error;
+        }
+        
         if(options.success==undefined){
             options.success = YW.options.success;
         }

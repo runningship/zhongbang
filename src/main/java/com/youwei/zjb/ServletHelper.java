@@ -144,7 +144,7 @@ public class ServletHelper {
 			if(!data.containsKey(pname)){
 				Column column = f.getAnnotation(Column.class);
 				if(column!=null && column.nullable()==false){
-					throw new GException(PlatformExceptionType.ParameterMissingError,pname + " is required");
+					throw new GException(PlatformExceptionType.ParameterMissingError,pname);
 				}
 			}
 			f.setAccessible(true);

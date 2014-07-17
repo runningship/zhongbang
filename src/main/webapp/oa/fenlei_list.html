@@ -72,6 +72,7 @@ function openEdit(id){
   });
 }
 
+
 $(function(){
   getList();
   // Page.Init();
@@ -100,7 +101,7 @@ $(function(){
     </thead>
     <tbody id="id_list">
     <tr style="display:none">
-      <td>${title}</td>
+      <td>${fenlei}</td>
       <td><a onclick="openEdit(${id})" href="javascript:void(0)">修改</a> <a onclick="deleteFenLei(${id})" href="javascript:void(0)" >删除</a></td>
     </tr>
     </tbody>

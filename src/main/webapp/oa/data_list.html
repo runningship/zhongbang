@@ -18,7 +18,7 @@
 <script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 var queryOpts;
-
+var fenleiId;
 function getList(search){
   var url='/zb/c/oa/listNotice';
   YW.ajax({
@@ -34,7 +34,14 @@ function getList(search){
   });
 }
 
-function selectType(id,title){
+function selectType(id){
+  var title="";
+  for(var index=0;index<queryOpts.list.length;index++){
+    if(queryOpts.list[index].id==id){
+      title = queryOpts.list[index].fenlei;
+      break;
+    }
+  }
   $('#btn_class_select').text(title);
   $('#claid').val(id);
   doSearch();
@@ -99,11 +106,17 @@ function openView(id,name){
 }
 
 $(function(){
-  getList();
+  var claid = getParam('claid');
   $.get('/zb/c/oa/listFenLei', function(data) {
     queryOpts=JSON.parse(data);
     buildHtmlWithJsonArray("adminClassList",queryOpts['list']);
     buildHtmlWithJsonArray("adminClassList2",queryOpts['list']);
+
+    if(claid!=null){
+      selectType(claid,'fsf');
+    }else{
+      getList();
+    }
   });
   Page.Init();
 });
@@ -120,7 +133,7 @@ $(function(){
     <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:30px;padding:0px 10px 0px 10px">添加 <span class="caret"></span></button>
     <ul class="dropdown-menu">
       <span id="adminClassList">
-        <li><label><a onclick="openAdd(${id},'${title}')" href="javascript:void(0)" style="color:black;padding-left:10px;line-height:30px;font-weight:normal">${title}</a></label></li>
+        <li><label><a onclick="openAdd(${id},'${fenlei}')" href="javascript:void(0)" style="color:black;padding-left:10px;line-height:30px;font-weight:normal">${fenlei}</a></label></li>
       </span>
     </ul>
   </div>
@@ -132,7 +145,7 @@ $(function(){
       <ul class="dropdown-menu">
         <li><label><span  onclick="selectType('','所有')" style="color:black;padding-left:10px;line-height:30px;font-weight:normal">所有</span></label></li>
         <span id="adminClassList2">
-          <li><label><span onclick="selectType(${id},'${title}');" style="color:black;padding-left:10px;line-height:30px;font-weight:normal">${title}</span></label></li>
+          <li><label><span onclick="selectType(${id},'${fenlei}');" style="color:black;padding-left:10px;line-height:30px;font-weight:normal">${fenlei}</span></label></li>
         </span>
       </ul>
     </div>

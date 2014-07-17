@@ -110,7 +110,7 @@ $(function(){
   $.get('/zb/c/house/getQueryOptions', function(data) {
     var queryOpts=JSON.parse(data);
     shEnums = queryOpts['shenhe'];
-    buildHtmlWithJsonArray("id_jiaoyi",queryOpts['jiaoyi']);       //交易
+    buildHtmlWithJsonArray("id_jiaoyi",queryOpts['jiaoyi'],true);       //交易
     buildHtmlWithJsonArray("id_shenhe",queryOpts['shenhe']);       //审核
   });
 });
@@ -134,13 +134,11 @@ $(function(){
         <li><label><input type="radio" name="sh" value="${name}"> ${name}</label>
       </ul>
     </div>
-    <div class="btn-group">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        交易 <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu" id="id_jiaoyi">
-        <li><label><input type="checkbox" name="jiaoyis" value="${name}"> ${name}</label>
-      </ul>
+    <div class="input-group ">
+        <span class="input-group-addon">交易</span>
+        <select class="form-control " name="jiaoyi" id="id_jiaoyi">
+          <option value="${name}">${name}</option>
+        </select>
     </div>
     <div class="input-group input-group-max">
       <span class="input-group-addon">房源编号</span>

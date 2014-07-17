@@ -16,14 +16,14 @@
 <script type="text/javascript" src="/zb/jsLib/jquery-smartMenu/js/mini/jquery-smartMenu-min.js"></script>
 <script type="text/javascript" src="/zb/jsLib/window.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
-<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=idialog"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
 <link rel="stylesheet" type="text/css" href="/zb/chat.css" />
 <script type="text/javascript" src="/zb/js/jquery.hotkeys.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/im.js"></script>
 <script type="text/javascript">
-hex.maximize();
+// hex.maximize();
 $(function(){
 	//存储桌面布局元素的jquery对象
 	myLib.desktop.desktopPanel();
@@ -78,17 +78,67 @@ function openChat(){
       height:605,
       width:930,
       title:'QQ',
-      resize:false
+      resize:false,
+      skin:'idialog'
   });
 }
+
+function logout(){
+  YW.ajax({
+    type: 'POST',
+    url: '/zb/c/user/logout',
+    data:'',
+    success: function(data){
+      alert('正在关闭...');
+      hex.close();
+    },
+    error:function(data){
+      hex.close();
+    }
+  });
+}
+
+function maximize(){
+  hex.maximize();
+  $('.max').css('display','none');
+  $('.revert').css('display','block');
+}
+
+function revert(){
+  hex.restore();
+  $('.max').css('display','block');
+  $('.revert').css('display','none');
+}
+
 </script>
 <style type="text/css">
   .loading{
     background:'';
   }
+#tool{background: #eee;width:100%;position: absolute;right: 0px;height: 20px;top:0px;}
+#tool a,a.open{float:left;width:21px;height:19px;display:block;margin-left:5px;background:url('/zb/style/image/winBtn.png') no-repeat;}
+a.open{position:absolute;top:10px;left:50%;margin-left:-10px;background-position:0 0;}
+a.open:hover{background-position:0 -29px;}
+#tool a.min{background-position:-29px 0;}
+#tool a.min:hover{background-position:-29px -29px;}
+#tool a.max{background-position:-60px 0;}
+#tool a.max:hover{background-position:-60px -29px;}
+#tool a.revert{background-position:-149px 0;display:none;}
+#tool a.revert:hover{background-position:-149px -29px;}
+#tool a.close{background-position:-89px 0;}
+#tool a.close:hover{background-position:-89px -29px;}
 </style>
 </head>
-<body>
+<body style="background:none">
+<div id="tool">
+  <div style="float:right">
+    <a class="min" onclick="hex.minimize();" href="javascript:;" title="最小化"></a>
+    <a class="max" onclick="maximize();" href="javascript:;" title="最大化"></a>
+    <a class="revert" onclick="revert();" href="javascript:;" title="还原"></a>
+    <a class="close" onclick="logout()" href="javascript:;" title="关闭"></a>
+  </div>
+</div>
+<div style="background:#06C url(/zb/style/wallpapers/menglong2.jpg) repeat scroll center center;margin-top:-5px;height:100%">
 <div id="rr_bar" >
   
   <div id="start_block" style="margin-left:110px;"> 
@@ -102,7 +152,7 @@ function openChat(){
       <ul class="item">
         <li onclick="openPassword()"><span class="sitting_btn"></span>修改密码</li>
         <li onclick="openFanKui()"><span class="about_btn"></span>意见反馈</li>
-        <li><span class="logout_btn"></span>退出系统</li>
+        <li onclick="logout()"><span class="logout_btn"></span>退出系统</li>
       </ul>
     </div>
 </div>
@@ -158,6 +208,7 @@ function openChat(){
     </div>
   </li>
 </ul>
+
 <div id="taskBar">
   <div id="leftBtn"><a href="#" class="upBtn"></a></div>
   <div id="rightBtn"><a href="#" class="downBtn"></a> </div>
@@ -165,7 +216,7 @@ function openChat(){
     <div id="task_lb"></div>
   </div>
 </div>
-
+</div>
 
 </body>
 </html>

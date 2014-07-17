@@ -281,29 +281,31 @@ public class UserService {
 	}
 	
 	@WebMethod
+	public ModelAndView superLogin(User user){
+		User po = dao.get(User.class, user.id);
+		if(po==null){
+			throw new GException(PlatformExceptionType.BusinessException, "用户名不存在");
+		}
+		UserSessionCache.putSession(ThreadSession.getHttpServletRequest().getSession().getId(), user.id, "super_login");
+		return new ModelAndView();
+	}
+	
+	@WebMethod
 	public ModelAndView login(User user,PC pc){
 		ModelAndView mv = new ModelAndView();
 		if(user.id==null){
-			mv.data.put("result", "1");
-			mv.data.put("msg", "用户名不存在");
-			return mv;
+			throw new GException(PlatformExceptionType.BusinessException, "用户名不存在");
 		}
 		User po = dao.get(User.class, user.id);
 		if(po==null){
-			mv.data.put("result", "1");
-			mv.data.put("msg", "用户名不存在");
-			return mv;
+			throw new GException(PlatformExceptionType.BusinessException, "用户名不存在");
 		}
 		if(!po.pwd.equals(SecurityHelper.Md5(user.pwd))){
-			mv.data.put("result", "2");
-			mv.data.put("msg", "密码不正确");
-			return mv;
+			throw new GException(PlatformExceptionType.BusinessException, "密码不正确");
 		}
 		if(!SecurityHelper.validate(pc)){
-			mv.data.put("result", "3");
-			mv.data.put("msg", "机器未授权,请重新授权");
 			LogUtil.info("未授权的机器,pc="+BeanUtil.toString(pc)+",user="+BeanUtil.toString(user));
-			return mv;
+			throw new GException(PlatformExceptionType.BusinessException, "机器未授权,请重新授权");
 		}
 		mv.data.put("result", "0");
 		mv.data.put("msg", "登录成功");
@@ -318,8 +320,9 @@ public class UserService {
 	}
 	
 	@WebMethod
-	public ModelAndView logout(User user,PC pc){
+	public ModelAndView logout(PC pc){
 		ModelAndView mv = new ModelAndView();
+		User user = ThreadSession.getUser();
 		UserSessionCache.removeUserSession(user.id);
 		return mv;
 	}

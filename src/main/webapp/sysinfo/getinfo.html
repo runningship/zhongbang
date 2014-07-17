@@ -1,37 +1,48 @@
 <html>
 <head>
-<script type="text/javascript" src="sysinfo.js"></script>
+<script type="text/javascript" src="http://192.168.1.125:8080/zb/sysinfo/sysinfo.js"></script>
 <script type="text/javascript">
 	var text = "";
 
-	window.onload=function(){
-		document.getElementById("config").value=readConfig();
-		getPcMac(function(macAddress){
-			document.getElementById("mac").value=macAddress;
-			showCpu();
-		});
-
+window.onload=function(){
+	try{
+		// getPcMac(function(macAddress){
+			
+		// });
+		dir();
+	}catch(e){
+		alert(e);
 	}
+}
+	// window.onload=function(){
+	// 	//document.getElementById("config").value=readConfig();
+	// 	alert(0);
+	// 	getPcMac(function(macAddress){
+	// 		document.getElementById("mac").value=macAddress;
+	// 		showCpu();
+	// 	});
 
-	function showCpu(){
-		getCpuNumber(function(result){
-			document.getElementById("cpu").value=result;
-			showDisk();
-		});
-	}
+	// }
 
-	function showDisk(){
-		getDiskNumber(function(result){
-			document.getElementById("disk").value=result;
-		});
-		showUUID();
-	}
+	// function showCpu(){
+	// 	getCpuNumber(function(result){
+	// 		document.getElementById("cpu").value=result;
+	// 		showDisk();
+	// 	});
+	// }
 
-	function showUUID(){
-		getUUID(function(result){
-			document.getElementById("uuid").value=result;
-		});
-	}
+	// function showDisk(){
+	// 	getDiskNumber(function(result){
+	// 		document.getElementById("disk").value=result;
+	// 	});
+	// 	showUUID();
+	// }
+
+	// function showUUID(){
+	// 	getUUID(function(result){
+	// 		document.getElementById("uuid").value=result;
+	// 	});
+	// }
 
 
 </script>

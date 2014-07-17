@@ -4,6 +4,7 @@ function getPcMac(callback){
 	//    	callback(macAddress);
 	// });
     var command = "wmic nic get macaddress"
+    try{
     exec(command, function(err, stdout, stderr) {
         if (err) {
           throw err;
@@ -29,8 +30,17 @@ function getPcMac(callback){
         }
         callback(result);
     });
+    }catch(e){
+        alert(e);
+    }
 }
 
+function dir(){
+    var process = require('child_process');
+    process.execFile('test.bat',function(err, stdout, stderr){
+        alert(stdout.toString());
+    });
+}
 
 
 var exec = require('child_process').exec;
@@ -87,12 +97,16 @@ function getUUID(callback){
 }
 
 function readConfig(){
-    var rf=require("fs");
-    var data=rf.readFileSync("config.ini","utf-8");
-    return data;
+    alert('0');
+    // var rf=require("fs");
+    // var data=rf.readFileSync("config.ini","utf-8");
+    // return data;
+    var os = require("os");
+    console.log(JSON.stringify(os.networkInterfaces().vals()));
 }
 
 function writeConfig(data){
     var rf = require("fs");
     fs.writeFileSync("config.ini", data, 'utf8')
 }
+

@@ -124,6 +124,7 @@ _top !== window && $(window).bind('unload', function () {
  * @param	{Boolean}	是否允许缓存. 默认true
  */
 artDialog.open = function (url, options, cache) {
+	cache = false;
 	options = options || {};
 	
 	var api, DOM,
