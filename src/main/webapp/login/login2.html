@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>众邦房源管理系统</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+<link rel="stylesheet" href="/zb/style/css.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/style/login.css">
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/sysinfo.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<script type="text/javascript">
+
+var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
+
+    function artdialog(conts,icon,callback){
+        art.dialog({
+            title:false,
+            content: conts,
+            icon: icon,
+            time: 3,
+            close: callback
+        });
+    }
+    function get_user(){
+    var compStr=$('.company').find('option:selected').parent().attr('label'),
+        compStrs=$('.company').val()
+        //alert(compStr)
+        $.each(getUserTreeStr.result, function(index, item) {
+            if(item.text==compStr){
+                //alert(item.name)
+                var optgroups='';
+                $.each(item.children, function(index, items) {
+                    if(items.deptId==compStrs){
+                        //alert(items.name)
+                        $(".user").empty();
+                        $.each(items.children, function(index, itemu) {
+                            $(".user").prepend('<option value="'+itemu.userId+'" >'+itemu.text+'</option>');
+                        })
+                    }
+                })
+                if(uidc){$(".user ").val(uidc);}
+                $('#password').focus();
+            }
+        });  
+    }
+    function get_company(){
+        YW.ajax({
+            url:'/zb/c/user/getUserTree',
+            data:'',
+            dataType:'json',
+            beforeSend: function(XMLHttpRequest){
+                $(".company").prepend('<option>加载中...</option>')
+                $(".user").prepend('<option>加载中...</option>')
+            },success:function (data, textStatus) {
+                if(data!=""){
+                    //alert(1)
+                    //var dataObj=eval("("+data+")");//转换为json对象 
+                    //alert(data.result.length);//输出root的子对象数量 
+                    $(".company").empty();
+                    getUserTreeStr=data
+                    $.each(data.result, function(index, item) {
+                        //alert(item.name);
+                        var optgroups='';
+                        $.each(item.children, function(indexs, items) {
+                            //alert(items.name);
+                            optgroups=optgroups + '<option value="'+items.deptId+'">'+items.text+'</option>';
+                        }); 
+                        //alert(optgroups)
+                        var optgroup=$(".company").prepend('<optgroup label="'+item.text+'">'+optgroups+'</optgroup>');
+                    });
+                    if(didc){$(".company").val(didc);}
+/**/                get_user();
+                }
+            }
+        })
+    }
+    function loginStart(){
+        function loginYes(){window.location='/zb/v/index.html'}
+    var did=$('.deptl').val(),
+        uid=$('.user').val(),
+        pwd=$('.password').val(),
+        param = {
+            deptId:did,
+            userId:uid,
+            pwd:pwd,
+            cpu:lc,
+            mac:lm,
+            uuid:lu,
+            harddrive:ld
+        },urls="/zb/c/user/login";
+        if(uid==''){artdialog('请选择用户','warning','');$('.user').focus();return false;}
+        if(pwd==''){artdialog('请输入密码','warning','');$('.password').focus();return false;}
+                        SetCookie('zb_l_comp',did);
+                        SetCookie('zb_l_user',uid);
+        YW.ajax({
+            async: true,
+            type:'POST',
+            dataType:'html',
+            url: urls,
+            data: param,
+            success: function(json){
+               loginYes();
+            }
+        });
+    }
+    $(function(){
+        var gui = require('nw.gui');
+        var menu = new gui.Menu({ title: 'Menu Title' });
+        alert(menu.title)
+        didc=GetCookie('zb_l_comp');
+        uidc=GetCookie('zb_l_user');
+        get_company();
+        
+    getPcMac(function(result){lm=result;alert(lm)});
+    // getCpuNumber(function(result){lc=result;});
+    // getDiskNumber(function(result){ld=result;});
+    // getUUID(function(result){lu=result;});
+        //$('.btn_go_reg').text(didc+'|'+uidc)
+        $('.company').on('change', function(event) {
+            get_user();
+        });
+        $('.user').on('change', function(event) {
+            $('.password').focus();
+        });
+        $('.btn_submit').on('click', function(event) {
+            loginStart();
+        });
+        $('.btn_reg').on('click', function(event) {
+            $.post("/zb/c/pc/add",{
+                authCode:$('.authCode').val(),
+                deptId:$('.deptr').val(),
+                beizhu:$('.beizhu').val(),
+                cpu:lc,
+                mac:lm,
+                uuid:lu,
+                harddrive:ld
+            },function(data,status){
+                //alert("Data: " + data + "\nStatus: " + status);
+                var datas=eval('(' + unescape(data) + ')');
+                
+                if(datas.result==0){
+                    function loginy() {
+                        $('.lb_reg').toggle();
+                        $('.lb_login').toggle();
+                        $('.password').focus();
+                    }
+                    artdialog(datas.msg,'succeed',loginy);
+                    $('.authCode').val();
+                    $('.beizhu').val();
+                }else{
+                    artdialog(datas.msg,'warning','');
+                }
+            });
+        });
+        $('.btn_go_login').on('click', function(event) {
+            $('.lb_reg').toggle();
+            $('.lb_login').toggle();
+            $('.password').focus();
+        });
+        $('.btn_go_reg').on('click', function(event) {
+            $('.lb_reg').toggle();
+            $('.lb_login').toggle();
+            $('.deptr').focus();
+        });
+
+    });
+    $('form').on('submit', function(event) {
+        loginStart();
+        return false;
+    });
+</script>
+</head>
+<body class="login">
+    <div class="winTool">
+        <a href="" class="">X</a>
+    </div>
+    <div class="header title">
+        <a href="#"><img src="/zb/style/images/logo.png" alt="" class=" title"></a>
+    </div>
+    <div class="mainer">
+        <div class="login_box lb_login">
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <label for="company" class="col-sm-3 control-label">账号</label>
+                <div class="col-sm-9">
+                    <div class="row">
+                        <div class="col-xs-7">
+                            <select name="company" class="form-control company deptl"></select>
+                        </div>
+                        <div class="col-xs-5">
+                            <select name="user" class="form-control user"></select>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="password" class="col-sm-3 control-label">密码</label>
+                <div class="col-sm-9">
+                  <input type="password" id="password" class="form-control password" placeholder="请输入密码" value="">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-9">
+                    <a href="#" class="btn btn-primary btn_submit">登　录</a>
+                    <a href="#" class="btn btn-default btn_go_reg">授权</a>
+                </div>
+              </div>
+            </form>
+        </div>
+        <div class="login_box lb_reg">
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <label for="company" class="col-sm-3 control-label">分公司</label>
+                <div class="col-sm-9">
+                    <select name="company" class="form-control company deptr"></select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="password" class="col-sm-3 control-label">授权码</label>
+                <div class="col-sm-9">
+                  <input type="password" name="authCode" class="form-control authCode" placeholder="授权码" value="">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="password" class="col-sm-3 control-label">备　注</label>
+                <div class="col-sm-9">
+                  <input type="text" name="beizhu" class="form-control beizhu" placeholder="备注" value="">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-9">
+                    <a href="#" class="btn btn-primary btn_reg">授　权</a>
+                    <a href="#" class="btn btn-default btn_go_login">返回</a>
+                </div>
+              </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

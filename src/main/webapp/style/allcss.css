@@ -1,0 +1,51 @@
+@charset "utf-8";
+/* CSS Document */
+form{ margin:0;}
+body,html{ height:100%; overflow:hidden;}
+/* 设置默认字体 */
+body,button, input, select, textarea {font: 14px/1 "microsoft yahei",Tahoma, Geneva, "\5fae\8f6f\96c5\9ed1",  Helvetica, Arial, "\5b8b\4f53", sans-serif; /* 用 ascii 字符表示，使得在任何编码下都无问题 */}
+body{ word-wrap:break-word; word-break:break-all; white-space:nowrap; background-color:transparent; }
+.body{overflow: hidden; height:100%; position:relative; min-width: 640px;_width: expression(document.documentElement.clientWidth<640?"640px":"auto");}
+.head{ background-color: rgba(255, 255, 255, 0.6); /* FF3+, Saf3+,Opera 10.10+, Chrome */
+filter:progid:DXImageTransform.Microsoft.gradient(startColorStr='#CCFFFFFF',EndColorStr='#33FFFFFF'); /* IE6+ position:relative;*/ z-index:100;}
+.main{position:fixed;_position: absolute; _height:100%; top:0px; right:0px; bottom:30px; left:0px;_left:0px; overflow-y:auto; z-index:99;padding: 0 5px;_height: expression((document.body.clientHeight-31)+"px");}/**/
+*:first-child+html .main{ overflow-x:hidden;}
+.foot{overflow:hidden;position:absolute;right:0px;bottom:0;left:0px;height:30px;line-height:30px;_width:expression((document.body.clientWidth-0)+"px"); background-color: rgba(255, 255, 255, 0.6); /* FF3+, Saf3+,Opera 10.10+, Chrome */
+filter:progid:DXImageTransform.Microsoft.gradient(startColorStr='#66FFFFFF',EndColorStr='#66FFFFFF'); /* IE6+*/}
+
+.btn-group>.dropdown-menu{ *overflow-x:hidden;}
+
+.selectBoxTop{ padding:5px;}
+
+.tables {background: none repeat scroll 0 0 #8F8F9A;border-spacing: 1px;margin: 0;overflow: hidden; margin-bottom:0;}
+.tables td, .tables th {border-bottom: 1px solid #000;border-right: 1px solid #000;text-align: center;}
+.t_table {overflow: auto;/*让内容表格外面的div自动有滚动条*/
+height: 353px;
+}
+
+.valign_middle{vertical-align: middle;}
+
+
+.miniwidth{white-space:nowrap;word-break: keep-all; text-align:center;}
+
+
+/* bug */
+.form-search .btn-group{ *display:inline !important;}
+
+.select-box label{ display:block;}
+
+.err_box { margin:50px 0 0 100px; background:url(../icon/errors.png) no-repeat; padding:80px 0 0 280px; width:300px; height:256px; }
+.font-red { color:red;}
+.input-mini-small { width:40px;}
+
+
+
+
+.pageFoot{ border-top:1px solid #CCC; font-family:"SimSun"; }
+.pageFoot ul{ list-style:none; padding:5px;}
+.pageFoot li{ margin:0; padding:0;vertical-align:middle;}
+.pageFoot span, .pageFoot a { border:1px solid #CCC; background:#EEE; padding:3px 5px; }
+.pageFoot a{ padding:5px 10px;float: left; cursor:pointer; text-decoration:none;}
+.pageFoot a:hover { background:#FFF;}
+.pageFoot a.page_selected{ font-weight:bold; background-color:#FFF;}
+.pageFoot span { float:right;}

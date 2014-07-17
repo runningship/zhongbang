@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title>我的桌面</title>
+<link href="/zb/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+<link href="/zb/bootstrap/css/bootstrap-responsive.min.css" type="text/css" rel="stylesheet">
+<link href="/zb/style/allcss.css" type="text/css" rel="stylesheet">
+<link href="/zb/style/all.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<style type="text/css">
+html,body,.body{ height:100%;}
+body{ background:#FFF;}
+.main { top:0px; bottom:0; padding:0 10px;}
+
+.j_th_w50{ width:50px;}
+.j_block_hide{ display:block; overflow:hidden; width:300px;}
+.text-overflow {width:260px; height:18px;
+display:block;/*内联对象需加*/
+word-break:keep-all;/* 不换行 */
+white-space:nowrap;/* 不换行 */
+overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */
+text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
+}
+.padleft{padding-left:10px;}
+
+.item_date_fla{ float:left;}
+.item_date_fr{ float: left;line-height: 30px;color: #333;padding-left: 10px; }
+.item_date_fr .btn{ padding-left:30px; padding-right:30px; margin-bottom:10px; width:100px;}
+.item_date_fr h3 {font-weight: bold;padding: 0;margin:10px 0 15px;font-size: 12px;}
+.item_date_fr span {color: #B8B8B8;}
+
+.j_table_com{ cursor:default; color:#999;}
+.j_table_com thead td{ padding:5px 0 ;}
+.j_table_com tbody td{ padding:3px 0;}
+.j_table_com a{}
+.j_table_com .j_table_time{ width:90px;white-space:nowrap; }
+
+.j_ul_com{ margin:0; padding:0;table-layout: fixed;word-break: break-all;word-wrap: break-word;white-space: normal;}
+.j_ul_com li{ list-style:none; margin:0;}
+.j_ul_com li:hover,.j_ul_com a:hover{ background:#F6F6F6;}
+.j_ul_com span{ float:right;}
+.j_ul_com p{ color:#999;}
+.j_ul_com th{ font-weight:normal;}
+
+
+.j_ul_com.row-fluid a{display:inline-block; width:48%; padding:5px 0;}
+.flat2{width:47%; float:left; margin-right:20px;height: 200px;}
+</style>
+<script type="text/javascript">
+var xingqi = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+function init(){
+  YW.ajax({
+    type: 'get',
+    url: '/zb/c/oa/desk/init',
+    data:'',
+    success: function(result){
+      var data = JSON.parse(result);
+      buildHtmlWithJsonArray('item_box',data.fenlei);
+      $(data.fenlei).each(function(index){
+        buildHtmlWithJsonArray('item_body_'+this.id,data[this.fenlei]);
+      });
+      buildHtmlWithJsonArray('attences',data.attences);
+      var now = new Date(data.now);
+      var src='/zb/style/image/clock.swf?h='+now.getHours()+'&amp;m='+now.getMinutes()+'&amp;s='+now.getSeconds()+'&amp;z=服务器 北京 时间&amp;t=今天是'+now.toLocaleDateString()+' '+xingqi[now.getDay()]+'&amp;c=打卡时间按此系统为准';
+      //$('#flashEid').attr('src',src);
+
+      var flash = '<object  classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,28,0" width="244" height="160"><param name="quality" value="high"><param name="wmode" value="transparent"><embed id="flashEid" name="calendarFlash" src="'+src+'" quality="high" wmode="transparent" pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash" type="application/x-shockwave-flash" width="244" height="160"></object>';
+      $('#calendarFlash').append(flash);
+    }
+  });
+  var today = new Date();
+  var hours = today.getHours();
+  $('#today').text(today.getFullYear()+'-'+today.getMonth()+'-'+today.getDate()+' 打卡记录');
+  if(hours<12){
+    $('#afternoon').css('display','none');
+  }else{
+    $('#morning').css('display','none');
+  }
+}
+
+function more(fenleiId){
+  window.parent.select(fenleiId);
+}
+
+function buildAttence(type){
+  var arr = ['','上午上班时间：','上午下班时间：','下午上班时间：','下午下班时间：'];
+  return arr[type];
+}
+
+function attence(type){
+
+  YW.ajax({
+    type: 'get',
+    url: '/zb/c/oa/attence/add?type='+type,
+    data:'',
+    success: function(result){
+      alert('打卡成功')
+    }
+  });
+}
+$(function(){
+  init();
+});
+</script>
+</head>
+
+<body>
+<div class="body">
+<div class="main">
+
+  <div class="row-fluid">
+    <div class="span9">
+      <span id="item_box">
+        <div class="flat2">
+          <div class="row-fluid item_box" >
+              <div class="item_head"><span><a onclick="more(${id})" href="javascript:void(0)">更多</a></span>
+                <h3>${fenlei}</h3>
+              </div>
+              <span id="item_body_${id}">
+                <div class="item_body">
+                  <div style="width:70%;overflow: hidden;text-overflow: ellipsis;">${title}</div><span style="float:right;">${addtime}</span>
+                </div>
+              </span>
+          </div>
+        </div>
+      </span>
+    </div>
+    <div class="span3 clearfix">
+    
+      <div class="row-fluid">
+        <div class="item_date_fla" id="calendarFlash">
+          
+        </div>
+        <div class="item_date_fr checkIn_box">
+          <h3 id="today"> </h3>
+          <div id="attences">
+            <div>
+              <span class="runscript">buildAttence(${type})</span><span>${checktime}</span>
+            </div>
+          </div>
+          <div id="morning">
+            <a class="btn btn-primary" onclick="attence(1)" >上午上班</a><br>
+            <a class="btn btn-primary" onclick="attence(2)" >上午下班</a><br>
+          </div>
+          <div id="afternoon">
+            <a class="btn btn-primary" onclick="attence(3)" >下午上班</a><br>
+            <a class="btn btn-primary" onclick="attence(4)" >下午下班</a><br>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row-fluid item_box j_item_url">
+        <div class="item_head"><span><i class="icon-chevron-right icon-white j_btn_url_add"></i></span><h3>网址收藏</h3></div>
+        <div class="item_body">
+          <a href="http://192.168.1.233:880/oa/me_home.asp#" style="display:none;">公共</a>
+          <form>
+          <ul class="j_ul_com row-fluid">
+
+          <a href="http://www.ganji.com" title="http://www.ganji.com">赶集网</a>
+
+          <a href="http://hf.soufun.com" title="http://hf.soufun.com">搜房网</a>
+
+          <a href="http://www.house365.com" title="http://www.house365.com">365网</a>
+
+          <a href="http://www.58.com" title="http://www.58.com">58同城</a>
+
+          <a href="http://hf.anjuke.com" title="http://hf.anjuke.com">安居客</a>
+
+          <a href="http://oldhouse.hfhouse.com" title="http://oldhouse.hfhouse.com">合房网</a>
+
+          <a href="http://www.zhongjiebao.com" title="http://www.zhongjiebao.com">中介宝</a>
+
+          <a href="http://www.baidu.com" title="http://www.baidu.com">百度</a>
+
+          </ul>
+          </form>
+        </div>
+      </div>
+
+      
+      <div class="row-fluid item_box" style="display:none;">
+        <div class="item_head"><span><i class="icon-list-alt"></i></span>私信箱</div>
+        <div class="item_body">
+          <a href="http://192.168.1.233:880/oa/me_home.asp#">未读</a>
+          <a href="http://192.168.1.233:880/oa/me_home.asp#">已读</a>
+          <form>
+          <ul class="j_ul_com">
+            <li><span>任务状态等</span>事务管理测试项目<b>dsadsadsa</b></li>
+            <li><span>任务状态等</span>事务管理测试项目</li>
+          </ul>
+          </form>
+          <script type="text/javascript"></script>
+        </div>
+      </div>
+    
+    </div>
+  <iframe id="tmp_downloadhelper_iframe" style="display: none;"></iframe></div>
+  
+</div>
+</div>
+
+</body></html>

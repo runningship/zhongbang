@@ -374,7 +374,7 @@ var IM = {
 		$('#searchInput').val(IM.defSearchStr);
 		IM.loadContacts();
 
-		IM.ws = new WebSocket("ws://192.168.1.119:9099");
+		IM.ws = new WebSocket("ws://192.168.1.125:9099");
 		IM.ws.onopen = function() { 
 			console.log("open"); 
 			IM.login(IM.ws);
