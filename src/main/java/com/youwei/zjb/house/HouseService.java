@@ -8,14 +8,17 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
+import org.bc.sdak.GException;
 import org.bc.sdak.Page;
 import org.bc.sdak.TransactionalServiceHelper;
 import org.bc.sdak.utils.BeanUtil;
+import org.bc.sdak.utils.LogUtil;
 import org.bc.web.ModelAndView;
 import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
 import com.youwei.zjb.DateSeparator;
+import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.client.DaiKuanType;
 import com.youwei.zjb.client.FuKuan;
@@ -24,6 +27,7 @@ import com.youwei.zjb.client.KeHuLaiYuan;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.house.entity.Favorite;
 import com.youwei.zjb.house.entity.House;
+import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.JSONHelper;
 import com.youwei.zjb.work.PiYue;
 
@@ -43,6 +47,12 @@ public class HouseService {
 		}else{
 			house.isdel = 0;
 			service.saveOrUpdate(house);
+			String py = DataHelper.toPinyin(house.quyu);
+			if(StringUtils.isNotEmpty(py) && py.length()>0){
+				house.houseNumber=  py.toUpperCase().charAt(0)+"-" + house.id;
+			}else{
+				LogUtil.warning("生成房源编号失败,houseId="+house.id);
+			}
 			mv.data.put("msg", "发布成功");
 			mv.data.put("result", 0);
 		}
@@ -52,6 +62,17 @@ public class HouseService {
 	@WebMethod
 	public ModelAndView update(House house){
 		ModelAndView mv = new ModelAndView();
+		//检查，是否是重复房源.检查条件为,小区名+楼栋号+房号
+		House po = service.getUniqueByParams(House.class, new String[]{"area","dhao","fhao"},new Object[]{house.area,house.dhao,house.fhao});
+		if(po!=null){
+			throw new GException(PlatformExceptionType.BusinessException, 1, "小区名+楼栋号+房号 重复");
+		}
+		String py = DataHelper.toPinyin(house.quyu);
+		if(StringUtils.isNotEmpty(py) && py.length()>0){
+			house.houseNumber=  py.toUpperCase().charAt(0)+"-" + house.id;
+		}else{
+			LogUtil.warning("生成房源编号失败,houseId="+house.id);
+		}
 		service.saveOrUpdate(house);
 		mv.data.put("msg", "修改成功");
 		mv.data.put("result", 0);
@@ -192,7 +213,10 @@ public class HouseService {
 			hql.append(" and h.xingzhi = ? ");
 			params.add(String.valueOf(query.xingzhi.getCode()));
 		}
-		
+		if(StringUtils.isNotEmpty(query.area)){
+			hql.append(" and h.area like ?");
+			params.add("%"+query.area+"%");
+		}
 		if(query.id!=null){
 			hql.append(" and h.id = ?");
 			params.add(query.id);
@@ -285,7 +309,7 @@ public class HouseService {
 		hql.append(" and ( isdel= 0 or isdel is null) ");
 		page = service.findPage(page, hql.toString(),params.toArray());
 		ModelAndView mv = new ModelAndView();
-		mv.data.put("page", JSONHelper.toJSON(page));
+		mv.data.put("page", JSONHelper.toJSON(page,DataHelper.dateSdf.toPattern()));
 		return mv;
 	}
 	

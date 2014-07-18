@@ -1,13 +1,29 @@
 html,body{ height: 100%; width: 100%; pointer-events:auto;}
-body{font:12px "microsoft yahei",Arial,Verdana,Tahoma,"宋体";}
+body{font:16px "microsoft yahei",Arial,Verdana,Tahoma,"宋体";}
 
-.login { position: relative; background: url('images/login_bg.jpg') bottom right;}
+
+.tool{ background-color:none;position: absolute; right:1px; top: 1px; padding-right: 10px;}
+.btnbox{width: 200px; text-align: right;}
+.tbtn{ display: inline-block; height: 20px; width: 30px;margin-right: -10px;-webkit-transition:all .3s;}
+.tbtn i{ display: inline-block; height: 100%; width: 100%; background: url(/zb/style/image/winBtn.png) no-repeat left top;}
+.tbtn.tbtnMenu i{background-position: -10px 0 }
+.tbtn.tbtnMin i{background-position:-60px 0 }
+.tbtn.tbtnMax i{background-position:-110px 0 }
+.tbtn.tbtnRevert {display: none}
+.tbtn.tbtnRevert i{background-position:-110px 0 ;}
+.tbtn.tbtnClose{ width:40px;}
+.tbtn.tbtnClose i{background-position:-155px 0 }
+.tbtn.tbtnMenu:hover,.tbtn.tbtnMin:hover,.tbtn.tbtnMax:hover,.tbtn.tbtnRevert:hover{background-image:linear-gradient(to bottom,rgba(0,153,255,0.9) 0%,rgba(0,153,255,0) 100%);}
+.tbtn.tbtnClose:hover{background-image:linear-gradient(to bottom,rgba(255,0,0,0.9) 0%,rgba(255,0,0,0) 100%);}
+
+.login { position: relative; background:#000; overflow: hidden;}
 .login .winTool{ position: absolute; top: 5px; right: 5px;}
 .login .header { position: absolute; top: 0; left: 0; right: 0; height: 100px;}
-.login .mainer { position: absolute; right: 50px; bottom: 00px; }
+.login .main { position: absolute; right: 50px; bottom: 00px; }
 .login .login_box { padding: 0px; width: 400px;}
 .login .login_box th { padding-right: 20px;}
 .login .login_box .btn_box { padding-top:10px;  }
 .login .login_box .btn_submit{ display:inline-block; background: }
 .login .login_box div.form-group {margin-bottom: 8px;}
 .login .login_box.lb_reg{ display: none;}
+.login .background{ position: absolute; top:1px; right: 1px; bottom: 1px; left: 1px; background: url('images/login_bg.jpg') bottom right;}

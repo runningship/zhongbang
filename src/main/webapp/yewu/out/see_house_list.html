@@ -106,6 +106,11 @@ $(function(){
 </script>
 <style type="text/css">
   .table{ margin-bottom: 0px;}
+  .div1 {
+    width: 500px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 </style>
 </head>
 <body class="hlist bodyer" style="overflow:auto">
@@ -163,7 +168,7 @@ $(function(){
       <td>${deptName}</td>
       <td>${uname}</td>
       <td>${client}</td>
-      <td>${house}</td>
+      <td><div class="div1">${house}</div></td>
       <td>${outTime}</td>
       <td>${backTime}</td>
       <td><a class="runscript">getEnumTextByCode(queryOpts['piyue'],${reply})</a></td>

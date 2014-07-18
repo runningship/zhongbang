@@ -23,7 +23,13 @@
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/im.js"></script>
 <script type="text/javascript">
-// hex.maximize();
+try{
+hex.maximize();
+}catch(e){
+
+}
+var socket;
+var chatWindow=null;
 $(function(){
 	//存储桌面布局元素的jquery对象
 	myLib.desktop.desktopPanel();
@@ -37,7 +43,7 @@ $(function(){
 	// myLib.desktop.contextMenu($(document.body),data,"body",10);
   init();
 });
-
+var myId;
 function init(){
   YW.ajax({
     type: 'POST',
@@ -46,6 +52,7 @@ function init(){
     success: function(data){
       var json = JSON.parse(data);
       $('#userinfo').text(json.username+' ('+json.role+')');
+      myId = json.userId;
     }
   });
 }
@@ -72,15 +79,28 @@ function openPassword(){
   });
 }
 
-function openChat(){
-  art.dialog.open('im.html?userId=316',{
+function openChat(e){
+  e.cancelBubble=true;
+  e.preventDefault();
+  if(chatWindow==null){
+    chatWindow = art.dialog.open('im.html?userId='+myId,{
       padding:0,
       height:605,
       width:930,
       title:'QQ',
       resize:false,
-      skin:'idialog'
-  });
+      skin:'idialog',
+      close:function(){
+        // $(art.dialog.opener.document).find('.idialog').remove();
+        this.hide();
+        return false;
+      }
+    });
+  }else{
+    chatWindow.show();
+    var xx = $('.idialog')
+    xx.find('iframe').css('display','block');
+  }
 }
 
 function logout(){
@@ -100,38 +120,63 @@ function logout(){
 
 function maximize(){
   hex.maximize();
-  $('.max').css('display','none');
-  $('.revert').css('display','block');
+  $('.tbtnMax').css('display','none');
+  $('.tbtnRevert').css('display','inline-block');
 }
 
 function revert(){
   hex.restore();
-  $('.max').css('display','block');
-  $('.revert').css('display','none');
+  $('.tbtnMax').css('display','inline-block');
+  $('.tbtnRevert').css('display','none');
 }
 
+function showMenu(e){
+  $('#start_item').css('display','block');
+  e.cancelBubble=true;
+}
 </script>
 <style type="text/css">
 .loading{background:'';}
-.tool{ background-color: ;position: absolute;right:0px;}
+.tool{ background-color: ;position: absolute;right:0px; top: 0;}
+.btnbox{width: 200px; text-align: right;}
 .tbtn{ display: inline-block; height: 20px; width: 30px;margin-right: -10px;-webkit-transition:all .3s;}
 .tbtn i{ display: inline-block; height: 100%; width: 100%; background: url(/zb/style/image/winBtn.png) no-repeat left top;}
 .tbtn.tbtnMenu i{background-position: -10px 0 }
 .tbtn.tbtnMin i{background-position:-60px 0 }
 .tbtn.tbtnMax i{background-position:-110px 0 }
+.tbtn.tbtnRevert {display: none}
+.tbtn.tbtnRevert i{background-position:-110px 0 ;}
 .tbtn.tbtnClose{ width:50px;}
-.tbtn.tbtnClose i{background-position:-150px 0 }
-.tbtn.tbtnMenu:hover,.tbtn.tbtnMin:hover,.tbtn.tbtnMax:hover{background-image:linear-gradient(to bottom,rgba(0,153,255,0.9) 0%,rgba(0,153,255,0) 100%);}
+.tbtn.tbtnClose i{background-position:-155px 0 }
+.tbtn.tbtnMenu:hover,.tbtn.tbtnMin:hover,.tbtn.tbtnMax:hover,.tbtn.tbtnRevert:hover{background-image:linear-gradient(to bottom,rgba(0,153,255,0.9) 0%,rgba(0,153,255,0) 100%);}
 .tbtn.tbtnClose:hover{background-image:linear-gradient(to bottom,rgba(255,0,0,0.9) 0%,rgba(255,0,0,0) 100%);}
 </style>
 </head>
 <body>
 <div class="tool">
     <div class="btnbox">
-        <a href="" class="tbtn tbtnMenu" data-q="menu"><i></i></a>
-        <a href="" class="tbtn tbtnMin" data-q="min"><i></i></a>
-        <a href="" class="tbtn tbtnMax" data-q="max"><i></i></a>
-        <a href="" class="tbtn tbtnClose" data-q="close"><i></i></a>
+        <a href="javascript:void(0)" class="tbtn tbtnMenu" data-q="menu" onclick="showMenu(event);"><i></i>
+        </a>
+        <a href="" onclick="hex.minimize();" class="tbtn tbtnMin" data-q="min"><i></i></a>
+        <a href="" onclick="maximize();" class="tbtn tbtnMax" data-q="max"><i></i></a>
+        <a href="" onclick="revert();" class="tbtn tbtnRevert" data-q="revert"><i></i></a>
+        <a href="" onclick="logout()" class="tbtn tbtnClose" data-q="close"><i></i></a>
+    </div>
+    <div id="rr_bar" >
+      <!-- <div id="start_block" style="margin-left:110px;"> 
+        <a title="开始" id="start_btn"></a>
+        
+      </div> -->
+      <div id="start_item">
+          <ul class="item admin">
+            <li ><span class="adminImg" ></span><div id="userinfo"></div></li>
+          </ul>
+          <ul class="item">
+            <li onclick="openPassword()"><span class="sitting_btn"></span>修改密码</li>
+            <li onclick="openFanKui()"><span class="about_btn"></span>意见反馈</li>
+            <li onclick="logout()"><span class="logout_btn"></span>退出系统</li>
+          </ul>
+        </div>
     </div>
 </div>
 <!-- <div id="tool">
@@ -143,23 +188,7 @@ function revert(){
   </div>
 </div> -->
 <div style="">
-<div id="rr_bar" >
-  
-  <div id="start_block" style="margin-left:110px;"> 
-    <a title="开始" id="start_btn"></a>
-    
-  </div>
-  <div id="start_item">
-      <ul class="item admin">
-        <li ><span class="adminImg" ></span><div id="userinfo"></div></li>
-      </ul>
-      <ul class="item">
-        <li onclick="openPassword()"><span class="sitting_btn"></span>修改密码</li>
-        <li onclick="openFanKui()"><span class="about_btn"></span>意见反馈</li>
-        <li onclick="logout()"><span class="logout_btn"></span>退出系统</li>
-      </ul>
-    </div>
-</div>
+
 <ul id="deskIcon">
   <li auth="fy" class="desktop_icon" id="win5" path="/zb/v/house/index.html"> <span class="icon"><img src="/zb/style/icon/ico_b_house_big.png"/></span>
     <div class="text">房源管理
@@ -206,7 +235,7 @@ function revert(){
       <div class="right_cron"></div>
     </div>
   </li>
-  <li onclick="openChat();" class="desktop_icon" id="win14"> <span class="icon"><img src="http://www.oyyw.com/icon/icon2.png"/></span>
+  <li onclick="openChat(event);" class="desktop_icon" id="win14" ignoreDblClick="true"> <span  class="icon"><img src="http://www.oyyw.com/icon/icon2.png"/></span>
     <div class="text">chat
       <div class="right_cron"></div>
     </div>
@@ -223,4 +252,5 @@ function revert(){
 </div>
 
 </body>
+
 </html>

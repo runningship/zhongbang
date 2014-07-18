@@ -14,6 +14,7 @@
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
 <script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
@@ -154,7 +155,7 @@ $(function(){
   });
   Page.Init();
 
-  $(document).on('click', '.btn', function(event) {
+  $(document).on('click', '.table .btn,.btnadd.btn', function(event) {
     var Thi=$(this),
     ThiId,    ThiFlag=Thi.data('flag');
     if(Thi.parents('tr').find('input[name=ids]').length){
@@ -196,7 +197,7 @@ $(function(){
 </head>
 <body class="hlist bodyer" style="overflow:auto">
 
-<div class="header" style="position:relative;height:50px;width:100%">
+<div class="header" style="/*position:relative;height:50px;width:100%*/">
     
     <form name="form1" style="float:left">
     <input type="hidden" class="userInput" name="xpath" value="">
@@ -257,10 +258,10 @@ $(function(){
     
     </form>
     <div class="btn-group" style="float:right">
-      <button  class="btn btn-primary btn_subnmit" data-flag="add">登记</button>
+      <button  class="btn btn-primary btnadd" data-flag="add">登记</button>
     </div>
 </div>
-<div class="mainer" style="position:relative;width:100%">
+<div class="mainer" style="/*position:relative;width:100%*/">
   <table class="table table-hover .table_bodyer" >
     <thead>
       <th><a href="javascript:void(0)" onclick="deleteSelected()">删除</a> 编号</th>
@@ -296,6 +297,6 @@ $(function(){
   </table>
 </div>
 
-<div class="footer foot_page_box" style="position:relative;margin-top:10px;height:55px;"></div>
+<div class="footer foot_page_box" style="/*position:relative;margin-top:10px;height:55px;*/"></div>
 </body>
 </html>

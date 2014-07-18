@@ -52,7 +52,31 @@ $(document).keydown(function(event){
     if((event.ctrlKey) && (event.keyCode==82)){  
         return false; //屏蔽alt+R   
     }  
-});  
+});
+//窗口调用的公共函数
+function WinMin(){/*最小化*/
+  hex.minimize();
+}
+function WinMax(){/*最大化*/
+  hex.maximize();
+}
+function WinRevert(){/*恢复*/
+  hex.restore();
+}
+function WinClose(){/*退出*/
+  YW.ajax({
+    type: 'POST',
+    url: '/zb/c/user/logout',
+    data:'',
+    success: function(data){
+      alert('正在关闭...');
+      hex.close();
+    },
+    error:function(data){
+      hex.close();
+    }
+  });
+}
 //相同class点击填充背景，导航选中状态
 function aBtnNavFun(a){
   if($(document).on!=undefined){
@@ -71,25 +95,47 @@ document.addEventListener('mousemove', function (e) {
         hex.setAsNonBorderAreas(-1, -1);
     }
 }, false);
+//设置网页内容高度
+function setMainHeight(){
+  var getTop,getFoot,getMain,getTopH=0,getMainH=0,getFootH=0;
+  getTop=$('.header');
+  getFoot=$('.footer');
+  getMain=$('.mainer');
+  if(getTop.length>0){
+    getTopH=getTop.height()+12;
+  }
+  if(getFoot.length>0){
+    getFootH=getFoot.height()+1;
+  }
+  if(getMain.length>0){
+    $('.mainer').css({
+      top:getTopH,
+      bottom:getFootH
+    });
+  }
+}
 
 $(document).ready(function() {
+  //页面侧边动作
   aBtnNavFun('.aNavBtn');
   //改善btn-group的操作感受
   if($('.btn-group').length>0){
-  var btn_group_time=null;
-  $('.btn-group').on('hide.bs.dropdown', function () {
-    return false;
-  }).on('show.bs.dropdown', function () {
-    $(".btn-group:not(this)").removeClass('open');
-  }).on('mousemove', function(event) {
-    clearTimeout(btn_group_time);
-  }).on('mouseout', function () {
-    btn_group_time=setTimeout(function(){
-      $(".btn-group").removeClass('open');
-    },500);
-  });
+    var btn_group_time=null;
+    $('.btn-group').on('hide.bs.dropdown', function () {
+      return false;
+    }).on('show.bs.dropdown', function () {
+      $(".btn-group:not(this)").removeClass('open');
+    }).on('mousemove', function(event) {
+      clearTimeout(btn_group_time);
+    }).on('mouseout', function () {
+      btn_group_time=setTimeout(function(){
+        $(".btn-group").removeClass('open');
+      },500);
+    });
   } 
 
+  //设置内容高度
+  setMainHeight();
 });
 
 

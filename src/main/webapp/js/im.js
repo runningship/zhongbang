@@ -16,7 +16,7 @@ var IM = {
 	chats:[],
 
 
-	loadContacts : function(){
+	loadContacts : function(callback){
 		YW.ajax({
 	        url:'/zb/c/im/getContacts?userId='+IM.myId,
 	        data:'',
@@ -27,6 +27,9 @@ var IM = {
 	            IM.contacts = IM.sortContacts(IM.contacts);
 	            buildHtmlWithJsonArray("contact",IM.contacts);
 	            IM.fixImg('contact');
+	            if(callback!=null){
+	            	callback();
+	        	}
 	        }
 	    });
 	},
@@ -139,6 +142,18 @@ var IM = {
 	},
 	onReceiveMsg : function(data){
 		var sender = IM.getContact(data['senderId']);
+		if(sender==null){
+			IM.addContact(data['senderId'],function(){
+				IM.renderReceivedMsg(data);
+			});
+		}else{
+			IM.renderReceivedMsg(data);
+		}
+		
+	},
+
+	renderReceivedMsg:function(data){
+		var sender = IM.getContact(data['senderId']);
 		if(IM.receiverId==data['senderId']){
 			$('#recvAvatar').attr('src','/zb/style/image/avatar/'+sender['avatar']+'.jpg');
 			var dhtml = $('#recvTmp').html();
@@ -155,7 +170,6 @@ var IM = {
 			msgCount.css('display','');	
 		}
 	},
-
 	send : function(){
 		var text = $('#message').val();
 		if(text==''){
@@ -263,7 +277,7 @@ var IM = {
 	        }
 	    });
 	},
-	addContact : function(contactId){
+	addContact : function(contactId,callback){
 		var url = '/zb/c/im/addContact?ownerId='+IM.myId+'&contactId='+contactId;
 		YW.ajax({
 	        url:url,
@@ -273,7 +287,7 @@ var IM = {
 	        dataType:'json',
 	        success:function (data, textStatus) {
 	            IM.closeSearchPanel();
-	            IM.loadContacts();
+	            IM.loadContacts(callback);
 	        }
 	    });
 	},

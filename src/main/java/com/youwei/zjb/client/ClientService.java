@@ -54,6 +54,10 @@ public class ClientService {
 	@WebMethod
 	public ModelAndView update(Client client){
 		ModelAndView mv = new ModelAndView();
+		Client po = dao.get(Client.class, client.id);
+		client.addtime = po.addtime;
+		client.valid = po.valid;
+		client.chuzu = po.chuzu;
 		dao.saveOrUpdate(client);
 		return mv;
 	}

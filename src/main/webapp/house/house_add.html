@@ -11,7 +11,7 @@
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/sysinfo.js"></script>
-<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=chrome"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.timers.js"></script>
@@ -65,8 +65,8 @@ var Thi=$('form');
     if(!Thi.find('[name=area]').val()){TipErrs('g','房源名称不能为空',Thi.find('[name=area]'));return false}
     if(!Thi.find('[name=dhao]').val()){TipErrs('g','栋号不能为空',Thi.find('[name=dhao]'));return false}
     if(!Thi.find('[name=fhao]').val()){TipErrs('g','房号不能为空',Thi.find('[name=fhao]'));return false}
-    if(!Thi.find('[name=lceng]').val()){TipErrs('g','房号不能为空',Thi.find('[name=lceng]'));return false}
-    if(!Thi.find('[name=zceng]').val()){TipErrs('g','房号不能为空',Thi.find('[name=zceng]'));return false}
+    if(!Thi.find('[name=lceng]').val()){TipErrs('g','楼层不能为空',Thi.find('[name=lceng]'));return false}
+    if(!Thi.find('[name=zceng]').val()){TipErrs('g','总层不能为空',Thi.find('[name=zceng]'));return false}
     if(!Thi.find('[name=lxr]').val()){TipErrs('g','客户姓名不能为空',Thi.find('[name=lxr]'));return false}
     if(!Thi.find('[name=tel]').val()){TipErrs('g','客户电话不能为空',Thi.find('[name=tel]'));return false}
     var url=$('form[name=form1]').attr('action');

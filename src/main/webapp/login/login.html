@@ -185,17 +185,36 @@ var getUserTreeStr,lm,lc,ld,lu,didc,uidc;
            loginStart();
            return false;
         }  
-    }); 
+    });
+$(document).ready(function() {
+    
+    $('.tool').on('click','.btnbox .tbtn',function(){
+        var Thi=$(this),
+        ThiQ=Thi.data('q');
+        if(ThiQ=='menu'){
+            
+        }else if(ThiQ=='min'){
+            WinMin();
+        }else if(ThiQ=='close'){
+            WinClose();
+        }
+        return false;
+    });
+
+});
 </script>
 </head>
 <body class="login">
-    <div class="winTool">
-        <a href="" class="">X</a>
-    </div>
+    <div class="background"></div>
     <div class="header title">
         <a href="#"><img src="/zb/style/images/logo.png" alt="" class=" title"></a>
     </div>
-    <div class="mainer">
+    <div class="tool">
+        <div class="btnbox">
+            <a href="" class="tbtn tbtnClose" data-q="close"><i></i></a>
+        </div>
+    </div>
+    <div class="main">
         <div class="login_box lb_login">
             <form class="form-horizontal" role="form">
               <div class="form-group">

@@ -10,6 +10,8 @@
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.timers.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
@@ -111,7 +113,11 @@ $(function(){
     var queryOpts=JSON.parse(data);
     shEnums = queryOpts['shenhe'];
     buildHtmlWithJsonArray("id_jiaoyi",queryOpts['jiaoyi'],true);       //交易
-    buildHtmlWithJsonArray("id_shenhe",queryOpts['shenhe']);       //审核
+    buildHtmlWithJsonArray("id_shenhe",queryOpts['shenhe'],true);       //审核
+    $('select').each(function(index,obj){
+      $(obj).prepend('<option value="">所有</option>');
+      $(obj).val("");
+    })
   });
 });
 
@@ -126,13 +132,11 @@ $(function(){
     
     <form name="form1">
       <input type="hidden" class="userInput" name="xpath" value="">
-    <div class="btn-group">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        审核 <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu" id="id_shenhe">
-        <li><label><input type="radio" name="sh" value="${name}"> ${name}</label>
-      </ul>
+    <div class="input-group ">
+        <span class="input-group-addon">审核</span>
+        <select class="form-control " name="sh" id="id_shenhe">
+          <option value="${name}">${name}</option>
+        </select>
     </div>
     <div class="input-group ">
         <span class="input-group-addon">交易</span>
@@ -154,8 +158,8 @@ $(function(){
     <br/><br/>
     <div class="input-group">
       <span class="input-group-addon">登记时间</span>
-      <input type="text" class="form-control" name="addtimeStart">
-      <input type="text" class="form-control" name="addtimeEnd">
+      <input type="text" id="idTimes" class="form-control" name="addtimeStart" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})"  style="width:150px;border-radius:0;">
+      <input type="text" class="form-control" name="addtimeEnd" id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" style="width:150px">
     </div>
     <div class="input-group input-group-mt3 input-group-select" style="margin-top:1px;">
       <span class="input-group-addon">跟进人</span>

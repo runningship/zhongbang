@@ -25,12 +25,6 @@ function fix(TableH,TableB){
     TableH.find('th').eq(i).width(TableB.find('tr').eq(1).find('td').eq(i).width());
   }
 }
-function setMainHeight(){
-  $('.mainer').css({
-    top: $('.header').height()+12,
-    bottom:$('.footer').height()+1
-  });
-}
 
 function getHuseList(a){
   var url
@@ -99,6 +93,7 @@ function setDateSec(select){
   if (select.value=="") {
     $('#idTimes').val("");
     $('#idTime').val("");
+    getHuseList(formSerialize($('form[name=form1]')));
     return;
   };
   var end = new Date();
@@ -109,7 +104,7 @@ function setDateSec(select){
   var startstr = end.getFullYear()+'-'+end.getMonth()+'-'+end.getDate();
   $('#idTimes').val(startstr);
   $('#idTime').val(endstr);
-
+  getHuseList(formSerialize($('form[name=form1]')));
 }
 
 $(function(){
@@ -130,6 +125,9 @@ $(function(){
     buildHtmlWithJsonArray("id_datetype",getStr['datetype'],true); //房型
     Page.Init();
     $('select').each(function(index,obj){
+      if(obj.name=='dateType'){
+        return;
+      }
       $(obj).prepend('<option value="">所有</option>');
       $(obj).val("");
     })
@@ -199,7 +197,11 @@ $(function(){
       });
     }
     return false;
-  })
+  }).on('click', 'tr', function(event) {
+    var Thi=$(this),
+    this_hid=Thi.data('hid');
+    dialogs(this_hid);
+  });
 });
 
 </script>
@@ -207,9 +209,10 @@ $(function(){
   .table{ margin-bottom: 0px;}
   .pointerevents{pointer-events:none}
   .font_no_br{white-space:nowrap;word-break: keep-all;}
+  table.text-center{ text-align: left;}
 </style>
 </head>
-<body class="hlist bodyer">
+<body class="hlist bodyer" style="overflow-y:auto">
 <div class="header">
   <form class="form-horizontal" role="form" name="form1">
     <input type="hidden" class="userInput" name="xpath" value="">
@@ -231,20 +234,14 @@ $(function(){
           <li><label><input type="radio" name="ztai" value="${name}"> ${name}</label></li>
         </ul>
       </div> -->
-      <div class="input-group ">
-        <span class="input-group-addon">状 态</span>
+      <div class="input-group input-group-min">
+        <span class="input-group-addon">状态</span>
         <select class="form-control " name="ztai" id="id_zhuangtai">
           <option value="${name}">${name}</option>
         </select>
       </div>
-      <div class="input-group ">
-        <span class="input-group-addon">朝向</span>
-        <select class="form-control " name="chaoxiang" id="id_chaoxiang">
-          <option value="${name}">${name}</option>
-        </select>
-      </div>
-      <div class="input-group ">
-        <span class="input-group-addon">房屋类别</span>
+      <div class="input-group input-group-min">
+        <span class="input-group-addon">类别</span>
         <select class="form-control " name="leibie" id="id_leibie">
           <option value="${name}">${name}</option>
         </select>
@@ -257,41 +254,58 @@ $(function(){
           <li><label><input type="checkbox" name="xingzhi" value="${name}"> ${name}</label>
         </ul>
       </div>
-      <div class="input-group ">
+      <div class="input-group input-group-min">
         <span class="input-group-addon">交易</span>
         <select class="form-control " name="jiaoyi" id="id_jiaoyi">
           <option value="${name}">${name}</option>
         </select>
       </div>
-      <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          楼型 <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" id="id_louxing">
-          <li><label><input type="checkbox" name="louxing" value="${name}"> ${name}</label></li>
-        </ul>
+      <div class="input-group input-group-max">
+        <span class="input-group-addon">智能</span>
+        <input type="text" class="form-control" name="">
       </div>
-      <div class="input-group ">
-        <span class="input-group-addon">房型</span>
-        <select class="form-control " name="fangxing" id="id_fangxing">
-          <option value="${name}">${name}</option>
-        </select>
-      </div>
+    </div>
+
+    <div class="clearfix">
       <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          区域 <span class="caret"></span>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width:75px;">
+          区域<span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" id="id_quyu">
           <li><label><input type="checkbox" name="quyus" value="${name}"> ${name}</label>
         </ul>
       </div>
       <div class="btn-group">
-        <button type="submit" class="btn btn-primary btn_subnmit">搜索提交</button>
-        <button type="submit" class="btn">清空</button>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width:75px;">
+          楼型<span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_louxing">
+          <li><label><input type="checkbox" name="louxing" value="${name}"> ${name}</label></li>
+        </ul>
+      </div>
+      <div class="input-group input-group-min">
+        <span class="input-group-addon">房型</span>
+        <select class="form-control " name="fangxing" id="id_fangxing">
+          <option value="${name}">${name}</option>
+        </select>
+      </div>
+      <div class="input-group input-group-min">
+        <span class="input-group-addon">朝向</span>
+        <select class="form-control " name="chaoxiang" id="id_chaoxiang">
+          <option value="${name}">${name}</option>
+        </select>
+      </div>
+      <div class="input-group" style="width:192px;">
+        <span class="input-group-addon">编号</span>
+        <input type="text" class="form-control" name="bianhao">
+      </div>
+      <div class="input-group input-group-max">
+        <span class="input-group-addon">产权证</span>
+        <input type="text" class="form-control" name="chanquan">
       </div>
     </div>
 
-    <div class="clearfix">
+    <div class="clearfix" style="width:900px;">
       <div class="input-group">
         <span class="input-group-addon" style="padding:8px;">日期</span>
         <select class="form-control" id="id_datetype" name="dateType">
@@ -315,13 +329,11 @@ $(function(){
         <input type="text" class="form-control" name="lcengStart">
         <input type="text" class="form-control" name="lcengEnd">
       </div>
-      
-
-      <br><br>
-      <div class="input-group input-group-max input-group-mt2">
-        <span class="input-group-addon">产权证</span>
-        <input type="text" class="form-control" name="chanquan">
-      </div><br><br>
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary btn_subnmit">搜索提交</button>
+        <button type="submit" class="btn">清空</button>
+      </div>
+      <br/><br/><br/>
 
       <div class="input-group input-group-select">
         <span class="input-group-addon">发布人</span>
@@ -333,36 +345,35 @@ $(function(){
 
 
   </form>
-  <table class="table TableH">
+ 
+</div>
+<div class="mainer">
+  <table class="table table-hover TableB nobr" >
     <tr>
-      <th class="font_no_br">房源编号</th>
+      <th>房源编号</th>
       <th>类别</th>
       <th>区域</th>
       <th>楼盘名称</th>
-      <th class="font_no_br">室厅卫阳</th>
+      <th>室厅卫阳</th>
       <th>楼层</th>
       <th>面积</th>
       <th>单价</th>
-      <th class="font_no_br">总价</th>
-      <th class="font_no_br">装潢</th>
+      <th>总价</th>
+      <th>装潢</th>
       <th>年代</th>
       <th>发布时间</th>
       <th>联系人</th>
       <th>性质</th>
       <th>状态</th>
-      <th class="font_no_br">房配客</th>
+      <!-- <th>房配客</th> -->
       <th>操作</th>
     </tr>
-  </table>
-</div>
-<div class="mainer">
-  <table class="table table-hover TableB" >
     <tbody id="id_House_list">
     <tr data-hid="${id}">
       <td>${houseNumber}</td>
       <td>${leibie}</td>
       <td>${quyu}</td>
-      <td>${area} ${dhao}#${fhao}</td>
+      <td >${area} ${dhao}#${fhao}</td>
       <td>${hxf}-${hxt}-${hxw}-${hxy}</td>
       <td>${lceng}/${zceng}</td>
       <td>${mianji}</td>
@@ -374,7 +385,7 @@ $(function(){
       <td>${forlxr}</td>
       <td class='runscript'>getEnumText('xingzhi',${xingzhi})</td>
       <td class='runscript'>getEnumText('zhuangtai',${ztai})</td>
-      <td>有</td>
+      <!-- <td>有</td> -->
       <td>
         <a href="#" data-hid="${id}" data-rel="edit">修改</a>
         <a href="##" data-hid="${id}" data-rel="del">删除</a>

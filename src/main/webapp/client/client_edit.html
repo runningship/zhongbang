@@ -64,13 +64,6 @@ function TipErrs(a,b,c){
 }
 function funSubmit(){
 var Thi=$('form');
-    if(!Thi.find('[name=area]').val()){TipErrs('g','房源名称不能为空',Thi.find('[name=area]'));return false}
-    if(!Thi.find('[name=dhao]').val()){TipErrs('g','栋号不能为空',Thi.find('[name=dhao]'));return false}
-    if(!Thi.find('[name=fhao]').val()){TipErrs('g','房号不能为空',Thi.find('[name=fhao]'));return false}
-    if(!Thi.find('[name=lceng]').val()){TipErrs('g','房号不能为空',Thi.find('[name=lceng]'));return false}
-    if(!Thi.find('[name=zceng]').val()){TipErrs('g','房号不能为空',Thi.find('[name=zceng]'));return false}
-    if(!Thi.find('[name=lxr]').val()){TipErrs('g','客户姓名不能为空',Thi.find('[name=lxr]'));return false}
-    if(!Thi.find('[name=tel]').val()){TipErrs('g','客户电话不能为空',Thi.find('[name=tel]'));return false}
     var url=$('form[name=form1]').attr('action');
     $.ajax({
       type: 'POST',
@@ -103,13 +96,14 @@ function withJson(a,b,c){
   if(!c){return false;}
   if(c.split(',').length<=0){return false;}
   var bs=a.find('input[name='+b+']'),
-      cs=c.replace(' ','')
+      cs=c.replace(' ','');
       cs=cs.split(',');
       bs.each(function(index, obj) {
         for(var i=0;i<cs.length;i++){
 //          alert($(obj).val() +'|'+ cs[i])
           if($(obj).val()==cs[i]){
             $(obj).attr('checked', true);
+            return;
           }else{
             $(obj).attr('checked',false);
           }
@@ -122,28 +116,28 @@ $(function(){
     queryOpts=JSON.parse(data);
     buildHtmlWithJsonArray("id_quyu",queryOpts['quyu']);       //区域
     buildHtmlWithJsonArray("id_kehuxingzhi",queryOpts['kehu']);       //客户性质
-    buildHtmlWithJsonArray("id_kehulaiyuan",queryOpts['kehulaiyuan']); //客户来源
-    buildHtmlWithJsonArray("id_fangxing",queryOpts['fangxing']); //客户来源
+    buildHtmlWithJsonArray("id_source",queryOpts['kehulaiyuan']); //客户来源
+    buildHtmlWithJsonArray("id_huxing",queryOpts['fangxing']); //客户来源
     buildHtmlWithJsonArray("id_zhuangxiu",queryOpts['zhuangxiu']);   //装修
     buildHtmlWithJsonArray("id_louxing",queryOpts['louxing']);     //楼型
-    buildHtmlWithJsonArray("id_fukuans",queryOpts['fukuan']);     //楼型
+    buildHtmlWithJsonArray("id_fuyongs",queryOpts['fukuan']);     //楼型
   });
     if(getClientId){
-      $('form[name=form1]').attr('action', '/zb/c/house/update');
+      $('form[name=form1]').attr('action', '/zb/c/client/update');
       //alert($('form[name=form1]').attr('action'))
       $.get('/zb/c/client/get?clientId='+getClientId, function(data) {
         getStr=JSON.parse(data);
         buildHtmlWithJsonArray("id_client_see",[getStr['client']],true);
 /*       alert(getStr['client']['quyu'])*/
         withJson($('#id_kehuxingzhi'),'kehuxingzhi',getStr['client']['zhongyaos']);
-        withJson($('#id_fangxing'),'fangxing',getStr['client']['huxing']);
-        withJson($('#id_kehulaiyuan'),'kehulaiyuan',getStr['client']['source']);
+        withJson($('#id_huxing'),'huxing',getStr['client']['huxing']);
+        withJson($('#id_source'),'source',getStr['client']['source']);
 
         withJson($('#id_quyu'),'quyuas',getStr['client']['quyuas']);
         withJson($('#id_quyu'),'quyuas',getStr['client']['quyuas']);
         withJson($('#id_zhuangxiu'),'zhuangxiu',getStr['client']['zhuangxiu']);
         withJson($('#id_louxing'),'louxing',getStr['client']['louxing']);
-        withJson($('#id_fukuans'),'fukuan',getStr['client']['fuyongs']);
+        withJson($('#id_fuyongs'),'fuyongs',getStr['client']['fuyongs']);
         withJson($('#id_valid'),'valid',getStr['client']['valid']);
 
           $('select').each(function(index,obj){
@@ -166,7 +160,7 @@ $(function(){
 </script>
 <style type="text/css">html, body, .body{overflow-y: auto;}
 .table{ margin-bottom: 0px;}
-table th{ width: 80px; text-align: right;}
+table th{ width: 60px; text-align: right;}
 .pointerevents{pointer-events:none}
 .font_no_br{white-space:nowrap;word-break: keep-all;}
 .w40b{ width: 40%;}
@@ -183,31 +177,31 @@ width: 100%;
 .checklist label{display: inline-block; background-color: #EEE; color:#666;font-weight: normal; margin-bottom: 2px;}
 </style>
 </head>
-<body class="bodyer" id="id_client_see">
-<form class="form" name="form1" method="post" action="/zb/c/house/add" onsubmit="return funSubmit();">
+<body class="bodyer">
+<div id="id_client_see">
+<form class="form" name="form1" method="post" action="/zb/c/client/add" onsubmit="return funSubmit();">
   <input type="hidden" class="form-control" name="id" value="${id}">
-  <input type="hidden" class="form-control" name="deptId" value="${deptId}">
-  <input type="hidden" class="form-control" name="userId" value="${userId}">
-  <input type="hidden" class="form-control" name="djia" value="${djia}">
     <table id="view_archive_table" class="j_tab_th table table-bordered">
       <tbody class="j_tab_tr_hide" style="display: table-row-group; ">
       <tr>
         <th>姓名</th>
         <td style="width:38%;"><input type="text" name="lxra" class="form-control inputW100" value="${lxr}"></td>
-        <th>区域</th>
-        <td style="width:38%;">
-          <ul class="checklist" id="id_quyu">
-            <li><label class="label"><input type="checkbox" name="quyuas" value="${value}">${name}</label>
+        <th>是否有效</th>
+        <td>
+          <ul class="checklist" id="id_valid">
+            <li><label class="label"><input type="checkbox" name="valid" value=""> 所有</label></li>
+            <li><label class="label"><input type="checkbox" name="valid" value="1"> 有效</label></li>
+            <li><label class="label"><input type="checkbox" name="valid" value="0"> 无效</label></li>
           </ul>
         </td>
       </tr>
       <tr>
         <th>电话</th>
         <td><input type="text" data-role="tagsinput" class="tag3" name="tel" value="${tel}" placeholder="Add"></td>
-        <th>装潢</th>
+        <th>客户性质</th>
         <td>
-          <ul class="checklist" id="id_zhuangxiu">
-            <li><label class="label"><input type="checkbox" name="zhuangxiu" value="${value}">${name}</label></li>
+          <ul class="checklist" id="id_kehuxingzhi">
+            <li><label class="label"><input type="checkbox" name="kehuxingzhi" value="${code}"> ${name}</label></li>
           </ul>
         </td>
       </tr>
@@ -221,30 +215,30 @@ width: 100%;
         </td>
       </tr>
       <tr>
-        <th>客户性质</th>
-        <td>
-          <ul class="checklist" id="id_kehuxingzhi">
-            <li><label class="label"><input type="checkbox" name="kehuxingzhi" value="${code}"> ${name}</label></li>
-          </ul>
-        </td>
         <th>楼型</th>
         <td>
           <ul class="checklist" id="id_louxing">
             <li><label class="label"><input type="checkbox" name="louxing" value="${value}"> ${name}</label></li>
           </ul>
         </td>
+        <th>装潢</th>
+        <td>
+          <ul class="checklist" id="id_zhuangxiu">
+            <li><label class="label"><input type="checkbox" name="zhuangxiu" value="${value}">${name}</label></li>
+          </ul>
+        </td>
       </tr>
       <tr>
         <th>户型</th>
         <td>
-          <ul class="checklist" id="id_fangxing">
-            <li><label class="label"><input type="checkbox" name="fangxing" value="${value}">${name}</label></li>
+          <ul class="checklist" id="id_huxing">
+            <li><label class="label"><input type="checkbox" name="huxing" value="${value}">${name}</label></li>
           </ul>
         </td>
-        <th>付款方式</th>
-        <td>
-          <ul class="checklist" id="id_fukuans">
-            <li><label class="label"><input type="checkbox" name="fukuan" value="${value}">${name}</label></li>
+        <th>区域</th>
+        <td style="width:38%;">
+          <ul class="checklist" id="id_quyu">
+            <li><label class="label"><input type="checkbox" name="quyuas" value="${value}">${name}</label></li>
           </ul>
         </td>
       </tr>
@@ -257,16 +251,14 @@ width: 100%;
       <tr>
         <th>客户来源</th>
         <td>
-          <ul class="checklist" id="id_kehulaiyuan">
-            <li><label class="label"><input type="checkbox" name="kehulaiyuan" value="${name}">${name}</label>
+          <ul class="checklist" id="id_source">
+            <li><label class="label"><input type="checkbox" name="source" value="${name}">${name}</label></li>
           </ul> 
         </td>
-        <th>是否有效</th>
+        <th>付款方式</th>
         <td>
-          <ul class="checklist" id="id_valid">
-            <li><label class="label"><input type="checkbox" name="valid" value=""> 所有</label>
-            <li><label class="label"><input type="checkbox" name="valid" value="1"> 有效</label>
-            <li><label class="label"><input type="checkbox" name="valid" value="0"> 无效</label>
+          <ul class="checklist" id="id_fuyongs">
+            <li><label class="label"><input type="checkbox" name="fuyongs" value="${value}">${name}</label></li>
           </ul>
         </td>
       </tr>
@@ -287,5 +279,6 @@ width: 100%;
     </tbody>
     </table>
 </form>
+</div>
 </body>
 </html>

@@ -100,7 +100,6 @@ $(function(){
 <style type="text/css">
   .table{ margin-bottom: 0px;}
   .pointerevents{pointer-events:none}
-  .font_no_br{white-space:nowrap;word-break: keep-all;}
 </style>
 </head>
 <body class="hsee bodyer">
@@ -125,7 +124,7 @@ $(function(){
                 [${leibie}] 编号：${houseNumber}
               </div>
               <div class="row-fluid">
-                ${area} <b class="label label-info">${dhao}#${fhao}</b>
+                ${area} <b style="padding:0px;" class="label label-info">${dhao}#${fhao}</b>
               </div>
               <div class="row-fluid">
                 由 <b>1</b> <b>2</b> <b>3</b> 发布
@@ -201,8 +200,8 @@ $(function(){
     <td width="250" valign="top">
       <div class="input-group">
         <input type="text" class="genjin_text" class="form-control">
-        <span class="input-group-btn">
-          <button class="btn btn-default btn_submit_gj" type="button">提交</button>
+        <span class="input-group-btn" >
+          <button class="btn btn-primary btn_submit_gj" type="button">提交</button>
         </span>
       </div>
       <ul id="id_genjin_see" >

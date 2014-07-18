@@ -16,6 +16,8 @@
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.4"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
 <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
+<script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/zb/js/pagination.js"></script>
 <script type="text/javascript">
 var lngs="117.260429";
 var lats="31.881385";
@@ -32,6 +34,7 @@ function getAreaList(search){
       var getStr=JSON.parse(data);
       dataArr = getStr['page']['data'];
       buildHtmlWithJsonArray("id_House_list",dataArr);
+      Page.setPageInfo(getStr['page']);
     }
   });
 }
@@ -83,6 +86,7 @@ function openEdit(rowIndex){
 $(document).ready(function() {
   onSubmit_Form();
   getAreaList();
+  Page.Init();
 });
 
 </script>
@@ -131,6 +135,6 @@ $(document).ready(function() {
     </tbody>
   </table>
 </div>
-
+<div class="footer foot_page_box" style="position:relative;margin-top:10px;height:55px;"></div>
 </body>
 </html>

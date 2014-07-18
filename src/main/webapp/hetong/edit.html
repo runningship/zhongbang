@@ -31,6 +31,7 @@ function funSubmit(){
     url: url,
     data:formSerialize($('form')),
     success: function(data){
+      art.dialog.close();
       art.dialog.opener.doSearch();
       alert('修改成功');
     }

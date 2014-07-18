@@ -15,7 +15,9 @@
 
 
 window.onload=function(){
-	IM.Init();
+
+	// IM.InitEvent(art.dialog.opener.socket);
+  IM.Init();
 };
 
 
@@ -117,7 +119,7 @@ window.onload=function(){
     <div  class="chat clearfix" style="display:none">
         <div style="position:absolute;left:8px;"><img id="recvAvatar" style="width:30px;height:30px;" src=''/></div>
           <span class="triangle"></span>
-          <div class="article">${msg}</div>
+          <span class="article">${msg}</span>
       </div>
     </span>
     <span id="sendTmp">

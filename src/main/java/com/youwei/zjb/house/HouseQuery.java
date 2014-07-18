@@ -29,4 +29,5 @@ public class HouseQuery extends AbstractQuery{
 	public Integer userId;
 	public Integer isdel = 0;
 	public Integer id;
+	public String area;
 }

@@ -64,7 +64,17 @@ public class IMService {
 		mv.data.put("msg","IM Server closed.");
 		return mv;
 	}
-	
+	@WebMethod
+	public ModelAndView status(){
+		ModelAndView mv = new ModelAndView();
+		JSONArray arr = new JSONArray();
+		for(Integer uid : IMServer.conns.keySet()){
+			User u = dao.get(User.class, uid);
+			arr.add(u.uname);
+		}
+		mv.data.put("onlien users", arr);
+		return mv;
+	}
 	@WebMethod
 	public ModelAndView start(){
 		ModelAndView mv = new ModelAndView();

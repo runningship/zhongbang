@@ -734,6 +734,9 @@ myLib.desktop.deskIcon={
                              })
          //双击图标打开窗口
          .dblclick(function(){
+                            if($(this).attr('ignoredblclick')=="true"){
+                                return;
+                            }
                             var title=$(this).children("div.text").text(),wid=this.id;
                             var href= this.getAttribute("path");
                             myLib.desktop.win.newWin({

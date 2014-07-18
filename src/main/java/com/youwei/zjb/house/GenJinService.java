@@ -104,8 +104,8 @@ public class GenJinService {
 			hql.append(" and bianhao like ?");
 			params.add("%"+query.bianhao+"%");
 		}
-		hql.append(HqlHelper.buildDateSegment("addtime", query.addtimeStart, DateSeparator.After, params));
-		hql.append(HqlHelper.buildDateSegment("addtime", query.addtimeEnd, DateSeparator.Before, params));
+		hql.append(HqlHelper.buildDateSegment("gj.addtime", query.addtimeStart, DateSeparator.After, params));
+		hql.append(HqlHelper.buildDateSegment("gj.addtime", query.addtimeEnd, DateSeparator.Before, params));
 		
 		hql.append(" order by gj.id ");
 		page = service.findPage(page, hql.toString(), true,params.toArray());

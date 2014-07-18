@@ -62,8 +62,13 @@ public class UserService {
 	public ModelAndView initIndex(){
 		ModelAndView mv = new ModelAndView();
 		User user = ThreadSession.getUser();
-		mv.data.put("username", user.uname);
+		try{
+			mv.data.put("username", user.uname);
+		}catch(Exception ex){
+ 			ex.printStackTrace();
+		}
 		mv.data.put("role", user.getRole().title);
+		mv.data.put("userId", user.id);
 		return mv;
 	}
 	

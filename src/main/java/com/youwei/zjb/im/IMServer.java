@@ -26,7 +26,7 @@ import com.youwei.zjb.util.JSONHelper;
 public class IMServer extends WebSocketServer{
 
 	private static IMServer instance =null;
-	private static Map<Integer,WebSocket> conns = new HashMap<Integer,WebSocket>();
+	static Map<Integer,WebSocket> conns = new HashMap<Integer,WebSocket>();
 	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
 	private static InetSocketAddress socket = new InetSocketAddress("localhost", 9099); 
 	private IMServer() throws UnknownHostException {

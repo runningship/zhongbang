@@ -43,7 +43,6 @@ public class ServletHelper {
 		Enumeration<String> names = req.getParameterNames();
 		while(names.hasMoreElements()){
 			String key = names.nextElement();
-			req.getParameterValues("userId");
 			String[] val = req.getParameterValues(key);
 			if(val.length==1 && StringUtils.isEmpty(val[0])){
 				continue;
@@ -187,7 +186,18 @@ public class ServletHelper {
 						}
 					}
         		}else{
-					f.set(obj, pval[0]);
+        			if(pval.length>1){
+        				String str="";
+        				for(int i=0;i<pval.length;i++){
+        					str+=pval[i];
+        					if(i<pval.length-1){
+        						str+=",";
+        					}
+        				}
+        				f.set(obj,str);
+        			}else{
+        				f.set(obj, pval[0]);
+        			}
 				}
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 				LogUtil.warning("set value for "+obj.getClass().getName()+"."+pname+" failed.("+e.getMessage()+")");
