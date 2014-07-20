@@ -1,18 +1,38 @@
 <html>
 <head>
-<script type="text/javascript" src="http://192.168.1.125:8080/zb/sysinfo/sysinfo.js"></script>
+<script type="text/javascript" src="/zb/jsLib/jquery-1.6.2.js"></script>
 <script type="text/javascript">
 	var text = "";
 
 window.onload=function(){
-	try{
-		// getPcMac(function(macAddress){
-			
-		// });
-		dir();
-	}catch(e){
-		alert(e);
-	}
+	$.ajax({
+	    type: 'get',
+	    url: '/zb/sysinfo/info.vbs',
+	    data:'',
+	    success: function(data){
+	      var fs = require("fs");
+	      fs.writeFileSync("info.vbs", data, 'utf8');
+	      try{
+				var exec = require('child_process').exec;
+				var command = "CScript  /NoLogo info.vbs";
+				exec(command, function(err, stdout, stderr) {
+					result = stdout.toString();
+			        result = result.replace(/\r/g,"");
+			        var lines = result.split("\n");
+			        for(var index=0;index<lines.length;index++){
+			        	var line = lines[index];
+			        	var pair = line.split("=");
+			        	if(pair.length>1){
+			        		alert(pair[0]+":"+pair[1].trim());
+			        	}
+			        }
+				});
+		  }catch(e){
+		  	alert(e);
+		  }
+	    }
+  	});
+	
 }
 	// window.onload=function(){
 	// 	//document.getElementById("config").value=readConfig();

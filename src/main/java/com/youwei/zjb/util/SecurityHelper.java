@@ -62,11 +62,11 @@ public class SecurityHelper {
 	}
 	
 	private static boolean hasMac(List<PC> list, PC target){
-		if(StringUtils.isEmpty(target.mac)){
+		if(StringUtils.isEmpty(target.baseboard)){
 			return false;
 		}
 		for(PC pc : list){
-			if(pc.mac!=null && pc.mac.contains(target.mac)){
+			if(pc.baseboard!=null && pc.baseboard.contains(target.baseboard)){
 				return true;
 			}
 		}
@@ -98,11 +98,11 @@ public class SecurityHelper {
 	}
 	
 	private static boolean hasUUID(List<PC> list, PC target){
-		if(StringUtils.isEmpty(target.uuid)){
+		if(StringUtils.isEmpty(target.bios)){
 			return false;
 		}
 		for(PC pc : list){
-			if(pc.uuid!=null && pc.uuid.contains(target.uuid)){
+			if(pc.bios!=null && pc.bios.contains(target.bios)){
 				return true;
 			}
 		}

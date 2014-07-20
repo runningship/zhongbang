@@ -37,7 +37,7 @@ public class PcService {
 			return mv;
 		}
 		
-		if(StringUtils.isEmpty(pc.mac) && StringUtils.isEmpty(pc.cpu) && StringUtils.isEmpty(pc.harddrive) && StringUtils.isEmpty(pc.uuid)){
+		if(StringUtils.isEmpty(pc.baseboard) && StringUtils.isEmpty(pc.cpu) && StringUtils.isEmpty(pc.harddrive) && StringUtils.isEmpty(pc.bios)){
 			mv.data.put("result", "2");
 			mv.data.put("msg", "机器码为空，不能授权，可能是由于您安装的是精简版的操作系统.");
 			return mv;
@@ -51,7 +51,7 @@ public class PcService {
 			return mv;
 		}
 		
-		PC po = dao.getUniqueByParams(PC.class, new String[]{"deptId","mac","cpu","harddrive","uuid"},	new Object[]{pc.deptId,pc.mac,pc.cpu,pc.harddrive,pc.uuid});
+		PC po = dao.getUniqueByParams(PC.class, new String[]{"deptId","baseboard","cpu","harddrive","bios"},	new Object[]{pc.deptId,pc.baseboard,pc.cpu,pc.harddrive,pc.bios});
 		if(po==null){
 			pc.addtime = new Date();
 			pc.lock=0;

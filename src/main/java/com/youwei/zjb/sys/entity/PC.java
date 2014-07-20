@@ -32,14 +32,14 @@ public class PC {
 	
 	public Date addtime;
 	
-	@Column(name="code_ma")
-	public String mac;
+//	@Column(name="code_ma")
+	public String baseboard;
 	
 	public String cpu;
 	
 	public String harddrive;
 	
-	public String uuid;
+	public String bios;
 	
 	@Column(name="llock")
 	public Integer lock;

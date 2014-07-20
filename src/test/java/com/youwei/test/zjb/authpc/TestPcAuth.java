@@ -40,7 +40,7 @@ public class TestPcAuth {
 			Assert.assertEquals(PlatformExceptionType.MachineCodeEmpty, ex.getType());
 		}
 		
-		pc.mac="1111111";
+		pc.baseboard="1111111";
 		
 		try{
 			pas.add(pc);
@@ -58,12 +58,12 @@ public class TestPcAuth {
 	@Test
 	public void testValidatePC(){
 		PC pc = new PC();
-		pc.mac="";
+		pc.baseboard="";
 		Assert.assertFalse(SecurityHelper.validate(pc));
 		pc.deptId=86;
 		Assert.assertFalse(SecurityHelper.validate(pc));
 		
-		pc.mac="e0cb4e9f9aad";
+		pc.baseboard="e0cb4e9f9aad";
 		Assert.assertTrue(SecurityHelper.validate(pc));
 	}
 	
