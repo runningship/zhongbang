@@ -25,10 +25,7 @@ function doSave(){
     url: '/zb/c/user/lizhi/add',
     data:data,
     success: function(data){
-      alert(data);
-    },
-    error:function(data){
-      alert(data.responseText);
+      alert('申请成功');
     }
   });
   return false;

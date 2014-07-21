@@ -16,11 +16,14 @@ import org.bc.web.WebMethod;
 
 import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.PlatformExceptionType;
+import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.Client;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.house.HouseQuery;
 import com.youwei.zjb.house.JiaoYi;
 import com.youwei.zjb.house.entity.House;
+import com.youwei.zjb.sys.OperatorService;
+import com.youwei.zjb.sys.OperatorType;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
 
@@ -28,12 +31,17 @@ import com.youwei.zjb.util.JSONHelper;
 public class ClientService {
 
 	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
+	OperatorService operService = TransactionalServiceHelper.getTransactionalService(OperatorService.class);
+	
 	
 	@WebMethod
 	public ModelAndView add(Client client){
 		ModelAndView mv = new ModelAndView();
 		client.addtime = new Date();
 		dao.saveOrUpdate(client);
+		User user = ThreadSession.getUser();
+		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 添加了编号为["+client.id+"]客源["+client.lxr+"]";
+		operService.add(OperatorType.客源记录, operConts);
 		return mv;
 	}
 	
@@ -59,6 +67,9 @@ public class ClientService {
 		client.valid = po.valid;
 		client.chuzu = po.chuzu;
 		dao.saveOrUpdate(client);
+		User user = ThreadSession.getUser();
+		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 修改了编号为["+client.id+"]客源["+client.lxr+"]";
+		operService.add(OperatorType.客源记录, operConts);
 		return mv;
 	}
 	
@@ -68,6 +79,9 @@ public class ClientService {
 		Client client = dao.get(Client.class, id);
 		if(client!=null){
 			dao.delete(client);
+			User user = ThreadSession.getUser();
+			String operConts = "["+user.Department().namea+"-"+user.uname+ "] 删除了编号为["+client.id+"]客源["+client.lxr+"]";
+			operService.add(OperatorType.客源记录, operConts);
 		}
 		mv.data.put("result", 0);
 		return mv;

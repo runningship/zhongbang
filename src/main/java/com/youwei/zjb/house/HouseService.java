@@ -27,6 +27,8 @@ import com.youwei.zjb.client.KeHuLaiYuan;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.house.entity.Favorite;
 import com.youwei.zjb.house.entity.House;
+import com.youwei.zjb.sys.OperatorService;
+import com.youwei.zjb.sys.OperatorType;
 import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.JSONHelper;
 import com.youwei.zjb.work.PiYue;
@@ -35,6 +37,8 @@ import com.youwei.zjb.work.PiYue;
 public class HouseService {
 
 	CommonDaoService service = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
+	
+	OperatorService operService = TransactionalServiceHelper.getTransactionalService(OperatorService.class);
 	
 	@WebMethod
 	public ModelAndView add(House house){
@@ -50,12 +54,16 @@ public class HouseService {
 			String py = DataHelper.toPinyin(house.quyu);
 			if(StringUtils.isNotEmpty(py) && py.length()>0){
 				house.houseNumber=  py.toUpperCase().charAt(0)+"-" + house.id;
+				service.saveOrUpdate(house);
 			}else{
 				LogUtil.warning("生成房源编号失败,houseId="+house.id);
 			}
 			mv.data.put("msg", "发布成功");
 			mv.data.put("result", 0);
 		}
+		User user = ThreadSession.getUser();
+		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 添加了房源["+house.area+"]";
+		operService.add(OperatorType.房源记录, operConts);
 		return mv;
 	}
 	
@@ -63,10 +71,10 @@ public class HouseService {
 	public ModelAndView update(House house){
 		ModelAndView mv = new ModelAndView();
 		//检查，是否是重复房源.检查条件为,小区名+楼栋号+房号
-		House po = service.getUniqueByParams(House.class, new String[]{"area","dhao","fhao"},new Object[]{house.area,house.dhao,house.fhao});
-		if(po!=null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "小区名+楼栋号+房号 重复");
-		}
+//		House po = service.getUniqueByParams(House.class, new String[]{"area","dhao","fhao"},new Object[]{house.area,house.dhao,house.fhao});
+//		if(po!=null){
+//			throw new GException(PlatformExceptionType.BusinessException, 1, "小区名+楼栋号+房号 重复");
+//		}
 		String py = DataHelper.toPinyin(house.quyu);
 		if(StringUtils.isNotEmpty(py) && py.length()>0){
 			house.houseNumber=  py.toUpperCase().charAt(0)+"-" + house.id;
@@ -74,6 +82,9 @@ public class HouseService {
 			LogUtil.warning("生成房源编号失败,houseId="+house.id);
 		}
 		service.saveOrUpdate(house);
+		User user = ThreadSession.getUser();
+		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 修改了房源["+house.area+"]";
+		operService.add(OperatorType.房源记录, operConts);
 		mv.data.put("msg", "修改成功");
 		mv.data.put("result", 0);
 		return mv;
@@ -87,8 +98,13 @@ public class HouseService {
 			if(po!=null){
 				po.isdel= 1;
 				service.saveOrUpdate(po);
+				
+				User user = ThreadSession.getUser();
+				String operConts = "["+user.Department().namea+"-"+user.uname+ "] 删除了房源["+po.area+"]";
+				operService.add(OperatorType.房源记录, operConts);
 			}
 		}
+		
 		mv.data.put("msg", "删除成功");
 		return mv;
 	}
@@ -216,6 +232,10 @@ public class HouseService {
 		if(StringUtils.isNotEmpty(query.area)){
 			hql.append(" and h.area like ?");
 			params.add("%"+query.area+"%");
+		}
+		if(StringUtils.isNotEmpty(query.houseNumber)){
+			hql.append(" and h.houseNumber like ?");
+			params.add("%"+query.houseNumber+"%");
 		}
 		if(query.id!=null){
 			hql.append(" and h.id = ?");

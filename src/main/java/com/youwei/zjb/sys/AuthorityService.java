@@ -34,6 +34,8 @@ public class AuthorityService {
 
 	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
 	
+	OperatorService operService = TransactionalServiceHelper.getTransactionalService(OperatorService.class);
+	
 	@Transactional
 	@WebMethod
 	public ModelAndView update(int roleId,String authData){
@@ -43,6 +45,10 @@ public class AuthorityService {
 		JSONArray json = JSONArray.fromObject(authData);
 		dao.execute("delete from RoleAuthority where roleId=?", roleId);
 		addChildren(roleId , json);
+		User user = ThreadSession.getUser();
+		Role role = dao.get(Role.class, roleId);
+		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 修改了职务["+role.title+"]的权限";
+		operService.add(OperatorType.权限记录, operConts);
 		return new ModelAndView();
 	}
 	
@@ -52,6 +58,9 @@ public class AuthorityService {
 		role.flag = 1;
 		role.sh = 1;
 		dao.saveOrUpdate(role);
+		User user = ThreadSession.getUser();
+		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 添加了职务["+role.title+"]";
+		operService.add(OperatorType.权限记录, operConts);
 		mv.data.put("msg", "添加成功");
 		return mv;
 	}
@@ -65,6 +74,9 @@ public class AuthorityService {
 			dao.delete(po);
 			dao.execute("update User u set u.roleId=? where u.roleId=?", 0,roleId);
 		}
+		User user = ThreadSession.getUser();
+		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 删除了职务["+po.title+"]";
+		operService.add(OperatorType.权限记录, operConts);
 		return mv;
 	}
 	

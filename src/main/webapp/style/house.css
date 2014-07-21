@@ -47,7 +47,7 @@ table.nobr th,table.nobr td{white-space:nowrap;word-break: keep-all;}
 
 .hmain .mainer{ margin-left: 120px; height: 100%; overflow: hidden;}
 
-.hsee{ height: 460px; min-width:722px; }
+.hsee{ height: 430px; min-width:722px; }
 .hsee td.biaoti{ width:15%; text-align:right; background:#F9F9F9;}
 .hsee .input-group{ width: auto; float: none;}
 .hsee #id_genjin_see{height:360px; overflow:auto; overflow-x: hidden;}

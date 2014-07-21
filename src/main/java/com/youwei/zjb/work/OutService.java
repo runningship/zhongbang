@@ -73,18 +73,33 @@ public class OutService {
 		return mv;
 	}
 	
-	public void piyue(int id, String content){
+	@WebMethod
+	public ModelAndView piyue(int id, String conts , int integral){
 		OutRecord po = dao.get(OutRecord.class, id);
 		if(po==null){
 			throw new GException(PlatformExceptionType.BusinessException, 2, "该记录已不存在");
 		}
 		po.reply=1;
-		po.conts = content;
+		po.conts = conts;
+		po.integral = integral;
 		dao.saveOrUpdate(po);
+		return new ModelAndView();
 	}
 
 	private void addOutBiz(OutRecord out) {
 		dao.saveOrUpdate(out);
+		
+	}
+	
+	@WebMethod
+	public ModelAndView upateOutRecord(int id, String onCont){
+		OutRecord po = dao.get(OutRecord.class, id);
+		if(po==null){
+			throw new GException(PlatformExceptionType.BusinessException, 2, "该记录已不存在");
+		}
+		po.onCont = onCont;
+		dao.saveOrUpdate(po);
+		return new ModelAndView();
 	}
 
 	private void addOutHouse(OutRecord out) {

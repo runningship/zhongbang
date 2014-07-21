@@ -5,7 +5,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.bc.sdak.GException;
 
+import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.SimpDaoTool;
 import com.youwei.zjb.sys.entity.PC;
 
@@ -41,23 +43,31 @@ public class SecurityHelper {
 		}
 	}
 	
-	public static boolean validate(PC pc){
-		List<PC> list = SimpDaoTool.getGlobalCommonDaoService().listByParams(PC.class, new String[]{"deptId"}, new Object[]{pc.deptId});
+	public static boolean validate(PC target){
+		List<PC> list = SimpDaoTool.getGlobalCommonDaoService().listByParams(PC.class, new String[]{"deptId"}, new Object[]{target.deptId});
 		if(list==null){
 			return false;
 		}
-		if(hasMac(list,pc)){
-			return true;
+		for(PC pc : list){
+			if(target.baseboard.equals(pc.baseboard) && target.bios.equals(pc.bios) && target.cpu.equals(pc.cpu) && target.harddrive.equals(pc.harddrive)){
+				if(pc.lock==1){
+					return true;
+				}
+				throw new GException(PlatformExceptionType.BusinessException, "授权审核中...");
+			}
 		}
-		if(hasCPU(list,pc)){
-			return true;
-		}
-		if(hasHarddrive(list,pc)){
-			return true;
-		}
-		if(hasUUID(list,pc)){
-			return true;
-		}
+//		if(hasMac(list,pc)){
+//			return true;
+//		}
+//		if(hasCPU(list,pc)){
+//			return true;
+//		}
+//		if(hasHarddrive(list,pc)){
+//			return true;
+//		}
+//		if(hasUUID(list,pc)){
+//			return true;
+//		}
 		return false;
 	}
 	

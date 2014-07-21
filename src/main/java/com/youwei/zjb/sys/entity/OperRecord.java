@@ -2,7 +2,10 @@ package com.youwei.zjb.sys.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -14,31 +17,21 @@ import javax.persistence.Table;
 public class OperRecord {
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer id;
 	
-	public Integer cid;
-	
-	public Integer qid;
-	
-	public Integer did;
+//	@Column(name="did")
+//	public Integer deptId;
 	
 	public Integer uid;
 	
-	public String uname;
-	
-	public String dname;
-	
-	public String qname;
-	
-	public String cname;
+//	public String uname;
 	
 	public Date addtime;
 	
 	public String ip;
 	
-	public String pcma;
-	
-	public String fenlei;
+	public int type;
 	
 	/**
 	 * 操作内容

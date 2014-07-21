@@ -144,7 +144,7 @@ $(function(){
           <option value="${name}">${name}</option>
         </select>
     </div>
-    <div class="input-group input-group-max">
+    <div class="input-group" style="width:192px;">
       <span class="input-group-addon">房源编号</span>
       <input type="text" class="form-control" name="bianhao">
     </div>
@@ -188,7 +188,7 @@ $(function(){
       <td>${chuzu}</td>
       <td>${bianhao}</td>
       <td>${area}</td>
-      <td><a href="javascript:void(0)" onclick="return dialogs(${houseId});">${conts}</a></td>
+      <td><a href="javascript:void(0)" onclick="return dialogs(${houseId});" style="width:200px; overflow:hidden;">${conts}</a></td>
       <td><a class='runscript' href="javascript:void(0)" onclick="review(${id},this)">getEnumTextByCode(shEnums,${sh})</a> <a href="javascript:void(0)" onclick="deleteGJ(${id})">删除</a></td>
       
     </tr>

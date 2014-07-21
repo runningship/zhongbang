@@ -359,6 +359,11 @@
 			"type":"menu",
 			"url":""
 		},{
+			"name":"xt_czjl_qx",
+			"text":"权限记录",
+			"type":"menu",
+			"url":""
+		},{
 			"name":"xt_czjl_fy",
 			"text":"房源记录",
 			"type":"menu",
@@ -375,10 +380,26 @@
 			"url":""
 		},{
 			"name":"xt_czjl_xt",
-			"text":"系统记录",
+			"text":"后台记录",
 			"type":"menu",
 			"url":""
 		}]
 	}]
-}
-]
+},{
+	"name":"data",
+	"type":"module",
+	"text":"数据权限",
+	"children":[{
+		"name":"data_dept",
+		"text":"分公司",
+		"type":"menu"
+	},{
+		"name":"data_quyu",
+		"text":"区域",
+		"type":"menu"
+	},{
+		"name":"data_all",
+		"text":"总部",
+		"type":"menu"
+	}]
+}]

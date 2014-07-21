@@ -20,6 +20,8 @@ import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.Role;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.sys.OperatorService;
+import com.youwei.zjb.sys.OperatorType;
 import com.youwei.zjb.user.entity.RenShiReview;
 import com.youwei.zjb.user.entity.UserAdjust;
 import com.youwei.zjb.util.HqlHelper;
@@ -29,7 +31,7 @@ import com.youwei.zjb.util.JSONHelper;
 public class UserAdjustService {
 
 	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
-	
+	OperatorService operService = TransactionalServiceHelper.getTransactionalService(OperatorService.class);
 	@WebMethod
 	public ModelAndView init(int adjustId){
 		ModelAndView mv = new ModelAndView();
@@ -138,12 +140,12 @@ public class UserAdjustService {
 		po.sh = 1;
 		dao.saveOrUpdate(po);
 		long count = dao.countHqlResult("from RenShiReview where userid=? and sh=0 and category='"+RenShiReview.Adjust+"' ", po.userId);
+		UserAdjust adjust = dao.get(UserAdjust.class, adjustId);
+		User user = dao.get(User.class, adjust.userId);
 		if(count==0){
-			UserAdjust adjust = dao.get(UserAdjust.class, adjustId);
 			adjust.passTime = new Date();
 			adjust.pass = 1;
 			dao.saveOrUpdate(adjust);
-			User user = dao.get(User.class, adjust.userId);
 			user.roleId = adjust.newRoleId;
 			user.deptId = adjust.newDeptId;
 			dao.saveOrUpdate(user);
@@ -154,6 +156,14 @@ public class UserAdjustService {
 				dao.execute("update Client set uid = ? where uid = ?", adjust.kyTo , adjust.userId);
 			}
 		}
+		User operUser = ThreadSession.getUser();
+		Department oldDept = dao.get(Department.class,adjust.oldDeptId);
+		Department newDept = dao.get(Department.class,adjust.newDeptId);
+		Role oldRole = dao.get(Role.class, adjust.oldRoleId);
+		Role newRole = dao.get(Role.class, adjust.newRoleId);
+		String operConts = "["+operUser.Department().namea+"-"+operUser.uname+ "] 审核通过了用户["+user.Department().namea+"-"+user.uname+"] 从["
+				+oldDept.getParent().namea+"-"+oldDept.namea+"-"+oldRole.title+"]调整到["+newDept.getParent().namea+"-"+newDept.namea+"-"+newRole.title+"]";
+		operService.add(OperatorType.人事记录, operConts);
 		mv.data.put("msg", "审核成功");
 		return new ModelAndView();
 	}

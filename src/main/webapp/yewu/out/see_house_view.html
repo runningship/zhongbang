@@ -12,12 +12,18 @@
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/uploadify/jquery.uploadify.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<link href="/zb/js/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.all.js"> </script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
-
 var data;
 var recordId;
 var category;
+var outHouseStr=['带看','自看','陪看']
 function get(){
   var url='/zb/c/out/get?id='+recordId;
   YW.ajax({
@@ -31,13 +37,48 @@ function get(){
   });
 }
 
+function save(){
+  $('#onCont').val(ue.getContent());
+  var text = $('form[name=textForm]').serialize();
+  YW.ajax({
+    type: 'POST',
+    url: '/zb/c/out/upateOutRecord',
+    data:text,
+    success: function(data){
+      art.dialog.close();
+      alert('保存成功');
+    },
+    error:function(error){
+      var json = JSON.parse(error.responseText);
+      alert(json['msg']);
+    }
+  });
+  return false;
+}
+
+function getContent(){
+  YW.ajax({
+    type: 'get',
+    url: '/zb/c/out/get?id='+recordId,
+    data:'',
+    success: function(result){
+      var json = JSON.parse(result);
+      ue.setContent(json['out']['onCont'] ,false);
+    }
+  });
+}
+
 function fillData(out){
+  var index=out['outHouse'];
+  $('#outHouse').html(outHouseStr[index]);
   $('#outTime').html(out['outTime']);
   $('#backTime').html(out['backTime']);
   $('#clientInfo').html(out['clientInfo']);
   $('#houseInfo').html(out['houseInfo']);
-  $('#conts').html(out['conts']);
-  
+  $('#id').html(out['id']);
+  if(out['reply']==1){
+    $('#submit').css('display','none');
+  }
 }
 $(function(){
   recordId = getParam('recordId');
@@ -46,16 +87,27 @@ $(function(){
     return;
   }
   get();
+
+  $('#id').val(recordId);
+  ue = UE.getEditor('editor');
+  ue.addListener( 'ready', function( editor ) {
+    ue.setHeight(150);
+    getContent();
+  });
 });
 
 </script>
 
 </head>
 <body class="hlist bodyer" style="overflow:auto">
+<form name="textForm">
+<input type="hidden" name="id" id="id" />
+<input type="hidden" name="onCont" id="onCont" />
+</form>
 <span >
     <div id="recordId" >
     <div>
-    <span>看房方式: </span><span id="outHouse" >$</span>
+    <span>看房方式: </span><span id="outHouse" ></span>
   </div>
     <div>
     <span>客户: </span><span id="clientInfo" >$</span>
@@ -66,18 +118,20 @@ $(function(){
     <div>
       <span>外出时间: </span><span id="outTime" ></span>
     </div>
-    <div>
+    <div class="hidden">
       <span>返回时间: </span><span id="backTime" ></span>
     </div>
     </div>
     <div>
-    <span>附件: </span>
-    <span id="content">
-    <div>
-        <a href="/zb/file/download?bizType=${bizType}&recordId=${recordId}&file=${filename}" name="attachment">${filename}</a>
-        </div>
-    </span>
-  </div>
+      <span>看房总结</span>
+    <div style="margin-top:10px;margin-left:10px;">
+    <span id="editor" type="text/plain" style="width:500px;height:150px;"></span>
+    </div>
+    </div>
+    <div id="submit" class="btn-group">
+      <button onclick="save();" class="btn btn-primary ">提交</button>
+    </div>
 </span>
+
 </body>
 </html>

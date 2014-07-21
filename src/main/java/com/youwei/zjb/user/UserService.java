@@ -23,15 +23,16 @@ import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
 import com.youwei.zjb.DateSeparator;
-import com.youwei.zjb.KeyConstants;
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.cache.UserSessionCache;
 import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.Role;
+import com.youwei.zjb.entity.RoleAuthority;
 import com.youwei.zjb.entity.User;
-import com.youwei.zjb.oa.entity.NoticeClass;
 import com.youwei.zjb.oa.entity.NoticeReceiver;
+import com.youwei.zjb.sys.OperatorService;
+import com.youwei.zjb.sys.OperatorType;
 import com.youwei.zjb.sys.entity.PC;
 import com.youwei.zjb.user.entity.RenShiReview;
 import com.youwei.zjb.util.DataHelper;
@@ -44,11 +45,33 @@ public class UserService {
 
 	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
 	
+	OperatorService operService = TransactionalServiceHelper.getTransactionalService(OperatorService.class);
+	/**
+	 * 3级联动下拉框
+	 * @return
+	 */
 	@WebMethod
 	public ModelAndView getUserTree(){
 		ModelAndView mv = new ModelAndView();
-		String hql = "select child.namea as cname,parent.namea as pname ,child.id as did ,child.fid as qid ,u.uname as user ,u.id as userId ,u.hunyin as hunyin "+
-					"from Department child,Department parent , User u where child.fid = parent.id and child.id=u.deptId and u.flag <> 1  ";
+		User user = ThreadSession.getUser();
+		String code = "";
+		if(user!=null){
+			List<RoleAuthority> authorities = user.getRole().Authorities();
+			code = user.orgpath;
+			for(RoleAuthority ra : authorities){
+				if("data_dept".equals(ra.name)){
+					code = user.Department().path;
+				}
+				if("data_quyu".equals(ra.name)){
+					code = String.valueOf(user.Department().getParent().path);
+				}
+				if("data_all".equals(ra.name)){
+					code = "";
+				}
+			}
+		}
+		String hql = "select child.namea as cname,parent.namea as pname ,child.id as did ,child.fid as qid ,u.uname as user ,u.id as userId "+
+					"from Department child,Department parent , User u where child.fid = parent.id and child.id=u.deptId and u.flag <> 1  and u.orgpath like '"+code+"%'";
 		List<Map> users = dao.listAsMap(hql);
 		Map<String, JSONArray> quyus = groupByQuyu(users);
 		Map<String, JSONArray> depts = groupByDeptId(users);
@@ -72,6 +95,11 @@ public class UserService {
 		return mv;
 	}
 	
+	/**
+	 * 树状选人控件
+	 * @param noticeId
+	 * @return
+	 */
 	@WebMethod
 	public ModelAndView getUserTree2(int noticeId){
 		ModelAndView mv = new ModelAndView();
@@ -187,8 +215,10 @@ public class UserService {
 			review.userId = user.id;
 			dao.saveOrUpdate(review);
 		}
+		User operUser = ThreadSession.getUser();
+		String operConts = "["+operUser.Department().namea+"-"+operUser.uname+ "] 添加了用户["+user.Department().namea+"-"+user.uname+"]";
+		operService.add(OperatorType.人事记录, operConts);
 		mv.data.put("msg", "添加用户成功");
-		
 		return mv;
 	}
 	
@@ -314,13 +344,9 @@ public class UserService {
 		}
 		mv.data.put("result", "0");
 		mv.data.put("msg", "登录成功");
-		HttpServletRequest req = ThreadSession.getHttpServletRequest();
-		String ip = req.getHeader("x-forwarded-for");
-		if (ip == null) {
-			ip = req.getRemoteAddr();
-		}
-		UserSessionCache.putSession(ThreadSession.getHttpServletRequest().getSession().getId(), user.id, ip);
-//		ThreadSession.getHttpServletRequest().getSession().setAttribute(KeyConstants.Session_User, po);
+		UserSessionCache.putSession(ThreadSession.getHttpServletRequest().getSession().getId(), user.id, ThreadSession.getIp());
+		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 登录成功";
+		operService.add(OperatorType.登录记录, operConts);
 		return mv;
 	}
 	

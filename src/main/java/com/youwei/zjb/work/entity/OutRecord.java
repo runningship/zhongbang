@@ -39,6 +39,9 @@ public class OutRecord {
 	 */
 	public String outCont;
 	
+	/**
+	 * 外出总结
+	 */
 	public String onCont;
 	
 	/**

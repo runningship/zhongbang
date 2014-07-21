@@ -23,7 +23,7 @@
 $(document).ready(function(){
     $(document).on('click', '.aNavBtn', function(event) {
         var aHref=$(this).attr( 'href');
-        $('iframe').attr('src',aHref);
+        $('#renshi_frame').attr('src',aHref);
         return false;
     });
     $('.sider').find('a').eq(0).click();
@@ -35,27 +35,27 @@ $(document).ready(function(){
         <div class="sider">
             <dl auth="rs_users" class="sidedl">
                 <dt>人员列表</dt>
-                <dd auth="rs_users_list" ><a class="aNavBtn" href="user_list.html"  target="house_iframe" >人员列表</a></dd>
+                <dd auth="rs_users_list" ><a class="aNavBtn" href="user_list.html"  target="renshi_frame" >人员列表</a></dd>
             </dl>
             <dl auth="rs_rz" class="sidedl">
                 <dt>入职登记</dt>
-                <dd auth="rs_rz_add" ><a class="aNavBtn" href="ruzhi_add.html"  target="house_iframe" >登记提交</a></dd>
-                <dd auth="rs_rz_list" ><a class="aNavBtn" href="ruzhi_list.html"  target="house_iframe" >登记审核</a></dd>
+                <dd auth="rs_rz_add" ><a class="aNavBtn" href="ruzhi_add.html"  target="renshi_frame" >登记提交</a></dd>
+                <dd auth="rs_rz_list" ><a class="aNavBtn" href="ruzhi_list.html"  target="renshi_frame" >登记审核</a></dd>
             </dl>
             <dl auth="rs_zwtz" class="sidedl">
                 <dt>职位调整</dt>
-                <dd auth="rs_zwtz_add" ><a class="aNavBtn" href="zwtz_add.html"  target="house_iframe" >申请调整</a></dd>
-                <dd auth="rs_zwtz_list" ><a class="aNavBtn" href="zwtz_list.html"  target="house_iframe" >待审核审核</a></dd>
+                <dd auth="rs_zwtz_add" ><a class="aNavBtn" href="zwtz_add.html"  target="renshi_frame" >申请调整</a></dd>
+                <dd auth="rs_zwtz_list" ><a class="aNavBtn" href="zwtz_list.html"  target="renshi_frame" >待审核审核</a></dd>
             </dl>
             <dl auth="rs_lizhi" class="sidedl">
                 <dt>离职登记</dt>
-                <dd auth="rs_lizhi_add" ><a class="aNavBtn" href="lizhi_add.html"  target="house_iframe" >离职申请</a></dd>
-                <dd auth="rs_lzsq_list" ><a class="aNavBtn" href="lzsq_list.html"  target="house_iframe" >待审核</a></dd>
-                <dd auth="rs_lizhi_list" ><a class="aNavBtn" href="lizhi_list.html"  target="house_iframe" >已离职人员</a></dd>
+                <dd auth="rs_lizhi_add" ><a class="aNavBtn" href="lizhi_add.html"  target="renshi_frame" >离职申请</a></dd>
+                <dd auth="rs_lzsq_list" ><a class="aNavBtn" href="lzsq_list.html"  target="renshi_frame" >待审核</a></dd>
+                <dd auth="rs_lizhi_list" ><a class="aNavBtn" href="lizhi_list.html"  target="renshi_frame" >已离职人员</a></dd>
             </dl>
         </div>
         <div class="mainer">
-            <iframe src="http://www.baidu.com/" id="house_iframe" name="house_iframe" width="100%" height="100%" frameborder="0"></iframe>
+            <iframe src="" id="renshi_frame" name="renshi_frame" width="100%" height="100%" frameborder="0"></iframe>
         </div>
     </div>
 </body>

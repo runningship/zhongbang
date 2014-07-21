@@ -121,11 +121,12 @@ $(function(){
   .font_no_br{white-space:nowrap;word-break: keep-all;}
   .w40b{ width: 40%;}
   .w160px{ width: 160px;}
- .hadd  .colspan2{ width: 300px;}
+ .hadd  .colspan2{ width: 340px;}
  .hadd{ height: auto;}
 </style>
 </head>
-<body class="hadd bodyer" id="id_house_see">
+<body class="hadd bodyer">
+<div id="id_house_see">
 <form name="form1" method="post" action="/zb/c/house/add" onsubmit="return funSubmit();">
   <input type="hidden" class="form-control" name="id" value="${id}">
   <input type="hidden" class="form-control" name="deptId" value="${deptId}">
@@ -352,5 +353,6 @@ $(function(){
       <button onclick="submit" class="btn btn-primary ">提交</button>
     </div>
 </form>
+</div>
 </body>
 </html>

@@ -30,4 +30,5 @@ public class HouseQuery extends AbstractQuery{
 	public Integer isdel = 0;
 	public Integer id;
 	public String area;
+	public String houseNumber;
 }

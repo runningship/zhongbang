@@ -74,18 +74,23 @@ function getEnumText(category,code){
     }
   }
 }
-
+var dialog_see;
 function dialogs(id){
-    art.dialog.open('house_see.html?hid='+id,{
-      id:'SeeHouse'+id,
-      title:'查看房源详情'
+//  if(dialog_see){art.dialog.list['SeeHouse'].close();}
+    dialog_see=art.dialog.open('house_see.html?hid='+id,{
+      id:'SeeHouse',
+      title:'查看房源详情',
+      height:430,
+      width:910
     })
 }
 
 function edit(id){
     art.dialog.open('house_add.html?hid='+id,{
-      id:'SeeHouse'+id,
-      title:'查看房源详情'
+      id:'EditHouse',
+      title:'查看房源详情',
+      width:910,
+      height:370
     })
 }
 
@@ -132,7 +137,13 @@ $(function(){
       $(obj).val("");
     })
   });
-
+    $('button').on('click', '.btn', function(event) {
+      var Thi=$(this),
+      ThiType=Thi.data('type');
+      if(ThiType=='qingkong'){
+        window.location.href='house_list.html?nav='+getParam('nav')
+      }
+    });
   $('#id_House_list').on('click', 'a', function(event) {
     var Thi=$(this),
     rel=Thi.data('rel'),
@@ -261,8 +272,8 @@ $(function(){
         </select>
       </div>
       <div class="input-group input-group-max">
-        <span class="input-group-addon">智能</span>
-        <input type="text" class="form-control" name="">
+        <span class="input-group-addon">楼盘</span>
+        <input type="text" class="form-control" name="area">
       </div>
     </div>
 
@@ -297,7 +308,7 @@ $(function(){
       </div>
       <div class="input-group" style="width:192px;">
         <span class="input-group-addon">编号</span>
-        <input type="text" class="form-control" name="bianhao">
+        <input type="text" class="form-control" name="houseNumber">
       </div>
       <div class="input-group input-group-max">
         <span class="input-group-addon">产权证</span>
@@ -331,7 +342,7 @@ $(function(){
       </div>
       <div class="btn-group">
         <button type="submit" class="btn btn-primary btn_subnmit">搜索提交</button>
-        <button type="submit" class="btn">清空</button>
+        <button type="button" class="btn" data-type="qingkong" onclick="window.location.href='house_list.html?nav='+getParam('nav')">清空</button>
       </div>
       <br/><br/><br/>
 

@@ -1,6 +1,7 @@
 package com.youwei.zjb;
 
 import com.youwei.zjb.entity.User;
+
 import javax.servlet.http.HttpServletRequest;
 public class ThreadSession {
 
@@ -25,5 +26,14 @@ public class ThreadSession {
     
     public static void setHttpServletRequest(HttpServletRequest request){
     	HttpServletRequest.set(request);
+    }
+    
+    public static String getIp(){
+    	HttpServletRequest req = ThreadSession.getHttpServletRequest();
+    	String ip = req.getHeader("x-forwarded-for");
+		if (ip == null) {
+			ip = req.getRemoteAddr();
+		}
+		return ip;
     }
 }

@@ -9,9 +9,12 @@ import org.bc.web.ModelAndView;
 import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
+import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.Role;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.sys.OperatorService;
+import com.youwei.zjb.sys.OperatorType;
 import com.youwei.zjb.user.entity.RenShiReview;
 import com.youwei.zjb.util.JSONHelper;
 
@@ -19,7 +22,7 @@ import com.youwei.zjb.util.JSONHelper;
 public class RuZhiService {
 
 	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
-	
+	OperatorService operService = TransactionalServiceHelper.getTransactionalService(OperatorService.class);
 	@WebMethod
 	public ModelAndView init(int userId){
 		ModelAndView mv = new ModelAndView();
@@ -49,6 +52,10 @@ public class RuZhiService {
 			user.sh=1;
 			dao.saveOrUpdate(user);
 		}
+		User operUser = ThreadSession.getUser();
+		User rzUser = dao.get(User.class, po.userId);
+		String operConts = "["+operUser.Department().namea+"-"+operUser.uname+ "] 审核通过了["+rzUser.Department().namea+"-"+rzUser.uname+"]的入职申请";
+		operService.add(OperatorType.人事记录, operConts);
 		mv.data.put("msg", "审批成功");
 		return mv;
 	}

@@ -18,6 +18,8 @@ import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.Role;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.sys.OperatorService;
+import com.youwei.zjb.sys.OperatorType;
 import com.youwei.zjb.user.entity.RenShiReview;
 import com.youwei.zjb.user.entity.UserAdjust;
 import com.youwei.zjb.user.entity.UserQuit;
@@ -27,7 +29,7 @@ import com.youwei.zjb.util.JSONHelper;
 public class UserQuitService {
 
 	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
-	
+	OperatorService operService = TransactionalServiceHelper.getTransactionalService(OperatorService.class);
 	@WebMethod
 	public ModelAndView init(int lizhiId){
 		ModelAndView mv = new ModelAndView();
@@ -132,8 +134,9 @@ public class UserQuitService {
 		po.sh = 1;
 		dao.saveOrUpdate(po);
 		long count = dao.countHqlResult("from RenShiReview where userid=? and sh=0 and category='quit' ", po.userId);
+		UserQuit uq = dao.get(UserQuit.class, lizhiId);
+		User user = dao.get(User.class, po.userId);
 		if(count==0){
-			UserQuit uq = dao.get(UserQuit.class, lizhiId);
 			uq.passTime = new Date();
 			uq.pass = 1;
 			dao.saveOrUpdate(uq);
@@ -143,11 +146,13 @@ public class UserQuitService {
 			if(uq.kyTo!=null){
 				dao.execute("update Client set uid = ? where uid = ?", uq.kyTo , po.userId);
 			}
-			User user = dao.get(User.class, po.userId);
 			user.flag = 1;
 			user.lzsj = uq.leaveTime;
 			dao.saveOrUpdate(user);
 		}
+		User operUser = ThreadSession.getUser();
+		String operConts = "["+operUser.Department().namea+"-"+operUser.uname+ "] 审核通过了用户["+user.Department().namea+"-"+user.uname+"] 的离职申请";
+		operService.add(OperatorType.人事记录, operConts);
 		return new ModelAndView();
 	}
 }

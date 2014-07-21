@@ -100,6 +100,8 @@ $(function(){
 <style type="text/css">
   .table{ margin-bottom: 0px;}
   .pointerevents{pointer-events:none}
+  
+  .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td { font-weight: bold;}
 </style>
 </head>
 <body class="hsee bodyer">
@@ -197,7 +199,7 @@ $(function(){
   </table>
     </span>
     </td>
-    <td width="250" valign="top">
+    <td width="250" style="vertical-align:top">
       <div class="input-group">
         <input type="text" class="genjin_text" class="form-control">
         <span class="input-group-btn" >
@@ -209,6 +211,7 @@ $(function(){
       </ul>
     </td>
   </tr>
+  <tr><td></td></tr>
 </table>
 </body>
 </html>

@@ -33,13 +33,13 @@ public class PC {
 	public Date addtime;
 	
 //	@Column(name="code_ma")
-	public String baseboard;
+	public String baseboard="";
 	
-	public String cpu;
+	public String cpu="";
 	
-	public String harddrive;
+	public String harddrive="";
 	
-	public String bios;
+	public String bios="";
 	
 	@Column(name="llock")
 	public Integer lock;

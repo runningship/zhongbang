@@ -74,7 +74,7 @@ public class PcService {
 	@WebMethod
 	public ModelAndView list(Page<Map> page,PCQuery query){
 		ModelAndView mv = new ModelAndView();
-		StringBuilder hql = new StringBuilder("select pc.id as id, pc.pcname as pcname, pc.addtime as addtime, pc.mac as mac, pc.cpu as cpu, pc.harddrive as harddrive, pc.uuid as uuid,"
+		StringBuilder hql = new StringBuilder("select pc.id as id, pc.pcname as pcname, pc.addtime as addtime, pc.bios as bios, pc.cpu as cpu, pc.harddrive as harddrive, pc.baseboard as baseboard,"
 				+ " pc.lock as lock, pc.beizhu as beizhu,d.path as xpath,d.namea as deptName,q.namea as quyu from PC pc, Department d , Department q  where pc.deptId=d.id and d.fid=q.id");
 		List<Object> params = new ArrayList<Object>();
 //		if(query.deptId!=null){

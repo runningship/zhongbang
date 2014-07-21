@@ -40,14 +40,25 @@ function onSubmit_Form(){
   });
 }
 
+
 function openView(id){
-  art.dialog.open('see_house_view.html?recordId='+id,{
+    art.dialog.open('see_house_view.html?recordId='+id,{
       padding:0,
       resize:true,
       lock:1,
-      height:600,
-      width:1080
-  });
+      height:450,
+      width:650
+    })
+}
+
+function openPiyue(id){
+    art.dialog.open('see_house_piyue.html?recordId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:550,
+      width:650
+    })
 }
 
 function openAdd(){
@@ -89,7 +100,6 @@ function deleteOut(id){
   });
   
 }
-
 
 $(function(){
   onSubmit_Form();
@@ -150,8 +160,8 @@ $(function(){
     </form>
 </div>
 <div class="mainer" style="position:relative;width:100%">
-  <table class="table table-hover .table_bodyer" >
-    <thead>
+  <table class="table table-hover TableB" >
+  <thead>
       <th>区域</th>
       <th>分公司</th>
       <th>业务员</th>
@@ -171,7 +181,7 @@ $(function(){
       <td><div class="div1">${house}</div></td>
       <td>${outTime}</td>
       <td>${backTime}</td>
-      <td><a class="runscript">getEnumTextByCode(queryOpts['piyue'],${reply})</a></td>
+      <td><a onclick="openPiyue(${id})" href="javascript:void(0)" class="runscript">getEnumTextByCode(queryOpts['piyue'],${reply})</a></td>
       <td><a onclick="openView(${id})" href="javascrip:void(0)" >查看</a> <a href="javascript:void(0)" onclick="deleteOut(${id})">删除</a></td>
       
     </tr>
