@@ -1,0 +1,57 @@
+html,body,.body{ height: 100%; width: 100%; }
+body{font:12px "microsoft yahei",Arial,Verdana,Tahoma,"微软雅黑";}
+
+br{ 
+display:inline; line-height:11px; 
+}
+
+a{text-decoration:none;}
+a:hover{text-decoration:none;}
+.miniwidth{white-space:nowrap;word-break: keep-all; text-align:center;}
+table.nobr th,table.nobr td{white-space:nowrap;word-break: keep-all;}
+
+.dropdown-menu label{ padding: 0 10px; display: block;}
+.dropdown-menu label:hover{ background: #EEE;}
+.dropdown-menu input[type="checkbox"]{vertical-align: text-top;}
+.input-group input.form-control{width: 100%;}
+.input-group,.btn-group{float: left; margin-left: 10px;}
+.input-group{ width: 160px;}
+.input-group-max{ width: 260px;}
+.input-group-min{ width: 120px;}
+.input-group-addon:not(:first-child):not(:last-child), .input-group-btn:not(:first-child):not(:last-child), .input-group .form-control:not(:first-child):not(:last-child){border-bottom-right-radius: 4px;border-top-right-radius: 4px;}
+.input-group-mt2{ margin-top: -8px;}
+.input-group-mt3{ margin-top: -16px;}
+.input-group-select{ width: 504px;}
+.input-group.input-group-select select{ width: 33%;}
+.input-group.input-group-select select.form-control:not(:first-child):not(:last-child){border-radius: 0px; border-right: none;}
+.input-group select.form-control{ padding: 6px 6px}
+.input-group select.form-control option{ font-weight: bold;}
+.hlist table.table>tbody>tr>td{ padding-left: 8; padding-right: 0;}
+.clearfix{ padding-bottom: 5px;}
+
+.bodyer{ position: relative; min-width: 900px;}
+.bodyer .header{ /**/position: absolute; top: 0; left: 0; right: 0; z-index: 9; padding: 10px 0 0 0;}
+.bodyer .mainer{ /**/position: absolute; top: 0; left: 0; right: 0; bottom: 44px;z-index: 1; overflow: hidden;overflow-y: auto; overflow-x: auto;}
+.bodyer .footer{ /**/position: absolute; left: 0; right: 0; bottom: 0; z-index: 8; height:44px; }
+.bodyer .footer .btn-group{ padding-top: 5px;}
+
+.hlist .input-group-max{ width: 240px;}
+
+.hmain .sider{ float: left; width: 120px; border-right: 1px solid #EEE;height: 100%;background-color: #ececec; overflow-y: auto;}
+.hmain .sidedl{ text-align: center; color: #555; margin: 0;}
+.hmain .sidedl dt{background: #FFF;color: #203f61;text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2); padding: 3px 0;}
+.hmain .sidedl dt div{ text-align: center; padding: 6px 0;}
+.hmain .sidedl dd{background-color: #ececec;border-bottom: 1px solid #dcdcdc;border-top: 1px solid #fff;color: 727272;text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.8);}
+.hmain .sidedl dd a{display: block; padding: 12px;}
+.hmain .sidedl dd a.acurr{ background-color: #4d7fb8; color: #FFF;}
+
+.hmain .mainer{ margin-left: 120px; height: 100%; overflow: hidden;}
+
+.hsee{ height: 460px; min-width:722px; background-color: #09F }
+.hsee td.biaoti{ width:15%; text-align:right; background:#F9F9F9;}
+.hsee .input-group{ width: auto; float: none;}
+.hsee #id_genjin_see{height:360px; overflow:auto; overflow-x: hidden;}
+.hsee #id_genjin_see li{ border-bottom: 1px solid #EEE; padding: 8px;}
+
+.hadd .input-group{ width: auto;}
+.hadd{ width: 800px; height: 310px;}

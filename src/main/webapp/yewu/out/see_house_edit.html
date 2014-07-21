@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>请假登记</title>
+<link rel="stylesheet" href="/zb/style/css.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/style/house.css">
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/uploadify/jquery.uploadify.js"></script>
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<link href="/zb/js/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.all.js"> </script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+var recordId;
+var ue;
+function save(){
+  $('#conta').val(ue.getContent());
+  var text = $('form[name=textForm]').serialize();
+  YW.ajax({
+    type: 'POST',
+    url: '/zb/c/journal/update',
+    data:text,
+    success: function(data){
+      alert('保存成功');
+      initFileUpload();
+    },
+    error:function(error){
+      var json = JSON.parse(error.responseText);
+      alert(json['msg']);
+    }
+  });
+  return false;
+}
+
+function initFileUpload(){
+  $('#file_upload').uploadify({
+      'swf'      : '/zb/js/uploadify/uploadify.swf',
+      'uploader' : '/zb/file/upload?bizType=journal&recordId='+recordId,
+      'buttonText': '上传附件',
+      'removeTimeout': 0.1,
+      'fileSizeLimit' : '5MB',
+      'onUploadError' : function(file, errorCode, errorMsg, errorString){
+          console.log('The file ' + file.name + ' could not be uploaded: ' + errorString);
+      },
+      'onUploadComplete':function(file){
+          console.log('finish:'+file);
+          getAttachList();
+      },
+      'onUploadSuccess' : function(file, data, response) {
+        var json = JSON.parse(data);
+        if(json['result']!=0){
+          $('#' + file.id).find('.data').html('-文件上传失败,'+json['msg']);
+          // console('The file ' + file.name + ' was successfully uploaded with a response of ' + response + ':' + data);
+        }
+      },
+      'onQueueComplete' : function(queueData) {
+        console.log(queueData);
+      }
+      // Put your options here
+  });
+}
+
+function getAttachList(){
+  YW.ajax({
+    type: 'get',
+    url: '/zb/c/attachment/list?bizType=journal&recordId='+recordId,
+    data:'',
+    success: function(result){
+      var data = JSON.parse(result)['data'];
+      buildHtmlWithJsonArray("attachList",data);
+    }
+  });
+}
+
+function deleteAttach(id){
+  YW.ajax({
+    type: 'get',
+    url: '/zb/c/attachment/delete?id='+id,
+    data:'',
+    success: function(result){
+      getAttachList();
+    }
+  });
+}
+function getContent(){
+  YW.ajax({
+    type: 'get',
+    url: '/zb/c/journal/get?id='+recordId,
+    data:'',
+    success: function(result){
+      var json = JSON.parse(result);
+      $('#title').val(json['journal']['title']);
+      ue.setContent(json['journal']['conta'] ,false);
+      initFileUpload();
+      getAttachList();
+    }
+  });
+}
+$(function(){
+  var category = getParam('category');
+  if(category==null || category==""){
+    alert("未指明的分类");
+  }
+  $('#category').val(category);
+  recordId = getParam('recordId');
+  if(recordId==null || recordId==""){
+    alert("加载数据失败");
+    return;
+  }
+
+  $('#id').val(recordId);
+  
+  ue = UE.getEditor('editor');
+  ue.addListener( 'ready', function( editor ) {
+    ue.setHeight(350);
+    getContent();
+  });
+  // getContent();
+});
+
+</script>
+</head>
+<body class="hlist bodyer" style="overflow:auto">
+  <form name="textForm">
+    <div>
+      <span>标题</span><input type="text" id="title" name="title" />
+    </div>
+    <input id="conta" name="conta" type="hidden" />
+    <input type="hidden" name="category" id="category" />
+    <input type="hidden" name="id" id="id" />
+  </form>
+   <div style="margin-top:10px;margin-left:10px;">
+    <span id="editor" type="text/plain" style="width:1024px;height:500px;"></span>
+  </div>
+    <button onclick="save();" class="btn btn-primary " style="margin-left:10px;">提交</button>
+  <br/>
+<div>
+    <input id="file_upload" name="file_upload" style="display:none">
+</div>
+<div id="attachList">
+  <span style="display:none">
+    <div>
+      <a target="_blank" href="/zb/file/download?bizType=${bizType}&recordId=${recordId}&file=${filename}">${filename}</a> <a href="javascript:void(0)" onclick="deleteAttach(${id})">删除</a>
+    </div>
+  </span>
+</div>
+</body>
+</html>
