@@ -94,6 +94,16 @@ function edit(id){
     })
 }
 
+function openHouseXingzhi(id){
+  art.dialog.open('xingzhi_edit.html?hid='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:300,
+      width:300
+  })
+}
+
 function setDateSec(select){
   if (select.value=="") {
     $('#idTimes').val("");
@@ -267,7 +277,7 @@ $(function(){
       </div>
       <div class="input-group input-group-min">
         <span class="input-group-addon">交易</span>
-        <select class="form-control " name="jiaoyi" id="id_jiaoyi">
+        <select class="form-control " name="jiaoyis" id="id_jiaoyi">
           <option value="${name}">${name}</option>
         </select>
       </div>
@@ -291,7 +301,7 @@ $(function(){
           楼型<span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" id="id_louxing">
-          <li><label><input type="checkbox" name="louxing" value="${name}"> ${name}</label></li>
+          <li><label><input type="checkbox" name="louxing" value="${name}" /> ${name}</label></li>
         </ul>
       </div>
       <div class="input-group input-group-min">
@@ -373,8 +383,8 @@ $(function(){
       <th>装潢</th>
       <th>年代</th>
       <th>发布时间</th>
-      <th>联系人</th>
-      <th>性质</th>
+      <th>发布人</th>
+      <th auth="fy_list_xingzhi">性质</th>
       <th>状态</th>
       <!-- <th>房配客</th> -->
       <th>操作</th>
@@ -394,7 +404,7 @@ $(function(){
       <td>${dateyear}</td>
       <td>${dateadd}</td>
       <td>${forlxr}</td>
-      <td class='runscript'>getEnumText('xingzhi',${xingzhi})</td>
+      <td auth="fy_list_xingzhi" ><a href="javascript:void(0)" onclick="openHouseXingzhi(${id})"><span class='runscript'>getEnumText('xingzhi',${xingzhi})</span></a></td>
       <td class='runscript'>getEnumText('zhuangtai',${ztai})</td>
       <!-- <td>有</td> -->
       <td>

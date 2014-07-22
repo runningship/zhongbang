@@ -344,6 +344,7 @@ public class UserService {
 		}
 		mv.data.put("result", "0");
 		mv.data.put("msg", "登录成功");
+		ThreadSession.setUser(user);
 		UserSessionCache.putSession(ThreadSession.getHttpServletRequest().getSession().getId(), user.id, ThreadSession.getIp());
 		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 登录成功";
 		operService.add(OperatorType.登录记录, operConts);

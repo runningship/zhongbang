@@ -19,7 +19,6 @@ var lngs="",
     lats="",
     areas = "",
     contall = "";
-  if(areaId){formAction='update';getArea();}else{formAction='add';}
   lngs="117.260429",
   lats="31.881385",
   areas = "华府俊园",
@@ -57,67 +56,29 @@ function getArea(){
     success: function(data){
       var getAreas=JSON.parse(data);
       if(getAreas["area"]){
-        buildHtmlWithJsonArray("arealist",[getAreas["area"]],true);
+        //buildHtmlWithJsonArray("arealist",[getAreas["area"]],true);
+        fillData(getAreas["area"]);
+
+        areas=getAreas["area"]['name']
+        lngs=getAreas["area"]['maplng']
+        lats=getAreas["area"]['maplat']
+        contall=getAreas["area"]['address'] +'<br>'
+
+        initMap();//创建和初始化地图
       }
     }
   })
 
 }
 
-$(function(){
-    if(areaId){}else{
-      $('#arealist').find('input').val('')
-    }
-    onSubmit_Form();
-});
 
-</script>
-<style type="text/css">
-  #mapIn{position:absolute;right:12px;top:50px;height:90%;background-color:white;}
-  .input-group, .btn-group {float: none;margin-bottom: 5px;}
-  #mapDiv{ height: 100%; position: relative;}
-  #map{ height: 100%;}
-  #info{ position: absolute; top: 10px; right: 10px; z-index: 9999;}
-</style>
-</head>
-<body>
-  <div id="mapDiv">
-    <div id="map"></div>
-    <div id="mapIn info" style="position: absolute; top: 10px; right: 10px; z-index: 9999;">
-    <form role="form" name="form1" id="arealist">
-    <span>
-      <input type="hidden" class="form-control" name="id" value="${id}">
-      <div class="input-group input-group-max">
-        <span class="input-group-addon">区域</span>
-        <input type="text" class="form-control" name="quyu" value="${quyu}">
-      </div>
-      <div class="input-group input-group-max">
-        <span class="input-group-addon">楼盘</span>
-        <input type="text" class="form-control" name="name" value="${name}">
-      </div>
-      <div class="input-group input-group-max">
-        <span class="input-group-addon">地址</span>
-        <input type="text" class="form-control" name="address" value="${address}">
-      </div>
-      <div class="input-group input-group-max">
-        <span class="input-group-addon">经度</span>
-        <input type="text" class="form-control" name="maplat" id="lat" value="${maplat}">
-      </div>
-      <div class="input-group input-group-max">
-        <span class="input-group-addon">维度</span>
-        <input type="text" class="form-control" name="maplng" id="lng" value="${maplng}">
-      </div>
-      <div class="btn-group input-group-max">
-        <button type="submit" class="btn btn-primary btn-block btn_submit">保存</button>
-      </div>
-      </span>
-    </form>
-    </div>
-  </div>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.4"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
-<link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
-<script type="text/javascript">
+
+
+
+
+
+
+
 
 //创建和初始化地图函数：
 function initMap(){
@@ -194,7 +155,74 @@ function other(){
   
 }
   
-    initMap();//创建和初始化地图
+$(function(){
+    if(areaId){
+      getArea();
+    }else{
+      $('#arealist').find('input').val('');
+      initMap();//创建和初始化地图
+    }
+    onSubmit_Form();
+
+    $.get('/zb/c/house/getQueryOptions', function(data) {
+      var getQueryOptions=JSON.parse(data);
+      buildHtmlWithJsonArray("id_quyu",getQueryOptions['quyu'],true);           //区域
+
+      if(areaId){formAction='update';getArea();}else{formAction='add';}
+    });
+/**/
+});
+
+</script>
+<style type="text/css">
+  #mapIn{position:absolute;right:12px;top:50px;height:90%;background-color:white;}
+  .input-group, .btn-group {float: none;margin-bottom: 5px;}
+  #mapDiv{ height: 100%; position: relative;}
+  #map{ height: 100%;}
+  #info{ position: absolute; top: 10px; right: 10px; z-index: 9999;}
+</style>
+</head>
+<body>
+  <div id="mapDiv">
+    <div id="map"></div>
+    <div id="mapIn info" style="position: absolute; top: 10px; right: 10px; z-index: 9999;">
+    <form role="form" name="form1" id="arealist">
+    <span>
+      <input type="hidden" class="form-control" name="id" value="${id}">
+      <div class="input-group input-group-max">
+        <span class="input-group-addon">区域</span>
+        <select class="form-control " name="quyu" id="id_quyu">
+          <option value="${name}">${name}</option>
+        </select>
+      </div>
+      <div class="input-group input-group-max">
+        <span class="input-group-addon">楼盘</span>
+        <input type="text" class="form-control" name="name" value="${name}">
+      </div>
+      <div class="input-group input-group-max">
+        <span class="input-group-addon">地址</span>
+        <input type="text" class="form-control" name="address" value="${address}">
+      </div>
+      <div class="input-group input-group-max">
+        <span class="input-group-addon">经度</span>
+        <input type="text" class="form-control" name="maplat" id="lat" value="${maplat}">
+      </div>
+      <div class="input-group input-group-max">
+        <span class="input-group-addon">维度</span>
+        <input type="text" class="form-control" name="maplng" id="lng" value="${maplng}">
+      </div>
+      <div class="btn-group input-group-max">
+        <button type="submit" class="btn btn-primary btn-block btn_submit">保存</button>
+      </div>
+      </span>
+    </form>
+    </div>
+  </div>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.4"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
+<link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
+<script type="text/javascript">
+
 </script>
 </body>
 </html>

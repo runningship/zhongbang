@@ -45,9 +45,19 @@ function openView(id){
       padding:0,
       resize:true,
       lock:1,
-      height:600,
-      width:1080
+      height:500,
+      width:650
   });
+}
+
+function openPiyue(id){
+    art.dialog.open('biz_piyue.html?recordId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:550,
+      width:650
+    })
 }
 
 function openAdd(){
@@ -149,7 +159,7 @@ $(function(){
       <td>${outCont}</td>
       <td>${outTime}</td>
       <td>${backTime}</td>
-      <td><a class="runscript">getEnumTextByCode(queryOpts['piyue'],${reply})</a></td>
+      <td><a onclick="openPiyue(${id})" href="javascript:void(0)" class="runscript">getEnumTextByCode(queryOpts['piyue'],${reply})</a></td>
       <td><a onclick="openView(${id})" href="#" >查看</a> <a href="#" onclick="deleteOut(${id})">删除</a></td>
       
     </tr>

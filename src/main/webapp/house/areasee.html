@@ -13,6 +13,7 @@
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript">
 var area=getParam('area');
 var lngs="",
@@ -23,6 +24,7 @@ lngs="117.260429",
 lats="31.881385",
 areas = "华府俊园",
 contall = "华府俊园de dizhi ";
+var map;
 
 function getArea(search){
   var param=search,url='/zb/c/areas/list';
@@ -34,60 +36,45 @@ function getArea(search){
       var getAreas=JSON.parse(data);
       dataArr = getAreas['page']['data'];
       buildHtmlWithJsonArray("id_House_list",dataArr);
+
+      $.each(dataArr, function(index, obj) {
+        if(obj.maplng || obj.maplat){
+          addMarker(obj.maplng, obj.maplat,obj.name,obj.address);
+        }
+      });
+
+      $('#id_House_list').find('tr').each(function(index, el) {
+        var Thi=$(this),
+        ThiLng=Thi.data('lng'),
+        ThiLat=Thi.data('lat')
+
+        if(ThiLat || ThiLng){
+          Thi.data('nulls', '1')
+        }else{
+          Thi.data('nulls', '0')
+          Thi.addClass('class_name')
+        }
+        
+      });
     }
   })
 
 }
-
-$(function(){
-  if(area){
-    var search={area:area}
-    getArea(search)
-  }
-  onSubmit_Form();
-});
-
-</script>
-<style type="text/css">
-  #mapIn{position:absolute;right:12px;top:50px;height:90%;background-color:white;}
-  .input-group, .btn-group {float: none;margin-bottom: 5px;}
-  #mapDiv{ height: 100%; position: relative;}
-  #map{ height: 100%;}
-  #info{ position: absolute; top: 10px; right: 10px; z-index: 9999;}
-</style>
-</head>
-<body>
-  <div id="mapDiv">
-    <div id="map"></div>
-    <div id="mapIn info" style="position: absolute; top: 10px; right: 10px; bottom:10px; overflow:none; overflow-y: auto; z-index: 9999;">
-      <table class="table table-hover table_bodyer" >
-        <tbody id="id_House_list">
-        <tr data-id="${id}" data-quyu="${quyu}" data-area="${name}" data-luduan="${address}" data-short="${pyShort}" data-pinyin="${pinyin}" data-lat="${maplat}" data-lng="${maplng}">
-          <td>${name} <span class="label label-info">${quyu}</span><div style="color:#999;">${address}</div></td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.4"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
-<link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
-<script type="text/javascript">
 
     //创建和初始化地图函数：
     function initMap(){
         createMap();//创建地图
         setMapEvent();//设置地图事件
         addMapControl();//向地图添加控件
-        addMarker(lngs, lats,contall);//向地图中添加marker
+//        addMarker(lngs, lats,contall);//向地图中添加marker
         other();//其他
     }
     
     //创建地图函数：
     function createMap(){
-        var map = new BMap.Map("map");//在百度地图容器中创建一个地图
+        map = new BMap.Map("map");//在百度地图容器中创建一个地图
         var point = new BMap.Point(lngs,lats);//定义一个中心点坐标
-        map.centerAndZoom(point,16);//设定地图的中心点和坐标并将地图显示在地图容器中
+        map.centerAndZoom(point,13);//设定地图的中心点和坐标并将地图显示在地图容器中
         window.map = map;//将map变量存储在全局
     }
     
@@ -111,8 +98,27 @@ $(function(){
   var ctrl_sca = new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT});
   map.addControl(ctrl_sca);
     }
+
+function addMarker(lngs,lats,title,contall){
+  var content = contall;
+  var opts = {
+    width : 200,     // 信息窗口宽度
+    height: 60,     // 信息窗口高度
+    title : title , // 信息窗口标题
+    enableMessage:true,//设置允许信息窗发送短息
+    message:"众邦手机地图："
+  }
+  var point = new BMap.Point(lngs,lats);
+  var marker = new BMap.Marker(point);
+  var infoWindow = new BMap.InfoWindow(content, opts);  // 创建信息窗口对象
+  map.openInfoWindow(infoWindow,point); //开启信息窗口
+  map.addOverlay(marker);
+  marker.addEventListener("click", function(){          
+     this.openInfoWindow(infoWindow);
+  });
+}
   
-function addMarker(lngs,lats,contall){
+function addMarker_nothing(lngs,lats,contall){
   var content = contall;
   //创建检索信息窗口对象
     var searchInfoWindow = new BMapLib.SearchInfoWindow(map, content, {
@@ -149,7 +155,63 @@ function other(){
   
 }
   
+function BtnAreaList(){
+  $(document).on('click', '#id_House_list tr', function(event) {
+    var Thi=$(this),
+    ThiI=Thi.index(),
+    ThiArea=Thi.data('area'),
+    ThiLat=Thi.data('lat'),
+    ThiLng=Thi.data('lng'),
+    ThiLuduan=Thi.data('luduan');
+    if(ThiLat || ThiLng){
+      addMarker(ThiLng,ThiLat,ThiArea,ThiLuduan)
+//    openInfoWinFuns[ThiI]();
+      map.panTo(new BMap.Point(ThiLng,ThiLat));
+//    searchInfoWindow.open(map); //在marker上打开检索信息串口
+//    map.setCenter(new BMap.Point(ThiLat,ThiLng));
+    }else{
+      alert('坐标为空')
+    }
+  });
+}
+$(function(){
     initMap();//创建和初始化地图
+  if(area){
+    var search={search:area}
+    getArea(search);
+  }
+//  onSubmit_Form();
+  BtnAreaList()
+});
+
+</script>
+<style type="text/css">
+  #mapIn{position:absolute;right:12px;top:50px;height:90%;background-color:white;}
+  .input-group, .btn-group {float: none;margin-bottom: 5px;}
+  #mapDiv{ height: 100%; position: relative;}
+  #map{ height: 100%;}
+  div.mapInfo{ position: absolute; top: 0px; right: 0px; bottom: 0px;overflow:none; overflow-y: auto;  z-index: 9999; background-color: #FFF; box-shadow: 0px 0px 5px #000; width: 200px;}
+  #loading{ display: none;;}
+</style>
+</head>
+<body>
+  <div id="mapDiv">
+    <div id="map"></div>
+    <div id="mapIn info" class="mapInfo">
+      <table class="table table-hover table_bodyer" >
+        <tbody id="id_House_list">
+        <tr data-id="${id}" data-quyu="${quyu}" data-area="${name}" data-luduan="${address}" data-short="${pyShort}" data-pinyin="${pinyin}" data-lat="${maplat}" data-lng="${maplng}">
+          <td>${name} <span class="label label-info">${quyu}</span><div style="color:#999;">${address}</div></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.4"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
+<link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
+<script type="text/javascript">
+
 </script>
 </body>
 </html>

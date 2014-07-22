@@ -45,8 +45,8 @@ function openView(id){
       padding:0,
       resize:true,
       lock:1,
-      height:600,
-      width:1080
+      height:450,
+      width:500
   });
 }
 
@@ -67,6 +67,7 @@ $(function(){
 <div class="header" style="position:relative;height:50px;width:100%">
   
   <form name="form1" onsubmit="return doSearch();">
+    <input type="hidden" class=".userInput" name="xpath" />
     <div class="clearfix">
       <div class="input-group ">
         <span class="input-group-addon">姓名</span>

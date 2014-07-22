@@ -5,7 +5,7 @@
 <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
 <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
 <meta HTTP-EQUIV="expires" CONTENT="0">
-<title>Web桌面系统</title>
+<title>众邦房源管理系统</title>
 <link rel="stylesheet" href="/zb/jsLib/themes/base/jquery.ui.all.css" />
 <link rel="stylesheet" href="/zb/jsLib/jquery-smartMenu/css/smartMenu.css" />
 <link rel="stylesheet" href="/zb/style/window.css" />
@@ -31,6 +31,23 @@ try{
 }catch(e){
 
 }
+
+   //初始化桌面右键菜单
+var data=[
+    [{text:"刷新",func:function(){
+        window.location.reload()
+      }
+    }],[{text:"系统设置",func:function(){
+
+        }
+      },{text:"主题设置",func:function(){
+
+      }
+    }],[{text:"退出系统",func:function(){
+        WinClose();
+      } 
+    }]
+  ];
 var socket;
 var chatWindow=null;
 $(function(){
@@ -43,7 +60,7 @@ $(function(){
 	//初始化侧边栏
 	myLib.desktop.lrBar.init();
 	//初始化桌面右键菜单
-	// myLib.desktop.contextMenu($(document.body),data,"body",10);
+	myLib.desktop.contextMenu($(document.body),data,"body",10);
   init();
 });
 var myId;
@@ -56,6 +73,8 @@ function init(){
       var json = JSON.parse(data);
       $('#userinfo').text(json.username+' ('+json.role+')');
       myId = json.userId;
+      $('#win_im').click();
+      // chatWindow.close();
     }
   });
 }
@@ -82,16 +101,19 @@ function openPassword(){
   });
 }
 
-function openChat(e){
-  e.cancelBubble=true;
-  e.preventDefault();
+function openChat(e,hidden){
+  if(e!=null){
+    e.cancelBubble=true;
+    e.preventDefault();
+  }
   if(chatWindow==null){
     chatWindow = art.dialog.open('im.html?userId='+myId,{
       padding:0,
       height:605,
       width:930,
-      title:'QQ',
+      title:'',
       resize:false,
+      show:false,
       skin:'idialog',
       close:function(){
         // $(art.dialog.opener.document).find('.idialog').remove();
@@ -248,8 +270,8 @@ box-shadow: 0px 1px 5px #000;
       <div class="right_cron"></div>
     </div>
   </li>
-  <li onclick="openChat(event);" class="desktop_icon" id="win14" ignoreDblClick="true"> <span  class="icon"><img src="http://www.oyyw.com/icon/icon2.png"/></span>
-    <div class="text">chat
+  <li class="desktop_icon" id="win_im" ignoreDblClick="true" onclick="openChat(event);"> <span  class="icon"><img src="/zb/style/icon/ico_b_im.png"/></span>
+    <div class="text">im
       <div class="right_cron"></div>
     </div>
   </li>

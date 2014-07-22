@@ -40,6 +40,7 @@ public class GrandServlet extends HttpServlet{
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		long start = System.currentTimeMillis();
 		resp.setCharacterEncoding("utf8");
 		resp.setContentType("text/html");
 		String path = req.getPathInfo();
@@ -125,6 +126,8 @@ public class GrandServlet extends HttpServlet{
 				ex.printStackTrace(resp.getWriter());
 			}
 		}
+		long end = System.currentTimeMillis();
+		System.out.println(path+":"+(end-start)+"毫秒");
 	}
 
 	private void processGException(HttpServletResponse resp ,GException ex){

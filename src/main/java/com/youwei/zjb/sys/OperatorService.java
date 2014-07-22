@@ -27,10 +27,7 @@ public class OperatorService {
 	public void add(OperatorType operType , String conts){
 		OperRecord oper = new OperRecord();
 		oper.addtime = new Date();
-		User user = ThreadSession.getUser();
-		if(user!=null){
-			oper.uid = ThreadSession.getUser().id;
-		}
+		oper.uid = ThreadSession.getUser().id;
 		oper.type = operType.getCode();
 		oper.ip = ThreadSession.getIp();
 		oper.conts = conts;

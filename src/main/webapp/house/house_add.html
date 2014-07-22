@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/zb/js/sysinfo.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
@@ -69,6 +68,7 @@ var Thi=$('form');
     if(!Thi.find('[name=zceng]').val()){TipErrs('g','总层不能为空',Thi.find('[name=zceng]'));return false}
     if(!Thi.find('[name=lxr]').val()){TipErrs('g','客户姓名不能为空',Thi.find('[name=lxr]'));return false}
     if(!Thi.find('[name=tel]').val()){TipErrs('g','客户电话不能为空',Thi.find('[name=tel]'));return false}
+    if(!Thi.find('[name=mianji]').val()){TipErrs('g','面积不能为空',Thi.find('[name=mianji]'));return false}
     var url=$('form[name=form1]').attr('action');
     YW.ajax({
       type: 'POST',
@@ -88,6 +88,21 @@ var Thi=$('form');
     });
     return false;
 }
+function fixQueryOptions(arr){
+  var result = [];
+  for(var i=0;i<arr.length;i++){
+    if(chuzu==1){
+      if(arr[i].name=='出租' || arr[i].name=='仅租' || arr[i].name=='租售'){
+        result.push(arr[i]);
+      }
+    }else{
+      if(arr[i].name=='出售' || arr[i].name=='仅售' || arr[i].name=='租售'){
+        result.push(arr[i]);
+      }
+    }
+  }
+  return result;
+}
 $(function(){
 
   $.get('/zb/c/house/getQueryOptions', function(data) {
@@ -95,7 +110,7 @@ $(function(){
     buildHtmlWithJsonArray("id_chaoxiang",QueryOptions['chaoxiang'],true); //朝向
     buildHtmlWithJsonArray("id_leibie",QueryOptions['leibie'],true);       //类别
     buildHtmlWithJsonArray("id_louxing",QueryOptions['louxing'],true);     //楼型
-    buildHtmlWithJsonArray("id_jiaoyi",QueryOptions['jiaoyi'],true);       //交易
+    buildHtmlWithJsonArray("id_jiaoyi",fixQueryOptions(QueryOptions['jiaoyi']),true);       //交易
     buildHtmlWithJsonArray("id_quyu",QueryOptions['quyu'],true);           //区域
     buildHtmlWithJsonArray("id_zhuangtai",QueryOptions['zhuangtai'],true); //状态
     buildHtmlWithJsonArray("id_xingzhi",QueryOptions['xingzhi'],true); //房型
@@ -105,7 +120,8 @@ $(function(){
         //alert($('form[name=form1]').attr('action'))
         $.get('/zb/c/house/listAll?id='+getHid, function(data) {
           getStr=JSON.parse(data);
-          buildHtmlWithJsonArray("id_house_see",getStr['page']['data'],true);
+          fillData(getStr['page']['data'][0]);
+          // buildHtmlWithJsonArray("id_house_see",getStr['page']['data'],true);
         });
       }else{
         var gerStrNull={"page":{"autoCount":"","currentPageNo":"","firstOfPage":"","lastOfPage":"","pageSize":"","pageUrl":"","totalCount":"","totalPageCount":"","data":[{"id":"","deptId":"","userId":"","cid":"","quyu":"","area":"","dhao":"","fhao":"","luduan":"","lceng":"","zceng":"","lxing":"","hxf":"","hxt":"","hxw":"","hxy":"","chaoxiang":"","zhuangxiu":"","mianji":"","zjia":"","sjia":"","djia":"","lxr":"","tel":"","forlxr":"","fortel":"","beizhu":"","jiaoyi":chuzu,"leibie":"","flag":"","xingzhi":"","tuijie":"","dateyear":"","dateweituo":"","datejiaofang":"","dateadd":"","dategenjin":"","fav":"","houseNumber":"","isdel":"","sh":"","chanquan":"","tudizheng":"","fordlr":"","fordlrtel":""}]}}
@@ -241,7 +257,7 @@ $(function(){
         <div class="input-group">
           <span class="input-group-addon" style="padding:8px;">性质</span>
           <select class="form-control" id="id_xingzhi" name="xingzhi">
-            <option value="${name}">${name}</option>
+            <option value="${code}">${name}</option>
           </select>
         </div>
       </td>
@@ -272,9 +288,16 @@ $(function(){
     </tr>
     <tr>
       <td>
-        <div class="input-group">
+        <!-- <div class="input-group">
           <span class="input-group-addon">编号</span>
           <input type="text" class="form-control" name="houseNumber" value="${houseNumber}" placeholder="房源编号">
+        </div> -->
+        <div class="input-group">
+          <span class="input-group-addon" style="padding:8px;">推介房</span>
+          <select class="form-control" id="id_chaoxiang" name="dateType">
+            <option value="0">否</option>
+            <option value="1">是</option>
+          </select>
         </div>
       </td>
       <td>
@@ -300,17 +323,8 @@ $(function(){
       </td>
     </tr>
     <tr>
-      <td>
-        <div class="input-group">
-          <span class="input-group-addon" style="padding:8px;">推介房</span>
-          <select class="form-control" id="id_chaoxiang" name="dateType">
-            <option value="0">否</option>
-            <option value="1">是</option>
-          </select>
-        </div>
-      </td>
-      <td>
-        <div class="input-group">
+      <td colspan="2">
+        <div class="input-group colspan2">
           <span class="input-group-addon">产权</span>
           <input type="text" class="form-control" name="chanquan" value="${chanquan}" placeholder="产权号">
         </div>

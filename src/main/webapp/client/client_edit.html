@@ -4,13 +4,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Examples</title>
+<title>客源</title>
 <link rel="stylesheet" href="/zb/style/css.css">
 <link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/zb/js/sysinfo.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=chrome"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
@@ -38,7 +37,7 @@ alert('exit')
 */
   var getStr,chuzu;
       getClientId=getParam('clientid')
-      chuzu=getParam('chuzu');
+      
   var QueryOptions='';
 function getEnumText(category,code){
   var arr = QueryOptions[category];
@@ -65,20 +64,15 @@ function TipErrs(a,b,c){
 function funSubmit(){
 var Thi=$('form');
     var url=$('form[name=form1]').attr('action');
-    $.ajax({
+    YW.ajax({
       type: 'POST',
       url: url,
   //    async:false,
       data:formSerialize(Thi),
       success: function(data){
-      var getStr=JSON.parse(data);
-        if(getStr['result']==0){
-          art.dialog({title:'提示',content:'提交成功',ok: function () {art.dialog.close()
-            }
-          })
-        }else{
-          art.dialog.tips(getStr['msg']);
-        }
+        art.dialog.close();
+        art.dialog.opener.doSearch();
+        alert('添加成功');
       }
     });
     return false;
@@ -111,7 +105,8 @@ function withJson(a,b,c){
       });
 }
 $(function(){
-
+  chuzu=getParam('chuzu');
+  $('#chuzu').val(chuzu);
   $.get('/zb/c/house/getQueryOptions', function(data) {
     queryOpts=JSON.parse(data);
     buildHtmlWithJsonArray("id_quyu",queryOpts['quyu']);       //区域
@@ -127,31 +122,46 @@ $(function(){
       //alert($('form[name=form1]').attr('action'))
       $.get('/zb/c/client/get?clientId='+getClientId, function(data) {
         getStr=JSON.parse(data);
-        buildHtmlWithJsonArray("id_client_see",[getStr['client']],true);
-/*       alert(getStr['client']['quyu'])*/
-        withJson($('#id_kehuxingzhi'),'kehuxingzhi',getStr['client']['zhongyaos']);
-        withJson($('#id_huxing'),'huxing',getStr['client']['huxing']);
-        withJson($('#id_source'),'source',getStr['client']['source']);
+        var client = getStr['client'];
+        withJson($('#id_quyu'),'quyuas',client['quyuas']);
+        withJson($('#id_kehuxingzhi'),'zhongyaos',client['zhongyaos']);
+        withJson($('#id_huxing'),'huxing',client['huxing']);
+        withJson($('#id_source'),'source',client['source']);
+        withJson($('#id_zhuangxiu'),'zhuangxiu',client['zhuangxiu']);
+        withJson($('#id_louxing'),'louxing',client['louxing']);
+        withJson($('#id_fuyongs'),'fuyongs',client['fuyongs']);
+        withJson($('#id_valid'),'valid',client['valid']);
 
-        withJson($('#id_quyu'),'quyuas',getStr['client']['quyuas']);
-        withJson($('#id_quyu'),'quyuas',getStr['client']['quyuas']);
-        withJson($('#id_zhuangxiu'),'zhuangxiu',getStr['client']['zhuangxiu']);
-        withJson($('#id_louxing'),'louxing',getStr['client']['louxing']);
-        withJson($('#id_fuyongs'),'fuyongs',getStr['client']['fuyongs']);
-        withJson($('#id_valid'),'valid',getStr['client']['valid']);
+        // fillData(getStr['client']);
+        //$('#tel').tagsinput('add', { "value": 1 , "text": "12321321321321321321"  });
+        $('#tel').tagsinput({
+    confirmKeys: [13, 44]
+});
+        $('#lxr').val(client['lxr']);
+        // $('#tel').val(client['tel']);
+        $('#area').val(client['area']);
+        $('#loucengFrom').val(client['loucengFrom']);
+        $('#loucengTo').val(client['loucengTo']);
+        $('#mianjiFrom').val(client['mianjiFrom']);
+        $('#mianjiTo').val(client['mianjiTo']);
+        $('#jiageFrom').val(client['jiageFrom']);
+        $('#jiageTo').val(client['jiageTo']);
+        $('#beizhu').val(client['beizhu']);
+        // buildHtmlWithJsonArray("id_client_see",[getStr['client']],true);
 
-          $('select').each(function(index,obj){
-            var select = $(this);
-            select.val(getStr['client'][select.attr('name')]);
-            select.change();
-          });
+        $('select').each(function(index,obj){
+          var select = $(this);
+          select.val(getStr['client'][select.attr('name')]);
+          select.change();
+        });
       });
       $('.tag3').tagsinput({maxTags:3});
     }else{
 //      var gerStrNull={"client":{"id":"","salesman":"","djr":"","lxr":"","tel":"","area":"","luduan":"","louxing":"","huxing":"","zhaungxiu":"","mianjiFrom":"","mianjiTo":"","jiageFrom":"","jiageTo":"","fuyongs":"","zhongyaos":"","beizhu":"","addtime":"","chuzu":"","loucengFrom":"","loucengTo":"","quyu":"","source":"","valid":""}}
       //gerStrNull=JSON.parse(gerStrNull)
 //      buildHtmlWithJsonArray("id_client_see",[gerStrNull['client']],true);
-      $('#id_client_see').find('input,textarea').val('');
+      $('#id_client_see').find('input[type=text],textarea').val('');
+      $('#id').val('');
       $('.tag3').tagsinput('removeAll');
       $('.tag3').tagsinput({maxTags:3});
     }
@@ -180,51 +190,52 @@ width: 100%;
 <body class="bodyer">
 <div id="id_client_see">
 <form class="form" name="form1" method="post" action="/zb/c/client/add" onsubmit="return funSubmit();">
-  <input type="hidden" class="form-control" name="id" value="${id}">
+  <input type="hidden" class="form-control" id="id" name="id" value="${id}">
+  <input type="hidden" class="form-control" id="chuzu" name="chuzu" value="${chuzu}">
     <table id="view_archive_table" class="j_tab_th table table-bordered">
       <tbody class="j_tab_tr_hide" style="display: table-row-group; ">
       <tr>
         <th>姓名</th>
-        <td style="width:38%;"><input type="text" name="lxra" class="form-control inputW100" value="${lxr}"></td>
+        <td style="width:38%;"><input type="text" id="lxr" name="lxr" class="form-control inputW100" value="${lxr}"></td>
         <th>是否有效</th>
         <td>
           <ul class="checklist" id="id_valid">
-            <li><label class="label"><input type="checkbox" name="valid" value=""> 所有</label></li>
-            <li><label class="label"><input type="checkbox" name="valid" value="1"> 有效</label></li>
-            <li><label class="label"><input type="checkbox" name="valid" value="0"> 无效</label></li>
+            <!-- <li><label class="label"><input type="checkbox" name="valid" value=""> 所有</label></li> -->
+            <li><label class="label"><input type="radio" name="valid" value="1"> 有效</label></li>
+            <li><label class="label"><input type="radio" name="valid" value="0"> 无效</label></li>
           </ul>
         </td>
       </tr>
       <tr>
         <th>电话</th>
-        <td><input type="text" data-role="tagsinput" class="tag3" name="tel" value="${tel}" placeholder="Add"></td>
+        <td><input type="text" data-role="tagsinput" style="min-width:90px" class="tag3 form-control" id="tel" name="tel" value="${tel}" placeholder="电话"></td>
         <th>客户性质</th>
         <td>
           <ul class="checklist" id="id_kehuxingzhi">
-            <li><label class="label"><input type="checkbox" name="kehuxingzhi" value="${code}"> ${name}</label></li>
+            <li><label class="label"><input type="checkbox" name="zhongyaos" value="${code}"> ${name}</label></li>
           </ul>
         </td>
       </tr>
       <tr>
         <th>楼盘</th>
-        <td><input type="text" data-role="tagsinput" class="tag3" name="area" value="${area}" placeholder="Add"></td>
+        <td><input type="text" data-role="tagsinput" class="tag3 form-control" id="area" name="area" value="${area}" placeholder="楼盘"></td>
         <th>楼层</th>
         <td>
-          <input type="text" class="form-control inputW100" name="loucengFrom" value="${loucengFrom}">-
-          <input type="text" class="form-control inputW100" name="loucengTo" value="${loucengTo}">层
+          <input type="text" class="form-control inputW100" id="loucengFrom" name="loucengFrom" value="${loucengFrom}">-
+          <input type="text" class="form-control inputW100" id="loucengTo" name="loucengTo" value="${loucengTo}">层
         </td>
       </tr>
       <tr>
         <th>楼型</th>
         <td>
           <ul class="checklist" id="id_louxing">
-            <li><label class="label"><input type="checkbox" name="louxing" value="${value}"> ${name}</label></li>
+            <li><label class="label"><input type="checkbox" name="louxing" value="${name}" /> ${name}</label></li>
           </ul>
         </td>
         <th>装潢</th>
         <td>
           <ul class="checklist" id="id_zhuangxiu">
-            <li><label class="label"><input type="checkbox" name="zhuangxiu" value="${value}">${name}</label></li>
+            <li><label class="label"><input type="checkbox" name="zhuangxiu" value="${name}" />${name}</label></li>
           </ul>
         </td>
       </tr>
@@ -232,21 +243,21 @@ width: 100%;
         <th>户型</th>
         <td>
           <ul class="checklist" id="id_huxing">
-            <li><label class="label"><input type="checkbox" name="huxing" value="${value}">${name}</label></li>
+            <li><label class="label"><input type="checkbox" name="huxing" value="${name}" />${name}</label></li>
           </ul>
         </td>
         <th>区域</th>
         <td style="width:38%;">
           <ul class="checklist" id="id_quyu">
-            <li><label class="label"><input type="checkbox" name="quyuas" value="${value}">${name}</label></li>
+            <li><label class="label"><input type="checkbox" name="quyuas" value="${name}" />${name}</label></li>
           </ul>
         </td>
       </tr>
       <tr>
         <th>面积</th>
-        <td><input type="text" class="form-control inputW100" name="mianjiFrom" width="100" value="${mianjiFrom}"> - <input type="text" class="form-control inputW100" name="mianjiTo" width="100" value="${mianjiTo}"> m<sup>2</sup></td>
+        <td><input type="text" class="form-control inputW100" id="mianjiFrom" name="mianjiFrom" width="100" value="${mianjiFrom}"> - <input type="text" class="form-control inputW100" id="mianjiTo" name="mianjiTo" width="100" value="${mianjiTo}"> m<sup>2</sup></td>
         <th>价格</th>
-        <td><input type="text" class="form-control inputW100" name="jiageFrom" width="100" value="${jiageFrom}"> - <input type="text" class="form-control inputW100" name="jiageTo" width="100" value="${jiageTo}"> 万</td>
+        <td><input type="text" class="form-control inputW100" id="jiageFrom" name="jiageFrom" width="100" value="${jiageFrom}"> - <input type="text" class="form-control inputW100" id="jiageTo" name="jiageTo" width="100" value="${jiageTo}"> 万</td>
       </tr>
       <tr>
         <th>客户来源</th>
@@ -258,7 +269,7 @@ width: 100%;
         <th>付款方式</th>
         <td>
           <ul class="checklist" id="id_fuyongs">
-            <li><label class="label"><input type="checkbox" name="fuyongs" value="${value}">${name}</label></li>
+            <li><label class="label"><input type="radio" name="fuyongs" value="${name}">${name}</label></li>
           </ul>
         </td>
       </tr>
@@ -268,13 +279,13 @@ width: 100%;
         <div class="input-group  input-group-select">
           <select class="form-control get_comp" name="salesmanQuyu"></select>
           <select class="form-control get_quyu" name="salesmanDeptId"></select>
-          <select class="form-control get_user" name="salesmanName"></select>
+          <select class="form-control get_user" name="salesman"></select>
         </div>
         </td>
       </tr>
       <tr>
         <th>备注</th>
-        <td colspan="3"><div class="hideduo"><textarea name="beizhua" class="form-control textarea" style="width:96%">${beizhu}</textarea></div></td>
+        <td colspan="3"><div class="hideduo"><textarea id="beizhu" name="beizhu" class="form-control textarea" style="width:96%">${beizhu}</textarea></div></td>
       </tr><input type="submit" value="提交" id="submits" style="display:none;">
     </tbody>
     </table>

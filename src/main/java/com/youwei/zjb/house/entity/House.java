@@ -110,6 +110,9 @@ public class House {
 
 	public String tel;
 
+	/**
+	 * 发布人
+	 */
 	public String forlxr;
 
 	public String fortel;
@@ -162,6 +165,9 @@ public class House {
 	public String chanquan;
 
 	// TODO
+	/**
+	 * 1 有，0 无
+	 */
 	public Integer tudizheng;
 	
 	public String fordlr;

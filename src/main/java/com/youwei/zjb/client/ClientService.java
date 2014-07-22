@@ -37,9 +37,16 @@ public class ClientService {
 	@WebMethod
 	public ModelAndView add(Client client){
 		ModelAndView mv = new ModelAndView();
-		client.addtime = new Date();
-		dao.saveOrUpdate(client);
+		Client po = dao.getUniqueByKeyValue(Client.class, "tel", client.tel);
+		if(po!=null){
+			throw new GException(PlatformExceptionType.BusinessException, "重复的电话号码，重复添加客源量吗?");
+		}
 		User user = ThreadSession.getUser();
+		client.addtime = new Date();
+		client.djr = user.id;
+		dao.saveOrUpdate(client);
+		
+		
 		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 添加了编号为["+client.id+"]客源["+client.lxr+"]";
 		operService.add(OperatorType.客源记录, operConts);
 		return mv;
@@ -54,6 +61,7 @@ public class ClientService {
 		if(salesman!=null){
 			mv.data.getJSONObject("client").put("salesmanDeptId",salesman.deptId);
 			mv.data.getJSONObject("client").put("salesmanName",salesman.uname);
+			mv.data.getJSONObject("client").put("salesman",salesman.id);
 			mv.data.getJSONObject("client").put("salesmanQuyu",salesman.Department().getParent().id);
 		}
 		return mv;
@@ -64,8 +72,10 @@ public class ClientService {
 		ModelAndView mv = new ModelAndView();
 		Client po = dao.get(Client.class, client.id);
 		client.addtime = po.addtime;
-		client.valid = po.valid;
+//		client.valid = po.valid;
 		client.chuzu = po.chuzu;
+		client.djr = po.djr;
+		client.salesman = po.salesman;
 		dao.saveOrUpdate(client);
 		User user = ThreadSession.getUser();
 		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 修改了编号为["+client.id+"]客源["+client.lxr+"]";
@@ -199,12 +209,12 @@ public class ClientService {
 		
 		hql.append(HqlHelper.buildDateSegment("c.addtime", query.addtimeStart, DateSeparator.After, params));
 		hql.append(HqlHelper.buildDateSegment("c.addtime", query.addtimeEnd, DateSeparator.Before, params));
-		if(StringUtils.isNotEmpty(query.orderBy)){
-			hql.append(" order by ").append(query.orderBy);
-		}
-		if(StringUtils.isNotEmpty(query.order)){
-			hql.append(query.order);
-		}
+//		if(StringUtils.isNotEmpty(query.orderBy)){
+//			hql.append(" order by ").append(query.orderBy);
+//		}
+//		if(StringUtils.isNotEmpty(query.order)){
+//			hql.append(query.order);
+//		}
 		
 		page = dao.findPage(page, hql.toString(), true ,params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));

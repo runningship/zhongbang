@@ -140,3 +140,8 @@ YW={
     }
 }
 
+function fillData(data){
+  $('.form-control').each(function(index,obj){
+    $(obj).val(data[$(obj).attr('name')]);
+  });
+}

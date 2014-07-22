@@ -22,6 +22,10 @@
 			"name":"fy_list_my",
 			"text":"我的房源",
 			"type":"menu"
+		},{
+			"name":"fy_list_xingzhi",
+			"text":"修改房源性质",
+			"type":"menu"
 		}]
 	},{
 		"name":"fy_add",

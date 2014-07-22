@@ -143,8 +143,11 @@ $(document).ready(function() {
 
 //获取url里需要的值
 function getParam(name){
-var reg = new RegExp("(^|\\?|&)"+ name +"=([^&]*)(\\s|&|$)", "i");
-return (reg.test(location.search))? encodeURIComponent(decodeURIComponent(RegExp.$2.replace(/\+/g, " "))) : '';
+var reg = new RegExp("(^|\\?|&)"+ name +"=([^&]*)(\\s|&|$)", "i"),
+decode;
+decode=(reg.test(location.search))? encodeURIComponent(decodeURIComponent(RegExp.$2.replace(/\+/g, " "))) : '';
+decode=decodeURIComponent(decode)
+return decode;
 }
 
 

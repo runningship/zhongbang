@@ -74,6 +74,11 @@ public class DistrictService {
 		if(district.id==null){
 			throw new GException(PlatformExceptionType.BusinessException, 1, "id不能为空");
 		}
+		if(StringUtils.isEmpty(district.name)){
+			throw new GException(PlatformExceptionType.BusinessException, "小区名不能为空");
+		}
+		district.pinyin=DataHelper.toPinyin(district.name);
+		district.pyShort=DataHelper.toPinyinShort(district.name);
 		service.saveOrUpdate(district);
 		mv.data.put("msg", "保存成功");
 		return mv;

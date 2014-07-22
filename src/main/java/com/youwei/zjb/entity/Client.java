@@ -26,6 +26,9 @@ public class Client {
 	 */
 	public Integer djr;
 	
+	/**
+	 * 客户姓名
+	 */
 	@Column(name="lxras")
 	public String lxr;
 	

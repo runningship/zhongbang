@@ -52,13 +52,15 @@ function openEdit(rowIndex){
     art.dialog.open('areaedit.html?areaId='+rowIndex,{
       height:450,
       width:700,
-      title:'修改地图'
+      title:'修改地图',
+      lock:1,
     })
   }else{
     art.dialog.open('areaedit.html',{
       height:450,
       width:700,
-      title:'添加地图'
+      title:'添加地图',
+      id:'addmap'
     })
   }
 }

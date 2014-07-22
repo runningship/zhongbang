@@ -65,8 +65,8 @@ function fillData(out){
   $('#clientInfo').html(out['clientInfo']);
   $('#houseInfo').html(out['houseInfo']);
   $('#onCont').html(out['onCont']);
-  $('#conts').html(out['conts']);
-  $('#integral_point').html(out['integral']);
+  $('#integral_point').val(out['integral']);
+  $('#integral').html(out['integral']);
   $('#id').html(out['id']);
   if(out['reply']==1){
     $('#submit').css('display','none');
@@ -78,12 +78,12 @@ $(function(){
     alert("加载数据失败");
     return;
   }
-  get();
 
   $('#id').val(recordId);
   ue = UE.getEditor('editor');
   ue.addListener( 'ready', function( editor ) {
     ue.setHeight(150);
+    get();
   });
 });
 

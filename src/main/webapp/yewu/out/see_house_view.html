@@ -86,13 +86,13 @@ $(function(){
     alert("加载数据失败");
     return;
   }
-  get();
 
   $('#id').val(recordId);
   ue = UE.getEditor('editor');
   ue.addListener( 'ready', function( editor ) {
     ue.setHeight(150);
     getContent();
+    get();
   });
 });
 

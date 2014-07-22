@@ -127,7 +127,7 @@ var ThiId='',title;
     }else{
       title='添加客源'
     }
-    art.dialog.open('client_edit.html?clientId='+ThiId,{
+    art.dialog.open('client_edit.html?chuzu='+chuzu+'&clientId='+ThiId,{
       height:500,
       width:960,
       title:title,
@@ -264,7 +264,8 @@ $(function(){
 <div class="mainer" style="/*position:relative;width:100%*/">
   <table class="table table-hover .table_bodyer" >
     <thead>
-      <th><a href="javascript:void(0)" onclick="deleteSelected()">删除</a> 编号</th>
+      <th style="width:40px;"><a href="javascript:void(0)" onclick="deleteSelected()">删除</a></th>
+      <th> 编号</th>
       <th>姓名</th>
       <th>电话</th>
       <th>面积</th>
@@ -277,9 +278,10 @@ $(function(){
       <th>分配</th>
       <th>操作</th>
     </thead>
-    <tbody id="id_GJ_list" style="display:">
-    <tr>
-      <td><input style="margin-left:20px;margin-right:20px;" type="checkbox" name="ids" value="${id}"/>${id}</td>
+    <tbody id="id_GJ_list">
+    <tr style="display:none">
+      <td><input type="checkbox" name="ids" value="${id}"/></td>
+      <td>${id}</td>
       <td>${lxr}</td>
       <td>${tel}</td>
       <td>${mianjiFrom}-${mianjiTo}</td>
@@ -288,9 +290,9 @@ $(function(){
       <td>${addtime}</td>
       <td class='runscript'>getEnumTextByCode(queryOpts['kehu'],${kehu})</td>
       <td>${uname}</td>
-      <td><a href="javascript:void(0)" class="btn" data-flag="fy">房源</a></td>
-      <td><a href="javascript:void(0)" class="btn" data-flag="fp">分配</a></td>
-      <td><a href="javascript:void(0)" class="btn" data-flag="edit">修改</a> <a href="javascript:void(0)"  class="btn" data-flag="del">删除</a></td>
+      <td><a href="javascript:void(0)" class="btn btn-xs" data-flag="fy">房源</a></td>
+      <td><a href="javascript:void(0)" class="btn btn-xs" data-flag="fp">分配</a></td>
+      <td><a href="javascript:void(0)" class="btn btn-xs" data-flag="edit">修改</a> <a href="javascript:void(0)"  class="btn" data-flag="del">删除</a></td>
       
     </tr>
     </tbody>
