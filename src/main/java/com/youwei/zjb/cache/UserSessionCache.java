@@ -50,8 +50,8 @@ public class UserSessionCache {
 			dao.saveOrUpdate(po);
 			map.put(sessionId, user);
 		}
-		//清理过期session id.
-		dao.execute("delete from UserSession where userId=? and sessionId<>? ", userId, sessionId);
+		//允许多处登录
+		//dao.execute("delete from UserSession where userId=? and sessionId<>? ", userId, sessionId);
 	}
 	
 	public static void removeUserSession(int userId){

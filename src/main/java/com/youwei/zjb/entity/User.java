@@ -21,8 +21,8 @@ import com.youwei.zjb.SimpDaoTool;
  */
 @Entity
 @Table(name="uc_user")
-//@Cacheable
-//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class User {
 
 	@Id

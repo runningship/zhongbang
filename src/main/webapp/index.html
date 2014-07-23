@@ -25,7 +25,7 @@
 <script type="text/javascript">
 try{
 //  hex.sizeTo(1024,700);
-  hex.maximize();
+  maximize();
   //hex.moveTo(x, y)
   //hex.updateManifest()
 }catch(e){
@@ -73,7 +73,7 @@ function init(){
       var json = JSON.parse(data);
       $('#userinfo').text(json.username+' ('+json.role+')');
       myId = json.userId;
-      // $('#win_im').click();
+      $('#win_im').click();
       // chatWindow.close();
     }
   });
@@ -107,8 +107,8 @@ function openChat(e,hidden){
     e.preventDefault();
   }
   if(chatWindow==null){
-    // chatWindow = art.dialog.open('im.html?userId='+myId,{
-    chatWindow = art.dialog.open('/zb/v/oa/index.html',{
+    chatWindow = art.dialog.open('im.html?userId='+myId,{
+    // chatWindow = art.dialog.open('/zb/v/oa/index.html',{
       padding:0,
       height:605,
       width:930,
@@ -128,6 +128,14 @@ function openChat(e,hidden){
   }
 }
 
+function receiveChatMessage(data){
+	//alert(data);
+	var msgCount=$('#msgCount');
+	var count = parseInt(msgCount.text());
+	count++;
+	msgCount.text(count);
+	msgCount.css('display','');	
+}
 function logout(){
   YW.ajax({
     type: 'POST',
@@ -149,7 +157,9 @@ function relogin(){
     url: '/zb/c/user/logout',
     data:'',
     success: function(data){
-      document.location="/zb/login/login.html?"+Math.random();
+      	revert();
+    	document.location="/zb/login/login.html?"+Math.random();
+      
     },
     error:function(data){
       hex.close();
@@ -284,7 +294,11 @@ box-shadow: 0px 1px 5px #000;
       <div class="right_cron"></div>
     </div>
   </li>
-  <li class="desktop_icon" id="win_im" ignoreDblClick="true" onclick="openChat(event);"> <span  class="icon"><img src="/zb/style/icon/ico_b_im.png"/></span>
+  <li class="desktop_icon" id="win_im" ignoreDblClick="true" onclick="openChat(event);"> 
+  	<span  class="icon">
+  	<img src="/zb/style/icon/ico_b_im.png" />	
+  	</span>
+  	<span id="msgCount" style="display:none;position:absolute;background:red;color:white;top:10px;right:10px;border-radius:8px;height:15px;width:18px;text-align:center;">0</span>
     <div class="text">im
       <div class="right_cron"></div>
     </div>

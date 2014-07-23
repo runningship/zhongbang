@@ -355,7 +355,9 @@ public class UserService {
 	public ModelAndView logout(PC pc){
 		ModelAndView mv = new ModelAndView();
 		User user = ThreadSession.getUser();
-		UserSessionCache.removeUserSession(user.id);
+		if(user!=null){
+			UserSessionCache.removeUserSession(user.id);
+		}
 		return mv;
 	}
 

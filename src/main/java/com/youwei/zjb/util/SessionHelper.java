@@ -3,6 +3,7 @@ package com.youwei.zjb.util;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.utils.LogUtil;
 
 import com.youwei.zjb.cache.UserSessionCache;
@@ -18,6 +19,9 @@ public class SessionHelper {
 				oldSessionId = coo.getValue();
 				break;
 			}
+		}
+		if(StringUtils.isEmpty(oldSessionId)){
+			return;
 		}
 		UserSessionCache.updateSession(oldSessionId, req.getSession().getId());
 		LogUtil.info("old session ["+oldSessionId+"] to new session ["+req.getSession().getId()+"]");

@@ -116,7 +116,8 @@ YW={
                     alert(json['msg']);   
                 }
                 
-            }else{
+            }else if(data.status!=0){
+//            	alert(data.status);
                 alert('请求服务失败，请稍后重试');
             }
         },
@@ -125,12 +126,12 @@ YW={
         }
     },
     ajax:function(options){
-        // if(options.beforeSend==undefined){
-        //     options.beforeSend = YW.options.beforeSend;
-        // }
-        // if(options.complete==undefined){
-        //     options.complete = YW.options.complete;
-        // }
+         if(options.beforeSend==undefined){
+             options.beforeSend = YW.options.beforeSend;
+         }
+         if(options.complete==undefined){
+             options.complete = YW.options.complete;
+         }
         if(options.error==undefined){
             options.error = YW.options.error;
         }

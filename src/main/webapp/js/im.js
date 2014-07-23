@@ -149,7 +149,7 @@ var IM = {
 		}else{
 			IM.renderReceivedMsg(data);
 		}
-		
+		art.dialog.opener.receiveChatMessage(data);
 	},
 
 	renderReceivedMsg:function(data){
