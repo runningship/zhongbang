@@ -81,10 +81,10 @@
             //'touppercase', //首字母大写
             //'tolowercase', //首字母小写
             //'|',
-            'link', //超链接
-            'unlink', //取消链接
-            'anchor', //锚点
-            '|', 
+            // 'link', //超链接
+            // 'unlink', //取消链接
+            // 'anchor', //锚点
+            // '|', 
             //'imagenone', //默认
             //'imageleft', //左浮动
             //'imageright', //右浮动
@@ -127,10 +127,10 @@
             'splittorows', //拆分行
             'splittocols', //拆分列
             //'charts', //图标
-            '|',
-            'print', //打印
-            'preview', //打印预览
-            'searchreplace', //查询替换
+            // '|',
+            // 'print', //打印
+            // 'preview', //打印预览
+            // 'searchreplace', //查询替换
             //'help', //帮助
             //'drafts'//从草稿箱加载
         ]]
@@ -335,11 +335,11 @@
 
         //elementPathEnabled
         //是否启用元素路径，默认是显示
-        //,elementPathEnabled : true
+        ,elementPathEnabled : false
 
         //wordCount
-        //,wordCount:true          //是否开启字数统计
-        //,maximumWords:10000       //允许的最大字符数
+        ,wordCount:false          //是否开启字数统计
+        // ,maximumWords:10000       //允许的最大字符数
         //字数统计提示，{#count}代表当前字数，{#leave}代表还可以输入多少字符数,留空支持多语言自动切换，否则按此配置显示
         //,wordCountMsg:''   //当前已输入 {#count} 个字符，您还可以输入{#leave} 个字符
         //超出字数限制提示  留空支持多语言自动切换，否则按此配置显示

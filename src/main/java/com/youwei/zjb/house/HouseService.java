@@ -70,11 +70,6 @@ public class HouseService {
 	@WebMethod
 	public ModelAndView update(House house){
 		ModelAndView mv = new ModelAndView();
-		//检查，是否是重复房源.检查条件为,小区名+楼栋号+房号
-//		House po = service.getUniqueByParams(House.class, new String[]{"area","dhao","fhao"},new Object[]{house.area,house.dhao,house.fhao});
-//		if(po!=null){
-//			throw new GException(PlatformExceptionType.BusinessException, 1, "小区名+楼栋号+房号 重复");
-//		}
 		String py = DataHelper.toPinyin(house.quyu);
 		if(StringUtils.isNotEmpty(py) && py.length()>0){
 			house.houseNumber=  py.toUpperCase().charAt(0)+"-" + house.id;
@@ -83,7 +78,21 @@ public class HouseService {
 		}
 		service.saveOrUpdate(house);
 		User user = ThreadSession.getUser();
-		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 修改了房源["+house.area+"]";
+		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 修改了房源["+house.houseNumber+"]";
+		operService.add(OperatorType.房源记录, operConts);
+		mv.data.put("msg", "修改成功");
+		mv.data.put("result", 0);
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView updateXingzhi(int hid, String xingzhi){
+		ModelAndView mv = new ModelAndView();
+		House house = service.get(House.class, hid);
+		house.xingzhi = xingzhi;
+		service.saveOrUpdate(house);
+		User user = ThreadSession.getUser();
+		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 修改了房屋性质["+house.houseNumber+"]";
 		operService.add(OperatorType.房源记录, operConts);
 		mv.data.put("msg", "修改成功");
 		mv.data.put("result", 0);

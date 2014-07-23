@@ -102,7 +102,10 @@ function review(id,target){
 function dialogs(id){
     art.dialog.open('house_see.html?hid='+id,{
       id:'SeeHouse'+id,
-      title:'查看房源详情'
+      title:'查看房源详情',
+      height:430,
+      width:910
+
     })
 }
 $(function(){
@@ -181,8 +184,8 @@ $(function(){
       <th>跟进内容</th>
       <th>操作</th>
     </thead>
-    <tbody id="id_GJ_list">
-    <tr>
+    <tbody id="id_GJ_list" >
+    <tr  style="display:none">
       <td>${addtime}</td>
       <td>${deptName} ${uname}</td>
       <td>${chuzu}</td>

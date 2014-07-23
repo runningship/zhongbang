@@ -99,6 +99,10 @@ public class ContractService {
 	@Transactional
 	public ModelAndView add(Contract contract){
 		ModelAndView mv = new ModelAndView();
+		Contract po = dao.getUniqueByKeyValue(Contract.class, "bianhao", contract.bianhao);
+		if(po!=null){
+			throw new GException(PlatformExceptionType.BusinessException, "合同编号重复");
+		}
 		User user = ThreadSession.getUser();
 		contract.userId = user.id;
 		contract.deptId = user.deptId;

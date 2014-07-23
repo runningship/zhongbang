@@ -56,6 +56,7 @@ public class GrandServlet extends HttpServlet{
 //				ip = req.getRemoteAddr();
 //			}
 //			UserSessionCache.putSession(req.getSession().getId(), u.id , ip);
+//			resp.sendRedirect("/zb/login/login.html");
 		}
 		ThreadSession.setUser(u);
 		ThreadSession.setHttpServletRequest(req);

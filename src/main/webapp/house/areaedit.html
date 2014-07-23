@@ -14,19 +14,17 @@
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript">
+var mapPoint
 var areaId=getParam('areaId'),formAction;
-var lngs="",
-    lats="",
-    areas = "",
-    contall = "";
-  lngs="117.260429",
-  lats="31.881385",
-  areas = "华府俊园",
-  contall = "";
+var mapLngs="",
+    mapLats="",
+    mapAreas = "",
+    mapContall = "";
 
-  lngs="117.260429",
-  lats="31.881385",
-  contall="暂未添加此楼盘字典，<br>请拖动下面箭头选择楼盘标注坐标!";
+  mapLngs="117.260429";
+  mapLats="31.881385";
+  mapAreas = "请移动坐标";
+  mapContall="请拖动下面箭头选择楼盘标注坐标!";
 
 function onSubmit_Form(){
   $('form[name=form1]').on('submit', function(event) {
@@ -43,7 +41,7 @@ function setArea(search){
     data:search,
     success: function(data){
       var getAreas=JSON.parse(data);
-      art.dialog.tips('yes')
+      art.dialog.tips('保存成功')
     }
   })
 }
@@ -63,8 +61,12 @@ function getArea(){
         lngs=getAreas["area"]['maplng']
         lats=getAreas["area"]['maplat']
         contall=getAreas["area"]['address'] +'<br>'
-
+if(lngs){mapLngs=lngs}
+if(lats){mapLats=lats}
+if(areas){mapAreas=areas}
+if(contall){mapContall=contall}
         initMap();//创建和初始化地图
+        addMarker(lngs,lats,areas,contall);
       }
     }
   })
@@ -85,16 +87,19 @@ function initMap(){
   createMap();//创建地图
   setMapEvent();//设置地图事件
   addMapControl();//向地图添加控件
-  addMarker();//向地图中添加marker
+//
+//    addMarker();//向地图中添加marker
   other();//其他
 }
 
 //创建地图函数：
 function createMap(){
   var map = new BMap.Map("map");//在百度地图容器中创建一个地图
-  var point = new BMap.Point(lngs,lats);//定义一个中心点坐标
+  var point = new BMap.Point(mapLngs,mapLats);//定义一个中心点坐标
   map.centerAndZoom(point,16);//设定地图的中心点和坐标并将地图显示在地图容器中
+  map.setCurrentCity("合肥");                                                                      
   window.map = map;//将map变量存储在全局
+  mapPoint=point
 }
 
 //地图事件设置函数：
@@ -117,8 +122,68 @@ function addMapControl(){
   var ctrl_sca = new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT});
   map.addControl(ctrl_sca);
 }
+
+function addMarker(lngs,lats,title,contall){
+  var content = contall;
+  var opts = {
+    width : 200,     // 信息窗口宽度
+    height: 60,     // 信息窗口高度
+    title : title , // 信息窗口标题
+    enableMessage:true,//设置允许信息窗发送短息
+    message:"众邦手机地图："
+  }
+  if(!lngs||lngs==0&&!lats||lats==0){
+    var local = new BMap.LocalSearch(map, {
+      renderOptions:{map: map,selectFirstResult:true}
+    });
+    local.search(title);
+    local.setSearchCompleteCallback(function(results){
+        if(local.getStatus() !== BMAP_STATUS_SUCCESS){
+            alert("无结果");
+            map.panTo(mapPoint);
+        } else {
+        }
+    });
+    local.setMarkersSetCallback(function(pois){
+        for(var i=pois.length; i--; ){
+            var marker = pois[i].marker;
+            marker.addEventListener("click", function(e){
+                marker_trick = true;
+                var pos = this.getPosition();
+                $("#lng").val(pos.lng);
+                $("#lat").val(pos.lat);
+                map.panTo(new BMap.Point(pos.lng,pos.lat));
+                //setResult(pos.lng, pos.lat);
+            });
+             // 信息窗打开时绑定的事件   
+            marker.addEventListener("infowindowopen", function(e){
+                var pos = this.getPosition();
+                $("#lng").val(pos.lng);
+                $("#lat").val(pos.lat);
+                //map.panTo(new BMap.Point(pos.lng,pos.lat));
+            });  
+        }
+    });
+  }else{
+    var point = mapPoint;
+    var marker = new BMap.Marker(point);
+    var infoWindow = new BMap.InfoWindow(content, opts);  // 创建信息窗口对象
+    map.openInfoWindow(infoWindow,point); //开启信息窗口
+    map.panTo(point);
+    map.addOverlay(marker);
+    marker.enableDragging(); //marker可拖拽
+    marker.addEventListener("click", function(){          
+       this.openInfoWindow(infoWindow);
+    });
+    marker.addEventListener("dragend", function(e){
+      $("#lng").val(e.point.lng);
+      $("#lat").val(e.point.lat);
+      map.panTo(new BMap.Point(e.point.lng,e.point.lat));
+    });
+  }
+}
   
-function addMarker(){
+function addMarker_nothing(){
   var content = contall;
   //创建检索信息窗口对象
     var searchInfoWindow = new BMapLib.SearchInfoWindow(map, content, {
@@ -161,6 +226,7 @@ $(function(){
     }else{
       $('#arealist').find('input').val('');
       initMap();//创建和初始化地图
+      addMarker(lngs,lats,areas,contall)
     }
     onSubmit_Form();
 

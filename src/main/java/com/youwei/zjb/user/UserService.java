@@ -71,7 +71,7 @@ public class UserService {
 			}
 		}
 		String hql = "select child.namea as cname,parent.namea as pname ,child.id as did ,child.fid as qid ,u.uname as user ,u.id as userId "+
-					"from Department child,Department parent , User u where child.fid = parent.id and child.id=u.deptId and u.flag <> 1  and u.orgpath like '"+code+"%'";
+					"from Department child,Department parent , User u where child.fid = parent.id and child.id=u.deptId and u.sh=1 and u.flag <> 1  and u.orgpath like '"+code+"%'";
 		List<Map> users = dao.listAsMap(hql);
 		Map<String, JSONArray> quyus = groupByQuyu(users);
 		Map<String, JSONArray> depts = groupByDeptId(users);

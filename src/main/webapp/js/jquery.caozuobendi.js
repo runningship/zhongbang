@@ -87,14 +87,14 @@ function aBtnNavFun(a){
   }
 }
 //根据titile可拖动窗口
-document.addEventListener('mousemove', function (e) {
-    if (e.target.classList.contains('title')) {
-        hex.setAsTitleBarAreas(e.clientX, e.clientY);
-    } else {
-        hex.setAsTitleBarAreas(-1, -1);
-        hex.setAsNonBorderAreas(-1, -1);
-    }
-}, false);
+// document.addEventListener('mousemove', function (e) {
+//     if (e.target.classList.contains('title')) {
+//         hex.setAsTitleBarAreas(e.clientX, e.clientY);
+//     } else {
+//         hex.setAsTitleBarAreas(-1, -1);
+//         hex.setAsNonBorderAreas(-1, -1);
+//     }
+// }, false);
 //设置网页内容高度
 function setMainHeight(){
   var getTop,getFoot,getMain,getTopH=0,getMainH=0,getFootH=0;

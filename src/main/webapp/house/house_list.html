@@ -20,6 +20,7 @@
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
 <script type="text/javascript">
+var getParamS=getParam('nav');
 function fix(TableH,TableB){
   for(var i=0;i<=TableB.find('td:last').index();i++){
     TableH.find('th').eq(i).width(TableB.find('tr').eq(1).find('td').eq(i).width());
@@ -29,14 +30,16 @@ function fix(TableH,TableB){
 function getHuseList(a){
   var url
 //  alert(getParam('chuzu'))
-  if(getParam('nav')=="chushou"){
+  if(getParamS=="chushou"){
     url='/zb/c/house/listSell';
-  }else if(getParam('nav')=="chuzu"){
+  }else if(getParamS=="chuzu"){
     url='/zb/c/house/listRent';
-  }else if(getParam('nav')=="del"){
+  }else if(getParamS=="del"){
     url='/zb/c/house/listRecycle';
-  }else if(getParam('nav')=="my"){
+  }else if(getParamS=="my"){
     url='/zb/c/house/listMy';
+  }else if(getParamS=="fav"){
+    url='/zb/c/house/fav/list';
   }else{
     url='/zb/c/house/listAll';
   }
@@ -52,8 +55,12 @@ function getHuseList(a){
         Page.setPageInfo(getStr['page']);
         fix($('.TableH'),$('.TableB'));
 
-      if(getParam('nav')=="del"){
+      if(getParamS=="del"){
+        $('a.edit').remove();
         $('a.hidden').removeClass('hidden');
+      }
+      if(getParamS=="fav"){
+        $('a.edit,a.del,a.revert').remove();
       }
     }
   });
@@ -94,14 +101,18 @@ function edit(id){
     })
 }
 
-function openHouseXingzhi(id){
-  art.dialog.open('xingzhi_edit.html?hid='+id,{
+function openHouseXingzhi(id,xingzhi){
+  art.dialog.open('xingzhi_edit.html?xingzhi='+xingzhi+'&hid='+id,{
       padding:0,
       resize:true,
       lock:1,
       height:300,
       width:300
   })
+}
+
+function doSearch(){
+  getHuseList(formSerialize($('form[name=form1]')));
 }
 
 function setDateSec(select){
@@ -151,7 +162,7 @@ $(function(){
       var Thi=$(this),
       ThiType=Thi.data('type');
       if(ThiType=='qingkong'){
-        window.location.href='house_list.html?nav='+getParam('nav')
+        window.location.href='house_list.html?nav='+getParamS
       }
     });
   $('#id_House_list').on('click', 'a', function(event) {
@@ -164,7 +175,7 @@ $(function(){
     }else if(rel=='edit'){
       edit(this_hid);
     }else if(rel=='del'){
-      if(getParam('nav')=="del"){
+      if(getParamS=="del"){
         art.dialog({
           title: '警告',
           content: '删除后不可恢复，确定？',
@@ -352,7 +363,7 @@ $(function(){
       </div>
       <div class="btn-group">
         <button type="submit" class="btn btn-primary btn_subnmit">搜索提交</button>
-        <button type="button" class="btn" data-type="qingkong" onclick="window.location.href='house_list.html?nav='+getParam('nav')">清空</button>
+        <button type="button" class="btn" data-type="qingkong" onclick="window.location.href='house_list.html?nav='+getParamS">清空</button>
       </div>
       <br/><br/><br/>
 
@@ -390,7 +401,7 @@ $(function(){
       <th>操作</th>
     </tr>
     <tbody id="id_House_list">
-    <tr data-hid="${id}">
+    <tr data-hid="${id}" style="display:none">
       <td>${houseNumber}</td>
       <td>${leibie}</td>
       <td>${quyu}</td>
@@ -404,14 +415,14 @@ $(function(){
       <td>${dateyear}</td>
       <td>${dateadd}</td>
       <td>${forlxr}</td>
-      <td auth="fy_list_xingzhi" ><a href="javascript:void(0)" onclick="openHouseXingzhi(${id})"><span class='runscript'>getEnumText('xingzhi',${xingzhi})</span></a></td>
+      <td auth="fy_list_xingzhi" ><a href="javascript:void(0)" onclick="openHouseXingzhi(${id},${xingzhi})"><span class='runscript'>getEnumText('xingzhi',${xingzhi})</span></a></td>
       <td class='runscript'>getEnumText('zhuangtai',${ztai})</td>
       <!-- <td>有</td> -->
       <td>
-        <a href="#" data-hid="${id}" data-rel="edit">修改</a>
-        <a href="##" data-hid="${id}" data-rel="del">删除</a>
-        <a href="###" data-hid="${id}" data-rel="revert" class="hidden">恢复</a>
-        <a href="####" data-hid="${id}" data-rel="see">查看</a></td>
+        <a href="#" class="edit" data-hid="${id}" data-rel="edit">修改</a>
+        <a href="##" class="del" data-hid="${id}" data-rel="del">删除</a>
+        <a href="###" class="revert hidden" data-hid="${id}" data-rel="revert">恢复</a>
+        <a href="####" class="see" data-hid="${id}" data-rel="see">查看</a></td>
     </tr>
     </tbody>
   </table>

@@ -20,7 +20,7 @@
 <script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript">
-	hex.sizeTo(800, 350);
+	// hex.sizeTo(800, 350);
 
 	//alert(hex.formResized)
 	var getUserTreeStr, bios, cpu, baseboard, harddrive, didc, uidc;
@@ -101,6 +101,7 @@
 	function loginStart() {
 		function loginYes() {
 			window.location = '/zb/v/index.html'
+			// window.location = '/zb/v/oa/index.html'
 		}
 		var did = $('.deptl').val(), uid = $('.user').val(), pwd = $(
 				'.password').val(), param = {
@@ -136,14 +137,15 @@
 		});
 	}
 	$(function() {
-		didc = GetCookie('zb_l_comp');
-		uidc = GetCookie('zb_l_user');
-		get_company();
 		try {
 			loadHardwareInfo();
 		} catch (e) {
 			alert(e);
 		}
+		didc = GetCookie('zb_l_comp');
+		uidc = GetCookie('zb_l_user');
+		get_company();
+		
 		//$('.btn_go_reg').text(didc+'|'+uidc)
 		$('.company').on('change', function(event) {
 			get_user();

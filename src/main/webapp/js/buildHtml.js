@@ -40,7 +40,7 @@ function buildHtmlWithJsonArray(id,json,removeTemplate){
                     obj.innerHTML = val;  
                 }
             }catch(e){
-                console.log(obj.textContent);
+                // console.log(obj.textContent);
                 obj.textContent = "";
             }
         // }
@@ -109,7 +109,9 @@ YW={
                     if(desc==undefined){
                         desc = field;
                     }
+                    $(arr[0]).focus();
                     alert("请先填写 "+ desc);
+
                 }else{
                     alert(json['msg']);   
                 }
@@ -123,12 +125,12 @@ YW={
         }
     },
     ajax:function(options){
-        if(options.beforeSend==undefined){
-            options.beforeSend = YW.options.beforeSend;
-        }
-        if(options.complete==undefined){
-            options.complete = YW.options.complete;
-        }
+        // if(options.beforeSend==undefined){
+        //     options.beforeSend = YW.options.beforeSend;
+        // }
+        // if(options.complete==undefined){
+        //     options.complete = YW.options.complete;
+        // }
         if(options.error==undefined){
             options.error = YW.options.error;
         }

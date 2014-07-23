@@ -20,8 +20,8 @@
 <script type="text/javascript">
 $(document).ready(function(){
     $(document).on('click', '.aNavBtn', function(event) {
-        var aHref=$(this).attr( 'href');
-        $('iframe').attr('src',aHref);
+        var aHref=$(this).attr( 'target');
+        $('#oa_iframe').attr('src',aHref);
         return false;
     });
     $('.sider').find('a').eq(0).click();
@@ -38,18 +38,19 @@ function select(fenleiId){
 <body>
     <div class="body hmain">
         <div class="sider">
-            <dl auth="oa_desk" class="sidedl">
-                <dt>我的桌面</dt>
-                <dd auth="oa_desk_mydesk"><a class="aNavBtn" href="desk.html"  target="house_iframe" >我的桌面</a></dd>
-            </dl>
+           
             <dl auth="oa_notice" class="sidedl">
                 <dt>系统公告</dt>
-                <dd auth="oa_notice_fenlei"><a class="aNavBtn" href="fenlei_list.html"  target="house_iframe" >公告分类</a></dd>
-                <dd auth="oa_notice_list"><a id="data_list" class="aNavBtn" href="data_list.html" target="house_iframe" >公告列表</a></dd>
+                <dd auth="oa_notice_fenlei"><a class="aNavBtn" href="javascript:void(0)"  target="fenlei_list.html" >公告分类</a></dd>
+                <dd auth="oa_notice_list"><a id="data_list" class="aNavBtn" href="javascript:void(0)" target="http://www.baidu.com" >公告列表</a></dd>
+            </dl>
+             <dl auth="oa_desk" class="sidedl">
+                <dt>我的桌面</dt>
+                <dd auth="oa_desk_mydesk"><a class="aNavBtn" href="javascript:void(0)" target="" >我的桌面</a></dd>
             </dl>
         </div>
         <div class="mainer">
-            <iframe src="" id="house_iframe" name="house_iframe" width="100%" height="100%" frameborder="0"></iframe>
+            <iframe src="" id="oa_iframe" name="oa_iframe" width="100%" height="100%" frameborder="0"></iframe>
         </div>
     </div>
 </body>

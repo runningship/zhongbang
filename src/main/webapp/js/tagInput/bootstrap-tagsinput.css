@@ -20,12 +20,14 @@
   margin: 0;
   width: auto !important;
   max-width: inherit;
+
 }
 .bootstrap-tagsinput input:focus {
   border: none;
   box-shadow: none;
 }
 .bootstrap-tagsinput .tag {
+  font-size: 12px;
   margin-right: 2px;
   color: white;
 }

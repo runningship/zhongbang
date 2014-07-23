@@ -18,7 +18,7 @@
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
-<script type="text/javascript" src="/zb/js/tagInput/bootstrap-tagsinput.min.js"></script>
+<script type="text/javascript" src="/zb/js/tagInput/bootstrap-tagsinput.js"></script>
 <link   rel="stylesheet"      href="/zb/js/tagInput/bootstrap-tagsinput.css">
 <script type="text/javascript">
 /*
@@ -70,9 +70,8 @@ var Thi=$('form');
   //    async:false,
       data:formSerialize(Thi),
       success: function(data){
-        art.dialog.close();
         art.dialog.opener.doSearch();
-        alert('添加成功');
+        alert('保存成功');
       }
     });
     return false;
@@ -132,14 +131,12 @@ $(function(){
         withJson($('#id_fuyongs'),'fuyongs',client['fuyongs']);
         withJson($('#id_valid'),'valid',client['valid']);
 
+        // $('.tag3').tagsinput({maxTags:3});
         // fillData(getStr['client']);
-        //$('#tel').tagsinput('add', { "value": 1 , "text": "12321321321321321321"  });
-        $('#tel').tagsinput({
-    confirmKeys: [13, 44]
-});
+        $('#tel').tagsinput('add', client['tel']);
+        $('#area').tagsinput('add', client['area']);
+        $('#id').val(client['id']);
         $('#lxr').val(client['lxr']);
-        // $('#tel').val(client['tel']);
-        $('#area').val(client['area']);
         $('#loucengFrom').val(client['loucengFrom']);
         $('#loucengTo').val(client['loucengTo']);
         $('#mianjiFrom').val(client['mianjiFrom']);
@@ -155,7 +152,7 @@ $(function(){
           select.change();
         });
       });
-      $('.tag3').tagsinput({maxTags:3});
+      
     }else{
 //      var gerStrNull={"client":{"id":"","salesman":"","djr":"","lxr":"","tel":"","area":"","luduan":"","louxing":"","huxing":"","zhaungxiu":"","mianjiFrom":"","mianjiTo":"","jiageFrom":"","jiageTo":"","fuyongs":"","zhongyaos":"","beizhu":"","addtime":"","chuzu":"","loucengFrom":"","loucengTo":"","quyu":"","source":"","valid":""}}
       //gerStrNull=JSON.parse(gerStrNull)
@@ -182,9 +179,11 @@ table th{ width: 60px; text-align: right;}
 margin-bottom: 0px;
 width: 100%;
 }
+.label{font-size: 12px;}
 .checklist{}
 .checklist li{ float: left; margin:0 3px 3px 0; }
-.checklist label{display: inline-block; background-color: #EEE; color:#666;font-weight: normal; margin-bottom: 2px;}
+.checklist label{display: inline-block; background-color: #EEE; color:#666;font-weight: normal; margin-bottom: 2px;font-size: 12px;}
+.checklist label input{ vertical-align: bottom;}
 </style>
 </head>
 <body class="bodyer">
@@ -208,7 +207,7 @@ width: 100%;
       </tr>
       <tr>
         <th>电话</th>
-        <td><input type="text" data-role="tagsinput" style="min-width:90px" class="tag3 form-control" id="tel" name="tel" value="${tel}" placeholder="电话"></td>
+        <td><input type="text" data-role="tagsinput"  style="min-width:90px" class="form-control tags3" id="tel" name="tel" value="" placeholder="电话"></td>
         <th>客户性质</th>
         <td>
           <ul class="checklist" id="id_kehuxingzhi">
@@ -218,7 +217,7 @@ width: 100%;
       </tr>
       <tr>
         <th>楼盘</th>
-        <td><input type="text" data-role="tagsinput" class="tag3 form-control" id="area" name="area" value="${area}" placeholder="楼盘"></td>
+        <td><input type="text" data-role="tagsinput" class="tag3 form-control" id="area" name="area" value="" placeholder="楼盘"></td>
         <th>楼层</th>
         <td>
           <input type="text" class="form-control inputW100" id="loucengFrom" name="loucengFrom" value="${loucengFrom}">-

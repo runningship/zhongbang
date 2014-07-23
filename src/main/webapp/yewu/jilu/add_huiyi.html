@@ -59,9 +59,6 @@ function initFileUpload(){
           $('#' + file.id).find('.data').html('-文件上传失败,'+json['msg']);
           // console('The file ' + file.name + ' was successfully uploaded with a response of ' + response + ':' + data);
         }
-      },
-      'onQueueComplete' : function(queueData) {
-        console.log(queueData);
       }
   });
 }

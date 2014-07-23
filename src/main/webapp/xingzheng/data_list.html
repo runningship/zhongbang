@@ -58,6 +58,7 @@ function deleteData(id){
     data:'',
     success: function(data){
       getList();
+      alert("删除成功")
     },
     error:function(data){
       alert(data.responseText);
@@ -74,8 +75,8 @@ function openAdd(id){
       padding:0,
       resize:true,
       lock:1,
-      height:600,
-      width:1080
+      height:500,
+      width:850
   });
 }
 
@@ -84,8 +85,8 @@ function openEdit(id){
       padding:0,
       resize:true,
       lock:1,
-      height:600,
-      width:1080
+      height:500,
+      width:850
   });
 }
 
@@ -124,19 +125,19 @@ $(function(){
     <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:30px;padding:0px 10px 0px 10px">添加 <span class="caret"></span></button>
     <ul class="dropdown-menu">
       <span id="adminClassList">
-        <li><label><a onclick="openAdd(${id})" href="javascript:void(0)" style="color:black;padding-left:10px;line-height:30px;font-weight:normal">${title}</a></label></li>
+        <li onclick="openAdd(${id})"><label><a  href="javascript:void(0)" style="color:black;padding-left:10px;line-height:30px;font-weight:normal">${title}</a></label></li>
       </span>
     </ul>
   </div>
 
-  <div style="float:right;margin-right:20px;">
+  <div style="">
   <form name="form1" onsubmit="return doSearch();">
     <div class="btn-group">
-      <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:35px;padding:0px 10px 0px 10px;width:150px;"><span id="btn_class_select">分 类</span> <span class="caret"></span></button>
+      <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:30px;padding:0px 10px 0px 10px;width:150px;"><span id="btn_class_select">分 类</span> <span class="caret"></span></button>
       <ul class="dropdown-menu">
         <li><label><span  onclick="selectType('','所有')" style="color:black;padding-left:10px;line-height:30px;font-weight:normal">所有</span></label></li>
         <span id="adminClassList2">
-          <li><label><span onclick="selectType(${id},'${title}');" style="color:black;padding-left:10px;line-height:30px;font-weight:normal">${title}</span></label></li>
+          <li onclick="selectType(${id},'${title}');"><label><span  style="color:black;padding-left:10px;line-height:30px;font-weight:normal">${title}</span></label></li>
         </span>
       </ul>
     </div>

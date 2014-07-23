@@ -81,10 +81,6 @@ function deleteClient(id){
         dataType:'json',
         success:function (data, textStatus) {
             doSearch();
-        },
-        complete: function(XMLHttpRequest, textStatus){},
-        error:function (XMLHttpRequest, textStatus, errorThrown) {
-          console.error(XMLHttpRequest.responseText);
         }
       });
     },
@@ -108,10 +104,6 @@ function deleteSelected(){
         dataType:'json',
         success:function (data, textStatus) {
             doSearch();
-        },
-        complete: function(XMLHttpRequest, textStatus){},
-        error:function (XMLHttpRequest, textStatus, errorThrown) {
-          console.error(XMLHttpRequest.responseText);
         }
       });
     },
@@ -193,6 +185,8 @@ $(function(){
 </script>
 <style type="text/css">
   .table{ margin-bottom: 0px;}
+  .input-group-time{ width: 300px; }
+  .input-group-time input{ width: 10px;}
 </style>
 </head>
 <body class="hlist bodyer" style="overflow:auto">
@@ -201,65 +195,66 @@ $(function(){
     
     <form name="form1" style="float:left">
     <input type="hidden" class="userInput" name="xpath" value="">
-    <div class="btn-group">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        区域 <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu" id="id_quyu">
-        <li><label><input type="checkbox" name="quyus" value="${name}"> ${name}</label>
-      </ul>
+    <div class="clearfix">
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          区域 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_quyu">
+          <li><label><input type="checkbox" name="quyus" value="${name}"> ${name}</label></li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          性质 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_kehu">
+          <li><label><input type="radio" name="kehuxingzhi" value="${name}"> ${name}</label></li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          来源 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_kehulaiyuan">
+          <li><label><input type="checkbox" name="kehulaiyuan" value="${name}"> ${name}</label></li>
+        </ul>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          是否有效 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" id="id_laiyuan">
+          <li><label><input type="radio" name="youxiao" value=""> 所有</label></li>
+          <li><label><input type="radio" name="youxiao" value="1"> 有效</label></li>
+          <li><label><input type="radio" name="youxiao" value="0"> 无效</label></li>
+        </ul>
+      </div>
+      <div class="input-group input-group-max">
+        <span class="input-group-addon">电话</span>
+        <input type="text" class="form-control" name="tel">
+      </div>
+      
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
+        <button  class="btn btn-primary btnadd" data-flag="add">登记</button>
+      </div>
     </div>
-    <div class="btn-group">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        性质 <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu" id="id_kehu">
-        <li><label><input type="radio" name="kehuxingzhi" value="${name}"> ${name}</label></li>
-      </ul>
+
+    <div class="clearfix">
+      <div class="input-group input-group-time" style="width:302px">
+        <span class="input-group-addon">登记时间</span>
+        <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:110px;border-radius:0;">
+        <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:115px">
+      </div>
+      <div class="input-group input-group-select">
+        <span class="input-group-addon">业务员</span>
+        <select class="form-control get_comp" name="form_cid"></select>
+        <select class="form-control get_quyu" name="form_did"></select>
+        <select class="form-control get_user" name="form_uid"></select>
+      </div>
     </div>
-    <div class="btn-group">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        来源 <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu" id="id_kehulaiyuan">
-        <li><label><input type="checkbox" name="kehulaiyuan" value="${name}"> ${name}</label>
-      </ul>
-    </div>
-    <div class="btn-group">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        是否有效 <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu" id="id_laiyuan">
-        <li><label><input type="radio" name="youxiao" value=""> 所有</label>
-        <li><label><input type="radio" name="youxiao" value="1"> 有效</label>
-        <li><label><input type="radio" name="youxiao" value="0"> 无效</label>
-      </ul>
-    </div>
-    <div class="input-group input-group-max">
-      <span class="input-group-addon">电话</span>
-      <input type="text" class="form-control" name="tel">
-    </div>
-    
-    <div class="btn-group">
-      <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
-    </div>
-    <br/><br/>
-    <div class="input-group" style="width:400px">
-      <span class="input-group-addon">登记时间</span>
-      <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:150px;border-radius:0;">
-      <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:150px">
-    </div>
-    <div class="input-group input-group-mt3 input-group-select" style="margin-top:1px;">
-      <span class="input-group-addon">业务员</span>
-      <select class="form-control get_comp" name="form_cid"></select>
-      <select class="form-control get_quyu" name="form_did"></select>
-      <select class="form-control get_user" name="form_uid"></select>
-    </div>
-    
     </form>
-    <div class="btn-group" style="float:right">
-      <button  class="btn btn-primary btnadd" data-flag="add">登记</button>
-    </div>
 </div>
 <div class="mainer" style="/*position:relative;width:100%*/">
   <table class="table table-hover .table_bodyer" >
@@ -275,7 +270,7 @@ $(function(){
       <th>客户性质</th>
       <th>业务员</th>
       <th>房配客</th>
-      <th>分配</th>
+      <th auth="ky_client_buy_assign">分配</th>
       <th>操作</th>
     </thead>
     <tbody id="id_GJ_list">
@@ -291,8 +286,10 @@ $(function(){
       <td class='runscript'>getEnumTextByCode(queryOpts['kehu'],${kehu})</td>
       <td>${uname}</td>
       <td><a href="javascript:void(0)" class="btn btn-xs" data-flag="fy">房源</a></td>
-      <td><a href="javascript:void(0)" class="btn btn-xs" data-flag="fp">分配</a></td>
-      <td><a href="javascript:void(0)" class="btn btn-xs" data-flag="edit">修改</a> <a href="javascript:void(0)"  class="btn" data-flag="del">删除</a></td>
+      <td auth="ky_client_buy_assign"><a href="javascript:void(0)" class="btn btn-xs" data-flag="fp">分配</a></td>
+      <td><a auth="ky_client_buy_edit" href="javascript:void(0)" class="btn btn-xs" data-flag="edit">修改</a>
+          <a auth="ky_client_buy_del" href="javascript:void(0)"  class="btn btn-xs" data-flag="del">删除</a>
+      </td>
       
     </tr>
     </tbody>

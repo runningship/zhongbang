@@ -73,7 +73,7 @@ function init(){
       var json = JSON.parse(data);
       $('#userinfo').text(json.username+' ('+json.role+')');
       myId = json.userId;
-      $('#win_im').click();
+      // $('#win_im').click();
       // chatWindow.close();
     }
   });
@@ -107,13 +107,13 @@ function openChat(e,hidden){
     e.preventDefault();
   }
   if(chatWindow==null){
-    chatWindow = art.dialog.open('im.html?userId='+myId,{
+    // chatWindow = art.dialog.open('im.html?userId='+myId,{
+    chatWindow = art.dialog.open('/zb/v/oa/index.html',{
       padding:0,
       height:605,
       width:930,
       title:'',
       resize:false,
-      show:false,
       skin:'idialog',
       close:function(){
         // $(art.dialog.opener.document).find('.idialog').remove();
@@ -136,6 +136,20 @@ function logout(){
     success: function(data){
       alert('正在关闭...');
       hex.close();
+    },
+    error:function(data){
+      hex.close();
+    }
+  });
+}
+
+function relogin(){
+  YW.ajax({
+    type: 'POST',
+    url: '/zb/c/user/logout',
+    data:'',
+    success: function(data){
+      document.location="/zb/login/login.html?"+Math.random();
     },
     error:function(data){
       hex.close();
@@ -209,7 +223,7 @@ box-shadow: 0px 1px 5px #000;
           <ul class="item">
             <li onclick="openPassword()"><span class="sitting_btn"></span>修改密码</li>
             <li onclick="openFanKui()"><span class="about_btn"></span>意见反馈</li>
-            <li onclick="logout()"><span class="logout_btn"></span>退出系统</li>
+            <li onclick="relogin()"><span class="logout_btn"></span>重新登录</li>
           </ul>
         </div>
     </div>

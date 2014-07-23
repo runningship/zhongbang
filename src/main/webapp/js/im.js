@@ -356,7 +356,7 @@ var IM = {
 	            IM.fixImg('avatars');
 	        },
 	        error:function (XMLHttpRequest, textStatus, errorThrown) {
-	        	console.error(XMLHttpRequest.responseText);
+	        	alert(XMLHttpRequest.responseText);
 	        }
 	    });
 	},
@@ -390,7 +390,6 @@ var IM = {
 
 		IM.ws = new WebSocket("ws://192.168.1.125:9099");
 		IM.ws.onopen = function() { 
-			console.log("open"); 
 			IM.login(IM.ws);
 		};
 		IM.ws.onmessage = function(e) { 

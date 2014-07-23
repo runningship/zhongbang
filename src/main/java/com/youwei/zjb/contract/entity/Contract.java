@@ -41,11 +41,13 @@ public class Contract {
 	@Column(name="did_yw")
 	public Integer ywDeptId;
 	
+	@Column(nullable=false)
 	public String bianhao;
 	
 	/**
 	 * 房主
 	 */
+	@Column(nullable=false)
 	public String lxr_f;
 	
 	public String tel_f;
@@ -53,16 +55,20 @@ public class Contract {
 	/**
 	 * 客户
 	 */
+	@Column(nullable=false)
 	public String lxr_k;
 	
 	public String tel_k;
 	
 	public String addr;
 	
+	@Column(nullable=false)
 	public Float mianji;
 	
+	@Column(nullable=false)
 	public Float zjia;
 	
+	@Column(nullable=false)
 	public Float djia;
 	
 	public Date addtime;

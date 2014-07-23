@@ -16,7 +16,7 @@ import com.youwei.zjb.house.entity.Favorite;
 import com.youwei.zjb.house.entity.House;
 import com.youwei.zjb.util.JSONHelper;
 
-@Module(name="/fav/")
+@Module(name="/house/fav/")
 public class FavoriteService {
 
 	CommonDaoService service = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
@@ -61,7 +61,6 @@ public class FavoriteService {
 		}
 		StringBuilder hql = new StringBuilder("select h from House h,Favorite f where h.id=f.houseId and f.userId="+user.id);
 		Page<House> page = new Page<House>();
-		page.setCurrentPageNo(1);
 		page = service.findPage(page, hql.toString());
 		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;

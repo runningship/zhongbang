@@ -59,8 +59,10 @@ public class ViewServlet extends HttpServlet{
 		if(user==null){
 			//返回登录
 //			return;
-			user = SimpDaoTool.getGlobalCommonDaoService().get(User.class, 316);
-			UserSessionCache.putSession(req.getSession().getId(), user.id, "test");
+			resp.sendRedirect(req.getContextPath()+"/login/login.html");
+			return;
+//			user = SimpDaoTool.getGlobalCommonDaoService().get(User.class, 316);
+//			UserSessionCache.putSession(req.getSession().getId(), user.id, "test");
 		}
 		String filePath = req.getServletContext().getRealPath("/")+path;
 		String html = FileUtils.readFileToString(new File(filePath));

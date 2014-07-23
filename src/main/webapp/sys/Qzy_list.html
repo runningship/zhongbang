@@ -30,7 +30,7 @@ function getList(search){
       var getStr=JSON.parse(data);
       dataArr = getStr['data'];
       buildHtmlWithJsonArray("id_list",dataArr);
-      Page.setPageInfo(getStr['page']);
+      // Page.setPageInfo(getStr['page']);
     }
   });
 }
@@ -64,10 +64,6 @@ function deleteQzy(id){
         dataType:'json',
         success:function (data, textStatus) {
             doSearch();
-        },
-        complete: function(XMLHttpRequest, textStatus){},
-        error:function (XMLHttpRequest, textStatus, errorThrown) {
-          console.error(XMLHttpRequest.responseText);
         }
       });
     },
@@ -78,6 +74,7 @@ function deleteQzy(id){
 
 $(function(){
   getList();
+  // Page.Init();
 });
 </script>
 

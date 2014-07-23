@@ -122,7 +122,7 @@ $(function(){
   $('#classId').val(classId);
   ue = UE.getEditor('editor');
   ue.addListener( 'ready', function( editor ) {
-    ue.setHeight(350);
+    ue.setHeight(250);
     loadData();
   });
   
@@ -155,7 +155,7 @@ $(function(){
     <input type="hidden" id="conts" name="conts" />
   </form>
   <div style="margin-left:10px;margin-top:50px;">
-    <span id="editor" type="text/plain" style="width:1024px;height:500px;"></span>
+    <span id="editor" type="text/plain" style="width:800px;height:500px;"></span>
   </div>
   <div>
     <input id="file_upload" name="file_upload" style="display:none">
