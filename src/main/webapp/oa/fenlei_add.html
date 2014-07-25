@@ -27,10 +27,6 @@ function doSave(){
       art.dialog.close();
       art.dialog.tips('添加成功');
       art.dialog.opener.getList();
-
-    },
-    error:function(data){
-      art.dialog.alert(data.responseText);
     }
   });
   return false;
@@ -42,13 +38,13 @@ $(function(){
 
 </script>
 </head>
-<body class="hlist bodyer" style="overflow:auto">
+<body style="overflow:hidden">
 
 <div class="header" style="position:relative;height:50px;width:100%">
   <form name="form1">
     <div class="input-group " style="float:none;margin-top:15px;width:300px;">
       <span class="input-group-addon">分类名称: </span>
-      <input type="text" class="form-control" name="title">
+      <input type="text" class="form-control" desc="分类名称" name="fenlei">
     </div>
   </form>
   <div class="btn-group" style="float:none;margin-top:15px;">

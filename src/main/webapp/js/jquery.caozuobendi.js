@@ -62,6 +62,8 @@ function WinMax(){/*最大化*/
 }
 function WinRevert(){/*恢复*/
   hex.restore();
+  $('.tbtnMax').css('display','inline-block');
+  $('.tbtnRevert').css('display','none');
 }
 function WinClose(){/*退出*/
   YW.ajax({

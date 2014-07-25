@@ -11,7 +11,7 @@
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.timers.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
@@ -23,6 +23,7 @@
 var getStr;
 var editPageData='';
 var actions;
+var contractId;
 function funSubmit(){
   var url=$('form[name=form1]').attr('action');
   YW.ajax({
@@ -35,12 +36,30 @@ function funSubmit(){
             art.dialog.close()
           }
         });
-    },
-    error:function(data){
-      art.dialog.tips(data.responseText);
     }
   });
   return false;
+}
+
+
+function openAddYongjin(id){
+  art.dialog.open('yongjin_add.html?yongjinId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:'300',
+      width:'400'
+  });
+}
+
+function openAddYongjinProxy(id){
+  art.dialog.open('yongjin_proxy_add.html?yongjinId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:'300',
+      width:'400'
+  });
 }
 
 function fillData(contract){
@@ -141,7 +160,7 @@ function doProcess(rowIndex){
 }
 
 $(function(){
-  var contractId = getParam('contractId');
+  contractId = getParam('contractId');
   $.get('/zb/c/contract/view?contractId='+contractId, function(data) {
     editPageData=JSON.parse(data);
     actions = editPageData['actions']
@@ -152,11 +171,13 @@ $(function(){
     buildHtmlWithJsonArray("id_list",editPageData['actions']);
     buildHtmlWithJsonArray("id_list_yongjin",editPageData['yongjins']);
     buildHtmlWithJsonArray("id_list_yongjinProxys",editPageData['yongjinProxys']);
-    if(editPageData['yongjins'].length==0){
-      $('#id_list_yongjin').append('等待财务添加...');
-    }
+    
+    // if(editPageData['yongjins'].length==0){
+    //   $('#id_list_yongjin').append('等待财务添加...');
+    // }
     if(editPageData['yongjinProxys'].length==0){
-      $('#table_yongjinProxys').append('<tr><td colspan="3">等待财务添加...</td></tr>');
+      $('#thead_yongjinProxys').remove();
+      // $('#table_yongjinProxys').append('<tr><td colspan="3">等待财务添加...</td></tr>');
     }
   });
 });
@@ -185,9 +206,10 @@ $(function(){
   font-weight: bold;
   border-bottom: none;
 }
+table.table>thead>tr>th, table.table>tbody>tr>th, table.table>tfoot>tr>th, table.table>thead>tr>td, table.table>tbody>tr>td, table.table>tfoot>tr>td {border-top: none;}
 </style>
 </head>
-<body style="overflow-y:auto" id="id_house_see">
+<body style="overflow:hidden; overflow-y:auto" id="id_house_see">
 <form name="form1" method="post" action="/zb/c/contract/update" onsubmit="return funSubmit();">
   <input type="hidden" id="claid" name="claid" />
   <input type="hidden" id="contractId" name="id" />
@@ -422,21 +444,24 @@ $(function(){
         </td>
         <td >${qian_r}</td>
         <td >${beizhu}</td>
-        <td><a>修改</a></td>
+        <td><a onclick="javascript:void(0)" onclick="openAddYongjin(${id})">修改</a></td>
       </tr>
     </tbody>
   </table>
+  <div>
+    <a onclick="openAddYongjin();" href="javascript:void(0)">添加</a>
+  </div>
 
   <div style="background:#ddd;font-weight:bold;height:30px;line-height:30px;margin-top:10px;"><span style="padding-left:10px;font-size:16px;">代收费: </span></div>
   <table style="float:right;width:100%" id="table_yongjinProxys">
-    <tr>
+    <tr id="thead_yongjinProxys">
       <th></th>
       <th style="width:200px;">项目名称</th>
       <th>金额</th>
     </tr>
     <tbody id="id_list_yongjinProxys" >
     <tr>
-      <td style="width:60px;border-right:none">${rowIndex}</td>
+      <td class="runscript" style="width:60px;border-right:none">${rowIndex}+1</td>
       <td colspan="2" style="border:none;">
         <table style="width:100%">
           <tbody >
@@ -458,7 +483,7 @@ $(function(){
               </tr>
               <tr>
                 <td >备注</td>
-                <td>${beizhu}<a style="float:right;">修改</a></td>
+                <td>${beizhu}<a onclick="javascript:void(0)" onclick="openAddYongjinProxy(${id})" style="float:right;">修改</a></td>
               </tr>
           </tbody>
         </table>
@@ -466,5 +491,8 @@ $(function(){
     </tr>
     </tbody>
   </table>
+   <div>
+    <a onclick="openAddYongjinProxy();" href="javascript:void(0)">添加</a>
+  </div>
 </body>
 </html>

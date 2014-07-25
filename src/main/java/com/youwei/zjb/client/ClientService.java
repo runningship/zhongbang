@@ -62,7 +62,7 @@ public class ClientService {
 			mv.data.getJSONObject("client").put("salesmanDeptId",salesman.deptId);
 			mv.data.getJSONObject("client").put("salesmanName",salesman.uname);
 			mv.data.getJSONObject("client").put("salesman",salesman.id);
-			mv.data.getJSONObject("client").put("salesmanQuyu",salesman.Department().getParent().id);
+			mv.data.getJSONObject("client").put("salesmanQuyu",salesman.Department().Parent().id);
 		}
 		return mv;
 	}

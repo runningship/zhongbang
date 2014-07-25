@@ -63,16 +63,20 @@ public class UserService {
 					code = user.Department().path;
 				}
 				if("data_quyu".equals(ra.name)){
-					code = String.valueOf(user.Department().getParent().path);
+					code = String.valueOf(user.Department().Parent().path);
 				}
 				if("data_all".equals(ra.name)){
 					code = "";
 				}
 			}
 		}
+		String sql = "select tt.*,xx.uname as user,xx.id as userId from (select c1.namea as pname , c2.namea as cname , c1.id as qid ,c2.id as did from uc_comp c1 left JOIN uc_comp c2 on c1.id=c2.fid where c1.fid=1) as tt"
+				+" LEFT JOIN (select u.uname,u.did ,u.id from uc_user u where u.sh=1 and u.flag <> 1) as xx on tt.did=xx.did ";
+		String sql2 = "select tt.*,u.uname from (select c1.namea as quyu , c2.namea as dept , c1.id as qid ,c2.id as did from Department c1 , Department c2 where c1.id=c2.fid and c1.id<>1) as tt"
+				+" LEFT JOIN User u on tt.did=u.did where u.sh=1 and u.flag <> 1";
 		String hql = "select child.namea as cname,parent.namea as pname ,child.id as did ,child.fid as qid ,u.uname as user ,u.id as userId "+
 					"from Department child,Department parent , User u where child.fid = parent.id and child.id=u.deptId and u.sh=1 and u.flag <> 1  and u.orgpath like '"+code+"%'";
-		List<Map> users = dao.listAsMap(hql);
+		List<Map> users = dao.listSqlAsMap(sql);
 		Map<String, JSONArray> quyus = groupByQuyu(users);
 		Map<String, JSONArray> depts = groupByDeptId(users);
 		JSONArray root = merge(quyus,depts,users);
@@ -90,7 +94,9 @@ public class UserService {
 		}catch(Exception ex){
  			ex.printStackTrace();
 		}
-		mv.data.put("role", user.getRole().title);
+		if(user.getRole()!=null){
+			mv.data.put("role", user.getRole().title);
+		}
 		mv.data.put("userId", user.id);
 		return mv;
 	}
@@ -395,7 +401,11 @@ public class UserService {
 		Map<String,JSONArray> quyus = new HashMap<String,JSONArray>();
 		for(Map user : users){
 			if(!quyus.containsKey(user.get("pname"))){
-				quyus.put(user.get("pname").toString(), new JSONArray());
+				if(user.get("pname")==null){
+					System.out.println("");
+				}else{
+					quyus.put(user.get("pname").toString(), new JSONArray());
+				}
 			}
 			JSONArray arr = quyus.get(user.get("pname"));
 			JSONObject dept = new JSONObject();
@@ -411,6 +421,10 @@ public class UserService {
 	private Map<String,JSONArray> groupByDeptId(List<Map> users){
 		Map<String,JSONArray> deptUsers = new HashMap<String,JSONArray>();
 		for(Map user : users){
+			if(user.get("cname")==null){
+				System.out.println();
+				continue;
+			}
 			if(!deptUsers.containsKey(user.get("cname"))){
 				deptUsers.put(user.get("cname").toString(), new JSONArray());
 			}

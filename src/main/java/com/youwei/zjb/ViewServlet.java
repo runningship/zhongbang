@@ -51,6 +51,8 @@ public class ViewServlet extends HttpServlet{
 		resp.setCharacterEncoding("utf8");
 		String path = req.getPathInfo();
 		SessionHelper.updateSession(req);
+		req.getSession().setMaxInactiveInterval(20);
+		System.out.println(req.getSession().getMaxInactiveInterval());
 		resp.setContentType(getMimeType(path));
 		if(!path.endsWith(".html")){
 			return;

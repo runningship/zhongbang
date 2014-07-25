@@ -103,19 +103,22 @@ $(function(){
 </script>
 
 </head>
-<body style="overflow:auto">
+<body style="overflow:hidden">
   
   <form name="textForm">
+    <input type="hidden" id="conts" name="conts" />
+    <input type="hidden" id="category" name="category" />
   <div class="clearfix" style="margin-top:10px;">
    <div class="input-group input-group-max">
       <span class="input-group-addon">  标 题</span>
       <input type="text" class="form-control" name="title">
     </div>
-    <input id="conts" name="conts" type="hidden" />
-    <input type="hidden" name="category" id="category" />
     <div class="input-group">
-          <span class="input-group-addon" style="padding:8px;">时间</span>
-          <input type="text" class="form-control" name="addtime" id="addtime" onFocus="WdatePicker()">
+      <span class="input-group-addon" style="padding:8px;">时间</span>
+      <input type="text" class="form-control" name="addtime" id="addtime" onFocus="WdatePicker()">
+    </div>
+    <div class="btn-group">
+      <button onclick="save();" class="btn btn-primary ">提交</button>
     </div>
   </div>
   </form>
@@ -123,9 +126,8 @@ $(function(){
   <span>内容: </span>
   </div>
   <div style="margin-left:10px;">
-    <span id="editor" type="text/plain" style="width:600px;height:250px;"></span>
+    <span id="editor" type="text/plain" style="width:680px;height:340px;"></span>
   </div>
-  <button onclick="save();" class="btn btn-primary " style="margin-left:10px;margin-top:10px;">提交</button>
 <div style="margin-top:5px;">
     <input id="file_upload" name="file_upload" style="display:none">
 </div>

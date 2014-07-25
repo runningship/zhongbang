@@ -68,7 +68,11 @@ public class IMServer extends WebSocketServer{
 		if(removed!=null){
 			conns.remove(removed);
 		}
-		nofityStatus(removed, 0);
+		try{
+			nofityStatus(removed, 0);
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 		System.out.println(conn+" removed ");
 	}
 

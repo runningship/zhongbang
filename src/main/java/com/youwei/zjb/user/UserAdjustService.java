@@ -162,7 +162,7 @@ public class UserAdjustService {
 		Role oldRole = dao.get(Role.class, adjust.oldRoleId);
 		Role newRole = dao.get(Role.class, adjust.newRoleId);
 		String operConts = "["+operUser.Department().namea+"-"+operUser.uname+ "] 审核通过了用户["+user.Department().namea+"-"+user.uname+"] 从["
-				+oldDept.getParent().namea+"-"+oldDept.namea+"-"+oldRole.title+"]调整到["+newDept.getParent().namea+"-"+newDept.namea+"-"+newRole.title+"]";
+				+oldDept.Parent().namea+"-"+oldDept.namea+"-"+oldRole.title+"]调整到["+newDept.Parent().namea+"-"+newDept.namea+"-"+newRole.title+"]";
 		operService.add(OperatorType.人事记录, operConts);
 		mv.data.put("msg", "审核成功");
 		return new ModelAndView();

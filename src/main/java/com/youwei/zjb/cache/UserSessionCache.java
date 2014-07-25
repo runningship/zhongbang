@@ -32,6 +32,10 @@ public class UserSessionCache {
 	}
 	
 	public static void updateSession(String oldSessionId, String newSessionId){
+		User user = map.remove(oldSessionId);
+		if(user!=null){
+			map.put(newSessionId, user);
+		}
 		dao.execute("update from UserSession set sessionId=? where sessionId=?", newSessionId,oldSessionId);
 	}
 	

@@ -61,7 +61,7 @@ public class ContractService {
 			}
 		}
 		if(contract.ywDeptId!=null){
-			mv.data.getJSONObject("contract").put("quyu", dao.get(Department.class, contract.ywDeptId).getParent().id);
+			mv.data.getJSONObject("contract").put("quyu", dao.get(Department.class, contract.ywDeptId).Parent().id);
 		}
 		return mv;
 	}

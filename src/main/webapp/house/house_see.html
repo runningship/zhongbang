@@ -102,6 +102,8 @@ $(function(){
   .pointerevents{pointer-events:none}
   
   .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td { font-weight: bold;}
+  #id_genjin_see{ color: #999; font-size: 10px;}
+  #id_genjin_see p{ color: #555; font-size: 12px; font-weight: bold;}
 </style>
 </head>
 <body class="hsee bodyer">
@@ -178,13 +180,14 @@ $(function(){
       </tr>
       <tr>
         <td class="biaoti">联系方式</td>
+        ${lxr}
         <td colspan="5" class="telSEE">
         ${tel}
         </td>
       </tr>
       <tr>
         <td class="biaoti">业务员</td>
-        <td colspan="5">${forlxr}</td>
+        <td colspan="5">${forlxr} ${fortel}</td>
       </tr>
       <tr>
         <td class="biaoti">备注</td>
@@ -208,7 +211,7 @@ $(function(){
         </span>
       </div>
       <ul id="id_genjin_see" >
-        <li><p>${conts}<br>${addtime}</p>${deptName}${uname}</li>
+        <li><p>${conts}</p>${deptName} ${uname}<br>${addtime}</li>
       </ul>
     </td>
   </tr>

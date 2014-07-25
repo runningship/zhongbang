@@ -146,7 +146,7 @@ $(function(){
 
 </script>
 </head>
-<body class="hlist bodyer" style="overflow:auto">
+<body class="hlist bodyer" style="overflow:hidden">
   <form name="textForm" style="position:relative;height:40px;width:100%">
     <input type="hidden" name="id" id="noticeId" />
     <input type="hidden" name="claid" id="claid" />
@@ -170,7 +170,7 @@ $(function(){
     <span id="editor" type="text/plain" style="width:1024px;height:200px;"></span>
   </div>
   <div>
-  <button onclick="save();return false;">提交</button>
+  <button onclick="save();return false;" class="btn btn-primary">提交</button>
   </div>
 <div>
     <input id="file_upload" name="file_upload" style="display:none">

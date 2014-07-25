@@ -53,6 +53,39 @@ function deleteFenLei(id){
 }
 
 function openAdd(){
+  art.dialog.prompt('公告分类名称：', function (val) {
+    var data = {fenlei:val};
+    YW.ajax({
+      type: 'POST',
+      url: '/zb/c/oa/addFenLei',
+      data:data,
+      success: function(data){
+        art.dialog.close();
+        art.dialog.tips('添加成功');
+        art.dialog.opener.getList();
+      }
+    });
+    return false;
+  }, '');
+}
+function openEdit(id,fenlei){
+  art.dialog.prompt('公告分类名称：', function (val) {
+    var data = {id:id,fenlei:val};
+    YW.ajax({
+      type: 'POST',
+      url: '/zb/c/oa/addFenLei',
+      data:data,
+      success: function(data){
+        art.dialog.close();
+        art.dialog.tips('修改成功');
+        art.dialog.opener.getList();
+      }
+    });
+    return false;
+  }, fenlei);
+}
+
+function openAdd2(){
   art.dialog.open('fenlei_add.html',{
       padding:0,
       resize:true,
@@ -62,7 +95,7 @@ function openAdd(){
   });
 }
 
-function openEdit(id){
+function openEdit2(id){
   art.dialog.open('fenlei_edit.html?id='+id,{
       padding:0,
       resize:true,
@@ -87,7 +120,7 @@ $(function(){
 
 <div class="header" style="position:relative;height:10px;width:100%">
   <div class="btn-group">
-    <button onclick="openAdd();" class="btn btn-primary ">新增</button>
+    <button onclick="openAdd2();" class="btn btn-primary ">新增</button>
   </div>
   <form name="form1">
     
@@ -102,7 +135,7 @@ $(function(){
     <tbody id="id_list">
     <tr style="display:none">
       <td>${fenlei}</td>
-      <td><a onclick="openEdit(${id})" href="javascript:void(0)">修改</a> <a onclick="deleteFenLei(${id})" href="javascript:void(0)" >删除</a></td>
+      <td><a onclick="openEdit2(${id})" href="javascript:void(0)">修改</a> <a onclick="deleteFenLei(${id})" href="javascript:void(0)" >删除</a></td>
     </tr>
     </tbody>
   </table>

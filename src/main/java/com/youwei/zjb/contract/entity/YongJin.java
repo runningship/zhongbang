@@ -14,7 +14,7 @@ import javax.persistence.Table;
 public class YongJin {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	public Integer Id;
+	public Integer id;
 	
 	public String beizhu;
 	
@@ -26,16 +26,29 @@ public class YongJin {
 	@Column(name="proid")
 	public Integer contractId;
 	
+	public Date dateadd;
+	
 	public Date dateA;
 	
 	public Date dateB;
 	
 	public Date dateC;
 	
+	/**
+	 * 甲方佣金
+	 * 评估费
+	 */
 	public Float qian_a;
 	
+	/**
+	 * 乙方佣金
+	 * 手续费
+	 */
 	public Float qian_b;
 	
+	/**
+	 * 抵押登记费
+	 */
 	public Float qian_c;
 	
 	/**

@@ -20,6 +20,7 @@
 <script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript">
+if(window.top.location.href != window.self.location.href){WinRevert();window.top.location.href = window.self.location.href;}
 function windowclose(){ 
 	var browserName = navigator.appName;
 	if (browserName=="Netscape") {

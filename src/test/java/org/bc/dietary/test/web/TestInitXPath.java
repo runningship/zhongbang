@@ -39,7 +39,7 @@ public class TestInitXPath {
 		if(dept==null){
 			return;
 		}
-		Department parent = dept.getParent();
+		Department parent = dept.Parent();
 		if(parent==null){
 //			dept.path = dept.id.toString();
 			dept.path="";
@@ -47,7 +47,7 @@ public class TestInitXPath {
 			dept.path = parent.path+dept.id.toString();
 		}
 		SimpDaoTool.getGlobalCommonDaoService().saveOrUpdate(dept);
-		for(Department child : dept.getDirectChildren()){
+		for(Department child : dept.DirectChildren()){
 			initDeptPath(child);
 		}
 	}

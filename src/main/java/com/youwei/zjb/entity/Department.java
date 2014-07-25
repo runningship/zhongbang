@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -26,6 +28,7 @@ import com.youwei.zjb.SimpDaoTool;
 public class Department {
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer id;
 	
 	/**
@@ -33,6 +36,7 @@ public class Department {
 	 */
 	public Integer fid;
 	
+	@Column(nullable=false)
 	public String namea;
 	
 	@Column(name="code_num")
@@ -40,10 +44,10 @@ public class Department {
 	
 	public String path;
 	
-	public Department getParent(){
+	public Department Parent(){
 		return SimpDaoTool.getGlobalCommonDaoService().get(Department.class, fid);
 	}
-	public List<Department> getDirectChildren(){
+	public List<Department> DirectChildren(){
 		List<Department> children = SimpDaoTool.getGlobalCommonDaoService().listByParams(Department.class, new String[]{"fid"}, new Object[]{id});
 		if(children==null){
 			return new ArrayList<Department>();

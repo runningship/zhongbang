@@ -142,10 +142,19 @@ $(function(){
   $.get('/zb/c/house/getQueryOptions', function(data) {
     queryOpts=JSON.parse(data);
     buildHtmlWithJsonArray("id_quyu",queryOpts['quyu']);       //区域
-    buildHtmlWithJsonArray("id_kehu",queryOpts['kehu']);       //客户性质
+    buildHtmlWithJsonArray("id_kehu",queryOpts['kehu'],true,1);       //客户性质
     buildHtmlWithJsonArray("id_kehulaiyuan",queryOpts['kehulaiyuan']); //客户来源
+  
+   Page.Init();
+    $('select').each(function(index,obj){
+      if(obj.name=='dateType'){
+        return;
+      }
+      $(obj).prepend('<option value="">所有</option>');
+      $(obj).val("");
+    })
   });
-  Page.Init();
+ 
 
   $(document).on('click', '.table .btn,.btnadd.btn', function(event) {
     var Thi=$(this),
@@ -204,13 +213,12 @@ $(function(){
           <li><label><input type="checkbox" name="quyus" value="${name}"> ${name}</label></li>
         </ul>
       </div>
-      <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          性质 <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" id="id_kehu">
-          <li><label><input type="radio" name="kehuxingzhi" value="${name}"> ${name}</label></li>
-        </ul>
+      <div class="input-group input-group-min">
+        <span class="input-group-addon">性质</span>
+        <select class="form-control " name="kehuxingzhi" id="id_kehu">
+          <option value="">所有</option>
+          <option value="${name}">${name}</option>
+        </select>
       </div>
       <div class="btn-group">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -220,15 +228,12 @@ $(function(){
           <li><label><input type="checkbox" name="kehulaiyuan" value="${name}"> ${name}</label></li>
         </ul>
       </div>
-      <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          是否有效 <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" id="id_laiyuan">
-          <li><label><input type="radio" name="youxiao" value=""> 所有</label></li>
-          <li><label><input type="radio" name="youxiao" value="1"> 有效</label></li>
-          <li><label><input type="radio" name="youxiao" value="0"> 无效</label></li>
-        </ul>
+      <div class="input-group ">
+        <span  type="button" class="input-group-addon">是否有效</span>
+        <select class="form-control " name="youxiao"  role="menu" id="id_laiyuan">
+          <option type="radio" value="1">有效</option>
+          <option type="radio" value="0">无效</option>
+        </select>
       </div>
       <div class="input-group input-group-max">
         <span class="input-group-addon">电话</span>

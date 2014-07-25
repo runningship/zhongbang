@@ -113,6 +113,7 @@ var Page={
         $('.pageInput').val(1);
         if($('.btn_subnmit').length>0){$('.btn_subnmit').click();}else{$('form[name=form1]').submit();}
       }).on('click', '.btn_p_prev', function(event) {
+        if(Page.p-1<=Page.pn){$('.pageInput').val(Page.p-1);}
         if($('.btn_subnmit').length>0){$('.btn_subnmit').click();}else{$('form[name=form1]').submit();}
       }).on('click', '.btn_p_next', function(event) {
         if(Page.p+1<=Page.pn){$('.pageInput').val(Page.p+1);}

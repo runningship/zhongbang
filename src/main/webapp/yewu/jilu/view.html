@@ -58,38 +58,54 @@ $(function(){
 });
 
 </script>
-
+<style type="text/css">
+.table{ margin-bottom: 0;}
+.table th{ text-align: right; width: 120px;}
+.table td{ font-weight: bold;}
+</style>
 </head>
-<body class="hlist bodyer" style="overflow:auto">
-<span >
-  <div id="time">
-    <span>时间: </span><span id="addtime" ></span>
-  </div>
+<body class="" style="overflow:auto">
+<span id="recordId">
+  <table class="table">
+    <tr id="time">
+      <th>时间:</th>
+      <td id="addtime"></td>
+    </tr>
+    <tr id="hy_time" style="display:none">
+      <th>客户:</th>
+      <td id="clientInfo"></td>
+    </tr>
   <div id="hy_time" style="display:none">
-    <div>
-      <span>开始时间: </span><span id="starttime" ></span>
-    </div>
-    <div>
-      <span>结束时间: </span><span id="endtime" ></span>
-    </div>
-    <div>
-      <span>参会人员: </span><span id="goin" ></span>
+    <tr>
+      <th>开始时间:</th>
+      <td id="starttime"></td>
+    </tr>
+    <tr>
+      <th>结束时间:</th>
+      <td id="endtime"></td>
+    </tr>
+    <tr>
+      <th>参会人员:</th>
+      <td id="goin"></td>
+    </tr>
   </div>
-  </div>
-  <div>
-    <span>标题: </span><span id="title" >$</span>
-  </div>
-  <div>
-    <span>内容: </span><p id="conts"></p>
-  </div>
-  <div>
-    <span>附件: </span>
-    <span id="content">
-      <div>
-        <a href="/zb/file/download?bizType=${bizType}&recordId=${recordId}&file=${filename}" name="attachment">${filename}</a>
-      </div>
-    </span>
-  </div>
+    <tr>
+      <th>标题:</th>
+      <td id="title"></td>
+    </tr>
+    <tr>
+      <th>内容:</th>
+      <td id="conts"></td>
+    </tr>
+    <tr>
+      <th>附件:</th>
+      <td id="content">
+        <div>
+          <a href="/zb/file/download?bizType=${bizType}&recordId=${recordId}&file=${filename}" name="attachment">${filename}</a>
+        </div>
+      </td>
+    </tr>
+  </table>
 </span>
 </body>
 </html>

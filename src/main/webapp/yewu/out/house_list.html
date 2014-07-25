@@ -59,6 +59,24 @@ function onSubmit_Form(){
   });
 }
 
+function setDateSec(select){
+  if (select.value=="") {
+    $('#idTimes').val("");
+    $('#idTime').val("");
+    getHuseList(formSerialize($('form[name=form1]')));
+    return;
+  };
+  var end = new Date();
+  end.setDate(end.getDate()+1);
+  var endstr = end.getFullYear()+'-'+end.getMonth()+'-'+end.getDate();
+
+  end.setDate(end.getDate()-select.value);
+  var startstr = end.getFullYear()+'-'+end.getMonth()+'-'+end.getDate();
+  $('#idTimes').val(startstr);
+  $('#idTime').val(endstr);
+  getHuseList(formSerialize($('form[name=form1]')));
+}
+
 function getEnumText(category,code){
   var arr = getStr[category];
   for(var i=0;i<arr.length;i++){
@@ -75,16 +93,23 @@ $(function(){
     $.get('/zb/c/house/getQueryOptions', function(data) {
     getStr=JSON.parse(data);
     //  alert(getStr['datetype'])
-    buildHtmlWithJsonArray("id_chaoxiang",getStr['chaoxiang']); //朝向
-    buildHtmlWithJsonArray("id_fangxing",getStr['fangxing']);   //户型
-    buildHtmlWithJsonArray("id_leibie",getStr['leibie']);       //类别
+    buildHtmlWithJsonArray("id_chaoxiang",getStr['chaoxiang'],true,1); //朝向
+    buildHtmlWithJsonArray("id_fangxing",getStr['fangxing'],true,1);   //户型
+    buildHtmlWithJsonArray("id_leibie",getStr['leibie'],true,1);       //类别
     buildHtmlWithJsonArray("id_louxing",getStr['louxing']);     //楼型
-    buildHtmlWithJsonArray("id_jiaoyi",getStr['jiaoyi']);       //交易
+    buildHtmlWithJsonArray("id_jiaoyi",getStr['jiaoyi'],true,1);       //交易
     buildHtmlWithJsonArray("id_quyu",getStr['quyu']);           //区域
-    buildHtmlWithJsonArray("id_zhuangtai",getStr['zhuangtai']); //状态
+    buildHtmlWithJsonArray("id_zhuangtai",getStr['zhuangtai'],true,1); //状态
     buildHtmlWithJsonArray("id_xingzhi",getStr['xingzhi']); //房型
     buildHtmlWithJsonArray("id_datetype",getStr['datetype'],true); //房型
     Page.Init();
+    $('select').each(function(index,obj){
+      if(obj.name=='dateType'){
+        return;
+      }
+      $(obj).prepend('<option value="">所有</option>');
+      $(obj).val("");
+    })
   });
 
   $('#id_House_list').on('click', 'a', function(event) {
@@ -131,40 +156,35 @@ function chooseHouse(){
   <form class="form-horizontal" role="form" name="form1">
     <input type="hidden" class="userInput" name="xpath" value="">
     <div class="clearfix">
-      <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          时间段 <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-          <li><a href="#">今日房源</a></li>
-          <li><a href="#">三天内房源</a></li>
-          <li><a href="#">七天内房源</a></li>
-          <li><a href="#">一个月房源</a></li>
-        </ul>
+      <div class="input-group ">
+        <span class="input-group-addon">时间段</span>
+        <select class="form-control " onchange='setDateSec(this)'>
+          <option value="1">今日房源</option>
+          <option value="3">三天内房源</option>
+          <option value="7">七天内房源</option>
+          <option value="30">一个月房源</option>
+        </select>
       </div>
-      <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          状 态 <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" id="id_zhuangtai">
-          <li><label><input type="radio" name="ztai" value="${name}"> ${name}</label></li>
-        </ul>
+      <div class="input-group input-group-min">
+        <span class="input-group-addon">状态</span>
+        <select class="form-control " name="ztai" id="id_zhuangtai">
+          <option value="">所有</option>
+          <option value="${name}">${name}</option>
+        </select>
       </div>
-      <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          朝向 <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" id="id_chaoxiang">
-          <li><label><input type="radio" name="chaoxiang" value="${name}"> ${name}</label></li>
-        </ul>
+      <div class="input-group input-group-min">
+        <span class="input-group-addon">朝向</span>
+        <select class="form-control " name="chaoxiang" id="id_chaoxiang">
+          <option value="">所有</option>
+          <option value="${name}">${name}</option>
+        </select>
       </div>
-      <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          房屋类别 <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" id="id_leibie">
-          <li><label><input type="radio" name="leibie" value="${name}"> ${name}</label></li>
-        </ul>
+      <div class="input-group input-group-min">
+        <span class="input-group-addon">房屋类别</span>
+        <select class="form-control " name="leibie" id="id_leibie" style="width:70px">
+          <option value="">所有</option>
+          <option value="${name}">${name}</option>
+        </select>
       </div>
       <div class="btn-group">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -174,13 +194,12 @@ function chooseHouse(){
           <li><label><input type="checkbox" name="xingzhi" value="${name}"> ${name}</label>
         </ul>
       </div>
-      <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          交易 <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" id="id_jiaoyi">
-          <li><label><input type="checkbox" name="jiaoyis" value="${name}"> ${name}</label>
-        </ul>
+      <div class="input-group input-group-min">
+        <span class="input-group-addon">交易</span>
+        <select class="form-control " name="jiaoyis" id="id_jiaoyi">
+          <option value="">所有</option>
+          <option value="${name}">${name}</option>
+        </select>
       </div>
       <div class="btn-group">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -190,13 +209,12 @@ function chooseHouse(){
           <li><label><input type="checkbox" name="louxing" value="${name}"> ${name}</label></li>
         </ul>
       </div>
-      <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          房型 <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" id="id_fangxing">
-          <li><label><input type="radio" name="fangxing" value="${name}"> ${name}</label></li>
-        </ul>
+      <div class="input-group input-group-min">
+        <span class="input-group-addon">房型</span>
+        <select class="form-control " name="fangxing" id="id_fangxing">
+          <option value="">所有</option>
+          <option value="${name}">${name}</option>
+        </select>
       </div>
       <div class="btn-group">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -242,12 +260,12 @@ function chooseHouse(){
       </div>
 
       <br><br>
-      <div class="input-group input-group-max input-group-mt2">
+      <div class="input-group input-group-max input-group-mt2" style="margin-top: 0px;">
         <span class="input-group-addon">产权证</span>
         <input type="text" class="form-control" name="chanquan">
       </div><br><br>
 
-      <div class="input-group input-group-mt3 input-group-select">
+      <div class="input-group input-group-mt3 input-group-select" style="margin-top: 0px;">
         <span class="input-group-addon">发布人</span>
         <select class="form-control get_comp" name="form_cid"></select>
         <select class="form-control get_quyu" name="form_did"></select>

@@ -119,12 +119,12 @@ $(function(){
           <span class="input-group-addon" style="padding:1px 6px">结束时间</span>
           <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="backTime" style="width:180px">
       </div>
+      <button onclick="save();" class="btn btn-primary " style="margin-left:10px;">提交</button>
     </div>
   </form>
   <div style="margin-left:10px;">
     <span id="editor" type="text/plain" style="width:1024px;height:300px;"></span>
   </div>
-  <button onclick="save();" class="btn btn-primary " style="margin-left:10px;">提交</button>
   <input id="file_upload" name="file_upload" style="display:none"/>
 <div id="attachList">
   <span style="display:none">
