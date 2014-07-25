@@ -18,7 +18,6 @@ document.oncontextmenu = function (event){
         return false; 
     } 
 }
- */
 //屏蔽全选
 document.onselectstart = function (event){
     if(window.event){
@@ -33,6 +32,7 @@ document.onselectstart = function (event){
         return false; 
     } 
 }
+ */
 //屏蔽快捷键
 $(document).keydown(function(event){  
 //alert(event.keyCode)
