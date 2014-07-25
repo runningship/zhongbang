@@ -86,7 +86,7 @@ public class ContractService {
 		ModelAndView mv = new ModelAndView();
 		Contract po = dao.get(Contract.class, contract.id);
 		if(po==null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "合同已不存在");
+			throw new GException(PlatformExceptionType.BusinessException, "合同已不存在");
 		}
 		contract.addtime = po.addtime;
 		contract.userId = po.userId;
@@ -187,7 +187,7 @@ public class ContractService {
 		ModelAndView mv = new ModelAndView();
 		ContractProcessClass po = dao.get(ContractProcessClass.class, pcId);
 		if(po==null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "步骤已不存在");
+			throw new GException(PlatformExceptionType.BusinessException,"步骤已不存在");
 		}
 		dao.delete(po);
 		return mv;
@@ -198,7 +198,7 @@ public class ContractService {
 		ModelAndView mv = new ModelAndView();
 		ContractProcessClass po = dao.get(ContractProcessClass.class, pcId);
 		if(po==null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "步骤已不存在");
+			throw new GException(PlatformExceptionType.BusinessException, "步骤已不存在");
 		}
 		mv.data.put("buzhou",JSONHelper.toJSON(po));
 		return mv;
@@ -209,11 +209,11 @@ public class ContractService {
 		ModelAndView mv = new ModelAndView();
 		ContractProcessClass po = dao.getUniqueByParams(ContractProcessClass.class, new String[]{"title","claid"}, new Object[] {proClass.title, proClass.claid});
 		if(po!=null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "步骤名称重复");
+			throw new GException(PlatformExceptionType.BusinessException, "步骤名称重复");
 		}
 		po =dao.getUniqueByParams(ContractProcessClass.class, new String[]{"ordera","claid"}, new Object[] {proClass.ordera, proClass.claid});
 		if(po!=null){
-			throw new GException(PlatformExceptionType.BusinessException, 2, "步骤序号重复");
+			throw new GException(PlatformExceptionType.BusinessException,"步骤序号重复");
 		}
 		dao.saveOrUpdate(proClass);
 		mv.data.put("msg", "添加成功");
@@ -224,7 +224,7 @@ public class ContractService {
 	public ModelAndView updateContractProcessClass(ContractProcessClass proClass){
 		ModelAndView mv = new ModelAndView();
 		if(proClass.id==null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "id不能为空");
+			throw new GException(PlatformExceptionType.BusinessException,"id不能为空");
 		}
 		dao.saveOrUpdate(proClass);
 		mv.data.put("msg", "添加成功");

@@ -12,6 +12,7 @@
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -39,6 +40,7 @@ function selectType(id,title){
   $('#btn_class_select').text(title);
   $('#classId').val(id);
   doSearch();
+  // window.location="data_list.html?claid="+id;
 }
 
 function doSearch(){
@@ -100,7 +102,13 @@ function openView(id){
   });
 }
 
+function isSelf(pubUserId,userId){
+  return pubUserId==userId;
+}
+
 $(function(){
+  // var claid = getParam('claid');
+  // $('#classId').val(claid);
   getList();
   $.get('/zb/c/admin/class/list', function(data) {
     queryOpts=JSON.parse(data);
@@ -120,9 +128,9 @@ $(function(){
 </head>
 <body class="hlist bodyer" style="overflow:auto">
 
-<div class="header" style="position:relative;height:50px;width:100%">
+<div class="header">
   <div class="btn-group">
-    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:30px;padding:0px 10px 0px 10px">添加 <span class="caret"></span></button>
+    <button auth="xz_table_list_add" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:30px;padding:0px 10px 0px 10px">添加 <span class="caret"></span></button>
     <ul class="dropdown-menu">
       <span id="adminClassList">
         <li onclick="openAdd(${id})"><label><a  href="javascript:void(0)" style="color:black;padding-left:10px;line-height:30px;font-weight:normal">${title}</a></label></li>
@@ -135,7 +143,7 @@ $(function(){
     <div class="btn-group">
       <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:30px;padding:0px 10px 0px 10px;width:150px;"><span id="btn_class_select">分 类</span> <span class="caret"></span></button>
       <ul class="dropdown-menu">
-        <li><label><span  onclick="selectType('','所有')" style="color:black;padding-left:10px;line-height:30px;font-weight:normal">所有</span></label></li>
+        <li onclick="selectType('','所有')"><label><span  style="color:black;padding-left:10px;line-height:30px;font-weight:normal">所有</span></label></li>
         <span id="adminClassList2">
           <li onclick="selectType(${id},'${title}');"><label><span  style="color:black;padding-left:10px;line-height:30px;font-weight:normal">${title}</span></label></li>
         </span>
@@ -158,7 +166,7 @@ $(function(){
   </div>
 
 </div>
-<div class="mainer" style="position:relative;width:100%">
+<div class="mainer">
   <table class="table table-hover .table_bodyer" >
     <thead>
       <th>标题</th>
@@ -173,13 +181,13 @@ $(function(){
       <td>${uname}</td>
       <td>${addtime}</td>
       <td>${classTitle}</td>
-      <td><a onclick="openView(${id})" href="javascript:void(0)">查看</a> <a onclick="openEdit(${id})" href="javascript:void(0)">修改</a> 
-      <a href="javascript:void(0)" onclick="deleteData(${id});">删除</a></td>
+      <td><a onclick="openView(${id})" href="javascript:void(0)">查看</a> <a show="isSelf(${userId},$${userId})" auth="xz_table_list_edit" onclick="openEdit(${id})" href="javascript:void(0)">修改</a> 
+      <a auth="xz_table_list_del" href="javascript:void(0)" onclick="deleteData(${id});">删除</a></td>
     </tr>
     </tbody>
   </table>
 </div>
 
-<div class="footer foot_page_box" style="position:relative;margin-top:10px;height:55px;"></div>
+<div class="footer foot_page_box"></div>
 </body>
 </html>

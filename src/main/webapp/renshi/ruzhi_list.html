@@ -12,6 +12,7 @@
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -75,7 +76,7 @@ $(function(){
 </head>
 <body class="hlist bodyer" style="overflow:auto">
 
-<div class="header" style="position:relative;height:50px;width:100%">
+<div class="header">
   
   <form name="form1">
     <div class="clearfix">
@@ -86,14 +87,6 @@ $(function(){
       <div class="input-group ">
         <span class="input-group-addon">电话</span>
         <input type="text" class="form-control" name="tel">
-      </div>
-      <div class="input-group input-group-max">
-        <span class="input-group-addon">地址</span>
-        <input type="text" class="form-control" name="address">
-      </div>
-      <div class="input-group input-group-max">
-        <span class="input-group-addon">身份证号</span>
-        <input type="text" class="form-control" name="sfz">
       </div>
       <div class="input-group ">
         <span class="input-group-addon">性别</span>
@@ -111,7 +104,26 @@ $(function(){
           <option value="0">未婚</option>
         </select>
       </div>
+      <div class="btn-group">
+        <button onclick="doSearch()" class="btn btn-primary btn_subnmit">搜索</button>
+      </div>
+    </div>
+    <div class="clearfix">
+      <div class="input-group input-group-max">
+        <span class="input-group-addon">地址</span>
+        <input type="text" class="form-control" name="address">
+      </div>
+      <div class="input-group input-group-max">
+        <span class="input-group-addon">身份证号</span>
+        <input type="text" class="form-control" name="sfz">
+      </div>
       
+      <div class="input-group">
+        <span class="input-group-addon">职务</span>
+        <select class="form-control" name="roleId" id="id_roles" style="width:150px;">
+            <option value="${id}">${title}</option>
+        </select>
+      </div>
     </div>
     <div style="">
       <div class="input-group">
@@ -125,26 +137,16 @@ $(function(){
         <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="rqtimeEnd" style="width:150px">
       </div>
       
-      
-      <div class="input-group  ">
-        <span class="input-group-addon">职务</span>
-        <select class="form-control" name="roleId" id="id_roles" style="width:150px;">
-            <option value="${id}">${title}</option>
-        </select>
-      </div>
        
-      <div class="input-group input-group-select">
+      <div class="input-group">
         <span class="input-group-addon">公司</span>
         <select class="form-control get_comp" name="form_cid"></select>
         <select class="form-control get_quyu" name="form_did"></select>
       </div>
     </div>
   </form>
-  <div class="btn-group">
-    <button onclick="doSearch()" class="btn btn-primary btn_subnmit">搜索</button>
-  </div>
 </div>
-<div class="mainer" style="position:relative;width:100%">
+<div class="mainer">
   <table class="table table-hover .table_bodyer" >
     <thead>
       <th>姓名/性别</th>
@@ -172,6 +174,6 @@ $(function(){
   </table>
 </div>
 
-<div class="footer foot_page_box" style="position:relative;margin-top:10px;height:55px;"></div>
+<div class="footer foot_page_box"></div>
 </body>
 </html>

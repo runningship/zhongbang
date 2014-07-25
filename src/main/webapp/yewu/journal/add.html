@@ -98,7 +98,7 @@ $(function(){
 
   ue = UE.getEditor('editor');
   ue.addListener( 'ready', function( editor ) {
-    ue.setHeight(250);
+    //ue.setHeight(250);
   });
 });
 
@@ -106,20 +106,22 @@ $(function(){
 </head>
 <body class="hlist bodyer" style="overflow:auto">
   <form name="textForm">
-   <div class="input-group input-group-max">
-      <span class="input-group-addon">  标 题</span>
-      <input type="text" class="form-control" name="title">
+    <div class="clearfix">
+       <div class="input-group input-group-max">
+          <span class="input-group-addon">  标 题</span>
+          <input type="text" class="form-control" name="title">
+        </div>
+      <input id="conta" name="conta" type="hidden" />
+      <input type="hidden" name="category" id="category" />
+        <div class="input-group" style="width:500px;margin-left:10px;margin-top:0px">
+          <span class="input-group-addon" style="padding:1px 6px">开始时间</span>
+          <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="outTime" style="width:180px;border-radius:0;">
+          <span class="input-group-addon" style="padding:1px 6px">结束时间</span>
+          <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="backTime" style="width:180px">
+      </div>
     </div>
-  <input id="conta" name="conta" type="hidden" />
-  <input type="hidden" name="category" id="category" />
-    <div class="input-group" style="width:500px;margin-left:10px;margin-top:0px">
-      <span class="input-group-addon" style="padding:1px 6px">开始时间</span>
-      <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="outTime" style="width:180px;border-radius:0;">
-      <span class="input-group-addon" style="padding:1px 6px">结束时间</span>
-      <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="backTime" style="width:180px">
-  </div>
   </form>
-  <div style="margin-top:45px;margin-left:10px;">
+  <div style="margin-left:10px;">
     <span id="editor" type="text/plain" style="width:1024px;height:300px;"></span>
   </div>
   <button onclick="save();" class="btn btn-primary " style="margin-left:10px;">提交</button>

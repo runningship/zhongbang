@@ -12,6 +12,7 @@
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -113,49 +114,61 @@ $(function(){
 <style type="text/css">
   .table{ margin-bottom: 0px;}
   .div1 {
-    width: 500px;
+    /*width: 500px;
+    overflow: hidden;
+    text-overflow: ellipsis;*/
+    display: block;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 280px;
+    word-break: break-all;
+    cursor: pointer;
   }
+  .TableB td{white-space:nowrap;word-break: keep-all;}
 </style>
 </head>
 <body class="hlist bodyer" style="overflow:auto">
 
-<div class="header" style="position:relative;height:50px;width:100%">
+<div class="header">
     <div class="btn-group">
       <button onclick="openAdd();" class="btn btn-primary ">新增</button>
     </div>
     <form name="form1">
-    <input type="hidden" class="userInput" name="xpath" value="">
-    
-    <div class="btn-group">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        外出看房 <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu">
-        <li><label><input type="radio" name="kanfang" value=""> 所有</label>
-        <li><label><input type="radio" name="kanfang" value="0"> 带看</label>
-        <li><label><input type="radio" name="kanfang" value="1"> 陪看</label>
-        <li><label><input type="radio" name="kanfang" value="2"> 自看</label>
-      </ul>
-    </div>
-    <div class="input-group input-group-select">
-      <span class="input-group-addon">分公司</span>
-      <select class="form-control get_comp" name="form_cid"></select>
-      <select class="form-control get_quyu" name="form_did"></select>
-    </div>
-    <div class="input-group" style="width:400px">
-      <span class="input-group-addon">外出时间</span>
-      <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:150px;border-radius:0;">
-      <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:150px">
-    </div>
-    <div class="btn-group">
-      <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
-    </div>
+      <input type="hidden" class="userInput" name="xpath" value="">
+      
+      <div class="clearfix">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            外出看房 <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><label><input type="radio" name="kanfang" value=""> 所有</label></li>
+            <li><label><input type="radio" name="kanfang" value="0"> 带看</label></li>
+            <li><label><input type="radio" name="kanfang" value="1"> 陪看</label></li>
+            <li><label><input type="radio" name="kanfang" value="2"> 自看</label></li>
+          </ul>
+        </div>
+        <div class="input-group input-group-select">
+          <span class="input-group-addon">分公司</span>
+          <select class="form-control get_comp" name="form_cid"></select>
+          <select class="form-control get_quyu" name="form_did"></select>
+        </div>
+      </div>
+      <div class="clearfix">
+        <div class="input-group" style="width:400px">
+          <span class="input-group-addon">外出时间</span>
+          <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:150px;border-radius:0;">
+          <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:150px">
+        </div>
+        <div class="btn-group">
+          <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
+        </div>
+      </div>
     
     </form>
 </div>
-<div class="mainer" style="position:relative;width:100%">
+<div class="mainer">
   <table class="table table-hover TableB" >
   <thead>
       <th>区域</th>
@@ -185,6 +198,6 @@ $(function(){
   </table>
 </div>
 
-<div class="footer foot_page_box" style="position:relative;margin-top:10px;height:55px;"></div>
+<div class="footer foot_page_box"></div>
 </body>
 </html>

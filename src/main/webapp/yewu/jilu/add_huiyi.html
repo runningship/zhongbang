@@ -88,7 +88,7 @@ function deleteAttach(id){
 $(function(){
   ue = UE.getEditor('editor');
   ue.addListener( 'ready', function( editor ) {
-    ue.setHeight(350);
+    //ue.setHeight(350);
   });
 });
 
@@ -98,29 +98,39 @@ $(function(){
 <body style="overflow:auto">
   
   <form name="textForm">
-    
-    <div style="margin-top:10px;">
+  <div class="clearfix">
+    <div class="input-group input-group-max">
+      <span class="input-group-addon">标题</span>
+      <input type="text" class="form-control" name="title">
+    </div>
+   <!--  <div style="margin-top:10px;">
     <span>标题: </span><input name="title" style="width:500px"/>
+    </div> -->
+    <br/><br/>
+    <div class="input-group input-group-max" style="margin-top:10px">
+      <span class="input-group-addon">人员</span>
+      <input type="text" class="form-control" name="goin">
     </div>
-    
-    <div style="margin-top:10px;">
+    <!-- <div style="margin-top:10px;">
     <span>人员: </span><input name="goin" style="width:500px;"/>
-    </div>
-    <div class="input-group" style="width:500px;margin-left:0px;margin-top:10px">
-      <span class="input-group-addon" style="padding:1px 6px">时间</span>
-      <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="starttime" style="width:180px;border-radius:0;">
-      <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="endtime" style="width:180px">
-    </div>
+    </div> -->
+    <br/><br/><br/>
+      <div class="input-group" style="width:500px;margin-left:10px;margin-top:0px">
+        <span class="input-group-addon" style="padding:1px 6px"> 时 间</span>
+        <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="starttime" style="width:180px;border-radius:0;">
+        <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="endtime" style="width:180px">
+      </div>
     <input id="conts" name="conts" type="hidden" />
     <input type="hidden" name="category" value="0"/>
+    </div>
   </form>
-  <div style="margin-top:50px;">
+  <div style="margin-top:0px;margin-left:10px;">
   <span>内容: </span>
   </div>
   <div style="margin-left:10px;">
     <span id="editor" type="text/plain" style="width:1024px;height:500px;"></span>
   </div>
-  <button onclick="save();" class="btn btn-primary " style="margin-left:10px;">提交</button>
+  <button onclick="save();" class="btn btn-primary " style="margin-left:10px;margin-top:10px">提交</button>
 <div style="margin-top:5px;">
     <input id="file_upload" name="file_upload" style="display:none">
 </div>

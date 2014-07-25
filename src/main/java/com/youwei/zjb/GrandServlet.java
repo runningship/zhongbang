@@ -45,7 +45,6 @@ public class GrandServlet extends HttpServlet{
 		resp.setContentType("text/html");
 		String path = req.getPathInfo();
 		SessionHelper.updateSession(req);
-//		User u = (User)req.getSession().getAttribute(KeyConstants.Session_User);
 		req.getSession().getAttribute("user");
 		User u = UserSessionCache.getUser(req.getSession().getId());
 		if(u==null){
@@ -67,6 +66,7 @@ public class GrandServlet extends HttpServlet{
 		}
 		Handler handler = ModuleManager.getHandler(path);
 		if(handler==null){
+			resp.setStatus(404);
 			resp.getWriter().println("404 : page not found");
 			return;
 		}
@@ -78,6 +78,7 @@ public class GrandServlet extends HttpServlet{
 			e.printStackTrace();
 		}
 		if(manager==null){
+			resp.setStatus(404);
 			resp.getWriter().println("404 : page not found");
 			return;
 		}
@@ -135,8 +136,12 @@ public class GrandServlet extends HttpServlet{
 		resp.setStatus(400);
 		JSONObject jobj = new JSONObject();
 		if(ex.getType()==PlatformExceptionType.ParameterMissingError){
-			jobj.put("result",PlatformExceptionType.ParameterMissingError.toString());
-			jobj.put("field", ex.getMessage());
+			jobj.put("type",PlatformExceptionType.ParameterMissingError.toString());
+			jobj.put("field", ex.getField());
+		}else if(ex.getType()==PlatformExceptionType.ParameterTypeError){
+			jobj.put("type",PlatformExceptionType.ParameterTypeError.toString());
+			jobj.put("field", ex.getField());
+			jobj.put("msg", ex.getMessage());
 		}else{
 			jobj.put("result",ex.getCode());
 			jobj.put("msg", ex.getMessage());

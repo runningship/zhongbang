@@ -181,22 +181,22 @@ public class UserService {
 	public ModelAndView add(User user){
 		ModelAndView mv = new ModelAndView();
 		if(StringUtils.isEmpty(user.uname)){
-			throw new GException(PlatformExceptionType.BusinessException, 3, "用户名不能为空");
+			throw new GException(PlatformExceptionType.BusinessException,"用户名不能为空");
 		}
 		if(user.deptId==null){
 			user.deptId = -1;
 		}
 		Department dept = dao.get(Department.class, user.deptId);
 		if(dept==null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "没有指定用户所属公司");
+			throw new GException(PlatformExceptionType.BusinessException, "没有指定用户所属公司");
 		}
 		User po = dao.getUniqueByKeyValue(User.class, "sfz" , user.sfz);
 		if(po!=null){
-			throw new GException(PlatformExceptionType.BusinessException, 2, "身份证号已经存在");
+			throw new GException(PlatformExceptionType.BusinessException,  "身份证号已经存在");
 		}
 		List<User> sprList = UserHelper.getUserWithAuthority("rs_rz_list");
 		if(sprList==null || sprList.size()==0){
-			throw new GException(PlatformExceptionType.BusinessException, 2, "没有用户拥有入职登记审核权限，请先在系统管理中设置入职登记审核人.或者联系系统管理员为您处理");
+			throw new GException(PlatformExceptionType.BusinessException,  "没有用户拥有入职登记审核权限，请先在系统管理中设置入职登记审核人.或者联系系统管理员为您处理");
 		}
 		user.addtime = new Date();
 		user.sh = 0;
@@ -311,7 +311,7 @@ public class UserService {
 				+ "from User  u, Department d,Role r where u.roleId = r.id and d.id = u.deptId ");
 		fillQuery(query,hql,params);
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
-		mv.data.put("page", JSONHelper.toJSON(page));
+		mv.data.put("page", JSONHelper.toJSON(page , DataHelper.dateSdf.toPattern()));
 		return mv;
 	}
 	

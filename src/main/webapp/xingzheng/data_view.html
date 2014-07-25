@@ -103,7 +103,6 @@ $(function(){
     autoHeightEnabled: false
   });
   ue.addListener( 'ready', function( editor ) {
-    ue.setHeight(350);
     loadData();
     ue.setDisabled();
   });
@@ -112,7 +111,7 @@ $(function(){
 
 </script>
 </head>
-<body class="hlist bodyer" style="overflow:auto">
+<body class="hlist bodyer" style="overflow:auto;min-width:400px;">
 
 <div class="header" style="position:relative;height:50px;width:100%">
   <form name="form1">
@@ -133,10 +132,10 @@ $(function(){
     <input type="hidden" id="conts" name="conts" />
   </form>
   <div style="margin-left:10px;margin-top:50px;">
-     <span id="editor" type="text/plain" style="width:1024px;height:500px;"></span>
+     <span id="editor" type="text/plain" style="width:800px;height:300px;"></span>
     <!-- <span id="editor" style="margin-right:10px;border:1px solid #ddd"></span> -->
   </div>
-  <div>
+  <div style="margin-left:10px;">
     <span>附件: </span>
     <div id="attachList">
       <span style="display:none">

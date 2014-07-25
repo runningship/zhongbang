@@ -33,10 +33,10 @@ public class ContractProcessService {
 		ModelAndView mv = new ModelAndView();
 		ContractProcess process = dao.get(ContractProcess.class, vo.id);
 		if(vo.blr==null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "请选择办理人");
+			throw new GException(PlatformExceptionType.BusinessException, "请选择办理人");
 		}
 		if(vo.endtime==null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "请选择办理结束日期");
+			throw new GException(PlatformExceptionType.BusinessException, "请选择办理结束日期");
 		}
 		process.flag = 2;
 		process.blr = vo.blr;

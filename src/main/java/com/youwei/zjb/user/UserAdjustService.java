@@ -68,14 +68,14 @@ public class UserAdjustService {
 	public ModelAndView add(UserAdjust ua){
 		UserAdjust po = dao.getUniqueByParams(UserAdjust.class, new String[]{"userId", "oldDeptId" , "newDeptId" , "pass"}, new Object[]{ua.userId , ua.oldDeptId , ua.newDeptId ,0});
 		if(po!=null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "已提交过相同的职务调整申请");
+			throw new GException(PlatformExceptionType.BusinessException,"已提交过相同的职务调整申请");
 		}
 		if(ua.userId.equals(ua.fyTo) || ua.userId.equals(ua.kyTo)){
-			throw new GException(PlatformExceptionType.BusinessException, 2, "客源或房源调整不正确");
+			throw new GException(PlatformExceptionType.BusinessException, "客源或房源调整不正确");
 		}
 		List<User> sprList = UserHelper.getUserWithAuthority("rs_zwtz_list");
 		if(sprList==null || sprList.size()==0){
-			throw new GException(PlatformExceptionType.BusinessException, 2, "没有用户拥有职务审核权限，请先在系统管理中设置职务调整审核人.或者联系系统管理员为您处理");
+			throw new GException(PlatformExceptionType.BusinessException, "没有用户拥有职务审核权限，请先在系统管理中设置职务调整审核人.或者联系系统管理员为您处理");
 		}
 		ua.applyTime = new Date();
 		ua.pass =0;

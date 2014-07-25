@@ -1,7 +1,10 @@
-function buildHtmlWithJsonArray(id,json,removeTemplate){
+function buildHtmlWithJsonArray(id,json,removeTemplate ,tempIndex){
     var subCatagory = $('#'+id);
     var dhtml = subCatagory.html();
-    var temp = subCatagory.children()[0];
+    if(tempIndex==null){
+        tempIndex=0;
+    }
+    var temp = subCatagory.children()[tempIndex];
     //var temp = $(first);
     var jtemp=$(temp);
     $(subCatagory).empty();
@@ -19,7 +22,8 @@ function buildHtmlWithJsonArray(id,json,removeTemplate){
                 if(eval(script)){
                     $(obj).css('display','');
                 }else{
-                    $(obj).css('display','none');
+                    // $(obj).css('display','none');
+                    $(obj).remove();
                 }
             }catch(e){
 
@@ -40,7 +44,8 @@ function buildHtmlWithJsonArray(id,json,removeTemplate){
                     obj.innerHTML = val;  
                 }
             }catch(e){
-                // console.log(obj.textContent);
+                console.log(e);
+                console.log(obj.textContent);
                 obj.textContent = "";
             }
         // }
@@ -82,6 +87,7 @@ var reg = new RegExp("(^|\\?|&)"+ name +"=([^&]*)(\\s|&|$)", "i");
 return (reg.test(location.search))? encodeURIComponent(decodeURIComponent(RegExp.$2.replace(/\+/g, " "))) : '';
 }
 
+window.blockAlert = window.alert;
 window.alert = function(data){
     art.dialog.tips(data);
 }
@@ -99,7 +105,7 @@ YW={
                 alert('系统内部错误，请联系管理员.');
             }else if(data.status==400){
                 json = JSON.parse(data.responseText);
-                if(json.result=='ParameterMissingError'){
+                if(json.type=='ParameterMissingError'){
                     var field = json.field;
                     var arr = $('[name="'+field+'"]');
                     var desc;
@@ -112,6 +118,18 @@ YW={
                     $(arr[0]).focus();
                     alert("请先填写 "+ desc);
 
+                }else if(json.type=='ParameterTypeError'){
+                    var field = json.field;
+                    var arr = $('[name="'+field+'"]');
+                    var desc;
+                    if(arr!=null && arr.length>0){
+                        desc = $(arr[0]).attr('desc');
+                    }
+                    if(desc==undefined){
+                        desc = field;
+                    }
+                    $(arr[0]).focus();
+                    alert(desc+json.msg);
                 }else{
                     alert(json['msg']);   
                 }

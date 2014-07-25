@@ -62,7 +62,7 @@ public class GenJinService {
 		ModelAndView mv = new ModelAndView();
 		if(id!=null){
 			if(sh!=0 && sh!=1){
-				throw new GException(PlatformExceptionType.BusinessException, 2, "无效的参数");
+				throw new GException(PlatformExceptionType.BusinessException, "无效的参数");
 			}
 			GenJin po = service.get(GenJin.class, id);
 			if(po!=null){

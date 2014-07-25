@@ -94,11 +94,11 @@ public class JournalService {
 	public ModelAndView update(Journal journal){
 		ModelAndView mv = new ModelAndView();
 		if(journal.id==null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "id不能为空");
+			throw new GException(PlatformExceptionType.BusinessException, "id不能为空");
 		}
 		Journal po = dao.get(Journal.class, journal.id);
 		if(po==null){
-			throw new GException(PlatformExceptionType.BusinessException, 2, "记录已不存在");
+			throw new GException(PlatformExceptionType.BusinessException, "记录已不存在");
 		}
 		po.title=journal.title;
 		po.conta = journal.conta;

@@ -51,7 +51,8 @@ $(document).on('click', '.j_btn_edit', function(event) {
   return false;
 }).on('click', '.j_btn_fav', function(event) {
   if($(this).text()=="收藏"){ThiAction="add";$(this).text('已收藏');}else{ThiAction="delete";$(this).text('收藏');}
-  $.get('/zb/c/fav/'+ThiAction+'?houseId='+getHid, function(data) {
+//  alert('/zb/c/house/fav/'+ThiAction+'?houseId='+getHid)
+  $.get('/zb/c/house/fav/'+ThiAction+'?houseId='+getHid, function(data) {
     getStr=JSON.parse(data);
     if(ThiAction=="add"){
       msg="已收藏";

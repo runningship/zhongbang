@@ -106,7 +106,7 @@ function openHouseXingzhi(id,xingzhi){
       padding:0,
       resize:true,
       lock:1,
-      height:300,
+      height:200,
       width:300
   })
 }
@@ -140,15 +140,15 @@ $(function(){
     $.get('/zb/c/house/getQueryOptions', function(data) {
     getStr=JSON.parse(data);
     //  alert(getStr['datetype'])
-    buildHtmlWithJsonArray("id_chaoxiang",getStr['chaoxiang'],true); //朝向
-    buildHtmlWithJsonArray("id_fangxing",getStr['fangxing'],true);   //户型
-    buildHtmlWithJsonArray("id_leibie",getStr['leibie'],true);       //类别
+    buildHtmlWithJsonArray("id_chaoxiang",getStr['chaoxiang'],true,1); //朝向
+    buildHtmlWithJsonArray("id_fangxing",getStr['fangxing'],true,1);   //户型
+    buildHtmlWithJsonArray("id_leibie",getStr['leibie'],true,1);       //类别
     buildHtmlWithJsonArray("id_louxing",getStr['louxing'],true);     //楼型
-    buildHtmlWithJsonArray("id_jiaoyi",getStr['jiaoyi'],true);       //交易
+    buildHtmlWithJsonArray("id_jiaoyi",getStr['jiaoyi'],true,1);       //交易
     buildHtmlWithJsonArray("id_quyu",getStr['quyu'],true);           //区域
-    buildHtmlWithJsonArray("id_zhuangtai",getStr['zhuangtai'],true); //状态
+    buildHtmlWithJsonArray("id_zhuangtai",getStr['zhuangtai'],true,1); //状态
     buildHtmlWithJsonArray("id_xingzhi",getStr['xingzhi'],true); //房型
-    buildHtmlWithJsonArray("id_datetype",getStr['datetype'],true); //房型
+    buildHtmlWithJsonArray("id_datetype",getStr['datetype'],true,1); //房型
     Page.Init();
     $('select').each(function(index,obj){
       if(obj.name=='dateType'){
@@ -269,12 +269,14 @@ $(function(){
       <div class="input-group input-group-min">
         <span class="input-group-addon">状态</span>
         <select class="form-control " name="ztai" id="id_zhuangtai">
+          <option value="">所有</option>
           <option value="${name}">${name}</option>
         </select>
       </div>
       <div class="input-group input-group-min">
         <span class="input-group-addon">类别</span>
         <select class="form-control " name="leibie" id="id_leibie">
+          <option value="">所有</option>
           <option value="${name}">${name}</option>
         </select>
       </div>
@@ -289,6 +291,7 @@ $(function(){
       <div class="input-group input-group-min">
         <span class="input-group-addon">交易</span>
         <select class="form-control " name="jiaoyis" id="id_jiaoyi">
+          <option value="">所有</option>
           <option value="${name}">${name}</option>
         </select>
       </div>
@@ -318,12 +321,14 @@ $(function(){
       <div class="input-group input-group-min">
         <span class="input-group-addon">房型</span>
         <select class="form-control " name="fangxing" id="id_fangxing">
+          <option value="">所有</option>
           <option value="${name}">${name}</option>
         </select>
       </div>
       <div class="input-group input-group-min">
         <span class="input-group-addon">朝向</span>
         <select class="form-control " name="chaoxiang" id="id_chaoxiang">
+          <option value="">所有</option>
           <option value="${name}">${name}</option>
         </select>
       </div>
@@ -341,6 +346,7 @@ $(function(){
       <div class="input-group">
         <span class="input-group-addon" style="padding:8px;">日期</span>
         <select class="form-control" id="id_datetype" name="dateType">
+          <option value="">所有</option>
           <option value="${name}">${name}</option>
         </select>
         <input type="text" class="form-control" name="dateStart" id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})">
@@ -395,7 +401,7 @@ $(function(){
       <th>年代</th>
       <th>发布时间</th>
       <th>发布人</th>
-      <th auth="fy_list_xingzhi">性质</th>
+      <th auth="$${authParent}_xingzhi">性质</th>
       <th>状态</th>
       <!-- <th>房配客</th> -->
       <th>操作</th>
@@ -415,13 +421,13 @@ $(function(){
       <td>${dateyear}</td>
       <td>${dateadd}</td>
       <td>${forlxr}</td>
-      <td auth="fy_list_xingzhi" ><a href="javascript:void(0)" onclick="openHouseXingzhi(${id},${xingzhi})"><span class='runscript'>getEnumText('xingzhi',${xingzhi})</span></a></td>
+      <td auth="$${authParent}_xingzhi" ><a href="javascript:void(0)" onclick="openHouseXingzhi(${id},${xingzhi})"><span class='runscript'>getEnumText('xingzhi',${xingzhi})</span></a></td>
       <td class='runscript'>getEnumText('zhuangtai',${ztai})</td>
       <!-- <td>有</td> -->
       <td>
-        <a href="#" class="edit" data-hid="${id}" data-rel="edit">修改</a>
-        <a href="##" class="del" data-hid="${id}" data-rel="del">删除</a>
-        <a href="###" class="revert hidden" data-hid="${id}" data-rel="revert">恢复</a>
+        <a auth="$${authParent}_edit" href="#" class="edit" data-hid="${id}" data-rel="edit">修改</a>
+        <a auth="$${authParent}_del" href="##" class="del" data-hid="${id}" data-rel="del">删除</a>
+        <a auth="$${authParent}_recover" href="###" class="revert hidden" data-hid="${id}" data-rel="revert">恢复</a>
         <a href="####" class="see" data-hid="${id}" data-rel="see">查看</a></td>
     </tr>
     </tbody>

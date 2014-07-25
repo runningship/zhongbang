@@ -37,7 +37,7 @@ public class FeedBackService {
 	@WebMethod
 	public ModelAndView add(FeedBack fb){
 		if(fb.conts==null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "请先填写反馈已经");
+			throw new GException(PlatformExceptionType.BusinessException, "请先填写反馈已经");
 		}
 		fb.addtime = new Date();
 		fb.userId = ThreadSession.getUser().id;

@@ -65,17 +65,17 @@ public class UserQuitService {
 		
 		UserQuit po = dao.getUniqueByParams(UserQuit.class, new String[]{"userId" , "pass"}, new Object[]{uq.userId , uq.pass});
 		if(po!=null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "已提交过相同的离职申请");
+			throw new GException(PlatformExceptionType.BusinessException,"已提交过相同的离职申请");
 		}
 		if(uq.userId==null){
-			throw new GException(PlatformExceptionType.BusinessException, 2, "离职人员不能为空");
+			throw new GException(PlatformExceptionType.BusinessException, "离职人员不能为空");
 		}
 		if(uq.userId.equals(uq.fyTo) || uq.userId.equals(uq.kyTo)){
-			throw new GException(PlatformExceptionType.BusinessException, 3, "客源或房源调整不正确");
+			throw new GException(PlatformExceptionType.BusinessException,"客源或房源调整不正确");
 		}
 		List<User> sprList = UserHelper.getUserWithAuthority("rs_lzsq_list");
 		if(sprList==null || sprList.size()==0){
-			throw new GException(PlatformExceptionType.BusinessException, 4, "没有用户拥有离职审核权限，请先在系统管理中设置离职整审核人.或者联系系统管理员为您处理");
+			throw new GException(PlatformExceptionType.BusinessException, "没有用户拥有离职审核权限，请先在系统管理中设置离职整审核人.或者联系系统管理员为您处理");
 		}
 		dao.saveOrUpdate(uq);
 		for(User spr : sprList){
@@ -129,7 +129,7 @@ public class UserQuitService {
 	public ModelAndView pass(int lizhiId ,int spId){
 		RenShiReview po = dao.get(RenShiReview.class, spId);
 		if(po==null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "该离职申请已不存在");
+			throw new GException(PlatformExceptionType.BusinessException, "该离职申请已不存在");
 		}
 		po.sh = 1;
 		dao.saveOrUpdate(po);

@@ -20,6 +20,7 @@ import com.youwei.zjb.entity.User;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
 import com.youwei.zjb.work.entity.JiLu;
+import com.youwei.zjb.work.entity.Journal;
 
 @Module(name="/jilu")
 public class JiLuService {
@@ -75,6 +76,16 @@ public class JiLuService {
 		
 		mv.data.put("attachs", JSONHelper.toJSONArray(attachs));
 		mv.data.put("jilu", JSONHelper.toJSON(jilu));
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView delete(int id){
+		ModelAndView mv = new ModelAndView();
+		JiLu po = dao.get(JiLu.class, id);
+		if(po!=null){
+			dao.delete(po);
+		}
 		return mv;
 	}
 }

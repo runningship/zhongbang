@@ -7,6 +7,7 @@ public enum PlatformExceptionType implements ExceptionType{
 	ModuleInvokeError,
 	MethodParameterError,
 	ParameterMissingError,
+	ParameterTypeError,
 	AuthCodeError,
 	MachineCodeEmpty,
 	BusinessException

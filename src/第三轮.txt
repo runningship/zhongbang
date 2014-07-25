@@ -6,10 +6,18 @@
 房源——查看里面土地证指向（zjia）（租金）交易后是空的(done)
 添加里面 房源编号、面积应是必填(done)
 im默认打开(done)
-im掉线重连
-im消息提醒到主界面
-数据格式的错误提示
+im掉线重连(done)
+im消息提醒到主界面(done)
+数据类型的错误提示(done)
 hibernate缓存(done)
 换图标
 
-/fav/list/
+客源的性质和是否有效改成下拉框
+去掉ue.setHeight(done)
+行政管理权限控制(done)
+行政管理添加步骤错误(done)
+房源权限(done)
+客源权限(done)
+
+房配客，根据区域查询
+查询缓存

@@ -12,6 +12,7 @@
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -35,7 +36,7 @@ function getList(search){
 }
 
 function selectType(id){
-  var title="";
+  var title="所有";
   for(var index=0;index<queryOpts.list.length;index++){
     if(queryOpts.list[index].id==id){
       title = queryOpts.list[index].fenlei;
@@ -112,7 +113,7 @@ $(function(){
     buildHtmlWithJsonArray("adminClassList",queryOpts['list']);
     buildHtmlWithJsonArray("adminClassList2",queryOpts['list']);
 
-    if(claid!=null){
+    if(claid!=null&&claid!=''){
       selectType(claid,'fsf');
     }else{
       getList();
@@ -128,7 +129,7 @@ $(function(){
 </head>
 <body class="hlist bodyer" style="overflow:auto">
 
-<div class="header" style="position:relative;height:50px;width:100%">
+<div class="header">
   <div class="btn-group">
     <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:30px;padding:0px 10px 0px 10px">添加 <span class="caret"></span></button>
     <ul class="dropdown-menu">
@@ -143,9 +144,9 @@ $(function(){
     <div class="btn-group">
       <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:35px;padding:0px 10px 0px 10px;width:150px;"><span id="btn_class_select">分 类</span> <span class="caret"></span></button>
       <ul class="dropdown-menu">
-        <li><label><span  onclick="selectType('','所有')" style="color:black;padding-left:10px;line-height:30px;font-weight:normal">所有</span></label></li>
+        <li onclick="selectType('','所有')"><label><span  style="color:black;padding-left:10px;line-height:30px;font-weight:normal">所有</span></label></li>
         <span id="adminClassList2">
-          <li><label><span onclick="selectType(${id},'${fenlei}');" style="color:black;padding-left:10px;line-height:30px;font-weight:normal">${fenlei}</span></label></li>
+          <li onclick="selectType(${id},'${fenlei}');"><label><span  style="color:black;padding-left:10px;line-height:30px;font-weight:normal">${fenlei}</span></label></li>
         </span>
       </ul>
     </div>
@@ -154,7 +155,7 @@ $(function(){
   </div>
 
 </div>
-<div class="mainer" style="position:relative;width:100%">
+<div class="mainer">
   <table class="table table-hover .table_bodyer" >
     <thead>
       <th>标题</th>
@@ -176,6 +177,6 @@ $(function(){
   </table>
 </div>
 
-<div class="footer foot_page_box" style="position:relative;margin-top:10px;height:55px;"></div>
+<div class="footer foot_page_box"></div>
 </body>
 </html>

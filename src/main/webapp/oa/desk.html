@@ -68,7 +68,8 @@ function init(){
       });
       buildHtmlWithJsonArray('attences',data.attences);
       var now = new Date(data.now);
-      var src = '/zb/style/image/clock.swf?h='+now.getHours()+'&amp;m='+now.getMinutes()+'&amp;s='+now.getSeconds()+'&amp;z=服务器 北京 时间&amp;t=今天是'+now.toDateString()+' '+xingqi[now.getDay()]+'&amp;c=打卡时间按此系统为准';
+      var nowStr = now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日';
+      var src = '/zb/style/image/clock.swf?h='+now.getHours()+'&amp;m='+now.getMinutes()+'&amp;s='+now.getSeconds()+'&amp;z=服务器 北京 时间&amp;t=今天是'+nowStr+' '+xingqi[now.getDay()]+'&amp;c=打卡时间按此系统为准';
       //var src='/zb/style/image/clock.swf?h='+now.getHours()+'&amp;m='+now.getMinutes()+'&amp;s='+now.getSeconds()+'&amp;z=服务器 北京 时间&amp;t=今天是'+now.toLocaleDateString()+' '+xingqi[now.getDay()]+'&amp;c=打卡时间按此系统为准';
       //$('#flashEid').attr('src',src);
       
@@ -78,12 +79,22 @@ function init(){
   });
   var today = new Date();
   var hours = today.getHours();
-  $('#today').text(today.getFullYear()+'-'+today.getMonth()+'-'+today.getDate()+' 打卡记录');
+  // $('#today').text(today.getFullYear()+'-'+today.getMonth()+'-'+today.getDate()+' 打卡记录');
   if(hours<12){
     $('#afternoon').css('display','none');
   }else{
     $('#morning').css('display','none');
   }
+}
+
+function openView(id,name){
+  art.dialog.open('notice_view.html?recordId='+id+'&claName='+name,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1080
+  });
 }
 
 function more(fenleiId){
@@ -126,7 +137,7 @@ $(function(){
               </div>
               <span id="item_body_${id}">
                 <div class="item_body">
-                  <div style="width:70%;overflow: hidden;text-overflow: ellipsis;">${title}</div><span style="float:right;">${addtime}</span>
+                  <a onclick="openView(${noticeId},'${fenlei}')" href="javascript:void(0)" style="width:70%;overflow: hidden;text-overflow: ellipsis;">${title}</a><span style="float:right;">${addtime}</span>
                 </div>
               </span>
           </div>
@@ -140,7 +151,7 @@ $(function(){
           
         </div>
         <div class="item_date_fr checkIn_box">
-          <h3 id="today"> </h3>
+          <h3 id="today"> 今日打卡记录</h3>
           <div id="attences">
             <div>
               <span class="runscript">buildAttence(${type})</span><span>${checktime}</span>

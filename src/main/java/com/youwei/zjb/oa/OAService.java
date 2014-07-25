@@ -52,10 +52,12 @@ public class OAService {
 		ModelAndView mv = new ModelAndView();
 		List<NoticeClass> fenLeiList = dao.listByParams(NoticeClass.class, "from NoticeClass");
 		mv.data.put("fenlei", JSONHelper.toJSONArray(fenLeiList));
+		User user = ThreadSession.getUser();
 		Page<Map> page = new Page<Map>();
 		page.setPageSize(5);
 		for(NoticeClass fenlei: fenLeiList){
-			Page<Map> noticeList = dao.findPage(page, "select title as title , addtime as addtime from Notice where claid=? order by addtime desc",true, new Object[]{fenlei.id});
+			StringBuilder hql = new StringBuilder("select  n.id as noticeId, n.title as title, n.addtime as addtime, nc.fenlei as classTitle, u.uname as uname from Notice n, NoticeReceiver nr , NoticeClass nc , User u where n.id=nr.noticeId and n.claid=nc.id and u.id=n.userId and n.claid=? and nr.receiverId=? order by n.addtime desc");
+			Page<Map> noticeList = dao.findPage(page, hql.toString(),true, new Object[]{fenlei.id , user.id});
 			mv.data.put(fenlei.fenlei, JSONHelper.toJSONArray(noticeList.getResult()));
 		}
 		AttenceService as = new AttenceService();
@@ -69,6 +71,7 @@ public class OAService {
 	public ModelAndView getNotice(int id){
 		ModelAndView mv = new ModelAndView();
 		Notice po = dao.get(Notice.class, id);
+		dao.execute("update NoticeReceiver set hasRead=1 where noticeId=? and receiverId=?", id,ThreadSession.getUser().id);
 		mv.data.put("notice", JSONHelper.toJSON(po));
 		return mv;
 	}
@@ -79,10 +82,10 @@ public class OAService {
 		ModelAndView mv = new ModelAndView();
 		Notice po = dao.get(Notice.class, notice.id);
 		if(po==null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "公告已经不存在");
+			throw new GException(PlatformExceptionType.BusinessException,"公告已经不存在");
 		}
 		if(StringUtils.isEmpty(receivers)){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "接受者不能为空");
+			throw new GException(PlatformExceptionType.BusinessException, "接受者不能为空");
 		}
 		po.title = notice.title;
 		po.conts = notice.conts;
@@ -106,11 +109,11 @@ public class OAService {
 	public ModelAndView addNotice(Notice notice , String receivers){
 		ModelAndView mv = new ModelAndView();
 		if(StringUtils.isEmpty(receivers)){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "接受者不能为空");
+			throw new GException(PlatformExceptionType.BusinessException, "接受者不能为空");
 		}
 		Notice po = dao.getUniqueByKeyValue(Notice.class, "title", notice.title);
 		if(po!=null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "该标题已存在");
+			throw new GException(PlatformExceptionType.BusinessException,"该标题已存在");
 		}
 		User user = ThreadSession.getUser();
 		if(user==null){

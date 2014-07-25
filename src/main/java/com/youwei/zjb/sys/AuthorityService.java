@@ -40,7 +40,7 @@ public class AuthorityService {
 	@WebMethod
 	public ModelAndView update(int roleId,String authData){
 		if(StringUtils.isEmpty(authData)){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "数据不能为空");
+			throw new GException(PlatformExceptionType.BusinessException, "数据不能为空");
 		}
 		JSONArray json = JSONArray.fromObject(authData);
 		dao.execute("delete from RoleAuthority where roleId=?", roleId);
@@ -85,10 +85,10 @@ public class AuthorityService {
 		ModelAndView mv = new ModelAndView();
 		Qzy po = dao.getUniqueByKeyValue(Qzy.class, "userId", qzy.userId);
 		if(po!=null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "不能添加重复的签证员");
+			throw new GException(PlatformExceptionType.BusinessException, "不能添加重复的签证员");
 		}
 		if(qzy.userId==null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "请先选择签证员");
+			throw new GException(PlatformExceptionType.BusinessException, "请先选择签证员");
 		}
 		dao.saveOrUpdate(qzy);
 		mv.data.put("msg", "添加成功");
@@ -141,7 +141,7 @@ public class AuthorityService {
 			return mv;
 		} catch (IOException ex) {
 			ex.printStackTrace();
-			throw new GException(PlatformExceptionType.BusinessException, 1, "读取资源文件失败");
+			throw new GException(PlatformExceptionType.BusinessException, "读取资源文件失败");
 		}
 	}
 	
@@ -186,7 +186,7 @@ public class AuthorityService {
 	public ModelAndView updateRole(int id,String title){
 		Role role = dao.get(Role.class, id);
 		if(role==null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "职务不存在");
+			throw new GException(PlatformExceptionType.BusinessException, "职务不存在");
 		}
 		role.title = title;
 		dao.saveOrUpdate(role);
@@ -201,7 +201,7 @@ public class AuthorityService {
 			user = dao.get(User.class, userId);
 		}
 		if(user==null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "用户不存在");
+			throw new GException(PlatformExceptionType.BusinessException, "用户不存在");
 		}
 		String hql = "from RoleAuthority where roleId=? and isMenu=1";
 		List<RoleAuthority> list = dao.listByParams(RoleAuthority.class, hql, user.roleId);

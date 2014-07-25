@@ -245,7 +245,7 @@ $(function(){
       <div class="input-group input-group-time" style="width:302px">
         <span class="input-group-addon">登记时间</span>
         <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:110px;border-radius:0;">
-        <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:115px">
+        <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:113px">
       </div>
       <div class="input-group input-group-select">
         <span class="input-group-addon">业务员</span>
@@ -270,7 +270,7 @@ $(function(){
       <th>客户性质</th>
       <th>业务员</th>
       <th>房配客</th>
-      <th auth="ky_client_buy_assign">分配</th>
+      <th auth="$${authParent}_assign">分配</th>
       <th>操作</th>
     </thead>
     <tbody id="id_GJ_list">
@@ -286,9 +286,9 @@ $(function(){
       <td class='runscript'>getEnumTextByCode(queryOpts['kehu'],${kehu})</td>
       <td>${uname}</td>
       <td><a href="javascript:void(0)" class="btn btn-xs" data-flag="fy">房源</a></td>
-      <td auth="ky_client_buy_assign"><a href="javascript:void(0)" class="btn btn-xs" data-flag="fp">分配</a></td>
-      <td><a auth="ky_client_buy_edit" href="javascript:void(0)" class="btn btn-xs" data-flag="edit">修改</a>
-          <a auth="ky_client_buy_del" href="javascript:void(0)"  class="btn btn-xs" data-flag="del">删除</a>
+      <td auth="$${authParent}_assign"><a href="javascript:void(0)" class="btn btn-xs" data-flag="fp">分配</a></td>
+      <td><a auth="$${authParent}_edit" href="javascript:void(0)" class="btn btn-xs" data-flag="edit">修改</a>
+          <a auth="$${authParent}_del" href="javascript:void(0)"  class="btn btn-xs" data-flag="del">删除</a>
       </td>
       
     </tr>

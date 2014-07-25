@@ -9,15 +9,54 @@
 		"children":[{
 			"name":"fy_list_sell",
 			"text":"出售信息",
-			"type":"menu"
+			"type":"menu",
+			"children":[{
+				"name":"fy_list_sell_del",
+				"text":"删除",
+				"type":"menu"
+			},{
+				"name":"fy_list_sell_edit",
+				"text":"修改",
+				"type":"menu"
+			},{
+				"name":"fy_list_rent_xingzhi",
+				"text":"修改房源性质",
+				"type":"menu"
+			}]
 		},{
 			"name":"fy_list_rent",
 			"text":"出租信息",
-			"type":"menu"
+			"type":"menu",
+			"children":[{
+				"name":"fy_list_rent_del",
+				"text":"删除",
+				"type":"menu"
+			},{
+				"name":"fy_list_rent_edit",
+				"text":"修改",
+				"type":"menu"
+			},{
+				"name":"fy_list_rent_xingzhi",
+				"text":"修改房源性质",
+				"type":"menu"
+			}]
 		},{
 			"name":"fy_list_all",
 			"text":"所有房源",
-			"type":"menu"
+			"type":"menu",
+			"children":[{
+				"name":"fy_list_all_del",
+				"text":"删除",
+				"type":"menu"
+			},{
+				"name":"fy_list_all_edit",
+				"text":"修改",
+				"type":"menu"
+			},{
+				"name":"fy_list_all_xingzhi",
+				"text":"修改房源性质",
+				"type":"menu"
+			}]
 		},{
 			"name":"fy_list_my",
 			"text":"我的房源",
@@ -25,10 +64,6 @@
 		},{
 			"name":"fy_list_fav",
 			"text":"我的收藏",
-			"type":"menu"
-		},{
-			"name":"fy_list_xingzhi",
-			"text":"修改房源性质",
 			"type":"menu"
 		}]
 	},{
@@ -51,7 +86,16 @@
 		"children":[{
 			"name":"fy_other_genjin",
 			"text":"跟进列表",
-			"type":"menu"
+			"type":"menu",
+			"children":[{
+				"name":"fy_other_genjin_del",
+				"text":"删除",
+				"type":"menu"
+			},{
+				"name":"fy_other_genjin_shenhe",
+				"text":"审核",
+				"type":"menu"
+			}]
 		},{
 			"name":"fy_other_setting",
 			"text":"房源设置",
@@ -59,7 +103,16 @@
 		},{
 			"name":"fy_other_recycle",
 			"text":"回收站",
-			"type":"menu"
+			"type":"menu",
+			"children":[{
+				"name":"fy_other_recycle_del",
+				"text":"删除",
+				"type":"menu"
+			},{
+				"name":"fy_other_recycle_recover",
+				"text":"恢复",
+				"type":"menu"
+			}]
 		}]
 	}]
 },{
@@ -121,27 +174,65 @@
 	},{
 		"name":"yw_journal_qj",
 		"text":"请假登记",
-		"type":"menu"
+		"type":"menu",
+		"children":[{
+			"name":"yw_journal_qj_edit",
+			"text":"修改",
+			"type":"menu"
+		},{
+			"name":"yw_journal_qj_del",
+			"text":"删除",
+			"type":"menu"
+		}]
 	},{
 		"name":"yw_journal_work",
 		"text":"工作日志",
-		"type":"menu"
+		"type":"menu",
+		"children":[{
+			"name":"yw_journal_work_edit",
+			"text":"修改",
+			"type":"menu"
+		},{
+			"name":"yw_journal_work_del",
+			"text":"删除",
+			"type":"menu"
+		}]
 	},{
 		"name":"yw_jilu_hy",
 		"text":"会议记录",
-		"type":"menu"
+		"type":"menu",
+		"children":[{
+			"name":"yw_jilu_hy_del",
+			"text":"删除",
+			"type":"menu"
+		}]
 	},{
 		"name":"yw_jilu_fy",
 		"text":"优质房源",
-		"type":"menu"
+		"type":"menu",
+		"children":[{
+			"name":"yw_jilu_fy_del",
+			"text":"删除",
+			"type":"menu"
+		}]
 	},{
 		"name":"yw_jilu_zj",
 		"text":"月度总结",
-		"type":"menu"
+		"type":"menu",
+		"children":[{
+			"name":"yw_jilu_zj_del",
+			"text":"删除",
+			"type":"menu"
+		}]
 	},{
 		"name":"yw_jilu_kq",
 		"text":"考勤表格",
-		"type":"menu"
+		"type":"menu",
+		"children":[{
+			"name":"yw_jilu_kq_del",
+			"text":"删除",
+			"type":"menu"
+		}]
 	}]
 },{
 	"name":"ht",
@@ -255,7 +346,20 @@
 	},{
 		"name":"xz_table_list",
 		"text":"数据列表",
-		"type":"menu"
+		"type":"menu",
+		"children":[{
+			"name":"xz_table_list_add",
+			"text":"添加",
+			"type":"menu"
+		},{
+			"name":"xz_table_list_edit",
+			"text":"修改",
+			"type":"menu"
+		},{
+			"name":"xz_table_list_del",
+			"text":"删除",
+			"type":"menu"
+		}]
 	}]
 },{
 	"name":"zc",

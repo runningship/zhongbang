@@ -28,10 +28,10 @@ $(document).ready(function(){
 });
 
 function select(fenleiId){
-    var oldHref= $('#data_list').attr('href');
-    $('#data_list').attr('href',oldHref+"?claid="+fenleiId);
+    var oldTarget= $('#data_list').attr('target');
+    $('#data_list').attr('target',oldTarget+"?claid="+fenleiId);
     $('#data_list').click();
-    $('#data_list').attr('href',oldHref);
+    $('#data_list').attr('target',oldTarget);
 }
 </script>
 </head>

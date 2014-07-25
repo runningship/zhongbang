@@ -35,13 +35,13 @@ public class OutService {
 		ModelAndView mv = new ModelAndView();
 		out.userId = ThreadSession.getUser().id;
 		if(out.outTime==null || out.backTime==null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "您填写的数据不完整");
+			throw new GException(PlatformExceptionType.BusinessException, "您填写的数据不完整");
 		}
 		out.reply = 0;
 		String hql = "from OutRecord where userId=? and outTime>= ? and backTime<=? ";
 		long count = dao.countHqlResult(hql, out.userId,out.outTime,out.backTime);
 		if(count>0){
-			throw new GException(PlatformExceptionType.BusinessException, 2, "您在该时间段已经有外出记录了");
+			throw new GException(PlatformExceptionType.BusinessException, "您在该时间段已经有外出记录了");
 		}
 		if(out.category==1){
 			addOutBiz(out);
@@ -77,7 +77,7 @@ public class OutService {
 	public ModelAndView piyue(int id, String conts , int integral){
 		OutRecord po = dao.get(OutRecord.class, id);
 		if(po==null){
-			throw new GException(PlatformExceptionType.BusinessException, 2, "该记录已不存在");
+			throw new GException(PlatformExceptionType.BusinessException, "该记录已不存在");
 		}
 		po.reply=1;
 		po.conts = conts;
@@ -95,7 +95,7 @@ public class OutService {
 	public ModelAndView upateOutRecord(int id, String onCont){
 		OutRecord po = dao.get(OutRecord.class, id);
 		if(po==null){
-			throw new GException(PlatformExceptionType.BusinessException, 2, "该记录已不存在");
+			throw new GException(PlatformExceptionType.BusinessException, "该记录已不存在");
 		}
 		po.onCont = onCont;
 		dao.saveOrUpdate(po);
@@ -105,10 +105,10 @@ public class OutService {
 	private void addOutHouse(OutRecord out) {
 		if(StringUtils.isEmpty(out.clients)){
 			//如果是带看需要客源信息
-			throw new GException(PlatformExceptionType.BusinessException, 3, "请选择客源信息");
+			throw new GException(PlatformExceptionType.BusinessException,"请选择客源信息");
 		}
 		if(StringUtils.isEmpty(out.houses)){
-			throw new GException(PlatformExceptionType.BusinessException, 4, "请选择房源信息");
+			throw new GException(PlatformExceptionType.BusinessException,"请选择房源信息");
 		}
 //		List<User> clients = dao.listByParams(User.class, "from User where id in (?) ", (Object[])out.clients.split(","));
 //		List<House> houses = dao.listByParams(House.class, "from House where id in (?) ", (Object[])out.houses.split(","));

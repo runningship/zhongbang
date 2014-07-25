@@ -96,7 +96,7 @@ $(function(){
   $('#category').val(category);
   ue = UE.getEditor('editor');
   ue.addListener( 'ready', function( editor ) {
-    ue.setHeight(350);
+    //ue.setHeight(350);
   });
 });
 
@@ -106,6 +106,7 @@ $(function(){
 <body style="overflow:auto">
   
   <form name="textForm">
+  <div class="clearfix" style="margin-top:10px;">
    <div class="input-group input-group-max">
       <span class="input-group-addon">  标 题</span>
       <input type="text" class="form-control" name="title">
@@ -116,14 +117,15 @@ $(function(){
           <span class="input-group-addon" style="padding:8px;">时间</span>
           <input type="text" class="form-control" name="addtime" id="addtime" onFocus="WdatePicker()">
     </div>
+  </div>
   </form>
-  <div style="margin-top:50px;">
+  <div style="margin-left:10px;">
   <span>内容: </span>
   </div>
   <div style="margin-left:10px;">
-    <span id="editor" type="text/plain" style="width:1024px;height:500px;"></span>
+    <span id="editor" type="text/plain" style="width:600px;height:250px;"></span>
   </div>
-  <button onclick="save();" class="btn btn-primary " style="margin-left:10px;">提交</button>
+  <button onclick="save();" class="btn btn-primary " style="margin-left:10px;margin-top:10px;">提交</button>
 <div style="margin-top:5px;">
     <input id="file_upload" name="file_upload" style="display:none">
 </div>

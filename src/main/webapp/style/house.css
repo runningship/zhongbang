@@ -22,6 +22,10 @@ table.nobr th,table.nobr td{white-space:nowrap;word-break: keep-all;}
 .input-group-mt2{ margin-top: -8px;}
 .input-group-mt3{ margin-top: -16px;}
 .input-group-select{ width: 504px;}
+.input-group.input-group-n2{width: 280px;}
+.input-group.input-group-n2 input{ width: 50%;}
+.input-group-select-n2{ width: 280px;}
+.input-group.input-group-select-n2 select{ width: 50%;}
 .input-group.input-group-select select{ width: 33%;}
 .input-group.input-group-select select.form-control:not(:first-child):not(:last-child){border-radius: 0px; border-right: none;}
 .input-group select.form-control{ padding: 6px 6px}

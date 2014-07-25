@@ -13,6 +13,7 @@
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -70,7 +71,7 @@ $(function(){
 </head>
 <body class="hlist bodyer" style="overflow:auto">
 
-<div class="header" style="position:relative;height:50px;width:100%">
+<div class="header">
   
   <form name="form1" onsubmit="return doSearch();">
     <input type="hidden" class=".userInput" name="xpath" />
@@ -83,15 +84,6 @@ $(function(){
         <span class="input-group-addon">电话</span>
         <input type="text" class="form-control" name="tel" style="width:148px;">
       </div>
-      <div class="input-group input-group-max">
-        <span class="input-group-addon">地址</span>
-        <input type="text" class="form-control" name="address">
-      </div>
-      <div class="input-group input-group-max">
-        <span class="input-group-addon">身份证号</span>
-        <input type="text" class="form-control" name="sfz" style="width:213px;">
-      </div>
-      
       <div class="input-group ">
         <span class="input-group-addon">婚姻状况</span>
         <select class="form-control " name="hunyin">
@@ -100,16 +92,34 @@ $(function(){
           <option value="0">未婚</option>
         </select>
       </div>
+      <div class="input-group ">
+        <span class="input-group-addon">性别</span>
+        <select class="form-control " name="gender">
+          <option value="">所有</option>
+          <option value="1">男</option>
+          <option value="0">女</option>
+        </select>
+      </div>
       <div class="btn-group">
         <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
       </div>
     </div>
-    <div style="">
-      <div class="input-group">
+    <div class="clearfix">
+      <div class="input-group input-group-max">
+        <span class="input-group-addon">身份证号</span>
+        <input type="text" class="form-control" name="sfz" style="width:213px;">
+      </div>
+      <div class="input-group input-group-n2">
         <span class="input-group-addon">年龄</span>
         <input type="text" class="form-control" name="ageStart">
         <input type="text" class="form-control" name="ageEnd">
       </div>
+      <div class="input-group input-group-max">
+        <span class="input-group-addon">地址</span>
+        <input type="text" class="form-control" name="address">
+      </div>
+    </div>
+    <div style="">
       <div class="input-group" style="">
         <span class="input-group-addon">入企时间</span>
         <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="rqtimeStart" style="width:120px;">
@@ -123,14 +133,6 @@ $(function(){
             <option value="${id}">${title}</option>
         </select>
       </div>
-      <div class="input-group ">
-        <span class="input-group-addon">性别</span>
-        <select class="form-control " name="gender">
-          <option value="">所有</option>
-          <option value="1">男</option>
-          <option value="0">女</option>
-        </select>
-      </div>
       <div class="input-group input-group-select">
         <span class="input-group-addon">公司</span>
         <select class="form-control get_comp" name="form_cid"></select>
@@ -140,7 +142,7 @@ $(function(){
   </form>
 
 </div>
-<div class="mainer" style="position:relative;width:100%">
+<div class="mainer">
   <table class="table table-hover .table_bodyer" >
     <thead>
       <th>姓名/性别</th>
@@ -168,6 +170,6 @@ $(function(){
   </table>
 </div>
 
-<div class="footer foot_page_box" style="position:relative;margin-top:10px;height:55px;"></div>
+<div class="footer foot_page_box"></div>
 </body>
 </html>

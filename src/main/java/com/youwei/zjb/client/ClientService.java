@@ -151,10 +151,10 @@ public class ClientService {
 		ModelAndView mv = new ModelAndView();
 		Client client = dao.get(Client.class, clientId);
 		if(client==null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "客户不能为空");
+			throw new GException(PlatformExceptionType.BusinessException, "客户不能为空");
 		}
 		if(userId==null){
-			throw new GException(PlatformExceptionType.BusinessException, 2, "业务员不能为空");
+			throw new GException(PlatformExceptionType.BusinessException,"业务员不能为空");
 		}
 		client.salesman = userId;
 		dao.saveOrUpdate(client);

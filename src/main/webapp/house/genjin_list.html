@@ -14,6 +14,7 @@
 <script type="text/javascript" src="/zb/js/jquery.timers.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.4"></script>
 <script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.js"></script>
@@ -90,10 +91,6 @@ function review(id,target){
         success:function (data, textStatus) {
           target.textContent=getEnumTextByCode(shEnums,sh);
           // ArtAlerts('操作成功');
-        },
-        complete: function(XMLHttpRequest, textStatus){},
-        error:function (XMLHttpRequest, textStatus, errorThrown) {
-          console.error(XMLHttpRequest.responseText);
         }
     });
 }
@@ -110,17 +107,18 @@ function dialogs(id){
 }
 $(function(){
   onSubmit_Form();
-  getGJList();
-  Page.Init();
+ 
   $.get('/zb/c/house/getQueryOptions', function(data) {
     var queryOpts=JSON.parse(data);
     shEnums = queryOpts['shenhe'];
-    buildHtmlWithJsonArray("id_jiaoyi",queryOpts['jiaoyi'],true);       //交易
-    buildHtmlWithJsonArray("id_shenhe",queryOpts['shenhe'],true);       //审核
+    buildHtmlWithJsonArray("id_jiaoyi",queryOpts['jiaoyi'],true,1);       //交易
+    buildHtmlWithJsonArray("id_shenhe",queryOpts['shenhe'],true,1);       //审核
     $('select').each(function(index,obj){
       $(obj).prepend('<option value="">所有</option>');
       $(obj).val("");
-    })
+    });
+    getGJList();
+    Page.Init();
   });
 });
 
@@ -131,19 +129,21 @@ $(function(){
 </head>
 <body class="hlist bodyer" style="overflow:auto">
 
-<div class="header" style="position:relative;height:50px;width:100%">
+<div class="header">
     
     <form name="form1">
       <input type="hidden" class="userInput" name="xpath" value="">
     <div class="input-group ">
         <span class="input-group-addon">审核</span>
         <select class="form-control " name="sh" id="id_shenhe">
+          <option value="">所有</option>
           <option value="${name}">${name}</option>
         </select>
     </div>
     <div class="input-group ">
         <span class="input-group-addon">交易</span>
         <select class="form-control " name="jiaoyi" id="id_jiaoyi">
+          <option value="">所有</option>
           <option value="${name}">${name}</option>
         </select>
     </div>
@@ -173,7 +173,7 @@ $(function(){
     
     </form>
 </div>
-<div class="mainer" style="position:relative;width:100%">
+<div class="mainer">
   <table class="table table-hover .table_bodyer" >
     <thead>
       <th>跟进时间</th>
@@ -192,13 +192,14 @@ $(function(){
       <td>${bianhao}</td>
       <td>${area}</td>
       <td><a href="javascript:void(0)" onclick="return dialogs(${houseId});" style="width:200px; overflow:hidden;">${conts}</a></td>
-      <td><a class='runscript' href="javascript:void(0)" onclick="review(${id},this)">getEnumTextByCode(shEnums,${sh})</a> <a href="javascript:void(0)" onclick="deleteGJ(${id})">删除</a></td>
+      <td><a auth="fy_other_genjin_shenhe" class='runscript' href="javascript:void(0)" onclick="review(${id},this)">getEnumTextByCode(shEnums,${sh})</a> 
+          <a auth="fy_other_genjin_del" href="javascript:void(0)" onclick="deleteGJ(${id})">删除</a></td>
       
     </tr>
     </tbody>
   </table>
 </div>
 
-<div class="footer foot_page_box" style="position:relative;margin-top:10px;height:55px;"></div>
+<div class="footer foot_page_box"></div>
 </body>
 </html>

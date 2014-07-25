@@ -11,6 +11,8 @@
   <!-- 5 include the minified jstree source -->
   <script src="/zb/js/jstree/jstree.js"></script>
   <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+  <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
+
   <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 
 <script>
@@ -85,7 +87,7 @@
         },
         success:function (data, textStatus) {
             art.dialog.close();
-            alert('success');
+            alert('保存成功');
         },
         dataType: 'json'
       });

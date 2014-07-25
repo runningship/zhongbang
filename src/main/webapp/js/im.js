@@ -381,13 +381,8 @@ var IM = {
 	        }
 	    });
 	},
-
-	Init : function(){
-		IM.myId = getParam("userId");
-		IM.msgContainer = $('#msgContainer');
-		$('#searchInput').val(IM.defSearchStr);
-		IM.loadContacts();
-
+	start: function(){
+		console.log('start...');
 		IM.ws = new WebSocket("ws://192.168.1.125:9099");
 		IM.ws.onopen = function() { 
 			IM.login(IM.ws);
@@ -406,10 +401,19 @@ var IM = {
 		};
 		IM.ws.onclose = function(e) {
 			console.log("closed"); 
+			setTimeout(IM.start,10000);
 		};
 		IM.ws.onerror = function(e){
 			console.log(e); 
 		}
+	},
+	Init : function(){
+		IM.myId = getParam("userId");
+		IM.msgContainer = $('#msgContainer');
+		$('#searchInput').val(IM.defSearchStr);
+		IM.loadContacts();
+
+		IM.start();
 		
 		jQuery.hotkeys.add('ctrl+return',function(e){
 			IM.send();

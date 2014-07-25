@@ -66,12 +66,20 @@ public class ViewServlet extends HttpServlet{
 		}
 		String filePath = req.getServletContext().getRealPath("/")+path;
 		String html = FileUtils.readFileToString(new File(filePath));
+		html = html.replace("$${userId}", user.id.toString());
 		Document doc = Jsoup.parse(html);
+		String authParent = req.getParameter("authParent");
 		List<RoleAuthority> authList = user.getRole().Authorities();
 //		JSONArray arr = JSONHelper.toJSONArray(authList);
 		Elements list = doc.getElementsByAttribute("auth");
 		for(Element e : list){
 			String target = e.attr("auth");
+			if(StringUtils.isEmpty(target)){
+				continue;
+			}
+			if(authParent!=null){
+				target = target.replace("$${authParent}", authParent);
+			}
 			boolean auth = false;
 			for(RoleAuthority ra : authList){
 				if(ra.name.equals(target)){

@@ -28,11 +28,11 @@ public class DistrictService {
 	public ModelAndView add(District district){
 		ModelAndView mv = new ModelAndView();
 		if(StringUtils.isEmpty(district.name)){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "小区名不能为空");
+			throw new GException(PlatformExceptionType.BusinessException,"小区名不能为空");
 		}
 		District po = service.getUniqueByKeyValue(District.class, "name", district.name);
 		if(po!=null){
-			throw new GException(PlatformExceptionType.BusinessException, 2, "小区名重复");
+			throw new GException(PlatformExceptionType.BusinessException,"小区名重复");
 		}
 		district.pinyin=DataHelper.toPinyin(district.name);
 		district.pyShort=DataHelper.toPinyinShort(district.name);
@@ -72,7 +72,7 @@ public class DistrictService {
 	public ModelAndView update(District district){
 		ModelAndView mv = new ModelAndView();
 		if(district.id==null){
-			throw new GException(PlatformExceptionType.BusinessException, 1, "id不能为空");
+			throw new GException(PlatformExceptionType.BusinessException, "id不能为空");
 		}
 		if(StringUtils.isEmpty(district.name)){
 			throw new GException(PlatformExceptionType.BusinessException, "小区名不能为空");

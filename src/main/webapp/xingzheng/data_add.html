@@ -122,7 +122,7 @@ $(function(){
   $('#classId').val(classId);
   ue = UE.getEditor('editor');
   ue.addListener( 'ready', function( editor ) {
-    ue.setHeight(250);
+    //ue.setHeight(250);
     loadData();
   });
   
@@ -130,7 +130,7 @@ $(function(){
 
 </script>
 </head>
-<body class="hlist bodyer" style="overflow:auto">
+<body class="hlist bodyer" style="overflow:auto;min-width:600px;">
 
 <div class="header" style="position:relative;height:50px;width:100%">
   <form name="form1">
