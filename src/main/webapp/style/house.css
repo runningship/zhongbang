@@ -33,7 +33,7 @@ table.nobr th,table.nobr td{white-space:nowrap;word-break: keep-all;}
 .hlist table.table>tbody>tr>td{ padding-left: 8; padding-right: 0;}
 .clearfix{ padding-bottom: 5px;}
 
-.bodyer{ position: relative; min-width: 900px;}
+.bodyer{ position: relative; min-width: 890px;}
 .bodyer .header{ /**/position: absolute; top: 0; left: 0; right: 0; z-index: 9; padding: 10px 0 0 0;}
 .bodyer .mainer{ /**/position: absolute; top: 0; left: 0; right: 0; bottom: 44px;z-index: 1; overflow: hidden;overflow-y: auto; overflow-x: auto;}
 .bodyer .footer{ /**/position: absolute; left: 0; right: 0; bottom: 0; z-index: 8; height:44px; }
