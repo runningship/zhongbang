@@ -36,7 +36,10 @@ function fun_get_comp(a){
         //var dataObj=eval("("+data+")");//转换为json对象 
         //alert(data.result.length);//输出root的子对象数量
         getComp.empty();
-        getComp.append('<option value="">请选择区域</option>');
+        // getComp.append('<option value="">请选择区域</option>');
+        if(getUserTreeStr.result.length>1){
+        	getComp.append('<option value="">请选择区域</option>');
+        }
         $.each(getUserTreeStr.result, function(index, item) {
             getComp.append('<option value="'+item.deptId+'">'+item.text+'</option>');
         });
@@ -52,14 +55,25 @@ function fun_get_quyu(a){
         var getQuyu=$(".get_quyu"+as);
         getQuyu.empty();
         //alert($(".get_comp").length)
-        getQuyu.append('<option value="">请选择分公司</option>');
+        // getQuyu.append('<option value="">请选择分公司</option>');
         if($(".get_comp"+as).length>0){
-            var comp_index=$(".get_comp"+as).prop('selectedIndex')-1;
+            var comp_index = $(".get_comp"+as).prop('selectedIndex')-1;
+            if($(".get_comp"+as).children().length==1){
+            	comp_index = $(".get_comp"+as).prop('selectedIndex');
+            }else{
+            	comp_index = $(".get_comp"+as).prop('selectedIndex')-1;
+            }
+
             //alert(getUserTreeStr.result[comp_index].children)
             if(getUserTreeStr.result[comp_index]){
-                $.each(getUserTreeStr.result[comp_index].children, function(index, item) {
+            	if(getUserTreeStr.result[comp_index].children.length>1){
+            		getQuyu.append('<option value="">请选择分公司</option>');	
+            	}
+            	$.each(getUserTreeStr.result[comp_index].children, function(index, item) {
                     getQuyu.append('<option value="'+item.deptId+'">'+item.text+'</option>');
                 });
+            }else{
+            	getQuyu.append('<option value="">请选择分公司</option>');
             }
         }else{
             $.each(getUserTreeStr.result, function(index, item) {
@@ -83,17 +97,35 @@ function fun_get_user(a){
     if(a){as='_'+a}else{as=''}
     if($(".get_user"+as).length>0){
         var getUser=$(".get_user"+as);
-        var comp_index=$(".get_comp"+as).prop('selectedIndex')-1,
-        quyu_index=$(".get_quyu"+as).prop('selectedIndex')-1,
+        var comp_index;
+        var quyu_index;
+        if($(".get_comp"+as).children().length==1){
+        	comp_index=0;
+        }else{
+        	comp_index = $(".get_comp"+as).prop('selectedIndex')-1;	
+        }
+        if($(".get_quyu"+as).children().length==1){
+        	quyu_index = 0;
+        }else{
+        	quyu_index=$(".get_quyu"+as).prop('selectedIndex')-1;
+        }
         getUserTreeStr_User='';
         getUser.empty();
-        getUser.append('<option value="">请选择业务员</option>');
+        
         if(getUserTreeStr.result[comp_index] && getUserTreeStr.result[comp_index].children[quyu_index]){
+        	if(getUserTreeStr.result[comp_index].children[quyu_index].children.length>1){
+        		getUser.append('<option value="">请选择业务员</option>');	
+        	}
             getUserTreeStr_User=getUserTreeStr.result[comp_index].children[quyu_index].children;
             //alert(getUserTreeStr.result[comp_index].children[quyu_index].children);//输出root的子对象数量
             $.each(getUserTreeStr_User, function(index, item) {
-                getUser.append('<option value="'+item.userId+'">'+item.text+'</option>');
+            	if(item.userId!=null){
+                	getUser.append('<option value="'+item.userId+'">'+item.text+'</option>');
+            	}
             });
+        }else{
+
+        	getUser.append('<option value="">请选择业务员</option>');
         }
         
     }

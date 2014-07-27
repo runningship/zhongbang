@@ -88,8 +88,6 @@ public class User {
 	 */
 	public String rqtj;
 	
-	public String leaderId;
-	
 	/**
 	 * 部门架构中的层次
 	 */
