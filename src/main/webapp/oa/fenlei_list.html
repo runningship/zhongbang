@@ -120,7 +120,7 @@ $(function(){
 
 <div class="header" style="position:relative;height:10px;width:100%">
   <div class="btn-group">
-    <button onclick="openAdd2();" class="btn btn-primary ">新增</button>
+    <button auth="oa_notice_fenlei_add" onclick="openAdd2();" class="btn btn-primary ">新增</button>
   </div>
   <form name="form1">
     
@@ -135,7 +135,8 @@ $(function(){
     <tbody id="id_list">
     <tr style="display:none">
       <td>${fenlei}</td>
-      <td><a onclick="openEdit2(${id})" href="javascript:void(0)">修改</a> <a onclick="deleteFenLei(${id})" href="javascript:void(0)" >删除</a></td>
+      <td><a auth="oa_notice_fenlei_edit" onclick="openEdit2(${id})" href="javascript:void(0)">修改</a>
+         <a auth="oa_notice_fenlei_del" onclick="deleteFenLei(${id})" href="javascript:void(0)" >删除</a></td>
     </tr>
     </tbody>
   </table>

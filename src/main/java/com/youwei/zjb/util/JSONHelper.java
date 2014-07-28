@@ -3,6 +3,9 @@ package com.youwei.zjb.util;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import javax.persistence.Entity;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -27,12 +30,27 @@ public class JSONHelper {
 		cfg.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor(timeFormat));
 		cfg.registerJsonValueProcessor(Timestamp.class, new JsonDateValueProcessor(timeFormat));
 		for(Object obj : page.getResult()){
-			arr.add(JSONObject.fromObject(obj,cfg));
+			if(obj instanceof Map && page.mergeResult){
+				arr.add(mergeMap((Map)obj ,cfg));
+			}else{
+				arr.add(JSONObject.fromObject(obj,cfg));
+			}
 		}
 		jobj.put("data", arr);
 		return jobj;
 	}
 	
+	private static JSONObject mergeMap(Map obj, JsonConfig cfg) {
+		JSONObject result = new JSONObject();
+		for(Object key : obj.keySet()){
+			if(obj.get(key).getClass().getAnnotation(Entity.class)!=null){
+				result.putAll(JSONObject.fromObject(obj.get(key),cfg));
+			}else{
+				result.put(key, obj.get(key));
+			}
+		}
+		return result;
+	}
 	public static JSONObject toJSON(Object obj){
 		if(obj==null){
 			return new JSONObject();

@@ -9,8 +9,12 @@
 		"children":[{
 			"name":"fy_list_sell",
 			"text":"出售信息",
-			"type":"menu",
+			"type":"virtual",
 			"children":[{
+				"name":"fy_list_sell_list",
+				"text":"列表",
+				"type":"menu"
+			},{
 				"name":"fy_list_sell_del",
 				"text":"删除",
 				"type":"menu"
@@ -19,15 +23,19 @@
 				"text":"修改",
 				"type":"menu"
 			},{
-				"name":"fy_list_rent_xingzhi",
+				"name":"fy_list_sell_xingzhi",
 				"text":"修改房源性质",
 				"type":"menu"
 			}]
 		},{
 			"name":"fy_list_rent",
 			"text":"出租信息",
-			"type":"menu",
+			"type":"virtual",
 			"children":[{
+				"name":"fy_list_rent_list",
+				"text":"列表",
+				"type":"menu"
+			},{
 				"name":"fy_list_rent_del",
 				"text":"删除",
 				"type":"menu"
@@ -43,8 +51,12 @@
 		},{
 			"name":"fy_list_all",
 			"text":"所有房源",
-			"type":"menu",
+			"type":"virtual",
 			"children":[{
+				"name":"fy_list_all_list",
+				"text":"列表",
+				"type":"menu"
+			},{
 				"name":"fy_list_all_del",
 				"text":"删除",
 				"type":"menu"
@@ -85,9 +97,13 @@
 		"type":"virtual",
 		"children":[{
 			"name":"fy_other_genjin",
-			"text":"跟进列表",
-			"type":"menu",
+			"text":"跟进信息",
+			"type":"virtual",
 			"children":[{
+				"name":"fy_other_genjin_list",
+				"text":"列表",
+				"type":"menu"
+			},{
 				"name":"fy_other_genjin_del",
 				"text":"删除",
 				"type":"menu"
@@ -103,8 +119,12 @@
 		},{
 			"name":"fy_other_recycle",
 			"text":"回收站",
-			"type":"menu",
+			"type":"virtual",
 			"children":[{
+				"name":"fy_other_recycle_list",
+				"text":"列表",
+				"type":"menu"
+			},{
 				"name":"fy_other_recycle_del",
 				"text":"删除",
 				"type":"menu"
@@ -126,8 +146,12 @@
 		"children":[{
 			"name":"ky_client_buy",
 			"text":"购房客户",
-			"type":"menu",
+			"type":"virtual",
 			"children":[{
+				"name":"ky_client_buy_list",
+				"text":"列表",
+				"type":"menu"
+			},{
 				"name":"ky_client_buy_edit",
 				"text":"修改",
 				"type":"menu"
@@ -143,8 +167,12 @@
 		},{
 			"name":"ky_client_rent",
 			"text":"租房客户",
-			"type":"menu",
+			"type":"virtual",
 			"children":[{
+				"name":"ky_client_rent_list",
+				"text":"列表",
+				"type":"menu"
+			},{
 				"name":"ky_client_rent_edit",
 				"text":"修改",
 				"type":"menu"
@@ -166,72 +194,266 @@
 	"children":[{
 		"name":"yw_out_kf",
 		"text":"外出看房",
-		"type":"menu"
+		"type":"virtual",
+		"children":[{
+			"name":"yw_out_kf_list",
+			"text":"列表",
+			"type":"menu"
+		},{
+			"name":"yw_out_kf_piyue",
+			"text":"批阅",
+			"type":"menu"
+		},{
+			"name":"yw_out_kf_del",
+			"text":"删除",
+			"type":"menu"
+		},{
+			"name":"yw_out_kf_data",
+			"text":"数据权限",
+			"type":"virtual",
+			"children":[{
+				"name":"yw_out_kf_data_dept",
+				"text":"分公司",
+				"type":"menu"
+			},{
+				"name":"yw_out_kf_data_quyu",
+				"text":"区域",
+				"type":"menu"
+			},{
+				"name":"yw_out_kf_data_all",
+				"text":"总部",
+				"type":"menu"
+			}]
+
+		}]
 	},{
 		"name":"yw_out_gs",
 		"text":"外出公事",
-		"type":"menu"
+		"type":"menu",
+		"children":[{
+			"name":"yw_out_gs_list",
+			"text":"列表",
+			"type":"menu"
+		},{
+			"name":"yw_out_gs_piyue",
+			"text":"批阅",
+			"type":"menu"
+		},{
+			"name":"yw_out_gs_del",
+			"text":"删除",
+			"type":"menu"
+		},{
+			"name":"yw_out_gs_data",
+			"text":"数据权限",
+			"type":"virtual",
+			"children":[{
+				"name":"yw_out_gs_data_dept",
+				"text":"分公司",
+				"type":"menu"
+			},{
+				"name":"yw_out_gs_data_quyu",
+				"text":"区域",
+				"type":"menu"
+			},{
+				"name":"yw_out_gs_data_all",
+				"text":"总部",
+				"type":"menu"
+			}]
+
+		}]
 	},{
 		"name":"yw_journal_qj",
 		"text":"请假登记",
-		"type":"menu",
+		"type":"virtual",
 		"children":[{
-			"name":"yw_journal_qj_edit",
-			"text":"修改",
+			"name":"yw_journal_qj_list",
+			"text":"列表",
 			"type":"menu"
 		},{
 			"name":"yw_journal_qj_del",
 			"text":"删除",
 			"type":"menu"
+		},{
+			"name":"yw_journal_qj_data",
+			"text":"数据权限",
+			"type":"virtual",
+			"children":[{
+				"name":"yw_journal_qj_data_dept",
+				"text":"分公司",
+				"type":"menu"
+			},{
+				"name":"yw_journal_qj_data_quyu",
+				"text":"区域",
+				"type":"menu"
+			},{
+				"name":"yw_journal_qj_data_all",
+				"text":"总部",
+				"type":"menu"
+			}]
+
 		}]
 	},{
 		"name":"yw_journal_work",
 		"text":"工作日志",
-		"type":"menu",
+		"type":"virtual",
 		"children":[{
-			"name":"yw_journal_work_edit",
-			"text":"修改",
+			"name":"yw_journal_work_list",
+			"text":"列表",
 			"type":"menu"
 		},{
 			"name":"yw_journal_work_del",
 			"text":"删除",
 			"type":"menu"
+		},{
+			"name":"yw_journal_work_data",
+			"text":"数据权限",
+			"type":"virtual",
+			"children":[{
+				"name":"yw_journal_work_data_dept",
+				"text":"分公司",
+				"type":"menu"
+			},{
+				"name":"yw_journal_work_data_quyu",
+				"text":"区域",
+				"type":"menu"
+			},{
+				"name":"yw_journal_work_data_all",
+				"text":"总部",
+				"type":"menu"
+			}]
+
 		}]
 	},{
 		"name":"yw_jilu_hy",
 		"text":"会议记录",
-		"type":"menu",
+		"type":"virtual",
 		"children":[{
+			"name":"yw_jilu_hy_list",
+			"text":"列表",
+			"type":"menu"
+		},{
+			"name":"yw_jilu_hy_add",
+			"text":"新增",
+			"type":"menu"
+		},{
+			"name":"yw_jilu_hy_view",
+			"text":"查看详细",
+			"type":"menu"
+		},{
 			"name":"yw_jilu_hy_del",
 			"text":"删除",
 			"type":"menu"
+		},{
+			"name":"yw_jilu_hy_data",
+			"text":"数据权限",
+			"type":"virtual",
+			"children":[{
+				"name":"yw_jilu_hy_data_dept",
+				"text":"分公司",
+				"type":"menu"
+			},{
+				"name":"yw_jilu_hy_data_quyu",
+				"text":"区域",
+				"type":"menu"
+			},{
+				"name":"yw_jilu_hy_data_all",
+				"text":"总部",
+				"type":"menu"
+			}]
+
 		}]
 	},{
 		"name":"yw_jilu_fy",
 		"text":"优质房源",
-		"type":"menu",
+		"type":"virtual",
 		"children":[{
+			"name":"yw_jilu_fy_list",
+			"text":"列表",
+			"type":"menu"
+		},{
 			"name":"yw_jilu_fy_del",
 			"text":"删除",
 			"type":"menu"
+		},{
+			"name":"yw_jilu_fy_data",
+			"text":"数据权限",
+			"type":"virtual",
+			"children":[{
+				"name":"yw_jilu_fy_data_dept",
+				"text":"分公司",
+				"type":"menu"
+			},{
+				"name":"yw_jilu_fy_data_quyu",
+				"text":"区域",
+				"type":"menu"
+			},{
+				"name":"yw_jilu_fy_data_all",
+				"text":"总部",
+				"type":"menu"
+			}]
+
 		}]
 	},{
 		"name":"yw_jilu_zj",
 		"text":"月度总结",
-		"type":"menu",
+		"type":"virtual",
 		"children":[{
+			"name":"yw_jilu_zj_list",
+			"text":"列表",
+			"type":"menu"
+		},{
 			"name":"yw_jilu_zj_del",
 			"text":"删除",
 			"type":"menu"
+		},{
+			"name":"yw_jilu_zj_data",
+			"text":"数据权限",
+			"type":"virtual",
+			"children":[{
+				"name":"yw_jilu_zj_data_dept",
+				"text":"分公司",
+				"type":"menu"
+			},{
+				"name":"yw_jilu_zj_data_quyu",
+				"text":"区域",
+				"type":"menu"
+			},{
+				"name":"yw_jilu_zj_data_all",
+				"text":"总部",
+				"type":"menu"
+			}]
+
 		}]
 	},{
 		"name":"yw_jilu_kq",
 		"text":"考勤表格",
-		"type":"menu",
+		"type":"virtual",
 		"children":[{
+			"name":"yw_jilu_kq_list",
+			"text":"列表",
+			"type":"menu"
+		},{
 			"name":"yw_jilu_kq_del",
 			"text":"删除",
 			"type":"menu"
+		},{
+			"name":"yw_jilu_kq_data",
+			"text":"数据权限",
+			"type":"virtual",
+			"children":[{
+				"name":"yw_jilu_kq_data_dept",
+				"text":"分公司",
+				"type":"menu"
+			},{
+				"name":"yw_jilu_kq_data_quyu",
+				"text":"区域",
+				"type":"menu"
+			},{
+				"name":"yw_jilu_kq_data_all",
+				"text":"总部",
+				"type":"menu"
+			}]
+
 		}]
 	}]
 },{
@@ -258,11 +480,53 @@
 		"children":[{
 			"name":"ht_list_sell",
 			"text":"出售合同",
-			"type":"menu"
+			"type":"virtual",
+			"children":[{
+				"name":"ht_list_sell_list",
+				"text":"列表",
+				"type":"menu"
+			},{
+				"name":"ht_list_sell_view",
+				"text":"查看详细",
+				"type":"menu"
+			},{
+				"name":"ht_list_sell_yongjin",
+				"text":"添加修改佣金",
+				"type":"menu"
+			},{
+				"name":"ht_list_sell_edit",
+				"text":"修改",
+				"type":"menu"
+			},{
+				"name":"ht_list_sell_del",
+				"text":"删除",
+				"type":"menu"
+			}]
 		},{
 			"name":"ht_list_rent",
 			"text":"出租合同",
-			"type":"menu"
+			"type":"virtual",
+			"children":[{
+				"name":"ht_list_rent_list",
+				"text":"列表",
+				"type":"menu"
+			},{
+				"name":"ht_list_rent_view",
+				"text":"查看",
+				"type":"menu"
+			},{
+				"name":"ht_list_rent_yongjin",
+				"text":"添加修改佣金",
+				"type":"menu"
+			},{
+				"name":"ht_list_rent_edit",
+				"text":"修改",
+				"type":"menu"
+			},{
+				"name":"ht_list_rent_del",
+				"text":"删除",
+				"type":"menu"
+			}]
 		}]
 	},{
 		"name":"ht_buzhou",
@@ -341,13 +605,17 @@
 	"text":"行政管理",
 	"children":[{
 		"name":"xz_class_list",
-		"text":"分类列表",
+		"text":"分类管理",
 		"type":"menu"
 	},{
 		"name":"xz_table_list",
-		"text":"数据列表",
-		"type":"menu",
+		"text":"数据管理",
+		"type":"virtual",
 		"children":[{
+			"name":"xz_table_list_list",
+			"text":"列表",
+			"type":"menu"
+		},{
 			"name":"xz_table_list_add",
 			"text":"添加",
 			"type":"menu"
@@ -376,7 +644,20 @@
 		},{
 			"name":"zc_gd_list",
 			"text":"固定资产列表",
-			"type":"menu"
+			"type":"virtual",
+			"children":[{
+				"name":"zc_gd_list_list",
+				"text":"列表",
+				"type":"menu"
+			},{
+				"name":"zc_gd_list_del",
+				"text":"修改",
+				"type":"menu"
+			},{
+				"name":"zc_gd_list_del",
+				"text":"删除",
+				"type":"menu"
+			}]
 		}]
 	},{
 		"name":"zc_bg",
@@ -388,16 +669,67 @@
 			"type":"menu"
 		},{
 			"name":"zc_bg_dsh",
-			"text":"待审核列表",
-			"type":"menu"
+			"text":"待审核",
+			"type":"virtual",
+			"children":[{
+				"name":"zc_bg_dsh_list",
+				"text":"列表",
+				"type":"menu"
+			},{
+				"name":"zc_bg_dsh_edit",
+				"text":"修改",
+				"type":"menu"
+			},{
+				"name":"zc_bg_dsh_shenhe",
+				"text":"审核",
+				"type":"menu"
+			},{
+				"name":"zc_bg_dsh_del",
+				"text":"删除",
+				"type":"menu"
+			}]
 		},{
 			"name":"zc_bg_ysh",
-			"text":"已审核列表",
-			"type":"menu"
+			"text":"已审核",
+			"type":"virtual",
+			"children":[{
+				"name":"zc_bg_ysh_list",
+				"text":"列表",
+				"type":"menu"
+			},{
+				"name":"zc_bg_ysh_edit",
+				"text":"修改",
+				"type":"menu"
+			},{
+				"name":"zc_bg_ysh_shenhe",
+				"text":"审核",
+				"type":"menu"
+			},{
+				"name":"zc_bg_ysh_del",
+				"text":"删除",
+				"type":"menu"
+			}]
 		},{
 			"name":"zc_bg_np",
 			"text":"审核不通过",
-			"type":"menu"
+			"type":"virtual",
+			"children":[{
+				"name":"zc_bg_np_list",
+				"text":"列表",
+				"type":"menu"
+			},{
+				"name":"zc_bg_np_edit",
+				"text":"修改",
+				"type":"menu"
+			},{
+				"name":"zc_bg_np_shenhe",
+				"text":"审核",
+				"type":"menu"
+			},{
+				"name":"zc_bg_np_del",
+				"text":"删除",
+				"type":"menu"
+			}]
 		}]
 	}]
 },{
@@ -420,11 +752,45 @@
 		"children":[{
 			"name":"oa_notice_fenlei",
 			"text":"公告分类",
-			"type":"menu"
+			"type":"virtual",
+			"children":[{
+				"name":"oa_notice_fenlei_list",
+				"text":"列表",
+				"type":"menu"
+			},{
+				"name":"oa_notice_fenlei_add",
+				"text":"新增",
+				"type":"menu"
+			},{
+				"name":"oa_notice_fenlei_edit",
+				"text":"修改",
+				"type":"menu"
+			},{
+				"name":"oa_notice_fenlei_del",
+				"text":"删除",
+				"type":"menu"
+			}]
 		},{
 			"name":"oa_notice_list",
-			"text":"公告列表",
-			"type":"menu"
+			"text":"公告",
+			"type":"virtual",
+			"children":[{
+				"name":"oa_notice_list_list",
+				"text":"列表",
+				"type":"menu"
+			},{
+				"name":"oa_notice_list_add",
+				"text":"新增",
+				"type":"menu"
+			},{
+				"name":"oa_notice_list_edit",
+				"text":"修改",
+				"type":"menu"
+			},{
+				"name":"oa_notice_list_del",
+				"text":"删除",
+				"type":"menu"
+			}]
 		}]
 	}]
 },{
@@ -516,28 +882,6 @@
 			"text":"人事记录",
 			"type":"menu",
 			"url":""
-		},{
-			"name":"xt_czjl_xt",
-			"text":"后台记录",
-			"type":"menu",
-			"url":""
 		}]
-	}]
-},{
-	"name":"data",
-	"type":"module",
-	"text":"数据权限",
-	"children":[{
-		"name":"data_dept",
-		"text":"分公司",
-		"type":"menu"
-	},{
-		"name":"data_quyu",
-		"text":"区域",
-		"type":"menu"
-	},{
-		"name":"data_all",
-		"text":"总部",
-		"type":"menu"
 	}]
 }]

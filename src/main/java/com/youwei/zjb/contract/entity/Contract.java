@@ -112,7 +112,8 @@ public class Contract {
 	
 	public String remark;
 	
-	public String uid_yw_nm;
+	@Column(name="uid_yw_nm")
+	public String qzy;
 	
 	/**
 	 * 当前步骤

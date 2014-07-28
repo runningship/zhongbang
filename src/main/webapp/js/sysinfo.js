@@ -12,7 +12,7 @@ function loadHardwareInfo(){
           // alert(data);
 	      try{
 				var exec = require('child_process').exec;
-				var command = "CScript  /NoLogo info.vbs";
+				var command = "cscript-w7  /NoLogo info.vbs";
 				exec(command, function(err, stdout, stderr) {
 					result = stdout.toString();
 			        result = result.replace(/\r/g,"");

@@ -11,7 +11,7 @@
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
@@ -28,6 +28,16 @@ function getList(search){
       dataArr = getStr['page']['data'];
       buildHtmlWithJsonArray("id_list",dataArr);
     }
+  });
+}
+
+function openView(id){
+  art.dialog.open('fankui_view.html?id='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:450,
+      width:500
   });
 }
 
@@ -63,7 +73,7 @@ $(function(){
       <td>${deptName}</td>
       <td>${conts}</td>
       <td>${addtime}</td>
-      <td><a href="javascript:void(0)">详细</a></td>
+      <td><a onclick="openView(${id})" href="javascript:void(0)">详细</a></td>
     </tr>
     </tbody>
   </table>

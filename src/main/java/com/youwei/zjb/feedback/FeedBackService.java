@@ -26,7 +26,7 @@ public class FeedBackService {
 	@WebMethod
 	public ModelAndView list(Page<Map> page){
 		ModelAndView mv = new ModelAndView();
-		StringBuilder hql = new StringBuilder("select SubString(fb.conts,1,20) as conts ,fb.addtime as addtime , u.uname as uname, d.namea as deptName from FeedBack fb, User u, "
+		StringBuilder hql = new StringBuilder("select fb.id as id, SubString(fb.conts,1,20) as conts ,fb.addtime as addtime , u.uname as uname, d.namea as deptName from FeedBack fb, User u, "
 				+ "Department d where fb.userId=u.id and u.deptId=d.id");
 		List<Object> params = new ArrayList<Object>();
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
@@ -43,5 +43,13 @@ public class FeedBackService {
 		fb.userId = ThreadSession.getUser().id;
 		dao.saveOrUpdate(fb);
 		return new ModelAndView();
+	}
+	
+	@WebMethod
+	public ModelAndView get(int id){
+		ModelAndView mv = new ModelAndView();
+		FeedBack po = dao.get(FeedBack.class, id);
+		mv.data.put("feedback", JSONHelper.toJSON(po));
+		return mv;
 	}
 }

@@ -51,28 +51,32 @@ public class UserService {
 	 * @return
 	 */
 	@WebMethod
-	public ModelAndView getUserTree(){
+	public ModelAndView getUserTree(String dataScope){
+		
 		ModelAndView mv = new ModelAndView();
 		User user = ThreadSession.getUser();
 		String code = "";
-		if(user!=null){
-			List<RoleAuthority> authorities = user.getRole().Authorities();
-			code = user.orgpath;
-			for(RoleAuthority ra : authorities){
-				if("data_dept".equals(ra.name)){
-					code = user.Department().path;
-				}
-				if("data_quyu".equals(ra.name)){
-					code = String.valueOf(user.Department().Parent().path);
-				}
-				if("data_all".equals(ra.name)){
-					code = "";
+		if(!"all".equals(dataScope)){
+			if(user!=null){
+				List<RoleAuthority> authorities = user.getRole().Authorities();
+				code = user.orgpath;
+				for(RoleAuthority ra : authorities){
+					if((dataScope+"_data_dept").equals(ra.name)){
+						code = user.Department().path;
+					}
+					if((dataScope+"_data_quyu").equals(ra.name)){
+						code = String.valueOf(user.Department().Parent().path);
+					}
+					if((dataScope+"_data_all").equals(ra.name)){
+						code = "";
+					}
 				}
 			}
 		}
+		
 		String sql = "select tt.*,xx.uname as user,xx.id as userId from (select c1.namea as pname , c2.namea as cname , c1.id as qid ,c2.id as did from uc_comp c1 left JOIN uc_comp c2 on c1.id=c2.fid where c1.fid=1"
-				+ " and c2.path like '"+code+"%' ) as tt"
-				+" LEFT JOIN (select u.uname,u.did ,u.id from uc_user u where u.sh=1 and u.flag <> 1 ) as xx on tt.did=xx.did ";
+				+ " ) as tt"
+				+" LEFT JOIN (select u.orgpath, u.uname,u.did ,u.id from uc_user u where u.sh=1 and u.flag <> 1 ) as xx on tt.did=xx.did where xx.orgpath like '"+code+"%' ";
 		String sql2 = "select tt.*,u.uname from (select c1.namea as quyu , c2.namea as dept , c1.id as qid ,c2.id as did from Department c1 , Department c2 where c1.id=c2.fid and c1.id<>1) as tt"
 				+" LEFT JOIN User u on tt.did=u.did where u.sh=1 and u.flag <> 1";
 		String hql = "select child.namea as cname,parent.namea as pname ,child.id as did ,child.fid as qid ,u.uname as user ,u.id as userId "+

@@ -62,6 +62,16 @@ function openAddYongjinProxy(id){
   });
 }
 
+function openEditProcess(id){
+  art.dialog.open('process_edit.html?id='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:'300',
+      width:'400'
+  });
+}
+
 function fillData(contract){
   var arr = $('input');
   arr = arr.add($('textarea'));
@@ -110,7 +120,7 @@ function buildBlrq(rowIndex){
 function buildZt(rowIndex){
   var action = actions[rowIndex];
   if(action.flag==2){
-    return '已完成<a style="float:right">修改</a>';
+    return '已完成<a href="javascript:void(0)" onclick="openEditProcess('+action.id+')" style="float:right">修改</a>';
   }
   return '<button onclick="doProcess('+rowIndex+')" class="btn btn-primary">确定</button> <button onclick="ignoreAction('+rowIndex+')" class="btn">无需办理</button>';
 }
@@ -444,12 +454,12 @@ table.table>thead>tr>th, table.table>tbody>tr>th, table.table>tfoot>tr>th, table
         </td>
         <td >${qian_r}</td>
         <td >${beizhu}</td>
-        <td><a onclick="javascript:void(0)" onclick="openAddYongjin(${id})">修改</a></td>
+        <td><a auth="$${authParent}_yongjin" href="javascript:void(0)" onclick="openAddYongjin(${id})">修改</a></td>
       </tr>
     </tbody>
   </table>
   <div>
-    <a onclick="openAddYongjin();" href="javascript:void(0)">添加</a>
+    <a auth="$${authParent}_yongjin" onclick="openAddYongjin();" href="javascript:void(0)">添加</a>
   </div>
 
   <div style="background:#ddd;font-weight:bold;height:30px;line-height:30px;margin-top:10px;"><span style="padding-left:10px;font-size:16px;">代收费: </span></div>
@@ -483,7 +493,7 @@ table.table>thead>tr>th, table.table>tbody>tr>th, table.table>tfoot>tr>th, table
               </tr>
               <tr>
                 <td >备注</td>
-                <td>${beizhu}<a onclick="javascript:void(0)" onclick="openAddYongjinProxy(${id})" style="float:right;">修改</a></td>
+                <td>${beizhu}<a auth="$${authParent}_yongjin" href="javascript:void(0)" onclick="openAddYongjinProxy(${id})" style="float:right;">修改</a></td>
               </tr>
           </tbody>
         </table>
@@ -492,7 +502,7 @@ table.table>thead>tr>th, table.table>tbody>tr>th, table.table>tfoot>tr>th, table
     </tbody>
   </table>
    <div>
-    <a onclick="openAddYongjinProxy();" href="javascript:void(0)">添加</a>
+    <a auth="$${authParent}_yongjin" onclick="openAddYongjinProxy();" href="javascript:void(0)">添加</a>
   </div>
 </body>
 </html>

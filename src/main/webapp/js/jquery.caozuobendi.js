@@ -89,6 +89,18 @@ function aBtnNavFun(a){
   }
 }
 //根据titile可拖动窗口
+$(document).ready(function($) {
+  $('.title').mousedown(function(e){
+    //alert(e.clientX, e.clientY)
+    $(this).on('mousemove',function(e){
+      hex.setAsTitleBarAreas(e.clientX, e.clientY);
+    });
+  }).mouseup(function(e) {
+    art.dialog.tips('1')
+      hex.setAsTitleBarAreas(-1, -1);
+      hex.setAsNonBorderAreas(-1, -1);
+  });
+});
 // document.addEventListener('mousemove', function (e) {
 //     if (e.target.classList.contains('title')) {
 //         hex.setAsTitleBarAreas(e.clientX, e.clientY);
@@ -203,6 +215,14 @@ $.fn.serializeObject = function(){
 
 
 
+function getEnumTexts(category,code){
+  var arr = category;
+  for(var i=0;i<arr.length;i++){
+    if(arr[i]['code']==code){
+      return arr[i]['name'];
+    }
+  }
+}
 
 
 

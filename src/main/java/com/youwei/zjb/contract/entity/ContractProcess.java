@@ -20,6 +20,9 @@ public class ContractProcess {
 	@Column(name="pid")
 	public Integer contractId;
 	
+	/**
+	 * 步骤类别
+	 */
 	@Column(name="proid")
 	public Integer buzhouId;
 	

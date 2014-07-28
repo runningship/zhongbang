@@ -52,11 +52,11 @@ function openView(id){
 }
 
 $(function(){
-  getList();
   $.get('/zb/c/user/allRoles', function(data) {
     queryOpts=JSON.parse(data);
     buildHtmlWithJsonArray("id_roles",queryOpts['roles'],true);
     $('#id_roles').prepend($('<option value="">所有</option>'));
+    doSearch();
   });
   Page.Init();
 });

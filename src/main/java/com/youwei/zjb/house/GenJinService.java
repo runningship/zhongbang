@@ -107,7 +107,7 @@ public class GenJinService {
 		hql.append(HqlHelper.buildDateSegment("gj.addtime", query.addtimeStart, DateSeparator.After, params));
 		hql.append(HqlHelper.buildDateSegment("gj.addtime", query.addtimeEnd, DateSeparator.Before, params));
 		
-		hql.append(" order by gj.id ");
+		hql.append(" order by gj.addtime desc ");
 		page = service.findPage(page, hql.toString(), true,params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;

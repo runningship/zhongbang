@@ -80,10 +80,10 @@ $(window).resize(function(event) {
         <div class="sider">
             <dl auth="fy_list" class="sidedl">
                 <dt></dt>
-                <dd auth="fy_list_all"><a  class="aNavBtn" href="house_list.html?authParent=fy_list_all" target="house_iframe">所有房源</a></dd>
-                <dd auth="fy_list_sell"><a class="aNavBtn" href="house_list.html?nav=chushou&authParent=fy_list_sell"  target="house_iframe" >出售房源</a></dd>
-                <dd auth="fy_list_rent"><a class="aNavBtn" href="house_list.html?nav=chuzu&authParent=fy_list_rent" target="house_iframe">出租房源</a></dd>
-                <dd auth="fy_list_fav"><a   class="aNavBtn" href="house_list.html?nav=fav&authParent=fy_list_fav" target="house_iframe">我的收藏</a></dd>
+                <dd auth="fy_list_all"><a  class="aNavBtn" href="house_list.html?dataScope=all&authParent=fy_list_all" target="house_iframe">所有房源</a></dd>
+                <dd auth="fy_list_sell"><a class="aNavBtn" href="house_list.html?dataScope=all&nav=chushou&authParent=fy_list_sell"  target="house_iframe" >出售房源</a></dd>
+                <dd auth="fy_list_rent"><a class="aNavBtn" href="house_list.html?dataScope=all&nav=chuzu&authParent=fy_list_rent" target="house_iframe">出租房源</a></dd>
+                <dd auth="fy_list_fav"><a   class="aNavBtn" href="house_list.html?dataScope=all&nav=fav&authParent=fy_list_fav" target="house_iframe">我的收藏</a></dd>
             </dl>
             <dl auth="fy_add" class="sidedl">
                 <dt></dt>
@@ -92,9 +92,9 @@ $(window).resize(function(event) {
             </dl>
             <dl auth="fy_other" class="sidedl">
                 <dt></dt>
-                <dd auth="fy_other_genjin"><a  class="aNavBtn" href="genjin_list.html" target="house_iframe">跟进列表</a></dd>
+                <dd auth="fy_other_genjin"><a  class="aNavBtn" href="genjin_list.html?dataScope=all&" target="house_iframe">跟进列表</a></dd>
                 <dd auth="fy_other_setting"><a class="aNavBtn" href="area_list.html" target="house_iframe">楼盘字典</a></dd>
-                <dd auth="fy_other_recycle"><a class="aNavBtn" href="house_list.html?nav=del&authParent=fy_other_recycle" target="house_iframe">回收站</a></dd>
+                <dd auth="fy_other_recycle"><a class="aNavBtn" href="house_list.html?dataScope=all&nav=del&authParent=fy_other_recycle" target="house_iframe">回收站</a></dd>
             </dl>
         </div>
         <div class="mainer">

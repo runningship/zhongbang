@@ -48,6 +48,10 @@ function withJson(a,b,c){
       });
 }
 $(function(){
+
+    $.get('/zb/c/house/getQueryOptions', function(data) {
+      QueryOptions=JSON.parse(data);
+    });
     if(getClientId){
       $('form[name=form1]').attr('action', '/zb/c/house/update');
       //alert($('form[name=form1]').attr('action'))
@@ -58,7 +62,8 @@ $(function(){
     }
 });
 </script>
-<style type="text/css">html, body, .body{overflow-y: auto;}
+<style type="text/css">
+html, body, .body{overflow-y: auto;}
 .table{ margin-bottom: 0px;}
 table th{ width: 80px; text-align: right; background-color: #F5F5F5}
 .pointerevents{pointer-events:none}
@@ -77,14 +82,15 @@ width: 100%;
 .checklist label{display: inline-block; background-color: #EEE; color:#666;font-weight: normal; margin-bottom: 2px;}
 </style>
 </head>
-<body class="bodyer" id="id_client_see">
+<body class="">
+  <span id="id_client_see">
     <table id="view_archive_table" class="j_tab_th table table-bordered">
       <tbody class="j_tab_tr_hide" style="display: table-row-group; ">
       <tr>
         <th>姓名</th>
-        <td style="width:38%;">${tel}</td>
+        <td style="width:38%;">${lxr}</td>
         <th>区域</th>
-        <td style="width:38%;">${quyu}</td>
+        <td style="width:38%;">${quyuas}</td>
       </tr>
       <tr>
         <th>电话</th>
@@ -101,7 +107,7 @@ width: 100%;
       </tr>
       <tr>
         <th>客户性质</th>
-        <td>111111111${name}</td>
+        <td class='runscript'>getEnumTexts([{code:1,name:'重要'},{code:0,name:'普通'}],${zhongyaos})</td>
         <th>楼型</th>
         <td>${louxing}</td>
       </tr>
@@ -109,7 +115,7 @@ width: 100%;
         <th>户型</th>
         <td>${huxing}</td>
         <th>付款方式</th>
-        <td>111111111111${name}</td>
+        <td>${fuyongs}</td>
       </tr>
       <tr>
         <th>面积</th>
@@ -121,11 +127,11 @@ width: 100%;
         <th>客户来源</th>
         <td>${source}</td>
         <th>是否有效</th>
-        <td>111111111111111${name}</td>
+        <td class='runscript'>getEnumTexts([{code:1,name:'有效'},{code:0,name:'无效'}],${valid})</td>
       </tr>
       <tr>
         <th>业务员</th>
-        <td colspan="3">${beizhu}</td>
+        <td colspan="3">${salesmanName}</td>
       </tr>
       <tr>
         <th>备注</th>
@@ -133,5 +139,6 @@ width: 100%;
       </tr>
     </tbody>
     </table>
+ </span>
 </body>
 </html>

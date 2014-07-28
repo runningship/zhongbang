@@ -100,7 +100,7 @@ function openEdit(id){
 
 $(function(){
   onSubmit_Form();
-  getList();
+  doSearch();
   $.get('/zb/c/house/getQueryOptions', function(data) {
     queryOpts=JSON.parse(data);
   });
@@ -132,6 +132,7 @@ $(function(){
           <span class="input-group-addon">分公司</span>
           <select class="form-control get_comp" name="form_cid"></select>
           <select class="form-control get_quyu" name="form_did"></select>
+          <select class="form-control get_user" name="form_uid"></select>
         </div>
         <div class="btn-group">
           <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>

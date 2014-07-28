@@ -97,7 +97,7 @@ $(function(){
 .input-group-mt2 {margin-top: -3px;}
 </style>
 </head>
-<body style="overflow:hidden">
+<body style="overflow:hidden;overflow-y: auto; padding:10px 0 10px 0;">
   
   <form name="textForm">
     <div class="clearfix">
@@ -114,9 +114,6 @@ $(function(){
         <span class="input-group-addon">人员</span>
         <input type="text" class="form-control" name="goin">
       </div>
-      <div class="btn-group">
-        <button onclick="save();" class="btn btn-primary " >提交</button>
-      </div>
       <input id="conts" name="conts" type="hidden" />
       <input type="hidden" name="category" value="0"/>
     </div>
@@ -127,15 +124,19 @@ $(function(){
   <div style="margin-left:10px;">
     <span id="editor" type="text/plain" style="width:680px;height:310px;"></span>
   </div>
-<div style="margin-top:5px;">
-    <input id="file_upload" name="file_upload" style="display:none">
-</div>
-<div id="attachList">
-  <span style="display:none">
-    <div>
-      <a target="_blank" href="/zb/file/download?bizType=${bizType}&recordId=${recordId}&file=${filename}">${filename}</a> <a href="javascript:void(0)" onclick="deleteAttach(${id})">删除</a>
-    </div>
-  </span>
-</div>
+  <div style="margin-top:5px;">
+      <input id="file_upload" name="file_upload" style="display:none">
+  </div>
+  <div id="attachList">
+    <span style="display:none">
+      <div>
+        <a target="_blank" href="/zb/file/download?bizType=${bizType}&recordId=${recordId}&file=${filename}">${filename}</a> <a href="javascript:void(0)" onclick="deleteAttach(${id})">删除</a>
+      </div>
+    </span>
+  </div>
+
+  <div class="btn-group">
+    <button onclick="save();" class="btn btn-primary " >提交</button>
+  </div>
 </body>
 </html>

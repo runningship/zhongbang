@@ -9,21 +9,21 @@
  */
 var getUserTreeStr;
 $(document).ready(function() {
-    
-
-
+    var dataScope=getParam('dataScope');
     YW.ajax({
-        url:'/zb/c/user/getUserTree',
+        url:'/zb/c/user/getUserTree?dataScope='+dataScope,
         data:'',
         timeout:3000,
         async:false,
         dataType:'json',
         success:function (data, textStatus) {
-            if(data!=""){
+            if(data.result.length>0){
                 getUserTreeStr=data;
                 //alert(getUserTreeStr.result)
                 //alert(getUserTreeStr.result[0].children)
                 fun_get_comp('');
+            }else{
+                $('.get_comp').parent().remove();
             }
         }
     })

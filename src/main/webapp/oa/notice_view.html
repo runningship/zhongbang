@@ -57,29 +57,39 @@ $(function(){
 
 </script>
 
+<style type="text/css">
+.table{ margin-bottom: 0;}
+.table td{ font-weight: bold;}
+</style>
 </head>
-<body class="hlist bodyer" style="overflow:auto">
-<span >
-
-  <div id="recordId" >
-    <div>
-      <span>时间: </span><span id="addtime" ></span>
-    </div>
-  </div>
-  <div>
-    <span>标题: </span><p id="title"></p>
-  </div>
-  <div>
-    <span>内容: </span><p id="conts"></p>
-  </div>
-  <div>
-    <span>附件: </span>
-    <span id="attachList">
-      <div>
-        <a href="/zb/file/download?bizType=oa&recordId=${recordId}&file=${filename}" name="attachment">${filename}</a>
-      </div>
-    </span>
-  </div>
+<body style="overflow:auto">
+<form name="textForm">
+<input type="hidden" name="id" id="id" />
+<input type="hidden" name="onCont" id="onCont" />
+</form>
+<span id="recordId">
+  <table class="table">
+    <tr>
+      <th>时间:</th>
+      <td id="addtime"></td>
+    </tr>
+    <tr>
+      <th>标题:</th>
+      <td id="title"></td>
+    </tr>
+    <tr>
+      <th>内容:</th>
+      <td id="conts"></td>
+    </tr>
+    <tr>
+      <th>附件:</th>
+      <td id="attachList">
+        <div>
+          <a href="/zb/file/download?bizType=oa&recordId=${recordId}&file=${filename}" name="attachment">${filename}</a>
+        </div>
+      </td>
+    </tr>
+  </table>
 </span>
 </body>
 </html>

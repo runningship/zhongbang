@@ -3,6 +3,7 @@ package com.youwei.zjb.contract;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.json.JSONArray;
 
@@ -69,8 +70,7 @@ public class ContractService {
 	@WebMethod
 	public ModelAndView view(int contractId){
 		ModelAndView mv = initEdit(contractId);
-		Contract contract = dao.get(Contract.class, contractId);
-		List<ContractProcess> processList = dao.listByParams(ContractProcess.class, new String[]{"contractId"}, new Object[]{ contract.id });
+		List<ContractProcess> processList = dao.listByParams(ContractProcess.class,"from ContractProcess where contractId=? order by ordera ",contractId);
 		mv.data.put("actions", JSONHelper.toJSONArray(processList));
 		//佣金收费
 		List<YongJin> yongjins = dao.listByParams(YongJin.class, "from YongJin where contractId = ? and flag=1", contractId);
@@ -125,10 +125,10 @@ public class ContractService {
 	}
 	
 	@WebMethod
-	public ModelAndView list(Page<Contract> page , ContractQuery query){
+	public ModelAndView list(Page<Map> page , ContractQuery query){
 		ModelAndView mv = new ModelAndView();
 		List<Object> params = new ArrayList<Object>();
-		StringBuilder hql = new StringBuilder("select c from Contract c where 1=1 ");
+		StringBuilder hql = new StringBuilder("select c, u.uname as ywUserName from Contract c,User u where u.id=c.ywUserId ");
 		if(query.claid!=null){
 			hql.append(" and c.claid = ? ");
 			params.add(query.claid);
@@ -169,7 +169,8 @@ public class ContractService {
 			hql.append(" and u.orgpath like ? ");
 			params.add(query.xpath+"%");
 		}
-		page = dao.findPage(page, hql.toString(), params.toArray());
+		page.mergeResult = true;
+		page = dao.findPage(page, hql.toString(), true, params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page , DataHelper.dateSdf.toPattern()));
 		return mv;
 	}
