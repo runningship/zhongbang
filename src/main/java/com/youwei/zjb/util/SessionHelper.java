@@ -14,6 +14,9 @@ public class SessionHelper {
 			return;
 		}
 		String oldSessionId = "";
+		if(req.getCookies()==null){
+			return;
+		}
 		for(Cookie coo : req.getCookies()){
 			if("JSESSIONID".equals(coo.getName())){
 				oldSessionId = coo.getValue();

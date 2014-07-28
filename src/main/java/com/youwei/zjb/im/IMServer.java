@@ -18,6 +18,7 @@ import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
+import com.youwei.zjb.cache.ConfigCache;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.im.entity.Contact;
 import com.youwei.zjb.im.entity.Message;
@@ -28,10 +29,11 @@ public class IMServer extends WebSocketServer{
 	private static IMServer instance =null;
 	static Map<Integer,WebSocket> conns = new HashMap<Integer,WebSocket>();
 	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
-	private static InetSocketAddress socket = new InetSocketAddress("localhost", 9099); 
+//	private static InetSocketAddress socket = new InetSocketAddress("localhost", 9099); 
 	private IMServer() throws UnknownHostException {
 //		super(new InetSocketAddress(Inet4Address.getByName("localhost"), 9099));
-		super(new InetSocketAddress("192.168.1.125", 9099));
+//		super(new InetSocketAddress("192.168.1.125", 9099));
+		super(new InetSocketAddress(ConfigCache.get("domainName"), 9099));
 //		super(socket);
 	}
 

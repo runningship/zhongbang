@@ -52,7 +52,6 @@ public class ViewServlet extends HttpServlet{
 		String path = req.getPathInfo();
 		SessionHelper.updateSession(req);
 		req.getSession().setMaxInactiveInterval(20);
-		System.out.println(req.getSession().getMaxInactiveInterval());
 		resp.setContentType(getMimeType(path));
 		if(!path.endsWith(".html")){
 			return;
@@ -67,7 +66,7 @@ public class ViewServlet extends HttpServlet{
 //			UserSessionCache.putSession(req.getSession().getId(), user.id, "test");
 		}
 		String filePath = req.getServletContext().getRealPath("/")+path;
-		String html = FileUtils.readFileToString(new File(filePath));
+		String html = FileUtils.readFileToString(new File(filePath),"utf-8");
 		html = html.replace("$${userId}", user.id.toString());
 		Document doc = Jsoup.parse(html);
 		String authParent = req.getParameter("authParent");

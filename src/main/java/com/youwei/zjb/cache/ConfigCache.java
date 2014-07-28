@@ -12,7 +12,7 @@ public class ConfigCache {
 
 	private static Properties props = new Properties();
 	
-	private static final String confFilePath = "D:\\zjb.zb.properties";
+	private static final String confFilePath = "E:\\zhongbang\\conf\\zjb.zb.properties";
 	static{
 		load();
 	}

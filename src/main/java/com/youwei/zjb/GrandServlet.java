@@ -143,7 +143,7 @@ public class GrandServlet extends HttpServlet{
 			jobj.put("field", ex.getField());
 			jobj.put("msg", ex.getMessage());
 		}else{
-			jobj.put("result",ex.getCode());
+//			jobj.put("result",ex.getCode());
 			jobj.put("msg", ex.getMessage());
 		}
 		try {

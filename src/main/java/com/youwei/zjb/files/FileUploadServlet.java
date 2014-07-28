@@ -22,12 +22,14 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.youwei.zjb.cache.ConfigCache;
 import com.youwei.zjb.entity.Attachment;
 
 public class FileUploadServlet extends HttpServlet {
 
 	static final int MAX_SIZE = 1024000*5;
-	static final String BaseFileDir = "F:\\temp\\upload";
+//	static final String BaseFileDir = "F:\\temp\\upload";
+	static final String BaseFileDir = ConfigCache.get("upload_dir");
 	String rootPath, successMessage;
 	FileService fileService = new FileService();
 
