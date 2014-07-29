@@ -16,6 +16,7 @@ import org.bc.web.ModelAndView;
 import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
+import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.im.entity.Contact;
 import com.youwei.zjb.util.DataHelper;
@@ -110,17 +111,21 @@ public class IMService {
 	}
 	
 	@WebMethod
-	public ModelAndView search(int ownerId,String txt , Page<Map> page){
+	public ModelAndView search(IMQuery query , Page<Map> page){
 		ModelAndView mv = new ModelAndView();
 		List<Object> params = new ArrayList<Object>();
-		StringBuilder hql = new StringBuilder("select id as userId, uname as uname from User  where id<> "+ownerId);
-		if(StringUtils.isNotEmpty(txt)){
+		StringBuilder hql = new StringBuilder("select u.id as userId, u.uname as uname,d.namea as deptName,u.tel as tel from User u,Department d  where u.deptId = d.id and  u.id<> "+ThreadSession.getUser().id);
+		if(StringUtils.isNotEmpty(query.search)){
 			hql.append(" and (tel like ? or uname like ?)");
-			params.add("%"+txt+"%");
-			params.add("%"+txt+"%");
+			params.add("%"+query.search+"%");
+			params.add("%"+query.search+"%");
+		}
+		if(StringUtils.isNotEmpty(query.xpath)){
+			hql.append(" and u.orgpath like ?");
+			params.add(query.xpath+"%");
 		}
 		page = dao.findPage(page,hql.toString() ,true , params.toArray());
-		mv.data.put("contacts", JSONHelper.toJSON(page));
+		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;
 	}
 	

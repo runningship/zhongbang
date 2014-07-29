@@ -20,7 +20,14 @@ window.onload=function(){
   IM.Init();
 };
 
-
+function openSearch(id){
+  art.dialog.open('im/user_list.html?dataScope=all',{
+      padding:0,
+      resize:true,
+      height:450,
+      width:800
+  });
+}
 </script>
 <style type="text/css">
 	.aui_nw{
@@ -58,7 +65,7 @@ window.onload=function(){
       
       <div>
       <input id='searchInput' onfocus="this.value='';" style="width:230px;line-height:18px;float:right;color:#eee" />
-      <span id="searchBtn" style="position:absolute;padding-top:5px;left:5px;" onclick="IM.search()"><img style="width:14px;cursor:pointer" src="http://pub.idqqimg.com/smartqq/css/image/title_search_icon.png"/></span>
+      <span id="searchBtn" style="position:absolute;padding-top:5px;left:5px;" onclick="openSearch();"><img style="width:14px;cursor:pointer" src="http://pub.idqqimg.com/smartqq/css/image/title_search_icon.png"/></span>
       <span id="closeSearchBtn" style="color:#ccc;float: right;position: absolute;left: 240px;display:none;cursor:pointer" onclick="IM.closeSearchPanel();">x</span>
       </div>
       </div>
@@ -75,9 +82,8 @@ window.onload=function(){
       </div>
     </div>
 
-    <div style="width:250px;height:450px;background-color:#eee;font-size:16px;font-family:微软雅黑;border:solid 1px #ccc;overflow-y:auto">
+    <div id="contractPanel" style="width:250px;height:450px;background-color:#eee;font-size:16px;font-family:微软雅黑;border:solid 1px #ccc;overflow-y:auto">
       <div>
-        
         <span id="contact">
           <div onclick="IM.openChat(${contactId});" id="${contactId}" style="display:none;padding-left:5px;background-color:whitesmoke;height:56px;border-bottom:1px solid #ddd;cursor:pointer">
             <span onclick="IM.delContact(${contactId})" style="float:right;margin-right:10px;color:#aaa">x</span>
@@ -91,6 +97,7 @@ window.onload=function(){
           </div>
         </span>
       </div>
+
     </div>
 
     <div style="background-color:#555;width:252px;height:50px;border-radius:0px 0px 8px 8px;">
