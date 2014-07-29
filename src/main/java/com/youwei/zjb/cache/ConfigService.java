@@ -11,7 +11,7 @@ public class ConfigService {
 	public ModelAndView list(){
 		ModelAndView mv = new ModelAndView();
 		for(Object key : ConfigCache.keySet()){
-			mv.data.put(key, ConfigCache.get(key.toString()));
+			mv.data.put(key, ConfigCache.get(key.toString() , ""));
 		}
 		return mv;
 	}

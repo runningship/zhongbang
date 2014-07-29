@@ -151,15 +151,15 @@ function windowclose(){
 		});
 	}
 	$(function() {
+		
+		didc = GetCookie('zb_l_comp');
+		uidc = GetCookie('zb_l_user');
+		get_company();
 		try {
 			loadHardwareInfo();
 		} catch (e) {
 			alert(e);
 		}
-		didc = GetCookie('zb_l_comp');
-		uidc = GetCookie('zb_l_user');
-		get_company();
-		
 		//$('.btn_go_reg').text(didc+'|'+uidc)
 		$('.company').on('change', function(event) {
 			get_user();
@@ -209,6 +209,7 @@ function windowclose(){
 		});
 
 	});
+
 	$('form').on('submit', function(event) {
 		loginStart();
 		return false;

@@ -154,6 +154,9 @@ $(function(){
       if(obj.name=='dateType'){
         return;
       }
+      if($(obj).hasClass('get_comp') || $(obj).hasClass('get_quyu') ||$(obj).hasClass('get_user')){
+        return;
+      }
       $(obj).prepend('<option value="">所有</option>');
       $(obj).val("");
     })
@@ -242,6 +245,11 @@ $(function(){
   .pointerevents{pointer-events:none}
   .font_no_br{white-space:nowrap;word-break: keep-all;}
   table.text-center{ text-align: left;}
+  .xingzhi-7{color:#FF3333}
+  .xingzhi-6{color:#000000;}
+  .xingzhi-5{color:#7126C9;}
+  .xingzhi-4{color:#01A7F5;}
+  .xingzhi-2{color:#aaaaaa;}
 </style>
 </head>
 <body class="hlist bodyer" style="overflow-y:auto">
@@ -421,7 +429,7 @@ $(function(){
       <td>${dateyear}</td>
       <td>${dateadd}</td>
       <td>${forlxr}</td>
-      <td auth="$${authParent}_xingzhi" ><a href="javascript:void(0)" onclick="openHouseXingzhi(${id},${xingzhi})"><span class='runscript'>getEnumText('xingzhi',${xingzhi})</span></a></td>
+      <td auth="$${authParent}_xingzhi" ><a href="javascript:void(0)" onclick="openHouseXingzhi(${id},${xingzhi})"><span class='runscript xingzhi-${xingzhi}'>getEnumText('xingzhi',${xingzhi})</span></a></td>
       <td class='runscript'>getEnumText('zhuangtai',${ztai})</td>
       <!-- <td>有</td> -->
       <td>

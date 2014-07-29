@@ -114,6 +114,12 @@ $(function(){
     buildHtmlWithJsonArray("id_jiaoyi",queryOpts['jiaoyi'],true,1);       //交易
     buildHtmlWithJsonArray("id_shenhe",queryOpts['shenhe'],true,1);       //审核
     $('select').each(function(index,obj){
+      if(obj.name=='dateType'){
+        return;
+      }
+      if($(obj).hasClass('get_comp') || $(obj).hasClass('get_quyu') ||$(obj).hasClass('get_user')){
+        return;
+      }
       $(obj).prepend('<option value="">所有</option>');
       $(obj).val("");
     });

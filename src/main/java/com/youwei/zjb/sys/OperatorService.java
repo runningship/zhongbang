@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.Page;
 import org.bc.sdak.TransactionalServiceHelper;
@@ -42,6 +43,10 @@ public class OperatorService {
 		StringBuilder hql = new StringBuilder("select r.conts as conts , u.uname as uname , d.namea as deptName ,r.addtime as addtime, r.ip as ip from OperRecord r ,User u , Department d where r.uid=u.id and u.deptId=d.id and r.type=?");
 		hql.append(HqlHelper.buildDateSegment("r.addtime", query.addtimeStart, DateSeparator.After, params));
 		hql.append(HqlHelper.buildDateSegment("r.addtime", query.addtimeEnd, DateSeparator.Before, params));
+		if(StringUtils.isNotEmpty(query.xpath)){
+			hql.append(" and u.orgpath like ? ");
+			params.add("%"+query.xpath+"%");
+		}
 		page = dao.findPage(page, hql.toString(), true , params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;

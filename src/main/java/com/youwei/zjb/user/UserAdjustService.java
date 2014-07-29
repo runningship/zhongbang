@@ -142,12 +142,15 @@ public class UserAdjustService {
 		long count = dao.countHqlResult("from RenShiReview where userid=? and sh=0 and category='"+RenShiReview.Adjust+"' ", po.userId);
 		UserAdjust adjust = dao.get(UserAdjust.class, adjustId);
 		User user = dao.get(User.class, adjust.userId);
+		Department oldDept = dao.get(Department.class,adjust.oldDeptId);
+		Department newDept = dao.get(Department.class,adjust.newDeptId);
 		if(count==0){
 			adjust.passTime = new Date();
 			adjust.pass = 1;
 			dao.saveOrUpdate(adjust);
 			user.roleId = adjust.newRoleId;
 			user.deptId = adjust.newDeptId;
+			user.orgpath = newDept.path+user.id;
 			dao.saveOrUpdate(user);
 			if(adjust.fyTo!=null){
 				dao.execute("update House set uid = ? where uid = ?", adjust.fyTo , adjust.userId);
@@ -157,8 +160,6 @@ public class UserAdjustService {
 			}
 		}
 		User operUser = ThreadSession.getUser();
-		Department oldDept = dao.get(Department.class,adjust.oldDeptId);
-		Department newDept = dao.get(Department.class,adjust.newDeptId);
 		Role oldRole = dao.get(Role.class, adjust.oldRoleId);
 		Role newRole = dao.get(Role.class, adjust.newRoleId);
 		String operConts = "["+operUser.Department().namea+"-"+operUser.uname+ "] 审核通过了用户["+user.Department().namea+"-"+user.uname+"] 从["

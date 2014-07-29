@@ -38,8 +38,10 @@ public class UserSessionCache {
 		}
 		dao.execute("update from UserSession set sessionId=? where sessionId=?", newSessionId,oldSessionId);
 	}
-	
 	public static void putSession(String sessionId , Integer userId , String remoteIP){
+		putSession(sessionId,userId,remoteIP ,false);
+	}
+	public static void putSession(String sessionId , Integer userId , String remoteIP ,boolean isSuper){
 		User user = dao.get(User.class, userId);
 		if(user==null){
 			return;
@@ -52,6 +54,7 @@ public class UserSessionCache {
 			po.ip = remoteIP;
 			po.addtime = new Date();
 			dao.saveOrUpdate(po);
+			user.isSuper = isSuper;
 			map.put(sessionId, user);
 		}
 		//允许多处登录

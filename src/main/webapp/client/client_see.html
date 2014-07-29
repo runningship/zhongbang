@@ -59,7 +59,19 @@ $(function(){
         getStr=JSON.parse(data);
         buildHtmlWithJsonArray("id_client_see",[getStr['client']],true);
       });
+      $.get('/zb/c/client/genjin/list?clientId='+getClientId, function(data) {
+        getStr=JSON.parse(data);
+        buildHtmlWithJsonArray("id_client_genjin",getStr['genjins'],true);
+      });
     }
+    $(document).on('click', '.btn', function(event) {
+      var Thi=$(this),
+      ThiType=Thi.data('type'),
+      ThiVal=Thi;
+      if(ThiType=='submit_gj'){
+
+      }
+    });
 });
 </script>
 <style type="text/css">
@@ -140,5 +152,29 @@ width: 100%;
     </tbody>
     </table>
  </span>
+
+  <table class="j_tab_th table table-bordered">
+    <head class="j_tab_tr_hide" style="display: table-row-group; ">
+      <tr>
+        <th colspan="2">跟进</th>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <div class="input-group" style="width:98%;">
+            <input type="text" class="form-control">
+            <span class="input-group-btn">
+              <button class="btn btn-default" data-type="submit_gj" type="button">跟进</button>
+            </span>
+          </div>
+        </td>
+      </tr>
+    </head>
+    <tbody id="id_client_genjin" class="j_tab_tr_hide" style="display: table-row-group; ">
+      <tr>
+        <th width="100" style="width:100px;">姓名</th>
+        <td>${conts}</td>
+      </tr>
+    </tbody>
+  </table>
 </body>
 </html>

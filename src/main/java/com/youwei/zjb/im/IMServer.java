@@ -33,7 +33,7 @@ public class IMServer extends WebSocketServer{
 	private IMServer() throws UnknownHostException {
 //		super(new InetSocketAddress(Inet4Address.getByName("localhost"), 9099));
 //		super(new InetSocketAddress("192.168.1.125", 9099));
-		super(new InetSocketAddress(ConfigCache.get("domainName"), 9099));
+		super(new InetSocketAddress(ConfigCache.get("domainName" , "192.168.1.125"), 9099));
 //		super(socket);
 	}
 

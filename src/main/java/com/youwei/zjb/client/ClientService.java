@@ -18,6 +18,7 @@ import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.Client;
+import com.youwei.zjb.entity.ClientGenJin;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.house.HouseQuery;
 import com.youwei.zjb.house.JiaoYi;
@@ -45,10 +46,31 @@ public class ClientService {
 		client.addtime = new Date();
 		client.djr = user.id;
 		dao.saveOrUpdate(client);
-		
-		
 		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 添加了编号为["+client.id+"]客源["+client.lxr+"]";
 		operService.add(OperatorType.客源记录, operConts);
+		return mv;
+	}
+	
+	@WebMethod(name="genjin/add")
+	public ModelAndView addGenJin(ClientGenJin genjin){
+		ModelAndView mv = new ModelAndView();
+		Client client = dao.get(Client.class,genjin.clientId);
+		if(client==null){
+			throw new GException(PlatformExceptionType.BusinessException, "客源已经被删除或不存在");
+		}
+		genjin.addtime = new Date();
+		genjin.userId = ThreadSession.getUser().id;
+		dao.saveOrUpdate(genjin);
+		client.gjtime = new Date();
+		dao.saveOrUpdate(client);
+		return mv;
+	}
+	
+	@WebMethod(name="genjin/list")
+	public ModelAndView listGenJin(int clientId){
+		ModelAndView mv = new ModelAndView();
+		List<ClientGenJin> list = dao.listByParams(ClientGenJin.class,  new String[]{"clientId"}, new Object[]{clientId});
+		mv.data.put("genjins", JSONHelper.toJSONArray(list));
 		return mv;
 	}
 	
@@ -164,8 +186,8 @@ public class ClientService {
 	@WebMethod
 	public ModelAndView list(ClientQuery query , Page<Map> page){
 		ModelAndView mv = new ModelAndView();
-		StringBuilder hql = new StringBuilder("select c.id as id,c.lxr as lxr,c.tel as tel, c.mianjiFrom as mianjiFrom ,c.mianjiTo as mianjiTo ,c.jiageFrom as jiageFrom,"
-				+ "c.jiageTo as jiageTo,c.loucengFrom as loucengFrom,c.loucengTo as loucengTo,c.addtime as addtime,c.zhongyaos as kehu ,u.uname as uname "
+		StringBuilder hql = new StringBuilder("select c.salesman as salesman, c.id as id,c.lxr as lxr,c.tel as tel, c.mianjiFrom as mianjiFrom ,c.mianjiTo as mianjiTo ,c.jiageFrom as jiageFrom,"
+				+ "c.jiageTo as jiageTo,c.loucengFrom as loucengFrom,c.loucengTo as loucengTo,c.addtime as addtime,c.gjtime as gjtime,c.zhongyaos as kehu ,u.uname as uname "
 				+ "from Client c,User u where u.id=c.salesman and u.id is not null ");
 		List<Object> params = new ArrayList<Object>();
 		if(StringUtils.isNotEmpty(query.xpath)){

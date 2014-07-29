@@ -7,6 +7,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 
 public class ConfigCache {
 
@@ -36,8 +37,12 @@ public class ConfigCache {
 		load();
 	}
 	
-	public static String get(String key){
-		return props.getProperty(key);
+	public static String get(String key , String def){
+		String val =  props.getProperty(key);
+		if(StringUtils.isNotEmpty(val)){
+			return val;
+		}
+		return def;
 	}
 	
 	public static Set<Object> keySet(){

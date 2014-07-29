@@ -67,6 +67,9 @@
     $('#jstree').on("changed.jstree", function (e, data) {
       // console.log(data.selected);
     });
+    $('#jstree').on("ready.jstree", function (e, data) {
+      $('#jstree').jstree('close_all', tree);
+    });
     // 8 interact with the tree - either way is OK
     $('button').on('click', function () {
       var arr = tree.jstree('get_selected',true);
@@ -91,8 +94,8 @@
         },
         dataType: 'json'
       });
-
     });
+    
   }
   </script>
 </head>

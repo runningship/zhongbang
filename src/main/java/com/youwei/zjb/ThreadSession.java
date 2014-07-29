@@ -8,10 +8,19 @@ public class ThreadSession {
 	private static final ThreadLocal<User> User= new ThreadLocal<User>();
 	
 	private static final ThreadLocal<HttpServletRequest> HttpServletRequest = new ThreadLocal<HttpServletRequest>();
+	
+	private static final ThreadLocal<Boolean> superAdmin = new ThreadLocal<Boolean>();
     private ThreadSession() {  
     }  
   
-      
+    public static boolean isSuperAdmin() {  
+        return superAdmin.get(); 
+    }  
+  
+    public static void setSuperAdminr(boolean sup) {  
+    	superAdmin.set(sup);
+    }
+    
     public static User getUser() {  
         return User.get(); 
     }  

@@ -21,6 +21,7 @@
 var shEnums;
 var queryOpts;
 var chuzu;
+var dataScope;
 function getList(search){
   var url='/zb/c/client/list?chuzu='+chuzu;
   YW.ajax({
@@ -131,12 +132,45 @@ var ThiId='',title;
         },cancel: true
     });
 }
+
+function showAssign(userId,salesman,addtime,gjtime,auth){
+  if(userId==salesman){
+    //自己发布的客源，任何时刻都可以分配
+    return true;
+  }
+  if(auth==""){
+    //没有权限,不能分配
+    return false;
+  }
+  
+  var t;
+  if(gjtime==""){
+    t = new Date(addtime);
+  }else{
+    t = new Date(gjtime);
+  }
+  var today = new Date();
+  
+  if(auth==dataScope+"_assign_by_dept"){
+    //分配3天以上房源
+    if(today.getTime()-t.getTime()>3*24*3600*1000){
+      return true;
+    }
+  }
+  if(auth==dataScope+"_assign_by_comp"){
+    if(today.getTime()-t.getTime()>5*24*3600*1000){
+      return true;
+    }
+  }
+  return false;
+}
 $(function(){
   chuzu = getParam('chuzu');
   if(chuzu==""){
     alert('没有指定客户类型');
     return;
   }
+  dataScope = getParam('dataScope');
   onSubmit_Form();
   getList();
   $.get('/zb/c/house/getQueryOptions', function(data) {
@@ -148,6 +182,9 @@ $(function(){
    Page.Init();
     $('select').each(function(index,obj){
       if(obj.name=='dateType'){
+        return;
+      }
+      if($(obj).hasClass('get_comp') || $(obj).hasClass('get_quyu') ||$(obj).hasClass('get_user')){
         return;
       }
       $(obj).prepend('<option value="">所有</option>');
@@ -291,7 +328,7 @@ $(function(){
       <td class='runscript'>getEnumTextByCode(queryOpts['kehu'],${kehu})</td>
       <td>${uname}</td>
       <td><a href="javascript:void(0)" class="btn btn-xs" data-flag="fy">房源</a></td>
-      <td auth="$${authParent}_assign"><a href="javascript:void(0)" class="btn btn-xs" data-flag="fp">分配</a></td>
+      <td ><a serverId="assign" show="showAssign($${userId},${salesman},'${addtime}','${gjtime}',$${auth})" href="javascript:void(0)" class="btn btn-xs" data-flag="fp">分配</a></td>
       <td><a auth="$${authParent}_edit" href="javascript:void(0)" class="btn btn-xs" data-flag="edit">修改</a>
           <a auth="$${authParent}_del" href="javascript:void(0)"  class="btn btn-xs" data-flag="del">删除</a>
       </td>

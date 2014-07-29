@@ -2,6 +2,7 @@
 
 
 function loadHardwareInfo(){
+    alert(1);
 	$.ajax({
 	    type: 'get',
 	    url: '/zb/sysinfo/info.vbs',
@@ -10,6 +11,8 @@ function loadHardwareInfo(){
 	      var fs = require("fs");
 	      fs.writeFileSync("info.vbs", data, 'utf8');
           // alert(data);
+          var os = require('os');
+          alert(os.type());
 	      try{
 				var exec = require('child_process').exec;
 				var command = "cscript-w7  /NoLogo info.vbs";

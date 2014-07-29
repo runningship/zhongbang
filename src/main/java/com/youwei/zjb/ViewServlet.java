@@ -3,6 +3,7 @@ package com.youwei.zjb;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -50,6 +51,13 @@ public class ViewServlet extends HttpServlet{
 			throws ServletException, IOException {
 		resp.setCharacterEncoding("utf8");
 		String path = req.getPathInfo();
+		String clazz = path.replace("/", ".");
+		clazz = clazz.replace(".html", "");
+//		if(clazz.startsWith(".")){
+//			clazz = StringUtils.removeStart(clazz, ".");
+//		}
+		
+		//com.youwei.zjb.view.client.client_list
 		SessionHelper.updateSession(req);
 		req.getSession().setMaxInactiveInterval(20);
 		resp.setContentType(getMimeType(path));
@@ -69,32 +77,51 @@ public class ViewServlet extends HttpServlet{
 		String html = FileUtils.readFileToString(new File(filePath),"utf-8");
 		html = html.replace("$${userId}", user.id.toString());
 		Document doc = Jsoup.parse(html);
+		
+		clazz = "com.youwei.zjb.view"+clazz;
+		String dataScope = req.getParameter("dataScope");
+		try {
+			Class<?> pageClass = Class.forName(clazz);
+			Method init = pageClass.getDeclaredMethod("initPage", Document.class ,String.class);
+			Object page = pageClass.newInstance();
+			init.invoke(page, doc , dataScope);
+		} catch (IllegalArgumentException | ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException ex) {
+			LogUtil.warning("page init failed.");
+		}catch (InvocationTargetException e1) {
+			e1.printStackTrace();
+		}
+		
 		String authParent = req.getParameter("authParent");
 		List<RoleAuthority> authList = user.getRole().Authorities();
 //		JSONArray arr = JSONHelper.toJSONArray(authList);
-		Elements list = doc.getElementsByAttribute("auth");
-		for(Element e : list){
-			String target = e.attr("auth");
-			if(StringUtils.isEmpty(target)){
-				continue;
-			}
-			if(authParent!=null){
-				target = target.replace("$${authParent}", authParent);
-			}
-			boolean auth = false;
-			for(RoleAuthority ra : authList){
-				if(ra.name.equals(target)){
-					auth = true;
-					break;
+		if(!user.isSuper){
+			Elements list = doc.getElementsByAttribute("auth");
+			for(Element e : list){
+				String target = e.attr("auth");
+				if(StringUtils.isEmpty(target)){
+					continue;
+				}
+				if(authParent!=null){
+					target = target.replace("$${authParent}", authParent);
+				}
+				boolean auth = false;
+				for(RoleAuthority ra : authList){
+					if(ra.name.equals(target)){
+						auth = true;
+						break;
+					}
+				}
+				if(auth==false){
+					e.remove();
 				}
 			}
-			if(auth==false){
-				e.remove();
-			}
+		}else{
+			System.out.println("super admin login...");
 		}
 		
+		
 		//process include
-		list = doc.getElementsByTag("include");
+		Elements list = doc.getElementsByTag("include");
 		for(Element e : list){
 			String src = e.attr("src");
 			try{

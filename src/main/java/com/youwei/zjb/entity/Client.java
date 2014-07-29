@@ -97,4 +97,6 @@ public class Client {
 	 */
 	@Column(name="flag")
 	public Integer valid;
+	
+	public Date gjtime;
 }

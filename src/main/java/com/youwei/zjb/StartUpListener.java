@@ -59,7 +59,7 @@ public class StartUpListener implements ServletContextListener{
 		settings.put(AvailableSettings.USE_SECOND_LEVEL_CACHE, "true");
 		
 //		settings.put(AvailableSettings.PROXOOL_XML, "proxool.xml");//相对目录为classes
-		settings.put(AvailableSettings.PROXOOL_XML, "file:\\"+ConfigCache.get("proxool_xml"));//相对目录为classes
+		settings.put(AvailableSettings.PROXOOL_XML, ConfigCache.get("proxool_xml" ,"proxool.xml"));//相对目录为classes
 		settings.put(AvailableSettings.PROXOOL_EXISTING_POOL, "false");
 		settings.put(AvailableSettings.PROXOOL_POOL_ALIAS, "mySqlProxool");
 		

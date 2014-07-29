@@ -100,6 +100,7 @@ public class User {
 	
 	public Integer avatar;
 	
+	public transient boolean isSuper;
 	public Role getRole(){
 		return SimpDaoTool.getGlobalCommonDaoService().get(Role.class, roleId);
 	}

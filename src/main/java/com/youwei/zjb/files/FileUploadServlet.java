@@ -29,7 +29,7 @@ public class FileUploadServlet extends HttpServlet {
 
 	static final int MAX_SIZE = 1024000*5;
 //	static final String BaseFileDir = "F:\\temp\\upload";
-	static final String BaseFileDir = ConfigCache.get("upload_dir");
+	static final String BaseFileDir = ConfigCache.get("upload_dir","F:\\temp\\upload");
 	String rootPath, successMessage;
 	FileService fileService = new FileService();
 

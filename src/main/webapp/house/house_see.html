@@ -39,6 +39,10 @@ function getFav(){
   }
   return '<a href="#" class="j_btn_fav btn btn-mini btn-link">'+isFavStr+'</a>';
 }
+
+function isShiPan(){
+  return getStr.house[0].xingzhi==7;
+}
 $(document).on('click', '.j_btn_edit', function(event) {
   window.location.href="house_add.html?hid="+getHid
   return false;
@@ -178,7 +182,7 @@ $(function(){
         </div>
         </td>
       </tr>
-      <tr>
+      <tr show="!isShiPan();">
         <td class="biaoti">联系方式</td>
         ${lxr}
         <td colspan="5" class="telSEE">
