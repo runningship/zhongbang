@@ -13,7 +13,9 @@ import org.bc.web.ModelAndView;
 import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
+import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.asset.entity.Asset;
+import com.youwei.zjb.entity.User;
 import com.youwei.zjb.util.JSONHelper;
 
 /**
@@ -29,6 +31,9 @@ public class AssetService {
 		ModelAndView mv = new ModelAndView();
 		asset.addtime = new Date();
 		asset.edittime = new Date();
+		User user = ThreadSession.getUser();
+		asset.deptId = user.deptId;
+		asset.userId = user.id;
 		dao.saveOrUpdate(asset);
 		return mv;
 	}

@@ -32,9 +32,6 @@ CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(Common
 		supply.addtime = new Date();
 		supply.shenhe = 0;
 		User user = ThreadSession.getUser();
-		if(user==null){
-			user = dao.get(User.class, 316);
-		}
 		supply.userId = user.id;
 		supply.deptId = user.deptId;
 		dao.saveOrUpdate(supply);

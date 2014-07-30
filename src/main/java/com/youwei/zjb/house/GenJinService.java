@@ -19,6 +19,7 @@ import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.house.entity.GenJin;
+import com.youwei.zjb.house.entity.House;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
 
@@ -31,15 +32,12 @@ public class GenJinService {
 	public ModelAndView add(GenJin gj){
 		ModelAndView mv = new ModelAndView();
 		User user = ThreadSession.getUser();
-		if(user==null){
-			gj.userId = 316;
-		}else{
-			gj.userId = user.id;
-		}
-		if(gj!=null){
-			gj.addtime = new Date();
-			service.saveOrUpdate(gj);
-		}
+		House house = service.get(House.class, gj.hid);
+		gj.userId = user.id;
+		gj.bianhao = house.houseNumber;
+		gj.area = house.area +house.dhao+"#"+house.fhao;
+		gj.addtime = new Date();
+		service.saveOrUpdate(gj);
 		mv.data.put("msg", "保存成功");
 		return mv;
 	}

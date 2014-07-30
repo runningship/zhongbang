@@ -18,13 +18,14 @@ public class FileDownloadServlet extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		req.setCharacterEncoding("utf8");
 		String bizType = req.getParameter("bizType");
 		String recordId = req.getParameter("recordId");
 		String fileName = req.getParameter("file");
 		ServletOutputStream out = resp.getOutputStream();
 		File file = new File(FileUploadServlet.BaseFileDir+File.separator+bizType+File.separator+recordId+File.separator+fileName);
 		if(file.exists()==false){
-			out.write("file not found".getBytes());
+			out.write(("file["+file.getAbsolutePath()+"] not found").getBytes());
 			return;
 		}
 		resp.addHeader("Content-Disposition", "attachment;filename=" + new String(fileName.getBytes("utf-8"),"ISO-8859-1"));

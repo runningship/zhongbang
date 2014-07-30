@@ -47,6 +47,19 @@ function withJson(a,b,c){
         }
       });
 }
+function setArea(search){
+  YW.ajax({
+    type: 'post',
+    async:false,
+    url: '/zb/c/client/genjin/add',
+    data:search,
+    success: function(data){
+      var getAreas=JSON.parse(data);
+      art.dialog.tips('跟进成功')
+      window.location.reload();
+    }
+  })
+}
 $(function(){
 
     $.get('/zb/c/house/getQueryOptions', function(data) {
@@ -67,9 +80,10 @@ $(function(){
     $(document).on('click', '.btn', function(event) {
       var Thi=$(this),
       ThiType=Thi.data('type'),
-      ThiVal=Thi;
+      ThiVal=$('#id_genjin_inp').val();
       if(ThiType=='submit_gj'){
-
+        var search={clientId:getClientId,conts:ThiVal}
+        setArea(search);
       }
     });
 });
@@ -92,6 +106,7 @@ width: 100%;
 .checklist{}
 .checklist li{ float: left; margin:0 3px 3px 0; }
 .checklist label{display: inline-block; background-color: #EEE; color:#666;font-weight: normal; margin-bottom: 2px;}
+.id_client_genjin span{ color: #999}
 </style>
 </head>
 <body class="">
@@ -156,12 +171,12 @@ width: 100%;
   <table class="j_tab_th table table-bordered">
     <head class="j_tab_tr_hide" style="display: table-row-group; ">
       <tr>
-        <th colspan="2">跟进</th>
+        <th colspan="2" style="text-align:left;">跟进</th>
       </tr>
       <tr>
         <td colspan="2">
           <div class="input-group" style="width:98%;">
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" id="id_genjin_inp">
             <span class="input-group-btn">
               <button class="btn btn-default" data-type="submit_gj" type="button">跟进</button>
             </span>
@@ -171,8 +186,8 @@ width: 100%;
     </head>
     <tbody id="id_client_genjin" class="j_tab_tr_hide" style="display: table-row-group; ">
       <tr>
-        <th width="100" style="width:100px;">姓名</th>
-        <td>${conts}</td>
+        <th style="width:100px;">${userId}</th>
+        <td>${conts} <span style="color:#ccc">${addtime}</span></td>
       </tr>
     </tbody>
   </table>

@@ -25,6 +25,7 @@ import org.bc.web.WebMethod;
 import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
+import com.youwei.zjb.cache.ConfigCache;
 import com.youwei.zjb.cache.UserSessionCache;
 import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.Role;
@@ -76,11 +77,14 @@ public class UserService {
 		
 		String sql = "select tt.*,xx.uname as user,xx.id as userId from (select c1.namea as pname , c2.namea as cname , c1.id as qid ,c2.id as did from uc_comp c1 left JOIN uc_comp c2 on c1.id=c2.fid where c1.fid=1"
 				+ " ) as tt"
-				+" LEFT JOIN (select u.orgpath, u.uname,u.did ,u.id from uc_user u where u.sh=1 and u.flag <> 1 ) as xx on tt.did=xx.did where xx.orgpath like '"+code+"%' ";
-		String sql2 = "select tt.*,u.uname from (select c1.namea as quyu , c2.namea as dept , c1.id as qid ,c2.id as did from Department c1 , Department c2 where c1.id=c2.fid and c1.id<>1) as tt"
-				+" LEFT JOIN User u on tt.did=u.did where u.sh=1 and u.flag <> 1";
-		String hql = "select child.namea as cname,parent.namea as pname ,child.id as did ,child.fid as qid ,u.uname as user ,u.id as userId "+
-					"from Department child,Department parent , User u where child.fid = parent.id and child.id=u.deptId and u.sh=1 and u.flag <> 1  and u.orgpath like '"+code+"%'";
+				+" LEFT JOIN (select u.orgpath, u.uname,u.did ,u.id from uc_user u where u.sh=1 and u.flag <> 1 ) as xx on tt.did=xx.did ";
+		if(StringUtils.isNotEmpty(code)){
+			sql += " where xx.orgpath like '"+code+"%' ";
+		}
+//		String sql2 = "select tt.*,u.uname from (select c1.namea as quyu , c2.namea as dept , c1.id as qid ,c2.id as did from Department c1 , Department c2 where c1.id=c2.fid and c1.id<>1) as tt"
+//				+" LEFT JOIN User u on tt.did=u.did where u.sh=1 and u.flag <> 1";
+//		String hql = "select child.namea as cname,parent.namea as pname ,child.id as did ,child.fid as qid ,u.uname as user ,u.id as userId "+
+//					"from Department child,Department parent , User u where child.fid = parent.id and child.id=u.deptId and u.sh=1 and u.flag <> 1  and u.orgpath like '"+code+"%'";
 		List<Map> users = dao.listSqlAsMap(sql);
 		Map<String, JSONArray> quyus = groupByQuyu(users);
 		Map<String, JSONArray> depts = groupByDeptId(users);
@@ -103,6 +107,7 @@ public class UserService {
 			mv.data.put("role", user.getRole().title);
 		}
 		mv.data.put("userId", user.id);
+		mv.data.put("hostname", ConfigCache.get("domainName", "zb.zhongjiebao.com"));
 		return mv;
 	}
 	
@@ -146,9 +151,6 @@ public class UserService {
 	public ModelAndView authorities(){
 		ModelAndView mv = new ModelAndView();
 		User user = ThreadSession.getUser();
-		if(user==null){
-			user = dao.get(User.class, 316);
-		}
 		mv.data.put("authorities", JSONHelper.toJSONArray(user.getRole().Authorities()));
 		return mv;
 	}
@@ -239,9 +241,6 @@ public class UserService {
 		StringBuilder hql = new StringBuilder();
 		List<Object> params = new ArrayList<Object>();
 		User user = ThreadSession.getUser();
-		if(user==null){
-			user = dao.get(User.class, 316);
-		}
 		hql.append("select review.sh as rzsh, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
 				+ "from User  u, Department d,Role r , RenShiReview review where u.sh=0 and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? and review.category='join' ");
 		params.add(user.id);

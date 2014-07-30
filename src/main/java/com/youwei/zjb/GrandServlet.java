@@ -48,14 +48,7 @@ public class GrandServlet extends HttpServlet{
 		req.getSession().getAttribute("user");
 		User u = UserSessionCache.getUser(req.getSession().getId());
 		if(u==null){
-			//返回登录页面
-//			u = SimpDaoTool.getGlobalCommonDaoService().get(User.class, 316);
-//			String ip = req.getHeader("x-forwarded-for");
-//			if (ip == null) {
-//				ip = req.getRemoteAddr();
-//			}
-//			UserSessionCache.putSession(req.getSession().getId(), u.id , ip);
-//			resp.sendRedirect("/zb/login/login.html");
+			//TODO
 		}
 		ThreadSession.setUser(u);
 		ThreadSession.setHttpServletRequest(req);

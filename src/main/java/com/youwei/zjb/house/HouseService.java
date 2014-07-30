@@ -24,6 +24,7 @@ import com.youwei.zjb.client.DaiKuanType;
 import com.youwei.zjb.client.FuKuan;
 import com.youwei.zjb.client.KeHuXingzhi;
 import com.youwei.zjb.client.KeHuLaiYuan;
+import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.house.entity.Favorite;
 import com.youwei.zjb.house.entity.House;
@@ -50,6 +51,11 @@ public class HouseService {
 			mv.data.put("result", 2);
 		}else{
 			house.isdel = 0;
+			house.dateadd = new Date();
+			if(house.mianji!=null && house.mianji!=0){
+				int jiage = (int) (house.sjia*10000/house.mianji);
+				house.djia = (float) jiage;
+			}
 			service.saveOrUpdate(house);
 			String py = DataHelper.toPinyin(house.quyu);
 			if(StringUtils.isNotEmpty(py) && py.length()>0){
@@ -75,6 +81,13 @@ public class HouseService {
 			house.houseNumber=  py.toUpperCase().charAt(0)+"-" + house.id;
 		}else{
 			LogUtil.warning("生成房源编号失败,houseId="+house.id);
+		}
+		House po = service.get(House.class, house.id);
+		house.isdel = po.isdel;
+		house.dateadd = po.dateadd;
+		if(house.mianji!=null && house.mianji!=0){
+			int jiage = (int) (house.sjia*10000/house.mianji);
+			house.djia = (float) jiage;
 		}
 		service.saveOrUpdate(house);
 		User user = ThreadSession.getUser();
@@ -198,6 +211,7 @@ public class HouseService {
 		}
 		query.jiaoyis.add(JiaoYi.仅售.toString());
 		query.jiaoyis.add(JiaoYi.出售.toString());
+		query.jiaoyis.add(JiaoYi.租售.toString());
 		return listAll(query , page);
 	}
 	
@@ -210,16 +224,18 @@ public class HouseService {
 	@WebMethod
 	public ModelAndView view(int houseId){
 		User user = ThreadSession.getUser();
-		if(user==null){
-			user = service.get(User.class, 316);
-		}
 		ModelAndView mv = new ModelAndView();
 		House house = service.get(House.class, houseId);
 		List<House> list = new ArrayList<House>();
 		list.add(house);
 		mv.data.put("house", JSONHelper.toJSONArray(list));
+		User fbr = service.get(User.class, house.userId);
+		Department dept = fbr.Department();
+		Department quyu = dept.Parent();
+		String fbrStr = quyu.namea+" "+dept.namea + " "+fbr.uname;
 		Favorite fav = service.getUniqueByParams(Favorite.class, new String[]{"userId" , "houseId"}, new Object[]{ user.id , houseId });
 		mv.data.put("fav", fav==null ? 0:1);
+		mv.data.put("fbr", fbrStr);
 		return mv;
 	}
 	
@@ -334,8 +350,14 @@ public class HouseService {
 			hql.append(" and h.userId= ? ");
 			params.add(query.userId);
 		}
-		
-		hql.append(" and ( isdel= 0 or isdel is null) ");
+		if(query.isdel==null){
+			hql.append(" and ( isdel= 0 or isdel is null) ");
+		}
+		if(query.isdel!=null){
+			hql.append(" and h.isdel=?");
+			params.add(query.isdel);
+		}
+//		hql.append(" and ( isdel= 0 or isdel is null) ");
 		page = service.findPage(page, hql.toString(),params.toArray());
 		ModelAndView mv = new ModelAndView();
 		mv.data.put("page", JSONHelper.toJSON(page,DataHelper.dateSdf.toPattern()));

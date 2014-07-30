@@ -70,8 +70,6 @@ public class ViewServlet extends HttpServlet{
 //			return;
 			resp.sendRedirect(req.getContextPath()+"/login/login.html");
 			return;
-//			user = SimpDaoTool.getGlobalCommonDaoService().get(User.class, 316);
-//			UserSessionCache.putSession(req.getSession().getId(), user.id, "test");
 		}
 		String filePath = req.getServletContext().getRealPath("/")+path;
 		String html = FileUtils.readFileToString(new File(filePath),"utf-8");

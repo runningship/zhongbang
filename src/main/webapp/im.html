@@ -17,11 +17,16 @@
 window.onload=function(){
 
 	// IM.InitEvent(art.dialog.opener.socket);
-  IM.Init();
+  var hostname = getParam('hostname');
+  IM.Init("ws://"+hostname+":9099");
 };
 
 function openSearch(id){
-  art.dialog.open('im/user_list.html?dataScope=all',{
+  var search = $('#searchInput').val();
+  if(search==IM.defSearchStr){
+    search="";
+  }
+  art.dialog.open('im/user_list.html?dataScope=all&search='+search,{
       padding:0,
       resize:true,
       height:450,
@@ -52,7 +57,8 @@ function openSearch(id){
 		border:0px;
 		border-radius: 10px;
 	}
-
+  .online{color:green;}
+  .offline{color:#aaa;}
 </style>
 </head>
 <body style="margin:0px;">
@@ -64,7 +70,7 @@ function openSearch(id){
       <div style="padding-top:44px;">
       
       <div>
-      <input id='searchInput' onfocus="this.value='';" style="width:230px;line-height:18px;float:right;color:#eee" />
+      <input id='searchInput' onfocus="this.value='';" style="width:230px;line-height:18px;float:right;" />
       <span id="searchBtn" style="position:absolute;padding-top:5px;left:5px;" onclick="openSearch();"><img style="width:14px;cursor:pointer" src="http://pub.idqqimg.com/smartqq/css/image/title_search_icon.png"/></span>
       <span id="closeSearchBtn" style="color:#ccc;float: right;position: absolute;left: 240px;display:none;cursor:pointer" onclick="IM.closeSearchPanel();">x</span>
       </div>
@@ -91,7 +97,7 @@ function openSearch(id){
             <img src="" srcx="/zb/style/image/avatar/${avatar}.jpg" style="width:40px;height:40px;margin-top:5px;margin-right:5px;float:left" />
             <p title="${deptName}" style="line-height:0px;display:inline-block">${contactName}</p>
 
-            <p style="font-size:12px;color:#aaa;line-height:15px;margin:0px"><span>[${state}]</span><span style="padding-left:5px;">${contactTel}</span>
+            <p class="${state_class}" style="font-size:12px;line-height:15px;margin:0px"><span>[${state}]</span><span style="padding-left:5px;">${contactTel}</span>
             </p>
 
           </div>

@@ -46,11 +46,6 @@ public class AdminService {
 		mv.data.put("result", 0);
 		mv.data.put("adminClass", JSONHelper.toJSON(po));
 		User user = ThreadSession.getUser();
-		if(user==null){
-			user = new User();
-			user.id = 316;
-			user.uname = "管理员";
-		}
 		mv.data.put("user", JSONHelper.toJSON(user));
 		return mv;
 	}

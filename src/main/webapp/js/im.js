@@ -13,6 +13,7 @@ var IM = {
 	avatarId:null,
 	defMsgInputHeight:36,
 	defMsgInputDivHeight:50,
+	url:null,
 	chats:[],
 
 
@@ -97,6 +98,7 @@ var IM = {
 		$('#cname').text(contact["contactName"]);
 
 		var msgCount = $($('#'+IM.receiverId).children(0)[1]);
+		art.dialog.opener.readMsg(msgCount.text());
 		msgCount.text(0);
 		msgCount.css('display','none');
 
@@ -304,6 +306,10 @@ var IM = {
 	            IM.loadContacts();
 	        }
 	    });
+	    if(IM.receiverId==contactId){
+	    	IM.msgContainer.html("");
+	    	$('#chatWindow').css('display','none');
+	    }
 	},
 
 	closeSearchPanel : function(){
@@ -383,7 +389,7 @@ var IM = {
 	},
 	start: function(){
 		console.log('start...');
-		IM.ws = new WebSocket("ws://192.168.1.125:9099");
+		IM.ws = new WebSocket(IM.url);
 		IM.ws.onopen = function() { 
 			IM.login(IM.ws);
 		};
@@ -407,7 +413,8 @@ var IM = {
 			console.log(e); 
 		}
 	},
-	Init : function(){
+	Init : function(url){
+		IM.url = url;
 		IM.myId = getParam("userId");
 		IM.msgContainer = $('#msgContainer');
 		$('#searchInput').val(IM.defSearchStr);

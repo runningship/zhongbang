@@ -1,6 +1,8 @@
 package com.youwei.zjb.files;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 
@@ -45,6 +47,12 @@ public class FileService {
 	public ModelAndView list(String bizType,int recordId){
 		ModelAndView mv = new ModelAndView();
 		List<Attachment> list = dao.listByParams(Attachment.class,  new String[]{"bizType" , "recordId"}, new Object[]{bizType , recordId});
+		for(Attachment attach : list){
+			try {
+				attach.filename_encoded = URLEncoder.encode(attach.filename, "utf8");
+			} catch (UnsupportedEncodingException e) {
+			}
+		}
 		mv.data.put("data", JSONHelper.toJSONArray(list));
 		return mv;
 	}

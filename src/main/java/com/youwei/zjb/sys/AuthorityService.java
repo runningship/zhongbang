@@ -70,6 +70,10 @@ public class AuthorityService {
 	public ModelAndView deleteRole(int roleId){
 		ModelAndView mv = new ModelAndView();
 		Role po = dao.get(Role.class,roleId);
+		long count = dao.countHqlResult("from User where roleId=?", roleId);
+		if(count>0){
+			throw new GException(PlatformExceptionType.BusinessException, "请先删除该职务下的用户，该职务下目前有"+count+"个用户");
+		}
 		if(po!=null){
 			dao.delete(po);
 			dao.execute("update User u set u.roleId=? where u.roleId=?", 0,roleId);

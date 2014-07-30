@@ -105,6 +105,14 @@ function dialogs(id){
 
     })
 }
+
+function buildJiaoYi(chuzu){
+  if(chuzu==0){
+    return "出售";
+  }else{
+    return "出租";
+  }
+}
 $(function(){
   onSubmit_Form();
  
@@ -194,7 +202,7 @@ $(function(){
     <tr  style="display:none">
       <td>${addtime}</td>
       <td>${deptName} ${uname}</td>
-      <td>${chuzu}</td>
+      <td class="runscript">buildJiaoYi(${chuzu})</td>
       <td>${bianhao}</td>
       <td>${area}</td>
       <td><a href="javascript:void(0)" onclick="return dialogs(${houseId});" style="width:200px; overflow:hidden;">${conts}</a></td>

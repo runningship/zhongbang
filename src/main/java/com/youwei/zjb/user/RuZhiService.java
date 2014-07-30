@@ -34,7 +34,7 @@ public class RuZhiService {
 		mv.data.put("roles", JSONHelper.toJSONArray(roles));
 		mv.data.put("rqtjs", RuQiTuJin.toJsonArray());
 		mv.data.put("user", JSONHelper.toJSON(user));
-		mv.data.put("myId", 316);
+		mv.data.put("myId", ThreadSession.getUser().id);
 		mv.data.getJSONObject("user").put("cid", comp.id);
 		mv.data.put("spList", JSONHelper.toJSONArray(spList));
 		return mv;

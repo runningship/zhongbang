@@ -21,6 +21,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.bc.sdak.utils.LogUtil;
 
 import com.youwei.zjb.cache.ConfigCache;
 import com.youwei.zjb.entity.Attachment;
@@ -67,6 +68,7 @@ public class FileUploadServlet extends HttpServlet {
 				out.write("recordId should be number ".getBytes());
 				return;
 			}
+			request.setCharacterEncoding("utf8");
 			List<FileItem> items = upload.parseRequest(request);
 			for(FileItem item : items){
 				if(item.isFormField()){
@@ -78,6 +80,7 @@ public class FileUploadServlet extends HttpServlet {
 					if(item.getSize()>=MAX_SIZE){
 						throw new RuntimeException("file size exceed 5M");
 					}else{
+						LogUtil.info("uploading file "+ item.getName());
 						FileUtils.copyInputStreamToFile(item.getInputStream(), new File(BaseFileDir
 								+ File.separator + bizType + File.separator
 								+ recordId + File.separator + item.getName()));

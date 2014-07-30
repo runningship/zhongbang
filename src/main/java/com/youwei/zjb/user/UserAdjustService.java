@@ -59,7 +59,7 @@ public class UserAdjustService {
 		mv.data.put("jiaojie", adjust.jiaojie);
 		
 		List<Map> spList = dao.listAsMap("select r.id as id, r.sprId as sprId, u.uname as spr , r.sh as sh from User u, RenShiReview r where r.category='adjust' and r.userId=? and u.id=r.sprId",adjust.userId);
-		mv.data.put("myId", 316);
+		mv.data.put("myId", ThreadSession.getUser().id);
 		mv.data.put("spList", JSONHelper.toJSONArray(spList));
 		return mv;
 	}

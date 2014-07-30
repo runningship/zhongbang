@@ -52,7 +52,7 @@ public class UserQuitService {
 		mv.data.put("jiaojie", uq.jiaojie);
 		
 		List<Map> spList = dao.listAsMap("select r.id as id, r.sprId as sprId, u.uname as spr , r.sh as sh from User u, RenShiReview r where r.category='quit' and r.userId=? and u.id=r.sprId",uq.userId);
-		mv.data.put("myId", 316);
+		mv.data.put("myId", ThreadSession.getUser().id);
 		mv.data.put("spList", JSONHelper.toJSONArray(spList));
 		return mv;
 	}
@@ -103,9 +103,6 @@ public class UserQuitService {
 		StringBuilder hql = new StringBuilder();
 		List<Object> params = new ArrayList<Object>();
 		User user = ThreadSession.getUser();
-		if(user==null){
-			user = dao.get(User.class, 316);
-		}
 		hql.append("select uq.id as id, review.sh as lzsh,uq.applyTime as applyTime, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
 				+ "from User  u, Department d,Role r ,UserQuit uq, RenShiReview review where u.id=uq.userId and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? and review.category='"+RenShiReview.Quit+"' ");
 		params.add(user.id);

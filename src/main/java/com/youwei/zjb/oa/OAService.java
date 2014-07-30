@@ -116,9 +116,6 @@ public class OAService {
 			throw new GException(PlatformExceptionType.BusinessException,"该标题已存在");
 		}
 		User user = ThreadSession.getUser();
-		if(user==null){
-			user = dao.get(User.class, 316);
-		}
 		notice.userId = user.id;
 		notice.addtime = new Date();
 		dao.saveOrUpdate(notice);
@@ -150,9 +147,6 @@ public class OAService {
 		ModelAndView mv = new ModelAndView();
 		List<Object> params = new ArrayList<Object>();
 		User user = ThreadSession.getUser();
-		if(user==null){
-			user = dao.get(User.class, 316);
-		}
 		StringBuilder hql = new StringBuilder("select n.id as id, n.title as title, n.addtime as addtime, nc.fenlei as classTitle, u.uname as uname from Notice n, NoticeReceiver nr , NoticeClass nc , User u where n.id=nr.noticeId and n.claid=nc.id and u.id=n.userId and nr.receiverId=?");
 		params.add(user.id);
 		if(query.claid!=null){

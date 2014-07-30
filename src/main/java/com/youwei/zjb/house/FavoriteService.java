@@ -24,9 +24,6 @@ public class FavoriteService {
 	@WebMethod
 	public ModelAndView add(Integer houseId){
 		User user = ThreadSession.getUser();
-		if(user==null){
-			user = service.get(User.class, 316);
-		}
 		Favorite po = service.getUniqueByParams(Favorite.class, new String[]{"userId","houseId"}, new Object[]{user.id,houseId});
 		if(po==null){
 			Favorite fav = new Favorite();
@@ -41,9 +38,6 @@ public class FavoriteService {
 	public ModelAndView delete(Integer houseId){
 		ModelAndView mv = new ModelAndView();
 		User user = ThreadSession.getUser();
-		if(user==null){
-			user = service.get(User.class, 316);
-		}
 		Favorite po = service.getUniqueByParams(Favorite.class, new String[]{"userId","houseId"}, new Object[]{user.id,houseId});
 		if(po!=null){
 			service.delete(po);
@@ -56,9 +50,6 @@ public class FavoriteService {
 	public ModelAndView list(HouseQuery query){
 		ModelAndView mv = new ModelAndView();
 		User user = ThreadSession.getUser();
-		if(user==null){
-			user = service.get(User.class, 316);
-		}
 		StringBuilder hql = new StringBuilder("select h from House h,Favorite f where h.id=f.houseId and f.userId="+user.id);
 		Page<House> page = new Page<House>();
 		page = service.findPage(page, hql.toString());

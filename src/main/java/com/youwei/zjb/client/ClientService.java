@@ -69,7 +69,8 @@ public class ClientService {
 	@WebMethod(name="genjin/list")
 	public ModelAndView listGenJin(int clientId){
 		ModelAndView mv = new ModelAndView();
-		List<ClientGenJin> list = dao.listByParams(ClientGenJin.class,  new String[]{"clientId"}, new Object[]{clientId});
+		String hql = "select g.conts as conts , u.uname as uname, g.addtime as addtime from ClientGenJin g ,User u where g.clientId=? and  u.id=g.userId order by g.addtime desc";
+		List<Map> list = dao.listAsMap(hql,clientId);
 		mv.data.put("genjins", JSONHelper.toJSONArray(list));
 		return mv;
 	}

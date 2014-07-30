@@ -38,8 +38,10 @@ public class IMService {
 			int uid = (int) map.get("contactId");
 			if(IMServer.isUserOnline(uid)){
 				map.put("state", "在线");
+				map.put("state_class", "online");
 			}else{
 				map.put("state", "离线");
+				map.put("state_class", "offline");
 			}
 		}
 		DataHelper.fillDefaultValue(list, "avatar", 0);

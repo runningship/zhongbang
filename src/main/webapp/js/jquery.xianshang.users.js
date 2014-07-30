@@ -70,7 +70,9 @@ function fun_get_quyu(a){
             		getQuyu.append('<option value="">请选择分公司</option>');	
             	}
             	$.each(getUserTreeStr.result[comp_index].children, function(index, item) {
-                    getQuyu.append('<option value="'+item.deptId+'">'+item.text+'</option>');
+                    if(item.deptId!=undefined && item.deptId!=null){
+                        getQuyu.append('<option value="'+item.deptId+'">'+item.text+'</option>');
+                    }
                 });
             }else{
             	getQuyu.append('<option value="">请选择分公司</option>');

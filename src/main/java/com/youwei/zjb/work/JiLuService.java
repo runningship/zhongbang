@@ -32,11 +32,7 @@ public class JiLuService {
 		ModelAndView mv = new ModelAndView();
 		jilu.addtime = new Date();
 		User user = ThreadSession.getUser();
-		if(user==null){
-			jilu.userId = 316;
-		}else{
-			jilu.userId = user.id;
-		}
+		jilu.userId = user.id;
 		dao.saveOrUpdate(jilu);
 		mv.data.put("result", 0);
 		mv.data.put("recordId", jilu.id);

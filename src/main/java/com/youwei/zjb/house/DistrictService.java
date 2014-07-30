@@ -36,7 +36,7 @@ public class DistrictService {
 		}
 		district.pinyin=DataHelper.toPinyin(district.name);
 		district.pyShort=DataHelper.toPinyinShort(district.name);
-//		service.saveOrUpdate(district);
+		service.saveOrUpdate(district);
 		mv.data.put("msg", "添加成功");
 		return mv;
 	}

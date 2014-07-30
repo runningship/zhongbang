@@ -48,6 +48,9 @@ function startChat(id){
 
 
 $(function(){
+  var search = getParam('search');
+  search = decodeURI(search);
+  $('#search').val(search);
   doSearch();
   Page.Init();
   jQuery.hotkeys.add('return',function(e){
@@ -66,7 +69,7 @@ $(function(){
     <input type="hidden" class=".userInput" name="xpath" />
     <div class="clearfix">
       <div class="input-group ">
-        <input style="width:200px;" type="text" class="form-control" name="search">
+        <input style="width:200px;" type="text" class="form-control" id="search" placeholder="请输姓名或手机号码" name="search">
       </div>
       <div class="input-group input-group-select">
         <span class="input-group-addon">公司</span>

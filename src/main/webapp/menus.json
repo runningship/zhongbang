@@ -125,7 +125,7 @@
 					"type":"menu"
 				},{
 					"name":"fy_other_genjin_data_all",
-					"text":"总部",
+					"text":"所有",
 					"type":"menu"
 			}]
 
@@ -199,7 +199,7 @@
 						"type":"menu"
 					},{
 						"name":"ky_client_buy_data_all",
-						"text":"总部",
+						"text":"所有",
 						"type":"menu"
 				}]
 
@@ -242,7 +242,7 @@
 						"type":"menu"
 					},{
 						"name":"ky_client_rent_data_all",
-						"text":"总部",
+						"text":"所有",
 						"type":"menu"
 					}]
 			}]
@@ -282,7 +282,7 @@
 				"type":"menu"
 			},{
 				"name":"yw_out_kf_data_all",
-				"text":"总部",
+				"text":"所有",
 				"type":"menu"
 			}]
 
@@ -317,7 +317,7 @@
 				"type":"menu"
 			},{
 				"name":"yw_out_gs_data_all",
-				"text":"总部",
+				"text":"所有",
 				"type":"menu"
 			}]
 
@@ -348,7 +348,7 @@
 				"type":"menu"
 			},{
 				"name":"yw_journal_qj_data_all",
-				"text":"总部",
+				"text":"所有",
 				"type":"menu"
 			}]
 
@@ -379,7 +379,7 @@
 				"type":"menu"
 			},{
 				"name":"yw_journal_work_data_all",
-				"text":"总部",
+				"text":"所有",
 				"type":"menu"
 			}]
 
@@ -418,7 +418,7 @@
 				"type":"menu"
 			},{
 				"name":"yw_jilu_hy_data_all",
-				"text":"总部",
+				"text":"所有",
 				"type":"menu"
 			}]
 
@@ -449,7 +449,7 @@
 				"type":"menu"
 			},{
 				"name":"yw_jilu_fy_data_all",
-				"text":"总部",
+				"text":"所有",
 				"type":"menu"
 			}]
 
@@ -480,7 +480,7 @@
 				"type":"menu"
 			},{
 				"name":"yw_jilu_zj_data_all",
-				"text":"总部",
+				"text":"所有",
 				"type":"menu"
 			}]
 
@@ -511,7 +511,7 @@
 				"type":"menu"
 			},{
 				"name":"yw_jilu_kq_data_all",
-				"text":"总部",
+				"text":"所有",
 				"type":"menu"
 			}]
 
@@ -528,11 +528,55 @@
 		"children":[{
 			"name":"ht_add_sell",
 			"text":"出售合同",
-			"type":"menu"
+			"type":"virtual",
+			"children":[{
+				"name":"ht_add_sell_page",
+				"text":"添加出售合同页面",
+				"type":"menu"
+				},{
+				"name":"ht_add_sell_data",
+				"text":"数据权限",
+				"type":"virtual",
+				"children":[{
+					"name":"ht_add_sell_data_dept",
+					"text":"分公司",
+					"type":"menu"
+				},{
+					"name":"ht_add_sell_data_quyu",
+					"text":"区域",
+					"type":"menu"
+				},{
+					"name":"ht_add_sell_data_all",
+					"text":"所有",
+					"type":"menu"
+				}]
+			}]
 		},{
 			"name":"ht_add_rent",
 			"text":"出租合同",
-			"type":"menu"
+			"type":"virtual",
+			"children":[{
+				"name":"ht_add_rent_page",
+				"text":"添加出租合同页面",
+				"type":"menu"
+				},{
+				"name":"ht_add_rent_data",
+				"text":"数据权限",
+				"type":"virtual",
+				"children":[{
+					"name":"ht_add_rent_data_dept",
+					"text":"分公司",
+					"type":"menu"
+				},{
+					"name":"ht_add_rent_data_quyu",
+					"text":"区域",
+					"type":"menu"
+				},{
+					"name":"ht_add_rent_data_all",
+					"text":"所有",
+					"type":"menu"
+				}]
+			}]
 		}]
 	},{
 		"name":"ht_list",
@@ -576,7 +620,7 @@
 					"type":"menu"
 				},{
 					"name":"ht_list_sell_data_all",
-					"text":"总部",
+					"text":"所有",
 					"type":"menu"
 				}]
 			}]
@@ -618,7 +662,7 @@
 					"type":"menu"
 				},{
 					"name":"ht_list_rent_data_all",
-					"text":"总部",
+					"text":"所有",
 					"type":"menu"
 				}]
 			}]
@@ -676,7 +720,7 @@
 				"type":"menu"
 			},{
 				"name":"rs_rz_data_all",
-				"text":"总部",
+				"text":"所有",
 				"type":"menu"
 			}]
 		}]
@@ -706,7 +750,7 @@
 				"type":"menu"
 			},{
 				"name":"rs_zwtz_data_all",
-				"text":"总部",
+				"text":"所有",
 				"type":"menu"
 			}]
 		}]
@@ -740,7 +784,7 @@
 				"type":"menu"
 			},{
 				"name":"rs_lizhi_data_all",
-				"text":"总部",
+				"text":"所有",
 				"type":"menu"
 			}]
 		}]
@@ -817,7 +861,7 @@
 					"type":"menu"
 				},{
 					"name":"zc_gd_list_data_all",
-					"text":"总部",
+					"text":"所有",
 					"type":"menu"
 				}]
 			}]
@@ -907,7 +951,7 @@
 				"type":"menu"
 			},{
 				"name":"zc_bg_data_all",
-				"text":"总部",
+				"text":"所有",
 				"type":"menu"
 			}]
 		}]

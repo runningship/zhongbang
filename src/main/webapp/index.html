@@ -37,18 +37,13 @@ var data=[
     [{text:"刷新",func:function(){
         window.location.reload()
       }
-    }],[{text:"系统设置",func:function(){
-
-        }
-      },{text:"主题设置",func:function(){
-
-      }
     }],[{text:"退出系统",func:function(){
         WinClose();
       } 
     }]
   ];
 var socket;
+var hostname;
 var chatWindow=null;
 $(function(){
 	//存储桌面布局元素的jquery对象
@@ -60,7 +55,7 @@ $(function(){
 	//初始化侧边栏
 	myLib.desktop.lrBar.init();
 	//初始化桌面右键菜单
-	// myLib.desktop.contextMenu($(document.body),data,"body",10);
+	myLib.desktop.contextMenu($(document.body),data,"body",10);
   init();
 });
 var myId;
@@ -73,6 +68,7 @@ function init(){
       var json = JSON.parse(data);
       $('#userinfo').text(json.username+' ('+json.role+')');
       myId = json.userId;
+      hostname = json.hostname;
       $('#win_im').click();
       // chatWindow.close();
     }
@@ -107,7 +103,7 @@ function openChat(e,hidden){
     e.preventDefault();
   }
   if(chatWindow==null){
-    chatWindow = art.dialog.open('im.html?userId='+myId,{
+    chatWindow = art.dialog.open('im.html?hostname='+hostname+'&userId='+myId,{
     // chatWindow = art.dialog.open('/zb/v/oa/index.html',{
       padding:0,
       height:605,
@@ -125,6 +121,18 @@ function openChat(e,hidden){
     chatWindow.show();
     var xx = $('.idialog')
     xx.find('iframe').css('display','block');
+  }
+}
+
+function readMsg(readCount){
+  var msgCount=$('#msgCount');
+  var count = parseInt(msgCount.text());
+  var read = parseInt(readCount);
+  count = count - readCount;
+  if(count<=0){
+    msgCount.css('display','none');
+  }else{
+    msgCount.text(count);
   }
 }
 
