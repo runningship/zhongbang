@@ -9,7 +9,7 @@ import net.sf.json.JSONObject;
 public enum DaiKuanType {
 
 	不贷款,
-	商代,
+	商贷,
 	市直,
 	省直,
 	市直组合,

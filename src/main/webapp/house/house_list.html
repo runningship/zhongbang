@@ -80,6 +80,7 @@ function getEnumText(category,code){
       return arr[i]['name'];
     }
   }
+  return "";
 }
 var dialog_see;
 function dialogs(id){
@@ -219,9 +220,9 @@ $(function(){
         content: '恢复数据？',
         ok: function () {
           date="{id:"+this_hid+"}"
-          $.post('/zb/c/house/physicalDelete?houseId='+this_hid, function(data, textStatus, xhr) {
+          $.post('/zb/c/house/recover?houseId='+this_hid, function(data, textStatus, xhr) {
             var getStr=JSON.parse(data);
-            if(getStr['msg']=='删除成功'){
+            if(getStr['msg']=='恢复成功'){
               art.dialog.tips('已恢复');
               Thi.parents('tr').remove();
             }else{
@@ -424,7 +425,7 @@ $(function(){
       <td>${lceng}/${zceng}</td>
       <td>${mianji}</td>
       <td>${djia}</td>
-      <td>${sjia}</td>
+      <td>${sjia}(万)</td>
       <td class='runscript'>getEnumText('zhuangxiu',${zhuangxiu})</td>
       <td>${dateyear}</td>
       <td>${dateadd}</td>

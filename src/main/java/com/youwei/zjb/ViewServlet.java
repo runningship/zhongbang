@@ -59,7 +59,7 @@ public class ViewServlet extends HttpServlet{
 		
 		//com.youwei.zjb.view.client.client_list
 		SessionHelper.updateSession(req);
-		req.getSession().setMaxInactiveInterval(20);
+//		req.getSession().setMaxInactiveInterval(20);
 		resp.setContentType(getMimeType(path));
 		if(!path.endsWith(".html")){
 			return;

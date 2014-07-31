@@ -105,6 +105,10 @@ public class ContractService {
 		}
 		User user = ThreadSession.getUser();
 		contract.userId = user.id;
+		if(contract.ywUserId==null){
+			contract.ywUserId = user.id;
+			throw new GException(PlatformExceptionType.BusinessException, "请先选择业务员");
+		}
 		contract.deptId = user.deptId;
 		contract.addtime = new Date();
 //		contract.proid=0;
@@ -191,6 +195,16 @@ public class ContractService {
 			throw new GException(PlatformExceptionType.BusinessException,"步骤已不存在");
 		}
 		dao.delete(po);
+		return mv;
+	}
+	
+	@WebMethod(name="delete")
+	public ModelAndView delete(int id){
+		ModelAndView mv = new ModelAndView();
+		Contract po = dao.get(Contract.class, id);
+		if(po!=null){
+			dao.delete(po);
+		}
 		return mv;
 	}
 	

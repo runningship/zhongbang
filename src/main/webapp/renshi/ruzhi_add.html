@@ -28,9 +28,6 @@ function doSave(){
     data:data,
     success: function(data){
       alert('添加成功');
-    },
-    error:function(data){
-      alert(data.responseText);
     }
   });
   return false;
@@ -84,7 +81,7 @@ $(function(){
     </div>
     <div class="input-group " style="float:none;margin-top:15px;width:300px;">
       <span class="input-group-addon">身份证号</span>
-      <input type="text" class="form-control" name="sfz" style="width:150px;">
+      <input type="text" class="form-control" desc="身份证号" name="sfz" style="width:150px;">
     </div>
     <div class="input-group" style="float:none;margin-top:15px;">
       <span class="input-group-addon">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;务</span>

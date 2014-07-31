@@ -44,6 +44,7 @@ public class HouseService {
 	@WebMethod
 	public ModelAndView add(House house){
 		ModelAndView mv = new ModelAndView();
+		User user = ThreadSession.getUser();
 		//检查，是否是重复房源.检查条件为,小区名+楼栋号+房号
 		House po = service.getUniqueByParams(House.class, new String[]{"area","dhao","fhao"},new Object[]{house.area,house.dhao,house.fhao});
 		if(po!=null){
@@ -52,6 +53,8 @@ public class HouseService {
 		}else{
 			house.isdel = 0;
 			house.dateadd = new Date();
+			house.userId = user.id;
+			house.deptId = user.deptId;
 			if(house.mianji!=null && house.mianji!=0){
 				int jiage = (int) (house.sjia*10000/house.mianji);
 				house.djia = (float) jiage;
@@ -67,7 +70,7 @@ public class HouseService {
 			mv.data.put("msg", "发布成功");
 			mv.data.put("result", 0);
 		}
-		User user = ThreadSession.getUser();
+		
 		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 添加了房源["+house.area+"]";
 		operService.add(OperatorType.房源记录, operConts);
 		return mv;
@@ -85,6 +88,8 @@ public class HouseService {
 		House po = service.get(House.class, house.id);
 		house.isdel = po.isdel;
 		house.dateadd = po.dateadd;
+		house.userId = po.id;
+		house.deptId = po.deptId;
 		if(house.mianji!=null && house.mianji!=0){
 			int jiage = (int) (house.sjia*10000/house.mianji);
 			house.djia = (float) jiage;
@@ -134,7 +139,7 @@ public class HouseService {
 	@WebMethod
 	public ModelAndView recover(Integer houseId){
 		ModelAndView mv = new ModelAndView();
-		if(houseId==null){
+		if(houseId!=null){
 			House po = service.get(House.class, houseId);
 			if(po!=null){
 				po.isdel= 0;
@@ -230,12 +235,15 @@ public class HouseService {
 		list.add(house);
 		mv.data.put("house", JSONHelper.toJSONArray(list));
 		User fbr = service.get(User.class, house.userId);
-		Department dept = fbr.Department();
-		Department quyu = dept.Parent();
-		String fbrStr = quyu.namea+" "+dept.namea + " "+fbr.uname;
+		if(fbr!=null){
+			Department dept = fbr.Department();
+			Department quyu = dept.Parent();
+			String fbrStr = quyu.namea+" "+dept.namea + " "+fbr.uname;
+			mv.data.put("fbr", fbrStr);
+		}
 		Favorite fav = service.getUniqueByParams(Favorite.class, new String[]{"userId" , "houseId"}, new Object[]{ user.id , houseId });
 		mv.data.put("fav", fav==null ? 0:1);
-		mv.data.put("fbr", fbrStr);
+		
 		return mv;
 	}
 	

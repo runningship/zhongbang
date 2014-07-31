@@ -69,11 +69,7 @@ public class IMServer extends WebSocketServer{
 		}
 		if(removed!=null){
 			conns.remove(removed);
-		}
-		try{
 			nofityStatus(removed, 0);
-		}catch(Exception ex){
-			ex.printStackTrace();
 		}
 		System.out.println(conn+" removed ");
 	}
@@ -83,8 +79,12 @@ public class IMServer extends WebSocketServer{
 		LogUtil.info(message);
 		JSONObject data = JSONObject.fromObject(message);
 		if("login".equals(data.getString("type"))){
-			conns.put(data.getInt("userId"), conn);
-			User user = dao.get(User.class,data.getInt("userId"));
+			int userId = data.getInt("userId");
+			if(conns.containsKey(userId)){
+				kickUser(userId);
+			}
+			conns.put(userId, conn);
+			User user = dao.get(User.class,userId);
 			if(user.avatar==null){
 				user.avatar=0;
 			}
@@ -93,7 +93,7 @@ public class IMServer extends WebSocketServer{
 			jobj.put("type", "userprofile");
 			jobj.put("avatarId", user.avatar);
 			conn.send(jobj.toString());
-			nofityStatus(data.getInt("userId") , 1);
+			nofityStatus(userId , 1);
 		}else if("msg".equals(data.getString("type"))){
 			sendMsg(conn,data);
 		}else if("history".equals(data.getString("type"))){
@@ -159,6 +159,14 @@ public class IMServer extends WebSocketServer{
 		}
 	}
 
+	public static void kickUser(int userId){
+		WebSocket conn = conns.get(userId);
+		if(conn!=null){
+			JSONObject msg = new JSONObject();
+			msg.put("type", "kickuser");
+			conn.send(msg.toString());
+		}
+	}
 	@Override
 	public void onError(WebSocket conn, Exception ex) {
 		ex.printStackTrace();

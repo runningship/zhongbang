@@ -151,7 +151,7 @@ var IM = {
 		}else{
 			IM.renderReceivedMsg(data);
 		}
-		art.dialog.opener.receiveChatMessage(data);
+		
 	},
 
 	renderReceivedMsg:function(data){
@@ -169,7 +169,8 @@ var IM = {
 			var count = parseInt(msgCount.text());
 			count++;
 			msgCount.text(count);
-			msgCount.css('display','');	
+			msgCount.css('display','');
+			art.dialog.opener.receiveChatMessage(data);
 		}
 	},
 	send : function(){
@@ -403,6 +404,9 @@ var IM = {
 				IM.setUserProfile(json);
 			}else if(json['type']=='status'){
 				IM.setUserStatus(json);
+			}else if(json['type']=='kickuser'){
+				blockAlert('您的账号在别处登录，您在此处将被迫下线..');
+				art.dialog.opener.logout();
 			}
 		};
 		IM.ws.onclose = function(e) {
@@ -422,13 +426,13 @@ var IM = {
 
 		IM.start();
 		
-		jQuery.hotkeys.add('ctrl+return',function(e){
-			IM.send();
-		});
+		// jQuery.hotkeys.add('ctrl+return',function(e){
+		// 	IM.increaseHeight();
+		// });
 
 
 		jQuery.hotkeys.add('return',{propagate: true},function(e){
-			IM.increaseHeight();
+			IM.send();
 		});
 
 		// art.dialog({

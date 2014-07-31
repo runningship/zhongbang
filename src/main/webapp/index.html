@@ -129,10 +129,9 @@ function readMsg(readCount){
   var count = parseInt(msgCount.text());
   var read = parseInt(readCount);
   count = count - readCount;
+  msgCount.text(count);
   if(count<=0){
     msgCount.css('display','none');
-  }else{
-    msgCount.text(count);
   }
 }
 

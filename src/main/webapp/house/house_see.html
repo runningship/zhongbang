@@ -68,6 +68,9 @@ $(document).on('click', '.j_btn_edit', function(event) {
   return false;
 });
 function getFbr(){
+  if(getStr['fbr']==undefined){
+    return "";
+  }
   return '由 <b>' + getStr['fbr'] + '</b> 发布';
 }
 $(function(){

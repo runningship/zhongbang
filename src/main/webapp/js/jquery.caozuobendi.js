@@ -3,7 +3,7 @@
  * @authors Your Name (you@example.org)
  * @date    2014-06-05 08:55:23
  * @version $Id$
-
+ */
 //屏蔽右键菜单
 document.oncontextmenu = function (event){
     if(window.event){
@@ -32,7 +32,7 @@ document.onselectstart = function (event){
         return false; 
     } 
 }
- */
+
 //屏蔽快捷键
 $(document).keydown(function(event){  
 //alert(event.keyCode)

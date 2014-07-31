@@ -69,8 +69,6 @@ function deletecontract(id){
     ok:function(){
       YW.ajax({
         url:'/zb/c/contract/delete?id='+id,
-        data:'',
-        timeout:5000,
         dataType:'json',
         success:function (data, textStatus) {
             doSearch();
@@ -181,7 +179,7 @@ $(function(){
       <td>${lxr_k}</td>
       <td>${ywUserName}</td>
       <td><a onclick="openView(${id});" href="javascript:void(0)">查看</a> <a auth="$${authParent}_edit" onclick="openEdit(${id});" href="javascript:void(0)">修改</a> 
-      <a auth="$${authParent}_edit" href="javascript:void(0)" onclick="deletecontract(${id})">删除</a></td>
+      <a auth="$${authParent}_del" href="javascript:void(0)" onclick="deletecontract(${id})">删除</a></td>
     </tr>
     </tbody>
   </table>

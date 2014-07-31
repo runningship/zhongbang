@@ -116,7 +116,7 @@ public class IMService {
 	public ModelAndView search(IMQuery query , Page<Map> page){
 		ModelAndView mv = new ModelAndView();
 		List<Object> params = new ArrayList<Object>();
-		StringBuilder hql = new StringBuilder("select u.id as userId, u.uname as uname,d.namea as deptName,u.tel as tel from User u,Department d  where u.deptId = d.id and  u.id<> "+ThreadSession.getUser().id);
+		StringBuilder hql = new StringBuilder("select u.id as userId, u.uname as uname,d.namea as deptName,u.tel as tel from User u,Department d  where u.deptId = d.id and u.flag=0 and  u.id<> "+ThreadSession.getUser().id);
 		if(StringUtils.isNotEmpty(query.search)){
 			hql.append(" and (tel like ? or uname like ?)");
 			params.add("%"+query.search+"%");

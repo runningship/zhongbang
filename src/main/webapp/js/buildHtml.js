@@ -76,7 +76,7 @@ function getEnumTextByCode(enumArr,code){
     }
     for(var i=0;i<enumArr.length;i++){
         if(enumArr[i]['code']==code){
-          return enumArr[i]['name'];
+            return enumArr[i]['name'];
         }
     }
 }
@@ -130,6 +130,8 @@ YW={
                     }
                     $(arr[0]).focus();
                     alert(desc+json.msg);
+                }else if(json.type=='LoginFromOtherException'){
+                    alert("您的账号在别处登录，您已被迫下线..",5);
                 }else{
                     alert(json['msg']);   
                 }

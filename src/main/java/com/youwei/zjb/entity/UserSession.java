@@ -21,4 +21,7 @@ public class UserSession {
 	public String ip;
 	
 	public Date addtime;
+	
+	public Date updatetime;
+	
 }

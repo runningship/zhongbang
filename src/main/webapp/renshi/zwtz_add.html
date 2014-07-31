@@ -36,7 +36,6 @@ $(function(){
   $.get('/zb/c/user/allRoles', function(data) {
     queryOpts=JSON.parse(data);
     buildHtmlWithJsonArray("id_roles",queryOpts['roles'],true);
-    $('#id_roles').prepend('<option>请选择</option>');
     fun_get_comp('to');
     fun_get_comp('fy_to');
     fun_get_comp('ky_to');

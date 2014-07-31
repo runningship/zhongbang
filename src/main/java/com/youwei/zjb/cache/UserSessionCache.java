@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bc.sdak.CommonDaoService;
+import org.bc.sdak.GException;
 import org.bc.sdak.utils.LogUtil;
 
+import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.SimpDaoTool;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.entity.UserSession;
@@ -36,7 +38,7 @@ public class UserSessionCache {
 		if(user!=null){
 			map.put(newSessionId, user);
 		}
-		dao.execute("update from UserSession set sessionId=? where sessionId=?", newSessionId,oldSessionId);
+		dao.execute("update from UserSession set sessionId=? , updatetime=? where sessionId=?", newSessionId, new Date(),oldSessionId);
 	}
 	public static void putSession(String sessionId , Integer userId , String remoteIP){
 		putSession(sessionId,userId,remoteIP ,false);

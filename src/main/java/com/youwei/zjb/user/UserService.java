@@ -31,6 +31,7 @@ import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.Role;
 import com.youwei.zjb.entity.RoleAuthority;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.im.IMServer;
 import com.youwei.zjb.oa.entity.NoticeReceiver;
 import com.youwei.zjb.sys.OperatorService;
 import com.youwei.zjb.sys.OperatorType;
@@ -203,6 +204,9 @@ public class UserService {
 		if(dept==null){
 			throw new GException(PlatformExceptionType.BusinessException, "没有指定用户所属公司");
 		}
+		if(StringUtils.isEmpty(user.sfz)){
+			throw new GException(PlatformExceptionType.ParameterMissingError,"sfz","");
+		}
 		User po = dao.getUniqueByKeyValue(User.class, "sfz" , user.sfz);
 		if(po!=null){
 			throw new GException(PlatformExceptionType.BusinessException,  "身份证号已经存在");
@@ -360,6 +364,7 @@ public class UserService {
 		mv.data.put("result", "0");
 		mv.data.put("msg", "登录成功");
 		ThreadSession.setUser(user);
+//		IMServer.kickUser(user.id);
 		UserSessionCache.putSession(ThreadSession.getHttpServletRequest().getSession().getId(), user.id, ThreadSession.getIp());
 		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 登录成功";
 		operService.add(OperatorType.登录记录, operConts);
