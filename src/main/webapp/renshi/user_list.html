@@ -56,7 +56,7 @@ function openView(id){
 $(function(){
   $.get('/zb/c/user/allRoles', function(data) {
     queryOpts=JSON.parse(data);
-    buildHtmlWithJsonArray("id_roles",queryOpts['roles'],true);
+    buildHtmlWithJsonArray("id_roles",queryOpts['roles'],true,1);
     $('#id_roles').prepend($('<option value="">所有</option>'));
     doSearch();
   });
@@ -130,6 +130,7 @@ $(function(){
       <div class="input-group  ">
         <span class="input-group-addon">职务</span>
         <select class="form-control" name="roleId" id="id_roles" style="width:150px;">
+          <option value="">所有</option>
             <option value="${id}">${title}</option>
         </select>
       </div>

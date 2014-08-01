@@ -61,6 +61,10 @@ function openView(contractId){
   });
 }
 
+function qingkong(){
+  window.location.reload();
+}
+
 function deletecontract(id){
   art.dialog({
     title:'提示',
@@ -91,7 +95,7 @@ $(function(){
   getList();
   $.get('/zb/c/contract/proClassList?claid='+claid, function(data) {
     queryOpts=JSON.parse(data);
-    buildHtmlWithJsonArray("id_proClassList",queryOpts['proClassList'],true);
+    buildHtmlWithJsonArray("id_proClassList",queryOpts['proClassList'],true,1);
     $('#id_proClassList').prepend($('<option value="">所有</option>'));
   });
   Page.Init();
@@ -147,12 +151,13 @@ $(function(){
       <div class="input-group">
         <span class="input-group-addon">待办理事项</span>
         <select class="form-control" name="proClass" id="id_proClassList" style="width:150px;">
-            <option value="${id}">${title}</option>
+          <option value="">所有</option>
+          <option value="${id}">${title}</option>
         </select>
       </div>
       <div class="btn-group">
         <button onclick="doSearch();return false;" class="btn btn-primary btn_submit">搜索</button>
-        <button class="btn">清空</button>
+        <button type="button" class="btn"  onclick="qingkong();">清空</button>
       </div>
     </div>
   </form>

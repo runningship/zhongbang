@@ -75,7 +75,7 @@ public class ViewServlet extends HttpServlet{
 		String html = FileUtils.readFileToString(new File(filePath),"utf-8");
 		html = html.replace("$${userId}", user.id.toString());
 		html = html.replace("$${myName}", user.uname);
-		html = html.replace("$${myTel}", user.tel);
+		html = html.replace("$${myTel}", user.tel==null? "": user.tel);
 		Document doc = Jsoup.parse(html);
 		
 		clazz = "com.youwei.zjb.view"+clazz;
