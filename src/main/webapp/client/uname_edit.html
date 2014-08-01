@@ -14,7 +14,6 @@
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
-<script type="text/javascript" src="/zb/js/pagination.js"></script>
 <script type="text/javascript">
 var clientId;
 function save(){
@@ -27,9 +26,6 @@ function save(){
       alert('保存成功.');
       art.dialog.close()
       art.dialog.opener.doSearch();
-    },
-    error:function(data){
-      alert('保存失败,'+data.responseText);
     }
   });
 }

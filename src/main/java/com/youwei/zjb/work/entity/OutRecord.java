@@ -26,6 +26,8 @@ public class OutRecord {
 	
 	public Date outTime;
 	
+	public Date addtime;
+	
 	@Column(name="onTime")
 	public Date backTime;
 	

@@ -28,6 +28,7 @@ function save(){
     success: function(data){
       art.dialog.close();
       alert('提交成功');
+      art.dialog.opener.location.reload();
     }
   });
 }

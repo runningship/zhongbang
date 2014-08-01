@@ -63,10 +63,6 @@ function deleteGJ(id){
         dataType:'json',
         success:function (data, textStatus) {
             doSearch();
-        },
-        complete: function(XMLHttpRequest, textStatus){},
-        error:function (XMLHttpRequest, textStatus, errorThrown) {
-          console.error(XMLHttpRequest.responseText);
         }
       });
     },

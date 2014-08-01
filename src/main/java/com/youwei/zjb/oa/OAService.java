@@ -109,7 +109,7 @@ public class OAService {
 	public ModelAndView addNotice(Notice notice , String receivers){
 		ModelAndView mv = new ModelAndView();
 		if(StringUtils.isEmpty(receivers)){
-			throw new GException(PlatformExceptionType.BusinessException, "接受者不能为空");
+			throw new GException(PlatformExceptionType.BusinessException, "请先选择接收人");
 		}
 		Notice po = dao.getUniqueByKeyValue(Notice.class, "title", notice.title);
 		if(po!=null){
@@ -137,7 +137,7 @@ public class OAService {
 	@WebMethod
 	public ModelAndView listFenLei(){
 		ModelAndView mv = new ModelAndView();
-		List<NoticeClass> list = dao.listByParams(NoticeClass.class, "from NoticeClass");
+		List<NoticeClass> list = dao.listByParams(NoticeClass.class, "from NoticeClass order by id desc");
 		mv.data.put("list", JSONHelper.toJSONArray(list));
 		return mv;
 	}
@@ -153,6 +153,8 @@ public class OAService {
 			hql.append("  and n.claid=? ");
 			params.add(query.claid);
 		}
+		page.orderBy = "n.addtime";
+		page.order = Page.DESC;
 		page = dao.findPage(page , hql.toString() , true, params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;
@@ -176,6 +178,10 @@ public class OAService {
 	public ModelAndView deleteFenLei(int id){
 		ModelAndView mv = new ModelAndView();
 		NoticeClass po = dao.get(NoticeClass.class, id);
+		long count = dao.countHqlResult("from Notice where claid=?", id);
+		if(count>0){
+			throw new GException(PlatformExceptionType.BusinessException,"该分类下有公告信息，请先删除分类下的公告信息。");
+		}
 		if(po!=null){
 			dao.delete(po);
 		}

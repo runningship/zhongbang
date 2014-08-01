@@ -1,6 +1,7 @@
 package com.youwei.zjb.work;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,7 @@ public class OutService {
 	public ModelAndView add(OutRecord out){
 		ModelAndView mv = new ModelAndView();
 		out.userId = ThreadSession.getUser().id;
+		out.addtime = new Date();
 		if(out.outTime==null || out.backTime==null){
 			throw new GException(PlatformExceptionType.BusinessException, "您填写的数据不完整");
 		}
@@ -145,7 +147,8 @@ public class OutService {
 //		User user = ThreadSession.getUser();
 //		hql.append(" and uid = ?");
 //		params.add(user.id);
-		
+		page.orderBy = "o.addtime";
+		page.order = Page.DESC;
 		page = dao.findPage(page, hql.toString(), true ,params.toArray());
 		DataHelper.fillDefaultValue(page.getResult(), "reply", PiYue.待批阅.getCode());
 		mv.data.put("page", JSONHelper.toJSON(page));

@@ -28,12 +28,12 @@ public class OfficeSupply {
 	@Column(name="names",nullable=false)
 	public String title;
 	
-	@Column(name="num")
+	@Column(name="num" , nullable=false)
 	public Integer count;
 	
 	public String beizhu;
 	
-	@Column
+	@Column(nullable=false)
 	public Float djia;
 	
 	public Float zjia;

@@ -34,6 +34,9 @@ public class AssetService {
 		User user = ThreadSession.getUser();
 		asset.deptId = user.deptId;
 		asset.userId = user.id;
+		if(asset.zjia==null){
+			asset.zjia = asset.djia*asset.count;
+		}
 		dao.saveOrUpdate(asset);
 		return mv;
 	}
@@ -60,6 +63,7 @@ public class AssetService {
 			hql.append(" and d.path like ?");
 			params.add(xpath+"%");
 		}
+		hql.append(" order by a.addtime desc");
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;

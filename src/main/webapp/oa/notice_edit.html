@@ -31,9 +31,6 @@ function save(){
     data:text,
     success: function(data){
       art.dialog.tips('保存成功.');
-    },
-    error:function(data){
-      art.dialog.alert(data.responseText);
     }
   });
   return false;
@@ -162,7 +159,7 @@ $(function(){
     </div>
     <div class="input-group input-group-max" style="width:752px;margin-top:5px;">
       <span class="input-group-addon"> 接收人</span>
-      <input readonly="true" onclick="openUserTree();" type="text" class="form-control" id="names">
+      <input readonly="true" type="text" class="form-control" id="names">
     </div>
   </form>
     
@@ -170,10 +167,10 @@ $(function(){
     <span id="editor" type="text/plain" style="width:1024px;height:200px;"></span>
   </div>
   <div>
-  <button onclick="save();return false;" class="btn btn-primary">提交</button>
+  <button onclick="save();return false;" class="btn btn-primary" style="margin-left:10px;margin-top:5px;">提交</button>
   </div>
 <div>
-    <input id="file_upload" name="file_upload" style="display:none">
+    <input id="file_upload" name="file_upload" style="display:none;">
 </div>
 <div id="attachList">
   <span style="display:none">

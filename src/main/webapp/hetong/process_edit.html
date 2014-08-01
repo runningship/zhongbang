@@ -25,6 +25,7 @@ function save(){
     success: function(data){
       art.dialog.close();
       alert('修改成功');
+      art.dialog.opener.location.reload();
     }
   });
 }

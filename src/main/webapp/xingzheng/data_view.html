@@ -42,9 +42,6 @@ function loadData(){
       $('#title').val(json['adminTable']['title']);
       processList = json['processList'];
       buildHtmlWithJsonArray("id_list",processList,data['attachs']);
-    },
-    error:function(data){
-      alert('加载数据失败,'+data.responseText);
     }
   });
 }
@@ -52,7 +49,7 @@ function loadData(){
 function buildBanliYiJian(rowIndex){
   var data = processList[rowIndex];
   if(myId==data['processorId'] && data['flag']==0){
-    return '<input type="text"/><button onclick="banli('+data['id']+',this)">确定</button>';
+    return '<input id="process_conts" type="text"/><button onclick="banli('+data['id']+',this)">确定</button>';
   }else{
     var txt = data['conts'];
     if(txt==""){
@@ -65,14 +62,11 @@ function buildBanliYiJian(rowIndex){
 function banli(pid , btn){
   YW.ajax({
     type: 'get',
-    url: '/zb/c/admin/updateProcess?pid='+pid+'&conts='+$(btn).next().val(),
+    url: '/zb/c/admin/updateProcess?pid='+pid+'&conts='+$('#process_conts').val(),
     data:'',
     success: function(data){
       alert('保存成功.');
       window.location.reload();
-    },
-    error:function(data){
-      alert('保存失败,'+data.responseText);
     }
   });
 }

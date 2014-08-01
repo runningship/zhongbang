@@ -23,7 +23,7 @@
 var recordId;
 var ue;
 function save(){
-  $('#conta').val(ue.getAllHtml());
+  $('#conta').val(ue.getContent());
   var text = $('form[name=textForm]').serialize();
   YW.ajax({
     type: 'POST',

@@ -49,13 +49,15 @@ function getHuseList(){
   });
 }
 var getStr;
+var options;
 function getEnumText(category,code){
-  var arr = getStr[category];
+  var arr = options[category];
   for(var i=0;i<arr.length;i++){
     if(arr[i]['code']==code){
       return arr[i]['name'];
     }
   }
+  return "";
 }
 
 $(function(){
@@ -64,6 +66,9 @@ if (clientId=="") {
   alert('未选择客源!');
   return
 };
+$.get('/zb/c/house/getQueryOptions', function(data) {
+    options=JSON.parse(data);
+  });
 getHuseList();
 });
 
@@ -87,11 +92,11 @@ getHuseList();
       <th>楼层</th>
       <th>面积</th>
       <th>单价</th>
-      <th class="font_no_br">总价</th>
+      <th class="font_no_br">总价(万)</th>
       <th class="font_no_br">装潢</th>
       <th>年代</th>
       <th>发布时间</th>
-      <th>联系人</th>
+      <th>发布人</th>
       <th>性质</th>
       <th>状态</th>
     </tr>
@@ -110,12 +115,12 @@ getHuseList();
       <td>${lceng}/${zceng}</td>
       <td>${mianji}</td>
       <td>${djia}</td>
-      <td>${zjia}</td>
+      <td>${sjia}</td>
       <td class='runscript'>getEnumText('zhuangxiu',${zhuangxiu})</td>
       <td>${dateyear}</td>
       <td>${dateadd}</td>
       <td>${forlxr}</td>
-      <td class='runscript'>getEnumText('xingzhi',${xingzhi})</td>
+      <td class='runscript' >getEnumText('xingzhi',${xingzhi})</td>
       <td class='runscript'>getEnumText('zhuangtai',${ztai})</td>
       </tr>
     </tbody>

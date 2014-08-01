@@ -125,8 +125,19 @@ public class ClientService {
 		ModelAndView mv = new ModelAndView();
 		Client client = dao.get(Client.class, clientId);
 		List<Object> params = new ArrayList<Object>();
-		StringBuilder hql = new StringBuilder("from House where area like ? and (isdel=0 or isdel is null) ");
-		params.add("%"+client.area +"%");
+		StringBuilder hql = new StringBuilder("from House where  isdel=0 ");
+		if(StringUtils.isNotEmpty(client.area)){
+			String[] areas = client.area.split(",");
+			hql.append(" and (");
+			for(int i=0;i<areas.length;i++){
+				hql.append("area like ? ");
+				if(i<areas.length-1){
+					hql.append(" or ");
+				}
+				params.add("%"+areas[i]+"%");
+			}
+			hql.append(")");
+		}
 		if(client.mianjiFrom!=null){
 			hql.append(" and mianji>=?");
 			params.add(client.mianjiFrom);
@@ -146,12 +157,13 @@ public class ClientService {
 		HouseQuery query = new HouseQuery();
 		query.jiaoyis = new ArrayList<String>();
 		if(chuzu==0){
+			query.jiaoyis.add(JiaoYi.仅售.toString());
+			query.jiaoyis.add(JiaoYi.出售.toString());
+			query.jiaoyis.add(JiaoYi.租售.toString());
+		}else{
 			query.jiaoyis.add(JiaoYi.仅租.toString());
 			query.jiaoyis.add(JiaoYi.出租.toString());
 			query.jiaoyis.add(JiaoYi.租售.toString());
-		}else{
-			query.jiaoyis.add(JiaoYi.仅售.toString());
-			query.jiaoyis.add(JiaoYi.出售.toString());
 		}
 		if(query.jiaoyis!=null){
 			hql.append(" and ( ");
@@ -214,7 +226,7 @@ public class ClientService {
 			if(quyus.length>0){
 				hql.append(" and (1=0 ");
 				for(String quyu : query.quyus.split(",")){
-					hql.append(" or c.quyu like ? ");
+					hql.append(" or c.quyuas like ? ");
 					params.add("%"+quyu+"%");
 				}
 				hql.append(")");
@@ -238,7 +250,8 @@ public class ClientService {
 //		if(StringUtils.isNotEmpty(query.order)){
 //			hql.append(query.order);
 //		}
-		
+		page.orderBy="addtime";
+		page.order = Page.DESC;
 		page = dao.findPage(page, hql.toString(), true ,params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;

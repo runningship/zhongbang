@@ -78,7 +78,8 @@ public class JournalService {
 //		User user = ThreadSession.getUser();
 //		hql.append(" and uid = ?");
 //		params.add(user.id);
-		
+		page.orderBy = "j.addtime";
+		page.order = Page.DESC;
 		page = dao.findPage(page, hql.toString(), true ,params.toArray());
 		DataHelper.escapeHtmlField(page.getResult(), "conta");
 		DataHelper.fillDefaultValue(page.getResult(), "reply", PiYue.待批阅.getCode());

@@ -48,10 +48,6 @@ function save(){
       art.dialog.close();
       art.dialog.opener.doSearch();
       alert('保存成功');
-    },
-    error:function(error){
-      var json = JSON.parse(error.responseText);
-      alert(json['msg']);
     }
   });
   return false;

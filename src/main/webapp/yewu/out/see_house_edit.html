@@ -31,10 +31,6 @@ function save(){
     success: function(data){
       alert('保存成功');
       initFileUpload();
-    },
-    error:function(error){
-      var json = JSON.parse(error.responseText);
-      alert(json['msg']);
     }
   });
   return false;

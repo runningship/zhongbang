@@ -10,7 +10,6 @@
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/zb/js/sysinfo.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
@@ -32,8 +31,14 @@ function getHuseList(a){
 //  alert(getParam('chuzu'))
   if(getParamS=="chushou"){
     url='/zb/c/house/listSell';
+    $('td.cz').remove();
+    $('th.cz').remove();
+    $('div.cz').remove();
   }else if(getParamS=="chuzu"){
     url='/zb/c/house/listRent';
+    $('td.cs').remove();
+    $('th.cs').remove();
+    $('div.cs').remove();
   }else if(getParamS=="del"){
     url='/zb/c/house/listRecycle';
   }else if(getParamS=="my"){
@@ -116,6 +121,9 @@ function doSearch(){
   getHuseList(formSerialize($('form[name=form1]')));
 }
 
+function qingkong(){
+  window.location.reload();
+}
 function setDateSec(select){
   if (select.value=="") {
     $('#idTimes').val("");
@@ -137,7 +145,6 @@ function setDateSec(select){
 $(function(){
     onSubmit_Form();
     setMainHeight();
-    getHuseList('');
     $.get('/zb/c/house/getQueryOptions', function(data) {
     getStr=JSON.parse(data);
     //  alert(getStr['datetype'])
@@ -160,15 +167,16 @@ $(function(){
       }
       $(obj).prepend('<option value="">所有</option>');
       $(obj).val("");
-    })
-  });
-    $('button').on('click', '.btn', function(event) {
-      var Thi=$(this),
-      ThiType=Thi.data('type');
-      if(ThiType=='qingkong'){
-        window.location.href='house_list.html?nav='+getParamS
-      }
     });
+    getHuseList('');
+  });
+    // $('button').on('click', '.btn', function(event) {
+    //   var Thi=$(this),
+    //   ThiType=Thi.data('type');
+    //   if(ThiType=='qingkong'){
+    //     window.location.href='house_list.html?nav='+getParamS
+    //   }
+    // });
   $('#id_House_list').on('click', 'a', function(event) {
     var Thi=$(this),
     rel=Thi.data('rel'),
@@ -361,10 +369,15 @@ $(function(){
         <input type="text" class="form-control" name="dateStart" id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})">
         <input type="text" class="form-control" name="dateEnd" id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})">
       </div>
-      <div class="input-group">
+      <div class="input-group cs">
         <span class="input-group-addon">售价</span>
-        <input type="text" class="form-control" name="sjiaStart">
-        <input type="text" class="form-control" name="sjiaEnd">
+        <input type="text" class="form-control" name="sjiaStart" placeholder="单位(万元)">
+        <input type="text" class="form-control" name="sjiaEnd" placeholder="单位(万元)">
+      </div>
+      <div class="input-group cz">
+        <span class="input-group-addon">租金</span>
+        <input type="text" class="form-control" name="zjiaStart" placeholder="元/月">
+        <input type="text" class="form-control" name="zjiaEnd" placeholder="元/月">
       </div>
       <div class="input-group">
         <span class="input-group-addon">面积</span>
@@ -376,11 +389,6 @@ $(function(){
         <input type="text" class="form-control" name="lcengStart">
         <input type="text" class="form-control" name="lcengEnd">
       </div>
-      <div class="btn-group">
-        <button type="submit" class="btn btn-primary btn_subnmit">搜索提交</button>
-        <button type="button" class="btn" data-type="qingkong" onclick="window.location.href='house_list.html?nav='+getParamS">清空</button>
-      </div>
-      <br/><br/><br/>
 
       <div class="input-group input-group-select">
         <span class="input-group-addon">发布人</span>
@@ -388,6 +396,11 @@ $(function(){
         <select class="form-control get_quyu" name="form_did"></select>
         <select class="form-control get_user" name="form_uid"></select>
       </div>
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary btn_subnmit">搜索提交</button>
+        <button type="button" class="btn" data-type="qingkong" onclick="qingkong();">清空</button>
+      </div>
+      <br/><br/><br/>
     </div>
 
 
@@ -404,8 +417,9 @@ $(function(){
       <th>室厅卫阳</th>
       <th>楼层</th>
       <th>面积</th>
-      <th>单价</th>
-      <th>总价</th>
+      <th class="cs">单价</th>
+      <th class="cs">总价(万)</th>
+      <th class="cz">租金</th>
       <th>装潢</th>
       <th>年代</th>
       <th>发布时间</th>
@@ -424,8 +438,9 @@ $(function(){
       <td>${hxf}-${hxt}-${hxw}-${hxy}</td>
       <td>${lceng}/${zceng}</td>
       <td>${mianji}</td>
-      <td>${djia}</td>
-      <td>${sjia}(万)</td>
+      <td class="cs">${djia}</td>
+      <td class="cs">${sjia}</td>
+      <td class="cz">${zjia}</td>
       <td class='runscript'>getEnumText('zhuangxiu',${zhuangxiu})</td>
       <td>${dateyear}</td>
       <td>${dateadd}</td>

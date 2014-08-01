@@ -53,9 +53,6 @@ function deleteAsset(id){
     success: function(data){
       alert('删除成功');
       getList(formSerialize($('form[name=form1]')));
-    },
-    error: function(data){
-      alert(data.responseText);
     }
   });
  },
@@ -94,15 +91,15 @@ $(function(){
       <span class="input-group-addon">标题</span>
       <input type="text" class="form-control" name="title">
     </div>
-    <div class="input-group input-group-select-n2">
+    <div class="input-group input-group-select-n2"style="width:400px">
       <span class="input-group-addon">分公司</span>
-      <select class="form-control get_comp" name="form_cid"></select>
-      <select class="form-control get_quyu" name="form_did"></select>
+      <select class="form-control get_comp" name="form_cid" style="width:150px"></select>
+      <select class="form-control get_quyu" name="form_did" style="width:150px"></select>
+    </div>
+    <div class="btn-group" >
+      <button onclick="doSearch();return false" class="btn btn-primary btn_subnmit">搜索</button>
     </div>
   </form>
- <div class="btn-group" >
-    <button onclick="doSearch();" class="btn btn-primary btn_subnmit">搜索</button>
-  </div>
 </div>
 <div class="mainer">
   <table class="table table-hover .table_bodyer" >

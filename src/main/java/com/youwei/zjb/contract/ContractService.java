@@ -46,6 +46,10 @@ public class ContractService {
 		mv.data.put("yongtu", HouseType.toJsonArray());
 		mv.data.put("daikuan_lx", DaiKuanType.toJsonArray());
 		mv.data.put("qzy", JSONHelper.toJSONArray(dao.listAsMap("select q.userId as userId , u.uname as name from Qzy q, User u where q.userId=u.id")));
+		User user = ThreadSession.getUser();
+		mv.data.put("myId", user.id);
+		mv.data.put("myDeptId", user.Department().id);
+		mv.data.put("myQuyuId", user.Department().Parent().id);
 		return mv;
 	}
 	
@@ -82,6 +86,33 @@ public class ContractService {
 	}
 	
 	@WebMethod
+	public ModelAndView rebuildProcess(int contractId){
+		ModelAndView mv = new ModelAndView();
+		Contract contract = dao.get(Contract.class, contractId);
+		if(contract==null){
+			return mv;
+		}
+		long count = dao.countHqlResult("from ContractProcess where contractId=?", contractId);
+		if(count>0){
+			return mv;
+		}
+		//添加办理步骤
+		List<ContractProcessClass> cpcList = dao.listByParams(ContractProcessClass.class, "from ContractProcessClass where claid=?", contract.claid);
+		for(ContractProcessClass cpc : cpcList){
+			ContractProcess process = new ContractProcess();
+			process.bianhao = contract.bianhao;
+			process.buzhouId = cpc.id;
+			process.contractId = contract.id;
+			process.flag = 0;
+			process.ordera = cpc.ordera;
+			process.qian = cpc.isqian;
+			process.title = cpc.title;
+			dao.saveOrUpdate(process);
+		}
+		return mv;
+	}
+	
+	@WebMethod
 	public ModelAndView update(Contract contract){
 		ModelAndView mv = new ModelAndView();
 		Contract po = dao.get(Contract.class, contract.id);
@@ -114,7 +145,10 @@ public class ContractService {
 //		contract.proid=0;
 		dao.saveOrUpdate(contract);
 		//添加办理步骤
-		List<ContractProcessClass> cpcList = dao.listByParams(ContractProcessClass.class, "from ContractProcessClass where claid=?", contract.claid);
+		List<ContractProcessClass> cpcList = dao.listByParams(ContractProcessClass.class, "from ContractProcessClass where claid=? order by ordera", contract.claid);
+		if(cpcList.size()>0){
+			contract.proid = cpcList.get(0).id;
+		}
 		for(ContractProcessClass cpc : cpcList){
 			ContractProcess process = new ContractProcess();
 			process.bianhao = contract.bianhao;
@@ -124,6 +158,7 @@ public class ContractService {
 			process.ordera = cpc.ordera;
 			process.qian = cpc.isqian;
 			process.title = cpc.title;
+			dao.saveOrUpdate(process);
 		}
 		return mv;
 	}
@@ -173,6 +208,8 @@ public class ContractService {
 			hql.append(" and u.orgpath like ? ");
 			params.add(query.xpath+"%");
 		}
+		page.orderBy = "c.addtime";
+		page.order = Page.DESC;
 		page.mergeResult = true;
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page , DataHelper.dateSdf.toPattern()));

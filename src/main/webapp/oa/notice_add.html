@@ -34,9 +34,6 @@ function save(){
       recordId = JSON.parse(data)['recordId'];
       initFileUpload();
       art.dialog.opener.doSearch();
-    },
-    error:function(data){
-      art.dialog.alert(data.responseText);
     }
   });
   return false;
@@ -155,10 +152,10 @@ $(function(){
     <span id="editor" type="text/plain" style="width:1024px;height:200px;"></span>
   </div>
   <div>
-  <button onclick="save();return false;">提交</button>
+  <button onclick="save();return false;" style="margin-left:10px;margin-top:5px;" class="btn btn-primary">提交</button>
   </div>
 <div>
-    <input id="file_upload" name="file_upload" style="display:none">
+    <input id="file_upload" name="file_upload" style="display:none;margin-top:5px;">
 </div>
 <div id="attachList">
   <span style="display:none">

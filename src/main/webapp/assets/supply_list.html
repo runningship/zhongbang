@@ -56,9 +56,6 @@ function deleteSupply(id){
     success: function(data){
       alert('删除成功');
       getList(formSerialize($('form[name=form1]')));
-    },
-    error: function(data){
-      alert(data.responseText);
     }
   });
   },

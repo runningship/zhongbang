@@ -27,7 +27,7 @@ public class ProcessClass {
 	/**
 	 * 处理人id
 	 */
-	@Column(name="uid")
+	@Column(name="uid" ,nullable=false)
 	public Integer userId;
 	
 	/**
@@ -41,6 +41,7 @@ public class ProcessClass {
 	/**
 	 * 序号
 	 */
+	@Column(nullable=false)
 	public Integer ordera;
 	
 }

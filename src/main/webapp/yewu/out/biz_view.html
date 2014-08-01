@@ -46,10 +46,6 @@ function save(){
     success: function(data){
       art.dialog.close();
       alert('保存成功');
-    },
-    error:function(error){
-      var json = JSON.parse(error.responseText);
-      alert(json['msg']);
     }
   });
   return false;

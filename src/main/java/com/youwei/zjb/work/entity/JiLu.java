@@ -30,6 +30,7 @@ public class JiLu {
 	
 	public String conts;
 	
+	@Column(nullable=false)
 	public String title;
 	
 	@Column(name="datetime")

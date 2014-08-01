@@ -36,9 +36,6 @@ function save(){
       recordId = JSON.parse(data)['recordId'];
       art.dialog.opener.doSearch();
       initFileUpload();
-    },
-    error:function(data){
-      alert('保存失败,'+data.responseText);
     }
   });
 }
@@ -106,9 +103,6 @@ function loadData(){
       $('#username').val(json['user']['uname']);
       $('#userId').val(json['user']['id']);
       $('#adminClass').val(json['adminClass']['title']);
-    },
-    error:function(data){
-      alert('加载数据失败,'+data.responseText);
     }
   });
 }

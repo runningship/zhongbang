@@ -14,6 +14,8 @@ public class HouseQuery extends AbstractQuery{
 	public String leibie;
 	public Float sjiaStart;
 	public Float sjiaEnd;
+	public Float zjiaStart;
+	public Float zjiaEnd;
 	public String xpath;
 	public DateType dateType;
 	public String dateStart;

@@ -23,6 +23,7 @@ public class Journal {
 	@Column(name="uid")
 	public Integer userId;
 	
+	@Column(nullable=false)
 	public String title;
 	
 	public String conta;

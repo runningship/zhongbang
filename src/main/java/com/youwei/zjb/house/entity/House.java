@@ -89,6 +89,7 @@ public class House {
 	 */
 	public Integer zhuangxiu;
 
+	@Column(nullable=false)
 	public Float mianji;
 
 	/**

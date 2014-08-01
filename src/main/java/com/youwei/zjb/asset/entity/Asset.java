@@ -23,10 +23,10 @@ public class Asset {
 	@Column(name="did")
 	public Integer deptId;
 	
-	@Column(name="cla")
+	@Column(name="cla" ,nullable=false)
 	public String name;
 	
-	@Column(name="num")
+	@Column(name="num" , nullable=false)
 	public Integer count;
 	
 	public String beizhu;
@@ -36,6 +36,7 @@ public class Asset {
 	@Column(name="editime")
 	public Date edittime;
 	
+	@Column(nullable=false)
 	public Float djia;
 	
 	public Float zjia; 

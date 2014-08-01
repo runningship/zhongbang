@@ -33,6 +33,8 @@ public class AdminService {
 	@WebMethod(name="class/list")
 	public ModelAndView listAdminClass(Page<Map> page){
 		ModelAndView mv = new ModelAndView();
+		page.orderBy="id";
+		page.order = Page.DESC;
 		page = dao.findPage(page,"select id as id ,title as title from AdminClass  where fid<>0 and flag=? ", true,  new Object[]{1});
 		mv.data.put("result", 0);
 		mv.data.put("page", JSONHelper.toJSON(page));
@@ -68,7 +70,7 @@ public class AdminService {
 		User user = dao.get(User.class, po.userId);
 		AdminClass cla = dao.get(AdminClass.class, po.classId);
 		mv.data.put("adminClass", cla.title);
-		mv.data.put("myId", po.userId);
+		mv.data.put("myId", ThreadSession.getUser().id);
 		mv.data.put("username", user.uname);
 		return mv;
 	}
@@ -77,7 +79,7 @@ public class AdminService {
 	public ModelAndView listTable(AdminQuery query,Page<Map> page){
 		ModelAndView mv = new ModelAndView();
 		StringBuilder hql = new StringBuilder("select t.title as title ,u.id as userId, u.uname as uname, c.title  as classTitle ,t.addtime as addtime "
-				+ ",t.id as id from AdminTable t, User u, AdminClass c where t.userId=u.id and t.classId=c.id and t.sh=1 ");
+				+ ",t.id as id from AdminTable t, User u, AdminClass c where t.userId=u.id and t.classId=c.id and t.sh=1 order by t.addtime desc");
 		List<Object> params = new ArrayList<Object>();
 		if(query.classId!=null){
 			hql.append(" and t.classId=? ");
@@ -200,9 +202,7 @@ public class AdminService {
 		ModelAndView mv = new ModelAndView();
 		User user = dao.get(User.class, pc.userId);
 		pc.username = user.uname;
-		if(pc.adminClassId==null || pc.userId==null || pc.ordera==null){
-				throw new GException(PlatformExceptionType.BusinessException, "参数不能为空");
-		}
+		
 		ProcessClass po = dao.getUniqueByParams(ProcessClass.class, new String[]{"adminClassId","userId"}, new Object[]{pc.adminClassId , pc.userId});
 		if(po!=null){
 			throw new GException(PlatformExceptionType.BusinessException, "存在相同的操作步骤人");

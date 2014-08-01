@@ -74,6 +74,8 @@ public class ViewServlet extends HttpServlet{
 		String filePath = req.getServletContext().getRealPath("/")+path;
 		String html = FileUtils.readFileToString(new File(filePath),"utf-8");
 		html = html.replace("$${userId}", user.id.toString());
+		html = html.replace("$${myName}", user.uname);
+		html = html.replace("$${myTel}", user.tel);
 		Document doc = Jsoup.parse(html);
 		
 		clazz = "com.youwei.zjb.view"+clazz;

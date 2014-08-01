@@ -59,6 +59,8 @@ public class JiLuService {
 		}
 		hql.append(HqlHelper.buildDateSegment("j.addtime", query.addtimeStart, DateSeparator.After, params));
 		hql.append(HqlHelper.buildDateSegment("j.addtime", query.addtimeEnd, DateSeparator.Before, params));
+		page.orderBy = "j.addtime";
+		page.order = Page.DESC;
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;

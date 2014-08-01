@@ -66,9 +66,6 @@ function deleteData(id){
         success: function(data){
           art.dialog.tips('删除成功');
           getList();
-        },
-        error:function(data){
-          alert(data.responseText);
         }
       });
     }

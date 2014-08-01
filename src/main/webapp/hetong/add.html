@@ -44,6 +44,11 @@ $(function(){
     buildHtmlWithJsonArray("id_yongtu",QueryOptions['yongtu'],true); //房屋类型
     buildHtmlWithJsonArray("id_daikuan_lx",QueryOptions['daikuan_lx'],true); //贷款类型
     buildHtmlWithJsonArray("id_qzy",QueryOptions['qzy'],true); //签证人
+    $('.get_comp').val(QueryOptions['myQuyuId']);
+    $('.get_comp').change();
+    $('.get_quyu').val(QueryOptions['myDeptId']);
+    $('.get_quyu').change();
+    $('.get_user').val(QueryOptions['myId']);
   });
 });
 </script>

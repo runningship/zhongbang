@@ -89,6 +89,8 @@ public class PcService {
 			hql.append(" and d.path like ?");
 			params.add(query.xpath+"%");
 		}
+		page.orderBy = "pc.addtime";
+		page.order = Page.DESC;
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;

@@ -47,6 +47,8 @@ public class OperatorService {
 			hql.append(" and u.orgpath like ? ");
 			params.add("%"+query.xpath+"%");
 		}
+		page.orderBy="r.addtime";
+		page.order = Page.DESC;
 		page = dao.findPage(page, hql.toString(), true , params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;

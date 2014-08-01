@@ -55,6 +55,9 @@ public class HouseService {
 			house.dateadd = new Date();
 			house.userId = user.id;
 			house.deptId = user.deptId;
+			if(house.sjia ==null){
+				house.sjia=0f;
+			}
 			if(house.mianji!=null && house.mianji!=0){
 				int jiage = (int) (house.sjia*10000/house.mianji);
 				house.djia = (float) jiage;
@@ -88,7 +91,7 @@ public class HouseService {
 		House po = service.get(House.class, house.id);
 		house.isdel = po.isdel;
 		house.dateadd = po.dateadd;
-		house.userId = po.id;
+		house.userId = po.userId;
 		house.deptId = po.deptId;
 		if(house.mianji!=null && house.mianji!=0){
 			int jiage = (int) (house.sjia*10000/house.mianji);
@@ -158,6 +161,7 @@ public class HouseService {
 			House po = service.get(House.class, houseId);
 			if(po!=null){
 				service.delete(po);
+				service.execute("delete from GenJin where hid=?", po.id);
 			}
 		}
 		mv.data.put("msg", "删除成功");
@@ -318,7 +322,14 @@ public class HouseService {
 			hql.append(" and h.sjia<= ? ");
 			params.add(query.sjiaEnd);
 		}
-		
+		if(query.zjiaStart!=null){
+			hql.append(" and h.zjia>= ? ");
+			params.add(query.zjiaStart);
+		}
+		if(query.zjiaEnd!=null){
+			hql.append(" and h.zjia<= ? ");
+			params.add(query.zjiaEnd);
+		}
 		if(query.dateType==null){
 			query.dateType = DateType.首次录入日;
 		}
@@ -365,6 +376,8 @@ public class HouseService {
 			hql.append(" and h.isdel=?");
 			params.add(query.isdel);
 		}
+		page.orderBy = "h.dateadd";
+		page.order = Page.DESC;
 //		hql.append(" and ( isdel= 0 or isdel is null) ");
 		page = service.findPage(page, hql.toString(),params.toArray());
 		ModelAndView mv = new ModelAndView();

@@ -60,7 +60,7 @@ function selectHouse(clientId){
 }
 
 function selectUname(clientId){
-  art.dialog.open('uname_edit.html?clientId='+clientId,{
+  art.dialog.open('uname_edit.html?dataScope=all&clientId='+clientId,{
       padding:0,
       resize:true,
       lock:1,
@@ -306,7 +306,7 @@ $(function(){
       <th>姓名</th>
       <th>电话</th>
       <th>面积</th>
-      <th>价格</th>
+      <th>价格(万)</th>
       <th>楼层</th>
       <th>登记时间</th>
       <th>客户性质</th>

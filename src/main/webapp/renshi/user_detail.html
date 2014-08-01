@@ -29,9 +29,6 @@ function doSave(){
     data:data,
     success: function(data){
       alert('添加成功');
-    },
-    error:function(data){
-      alert(data.responseText);
     }
   });
   return false;
@@ -72,9 +69,6 @@ function passSP(spId){
     data:'',
     success: function(data){
       alert('审批成功');
-    },
-    error:function(data){
-      alert(data.responseText);
     }
   });
 }

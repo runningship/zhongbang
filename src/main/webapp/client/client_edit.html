@@ -106,6 +106,11 @@ function withJson(a,b,c){
 $(function(){
   chuzu=getParam('chuzu');
   $('#chuzu').val(chuzu);
+  if(chuzu==0){
+    $('.zf').remove();
+  }else{
+    $('.gf').remove();
+  }
   $.get('/zb/c/house/getQueryOptions', function(data) {
     queryOpts=JSON.parse(data);
     buildHtmlWithJsonArray("id_quyu",queryOpts['quyu']);       //区域
@@ -256,7 +261,8 @@ width: 100%;
         <th>面积</th>
         <td><input type="text" class="form-control inputW100" id="mianjiFrom" name="mianjiFrom" width="100" value="${mianjiFrom}"> - <input type="text" class="form-control inputW100" id="mianjiTo" name="mianjiTo" width="100" value="${mianjiTo}"> m<sup>2</sup></td>
         <th>价格</th>
-        <td><input type="text" class="form-control inputW100" id="jiageFrom" name="jiageFrom" width="100" value="${jiageFrom}"> - <input type="text" class="form-control inputW100" id="jiageTo" name="jiageTo" width="100" value="${jiageTo}"> 万</td>
+        <td class="gf"><input type="text" class="form-control inputW100" id="jiageFrom" name="jiageFrom" width="100" value="${jiageFrom}"> - <input type="text" class="form-control inputW100" id="jiageTo" name="jiageTo" width="100" value="${jiageTo}"> 万</td>
+        <td class="zf"><input type="text" class="form-control inputW100" id="jiageFrom" name="jiageFrom" width="100" value="${jiageFrom}"> - <input type="text" class="form-control inputW100" id="jiageTo" name="jiageTo" width="100" value="${jiageTo}">元/月</td>
       </tr>
       <tr>
         <th>客户来源</th>

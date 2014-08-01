@@ -143,9 +143,6 @@ function ignoreAction(rowIndex){
       var json = JSON.parse(data);
       actions = json['actions'];
       buildHtmlWithJsonArray("id_list",actions);
-    },
-    error:function(data){
-      art.dialog.tips(data.responseText);
     }
   });
 }
@@ -162,9 +159,6 @@ function doProcess(rowIndex){
       var json = JSON.parse(data);
       actions = json['actions'];
       buildHtmlWithJsonArray("id_list",actions);
-    },
-    error:function(data){
-      art.dialog.tips(data.responseText);
     }
   });
 }
