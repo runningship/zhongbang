@@ -405,8 +405,16 @@ var IM = {
 			}else if(json['type']=='status'){
 				IM.setUserStatus(json);
 			}else if(json['type']=='kickuser'){
-				blockAlert('您的账号在别处登录，您在此处将被迫下线..');
-				art.dialog.opener.logout();
+				art.dialog.opener.art.dialog({
+				    lock: true,
+				    content: '您的账号在别处登录，您在此处将被迫下线..',
+				    icon: 'error',
+				    ok: function () {
+				        art.dialog.opener.logout();
+				    },
+				    cancel: true
+				});
+				
 			}
 		};
 		IM.ws.onclose = function(e) {
