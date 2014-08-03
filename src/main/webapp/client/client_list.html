@@ -172,7 +172,6 @@ $(function(){
   }
   dataScope = getParam('dataScope');
   onSubmit_Form();
-  getList();
   $.get('/zb/c/house/getQueryOptions', function(data) {
     queryOpts=JSON.parse(data);
     buildHtmlWithJsonArray("id_quyu",queryOpts['quyu']);       //区域
@@ -189,7 +188,8 @@ $(function(){
       }
       $(obj).prepend('<option value="">所有</option>');
       $(obj).val("");
-    })
+    });
+    doSearch();
   });
  
 

@@ -34,6 +34,11 @@ function getList(search){
   });
 }
 
+function doSearch(){
+  getList(formSerialize($('form[name=form1]')));
+  return false;
+}
+
 function getAction(sh){
   if(sh==0){
     return "审核";
@@ -66,8 +71,11 @@ $(function(){
 <body class="hlist bodyer" style="overflow:auto">
 
 <div class="header">
-  
-
+  <form name="form1">
+  </form>
+  <div class="btn-group">
+    <button onclick="doSearch();return false;" style="display:none" class="btn btn-primary btn_subnmit">搜索</button>
+  </div>
 </div>
 <div class="mainer">
   <table class="table table-hover .table_bodyer" >

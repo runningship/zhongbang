@@ -150,6 +150,7 @@ public class UserAdjustService {
 			dao.saveOrUpdate(adjust);
 			user.roleId = adjust.newRoleId;
 			user.deptId = adjust.newDeptId;
+			dao.saveOrUpdate(user);
 			user.orgpath = newDept.path+user.id;
 			dao.saveOrUpdate(user);
 			if(adjust.fyTo!=null){

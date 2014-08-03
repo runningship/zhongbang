@@ -219,9 +219,10 @@ public class UserService {
 		user.sh = 0;
 		user.flag = 0;
 		user.lock = 0;
-		user.orgpath = dept.path+user.id;
 		user.pwd = SecurityHelper.Md5(DataHelper.User_Default_Password);
 		
+		dao.saveOrUpdate(user);
+		user.orgpath = dept.path+user.id;
 		dao.saveOrUpdate(user);
 //		 添加审批项
 		for(User spr : sprList){
@@ -366,7 +367,7 @@ public class UserService {
 		ThreadSession.setUser(user);
 //		IMServer.kickUser(user.id);
 		UserSessionCache.putSession(ThreadSession.getHttpServletRequest().getSession().getId(), user.id, ThreadSession.getIp());
-		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 登录成功";
+		String operConts = "["+po.Department().namea+"-"+po.uname+ "] 登录成功";
 		operService.add(OperatorType.登录记录, operConts);
 		return mv;
 	}

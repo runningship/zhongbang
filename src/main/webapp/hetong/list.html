@@ -92,11 +92,11 @@ $(function(){
   });
   claid = getParam('claid');
   authParent = getParam('authParent');
-  getList();
   $.get('/zb/c/contract/proClassList?claid='+claid, function(data) {
     queryOpts=JSON.parse(data);
     buildHtmlWithJsonArray("id_proClassList",queryOpts['proClassList'],true,1);
     $('#id_proClassList').prepend($('<option value="">所有</option>'));
+    doSearch();
   });
   Page.Init();
 });
