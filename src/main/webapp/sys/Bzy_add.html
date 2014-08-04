@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>添加签证员</title>
+<link rel="stylesheet" href="/zb/style/css.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/style/house.css">
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/zb/js/pagination.js"></script>
+<script type="text/javascript">
+var clientId;
+function save(){
+  var text = $('form[name=form1]').serialize();
+  YW.ajax({
+    type: 'POST',
+    url: '/zb/c/bzy/add',
+    data:text,
+    success: function(data){
+      art.dialog.close()
+      art.dialog.opener.doSearch();
+      alert('保存成功.');
+    }
+  });
+}
+
+</script>
+</head>
+<body style="overflow:hidden">
+
+  <form name="form1">
+  <div class="input-group input-group-mt3 input-group-select" style="margin-top:10px;float:none;">
+      <span class="input-group-addon">区  &nbsp;&nbsp;&nbsp;域</span>
+      <select class="form-control get_comp" name="form_cid"></select>
+    </div>
+    <div class="input-group input-group-mt3 input-group-select" style="margin-top:10px;float:none;">
+      <span class="input-group-addon">分公司</span>
+      <select class="form-control get_quyu" name="form_did"></select>
+    </div>
+    <div class="input-group input-group-mt3 input-group-select" style="margin-top:10px;float:none;">
+    <span class="input-group-addon">业务员</span>
+      <select class="form-control get_user" name="userId"></select>
+    </div>
+  </form>
+  <div class="btn-group" style="margin-top:10px;margin-left:10px;">
+    <button onclick="save();" class="btn btn-primary">提交</button>
+  </div>
+
+</body>
+</html>
