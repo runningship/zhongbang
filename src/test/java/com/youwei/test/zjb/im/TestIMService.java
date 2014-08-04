@@ -31,12 +31,6 @@ public class TestIMService {
 	}
 	
 	@Test
-	public void testCountUnReadMessage(){
-		ModelAndView mv = service.countUnReadMessage(316);
-		DebugHelper.printResult((List<?>) mv.data.get("unreads"));
-	}
-	
-	@Test
 	public void testAddMessage(){
 		Message dbMsg = new Message();
 		dbMsg.sendtime = new Date();

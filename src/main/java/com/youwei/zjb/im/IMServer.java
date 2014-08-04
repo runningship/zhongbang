@@ -105,8 +105,6 @@ public class IMServer extends WebSocketServer{
 			data.put("history", JSONHelper.toJSONArray(page.getResult()));
 			data.put("contactId", data.getInt("contactId") );
 			conn.send(data.toString());
-		}else if("read".equals(data.getString("type"))){
-			dao.execute("update Message set read=1 where senderId=? and receiverId=? and read=0", data.getInt("contactId"), data.getInt("myId"));
 		}else if("countUnRead".equals(data.getString("type"))){
 			
 		}

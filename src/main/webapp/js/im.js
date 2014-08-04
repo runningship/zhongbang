@@ -31,6 +31,12 @@ var IM = {
 	            if(callback!=null){
 	            	callback();
 	        	}
+	        	for(var i=0;i<data['unreads'].length;i++){
+	        		var obj = data['unreads'][i];
+	        		var msgCount = $($('#'+obj['senderId']).children(0)[1]);
+					msgCount.text(obj['total']);
+					msgCount.css('display','');
+	        	}
 	        }
 	    });
 	},
@@ -116,7 +122,7 @@ var IM = {
 		
 		$('#chatWindow').css('display','');
 		YW.ajax({
-	        url:'/zb/c/im/setRead?myId='+Im.myId+'&contactId='+contactId,
+	        url:'/zb/c/im/setRead?myId='+IM.myId+'&contactId='+contactId,
 	        type:'get',
 	        success:function (data, textStatus) {
 	        }

@@ -46,14 +46,14 @@ public class IMService {
 		}
 		DataHelper.fillDefaultValue(list, "avatar", 0);
 		mv.data.put("contacts",JSONHelper.toJSONArray(list));
+		List<Map> list2 = countUnReadMessage(userId);
+		mv.data.put("unreads", JSONHelper.toJSONArray(list2));
 		return mv;
 	}
-	public ModelAndView countUnReadMessage(int userId){
-		ModelAndView mv = new ModelAndView();
-		String hql = "select count(*) as total, senderId as contactId from Message where read=0 and receiverId=? group by senderId";
+	public List<Map> countUnReadMessage(int userId){
+		String hql = "select count(*) as total, senderId as senderId from Message where hasRead=0 and receiverId=? group by senderId";
 		List<Map> list = dao.listAsMap(hql, userId);
-		mv.data.put("unreads",JSONHelper.toJSONArray(list));
-		return mv;
+		return list;
 	}
 	
 	@WebMethod
@@ -153,7 +153,7 @@ public class IMService {
 	@WebMethod
 	public ModelAndView setRead(int myId, int contactId){
 		ModelAndView mv = new ModelAndView();
-		String hql = "update Message set read=1 where senderId=? and receiverId=? and read=0";
+		String hql = "update Message set hasRead=1 where senderId=? and receiverId=? and hasRead=0";
 		dao.execute(hql, contactId, myId);
 		mv.data.put("result", 0);
 		return mv;
