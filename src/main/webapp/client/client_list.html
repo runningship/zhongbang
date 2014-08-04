@@ -214,20 +214,28 @@ $(function(){
 
     }
     return false;
-  }).on('click', 'table tr', function(event) {
-    var Thi=$(this),
-    ThiId=Thi.find('input[name=ids]').val()
-    if(ThiId){
-      art.dialog.open('client_see.html?clientId='+ThiId,{
-        height:460,
-        width:765,
-        title:'查看详细'
-      });
-    }
   });
+  // .on('click', 'table tr', function(event) {
+  //   var Thi=$(this),
+  //   ThiId=Thi.find('input[name=ids]').val()
+  //   if(ThiId){
+  //     art.dialog.open('client_see.html?clientId='+ThiId,{
+  //       height:460,
+  //       width:765,
+  //       title:'查看详细'
+  //     });
+  //   }
+  // });
 
 });
 
+function openView(cid){
+   art.dialog.open('client_see.html?clientId='+cid,{
+      height:460,
+      width:765,
+      title:'查看详细'
+    });
+}
 </script>
 <style type="text/css">
   .table{ margin-bottom: 0px;}
@@ -301,7 +309,7 @@ $(function(){
 <div class="mainer" style="/*position:relative;width:100%*/">
   <table class="table table-hover .table_bodyer" >
     <thead>
-      <th style="width:40px;"><a href="javascript:void(0)" onclick="deleteSelected()">删除</a></th>
+      <th auth="$${authParent}_del" style="width:40px;"><a auth="$${authParent}_del" href="javascript:void(0)" onclick="deleteSelected()">删除</a></th>
       <th> 编号</th>
       <th>姓名</th>
       <th>电话</th>
@@ -317,7 +325,7 @@ $(function(){
     </thead>
     <tbody id="id_GJ_list">
     <tr style="display:none">
-      <td><input type="checkbox" name="ids" value="${id}"/></td>
+      <td auth="$${authParent}_del"><input type="checkbox" name="ids" value="${id}"/></td>
       <td>${id}</td>
       <td>${lxr}</td>
       <td>${tel}</td>
@@ -329,7 +337,8 @@ $(function(){
       <td>${uname}</td>
       <td><a href="javascript:void(0)" class="btn btn-xs" data-flag="fy">房源</a></td>
       <td ><a serverId="assign" show="showAssign($${userId},${salesman},'${addtime}','${gjtime}',$${auth})" href="javascript:void(0)" class="btn btn-xs" data-flag="fp">分配</a></td>
-      <td><a auth="$${authParent}_edit" href="javascript:void(0)" class="btn btn-xs" data-flag="edit">修改</a>
+      <td><a href="javascript:void(0)" onclick="openView(${id});" class="btn btn-xs" data-flag="view">查看</a>
+          <a auth="$${authParent}_edit" href="javascript:void(0)" class="btn btn-xs" data-flag="edit">修改</a>
           <a auth="$${authParent}_del" href="javascript:void(0)"  class="btn btn-xs" data-flag="del">删除</a>
       </td>
       

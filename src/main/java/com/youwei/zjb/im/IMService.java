@@ -150,6 +150,7 @@ public class IMService {
 		return mv;
 	}
 	
+	@WebMethod
 	public ModelAndView setRead(int myId, int contactId){
 		ModelAndView mv = new ModelAndView();
 		String hql = "update Message set read=1 where senderId=? and receiverId=? and read=0";

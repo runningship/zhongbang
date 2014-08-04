@@ -79,7 +79,7 @@ public class AdminService {
 	public ModelAndView listTable(AdminQuery query,Page<Map> page){
 		ModelAndView mv = new ModelAndView();
 		StringBuilder hql = new StringBuilder("select t.title as title ,u.id as userId, u.uname as uname, c.title  as classTitle ,t.addtime as addtime "
-				+ ",t.id as id from AdminTable t, User u, AdminClass c where t.userId=u.id and t.classId=c.id and t.sh=1 order by t.addtime desc");
+				+ ",t.id as id from AdminTable t, User u, AdminClass c where t.userId=u.id and t.classId=c.id and t.sh=1");
 		List<Object> params = new ArrayList<Object>();
 		if(query.classId!=null){
 			hql.append(" and t.classId=? ");
@@ -91,6 +91,8 @@ public class AdminService {
 		}
 		hql.append(HqlHelper.buildDateSegment("t.addtime", query.addtimeStart, DateSeparator.After, params));
 		hql.append(HqlHelper.buildDateSegment("t.addtime", query.addtimeEnd, DateSeparator.Before, params));
+		page.orderBy = "t.addtime";
+		page.order = Page.DESC;
 		page= dao.findPage(page, hql.toString(), true , params.toArray());
 		mv.data.put("result", 0);
 		mv.data.put("page", JSONHelper.toJSON(page));

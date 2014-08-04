@@ -47,27 +47,31 @@ $(function(){
 </script>
 <style type="text/css">
   .table{ margin-bottom: 0px;}
+  th{width:100px; text-align: right}
 </style>
 </head>
-<body class="hlist bodyer" style="overflow:auto">
-<span >
-  <div>
-    <span>内容: </span><span id="conta" name="conta">${conta}</span>
-  </div>
-  <div>
-    <span>批语: </span><span id="contb" name="contb">${contb}</span>
-  </div>
-  <div>
-    <span>打分: </span><span id="integral" name="integral">${integral}</span>
-  </div>
-  <div>
-    <span>附件: </span>
-    <span id="content">
-      <div>
+<body style="overflow:auto">
+<span>
+  <table class="table">
+    <tr>
+      <th>内容:</th>
+      <td id="conta" name="conta">${conta}</td>
+    </tr>
+    <tr>
+      <th>批语:</th>
+      <td id="contb" name="contb">${contb}</td>
+    </tr>
+    <tr>
+      <th>打分:</th>
+      <td id="integral" name="integral">${integral}</td>
+    </tr>
+    <tr>
+      <th>附件:</th>
+      <td id="content">
         <a href="/zb/file/download?bizType=${bizType}&recordId=${recordId}&file=${id}" name="attachment">${filename}</a>
-      </div>
-    </span>
-  </div>
+      </td>
+    </tr>
+  </table>
 </span>
 </body>
 </html>

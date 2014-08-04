@@ -74,6 +74,7 @@ public class ContractService {
 	@WebMethod
 	public ModelAndView view(int contractId){
 		ModelAndView mv = initEdit(contractId);
+		mv.data.put("bzy", JSONHelper.toJSONArray(dao.listAsMap("select b.userId as userId , u.uname as name from Bzy b, User u where b.userId=u.id")));
 		List<ContractProcess> processList = dao.listByParams(ContractProcess.class,"from ContractProcess where contractId=? order by ordera ",contractId);
 		mv.data.put("actions", JSONHelper.toJSONArray(processList));
 		//佣金收费

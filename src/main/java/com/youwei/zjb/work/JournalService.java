@@ -26,6 +26,7 @@ import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
 import com.youwei.zjb.work.entity.Journal;
+import com.youwei.zjb.work.entity.OutRecord;
 
 @Module(name="/journal")
 public class JournalService {
@@ -102,6 +103,18 @@ public class JournalService {
 		dao.saveOrUpdate(po);
 		mv.data.put("result", 0);
 		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView piyue(int id, String contb ){
+		Journal po = dao.get(Journal.class, id);
+		if(po==null){
+			throw new GException(PlatformExceptionType.BusinessException, "该记录已不存在");
+		}
+		po.reply=1;
+		po.contb = contb;
+		dao.saveOrUpdate(po);
+		return new ModelAndView();
 	}
 	
 	@WebMethod

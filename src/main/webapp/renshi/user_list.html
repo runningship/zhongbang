@@ -51,7 +51,38 @@ function openView(id){
       width:500
   });
 }
+function openEdit(id){
+  art.dialog.open('user_edit.html?userId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:450,
+      width:500
+  });
+}
 
+function openPassword(userId){
+  art.dialog.open('password_reset.html?userId='+userId,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:250,
+      width:400,
+      title:'重置密码',
+      resize:false
+  });
+}
+
+function openAuth(userId){
+  art.dialog.open('menuTree.html?userId='+userId,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      title:'授权',
+      width:600
+  });
+}
 
 $(function(){
   $.get('/zb/c/user/allRoles', function(data) {
@@ -165,6 +196,9 @@ $(function(){
       <td>${address}</td>
       <td>${rqsj}</td>
       <td><a onclick="openView(${uid})" href="javascript:void(0)">查看</a> 
+          <a auth="rs_users_userEdit" onclick="openEdit(${uid})" href="javascript:void(0)">修改</a> 
+         <a auth="rs_users_userAuth" onclick="openAuth(${uid})" href="javascript:void(0)">权限</a> 
+         <a auth="rs_users_resetPwd" onclick="openPassword(${uid})" href="javascript:void(0)">重置密码</a>
       </td>
     </tr>
     </tbody>

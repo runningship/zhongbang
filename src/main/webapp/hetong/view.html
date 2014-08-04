@@ -98,14 +98,14 @@ function buildBlr(rowIndex){
   if(action.qian==2){
     return '<div><input style="width:200px;" type="text" class="form-control" id="blr_'+rowIndex+'" name="blr" ></div>';
   }
-  var qzr = editPageData['qzy'];
+  var bzr = editPageData['bzy'];
   var str = '<select name="blr" id="blr_'+rowIndex+'" style="width:200px;">'
-  for(var i=0;i<qzr.length;i++){
-    var name =  qzr[i]['name'];
+  for(var i=0;i<bzr.length;i++){
+    var name =  bzr[i]['name'];
     var option = '<option value="'+name+'">'+name+'</option>';
     str +=option;
   }
-  str+='</select';
+  str+='</select>';
   return str;
 }
 
@@ -417,7 +417,7 @@ table.table>thead>tr>th, table.table>tbody>tr>th, table.table>tfoot>tr>th, table
       <th>状态</th>
     </tr>
     <tbody id="id_list">
-    <tr style="height:40px;">
+    <tr style="height:40px;display:none">
       <td style="vertical-align:middle">${title}</td>
       <td style="vertical-align:middle" class="runscript">buildBlr(${rowIndex})</td>
       <td style="vertical-align:middle" class="runscript">buildBlrq(${rowIndex})</td>

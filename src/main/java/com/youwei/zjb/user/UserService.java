@@ -31,6 +31,7 @@ import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.Role;
 import com.youwei.zjb.entity.RoleAuthority;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.entity.UserAuthority;
 import com.youwei.zjb.im.IMServer;
 import com.youwei.zjb.oa.entity.NoticeReceiver;
 import com.youwei.zjb.sys.OperatorService;
@@ -60,9 +61,9 @@ public class UserService {
 		String code = "";
 		if(!"all".equals(dataScope)){
 			if(user!=null){
-				List<RoleAuthority> authorities = user.getRole().Authorities();
+				List<UserAuthority> authorities = user.Authorities();
 				code = user.orgpath;
-				for(RoleAuthority ra : authorities){
+				for(UserAuthority ra : authorities){
 					if((dataScope+"_data_dept").equals(ra.name)){
 						code = user.Department().path;
 					}
@@ -152,7 +153,7 @@ public class UserService {
 	public ModelAndView authorities(){
 		ModelAndView mv = new ModelAndView();
 		User user = ThreadSession.getUser();
-		mv.data.put("authorities", JSONHelper.toJSONArray(user.getRole().Authorities()));
+		mv.data.put("authorities", JSONHelper.toJSONArray(user.Authorities()));
 		return mv;
 	}
 	@WebMethod
@@ -187,6 +188,56 @@ public class UserService {
 			throw new GException(PlatformExceptionType.BusinessException, "原密码错误");
 		}
 		po.pwd = SecurityHelper.Md5(newPwd);
+		dao.saveOrUpdate(po);
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView resetPwd(Integer userId, String newPwd, String newPwdRepeat){
+		ModelAndView mv = new ModelAndView();
+		if(StringUtils.isEmpty(newPwd)){
+			throw new GException(PlatformExceptionType.BusinessException, "新密码不能为空");
+		}
+		if(newPwd.length()<6 || newPwd.length()>20){
+			throw new GException(PlatformExceptionType.BusinessException, "密码长度应为6-20位");
+		}
+		if(StringUtils.isEmpty(newPwdRepeat)){
+			throw new GException(PlatformExceptionType.BusinessException, "重复新密码不能为空");
+		}
+		if(!newPwd.equals(newPwdRepeat)){
+			throw new GException(PlatformExceptionType.BusinessException, "两次输入的新密码不一样");
+		}
+		User po = dao.get(User.class, userId);
+		po.pwd = SecurityHelper.Md5(newPwd);
+		dao.saveOrUpdate(po);
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView update(User user){
+		ModelAndView mv = new ModelAndView();
+		if(StringUtils.isEmpty(user.uname)){
+			throw new GException(PlatformExceptionType.BusinessException,"用户名不能为空");
+		}
+		
+		if(StringUtils.isEmpty(user.sfz)){
+			throw new GException(PlatformExceptionType.ParameterMissingError,"sfz","");
+		}
+		User tmp = dao.getUniqueByKeyValue(User.class, "sfz" , user.sfz);
+		if(tmp!=null && !tmp.id.equals(user.id)){
+			throw new GException(PlatformExceptionType.BusinessException,  "身份证号已经存在");
+		}
+		User po = dao.get(User.class, user.id);
+		po.uname = user.uname;
+		po.gender = user.gender;
+		po.age = user.age;
+		po.xueli = user.xueli;
+		po.hunyin = user.hunyin;
+		po.sfz = user.sfz;
+		po.tel = user.tel;
+		po.address = user.address;
+		po.rqsj = user.rqsj;
+		po.rqtj = user.rqtj;
 		dao.saveOrUpdate(po);
 		return mv;
 	}

@@ -38,6 +38,7 @@ import org.jsoup.select.Elements;
 import com.youwei.zjb.cache.UserSessionCache;
 import com.youwei.zjb.entity.RoleAuthority;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.entity.UserAuthority;
 import com.youwei.zjb.util.JSONHelper;
 import com.youwei.zjb.util.SessionHelper;
 
@@ -92,7 +93,7 @@ public class ViewServlet extends HttpServlet{
 		}
 		
 		String authParent = req.getParameter("authParent");
-		List<RoleAuthority> authList = user.getRole().Authorities();
+		List<UserAuthority> authList = user.Authorities();
 //		JSONArray arr = JSONHelper.toJSONArray(authList);
 		if(!user.isSuper){
 			Elements list = doc.getElementsByAttribute("auth");
@@ -105,7 +106,7 @@ public class ViewServlet extends HttpServlet{
 					target = target.replace("$${authParent}", authParent);
 				}
 				boolean auth = false;
-				for(RoleAuthority ra : authList){
+				for(UserAuthority ra : authList){
 					if(ra.name.equals(target)){
 						auth = true;
 						break;

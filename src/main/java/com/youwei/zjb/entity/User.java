@@ -1,6 +1,7 @@
 package com.youwei.zjb.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
@@ -107,5 +108,18 @@ public class User {
 	
 	public Department Department(){
 		return SimpDaoTool.getGlobalCommonDaoService().get(Department.class, deptId);
+	}
+	
+	public List<UserAuthority> Authorities(){
+		List<UserAuthority> result = SimpDaoTool.getGlobalCommonDaoService().listByParams(UserAuthority.class, new String[]{"userId"}, new Object[]{id});
+		List<RoleAuthority> list = getRole().Authorities();
+		for(RoleAuthority ra : list){
+			UserAuthority ua = new UserAuthority();
+			ua.name = ra.name;
+			if(!result.contains(ua)){
+				result.add(ua);
+			}
+		}
+		return result;
 	}
 }

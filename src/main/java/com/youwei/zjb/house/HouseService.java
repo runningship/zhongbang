@@ -26,6 +26,7 @@ import com.youwei.zjb.client.KeHuXingzhi;
 import com.youwei.zjb.client.KeHuLaiYuan;
 import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.entity.UserAuthority;
 import com.youwei.zjb.house.entity.Favorite;
 import com.youwei.zjb.house.entity.House;
 import com.youwei.zjb.sys.OperatorService;
@@ -128,7 +129,6 @@ public class HouseService {
 			if(po!=null){
 				po.isdel= 1;
 				service.saveOrUpdate(po);
-				
 				User user = ThreadSession.getUser();
 				String operConts = "["+user.Department().namea+"-"+user.uname+ "] 删除了房源["+po.area+"]";
 				operService.add(OperatorType.房源记录, operConts);
@@ -136,6 +136,46 @@ public class HouseService {
 		}
 		
 		mv.data.put("msg", "删除成功");
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView softDeleteBatch(List<Object> ids){
+		List<Integer> params = new ArrayList<Integer>();
+		ModelAndView mv = new ModelAndView();
+		mv.data.put("result", 0);
+		if(ids.isEmpty()){
+			return mv;
+		}
+		StringBuilder hql = new StringBuilder("delete from House where id in (-1");
+		for(Object id : ids){
+			hql.append(",").append("?");
+			params.add(Integer.valueOf(id.toString()));
+		}
+		hql.append(")");
+		service.execute(hql.toString(), params.toArray());
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView physicalDeleteBatch(List<Object> ids){
+		List<Integer> params = new ArrayList<Integer>();
+		ModelAndView mv = new ModelAndView();
+		mv.data.put("result", 0);
+		if(ids.isEmpty()){
+			return mv;
+		}
+		StringBuilder hql = new StringBuilder("delete from House where id in (-1");
+		StringBuilder gjHql = new StringBuilder("delete from GenJin where hid in (-1");
+		for(Object id : ids){
+			hql.append(",").append("?");
+			gjHql.append(",").append("?");
+			params.add(Integer.valueOf(id.toString()));
+		}
+		hql.append(")");
+		gjHql.append(")");
+		service.execute(hql.toString(), params.toArray());
+		service.execute(gjHql.toString(), params.toArray());
 		return mv;
 	}
 	
@@ -231,7 +271,7 @@ public class HouseService {
 	}
 	
 	@WebMethod
-	public ModelAndView view(int houseId){
+	public ModelAndView view(String authParent , int houseId){
 		User user = ThreadSession.getUser();
 		ModelAndView mv = new ModelAndView();
 		House house = service.get(House.class, houseId);
@@ -247,7 +287,15 @@ public class HouseService {
 		}
 		Favorite fav = service.getUniqueByParams(Favorite.class, new String[]{"userId" , "houseId"}, new Object[]{ user.id , houseId });
 		mv.data.put("fav", fav==null ? 0:1);
-		
+		if(user.id.equals(house.userId)){
+			mv.data.put("showTel", "true");
+		}
+		for(UserAuthority ua :  user.Authorities()){
+			if((authParent+"_xingzhi").equals(ua.name)){
+				mv.data.put("showTel", "true");
+				break;
+			}
+		}
 		return mv;
 	}
 	
@@ -381,6 +429,13 @@ public class HouseService {
 //		hql.append(" and ( isdel= 0 or isdel is null) ");
 		page = service.findPage(page, hql.toString(),params.toArray());
 		ModelAndView mv = new ModelAndView();
+		User user = ThreadSession.getUser();
+		for(UserAuthority ua :  user.Authorities()){
+			if((query.authParent+"_xingzhi").equals(ua.name)){
+				mv.data.put("shy", "true");
+				break;
+			}
+		}
 		mv.data.put("page", JSONHelper.toJSON(page,DataHelper.dateSdf.toPattern()));
 		return mv;
 	}

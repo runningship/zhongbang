@@ -20,6 +20,7 @@
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
 <script type="text/javascript">
 var tudizheng = ["有","无"];
+var authParent = getParam('authParent');
   var getStr,isFavZT;
   var QueryOptions='',getHid=getParam('hid');
 function getEnumText(category,code){
@@ -40,8 +41,16 @@ function getFav(){
   return '<a href="#" class="j_btn_fav btn btn-mini btn-link">'+isFavStr+'</a>';
 }
 
-function isShiPan(){
-  return getStr.house[0].xingzhi==7;
+function showTel(){
+  if(getStr.house[0].xingzhi==6){
+    return true;
+  }
+  if(getStr.house[0].xingzhi==4){
+    return false;
+  }
+  if(getStr.house[0].xingzhi==7){
+    return getStr['showTel']=="true";
+  }
 }
 $(document).on('click', '.j_btn_edit', function(event) {
   window.location.href="house_add.html?hid="+getHid
@@ -95,7 +104,7 @@ $(function(){
   $.get('/zb/c/house/getQueryOptions', function(data) {
     QueryOptions=JSON.parse(data);
   });
-  $.get('/zb/c/house/view?userId=3&houseId='+getHid, function(data) {
+  $.get('/zb/c/house/view?authParent='+authParent+'&houseId='+getHid, function(data) {
     getStr=JSON.parse(data);
     buildHtmlWithJsonArray("id_house_see",getStr['house']);
   });
@@ -189,7 +198,7 @@ $(function(){
         </div>
         </td>
       </tr>
-      <tr show="!isShiPan();">
+      <tr show="showTel();">
         <td class="biaoti">联系方式</td>
         ${lxr}
         <td colspan="5" class="telSEE">

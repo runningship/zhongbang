@@ -19,6 +19,7 @@
 <script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 var queryOpts;
+var dataArr;
 var pizhu=[{
   "name":"待审批",
   "code":0
@@ -84,6 +85,28 @@ function openAdd(){
   });
 }
 
+function openPiYue(id){
+    art.dialog.open('qingjia_piyue.html?category=1&recordId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:550,
+      width:650
+    })
+}
+
+// function openPiYue(rowIndex){
+//   var piyue = dataArr[rowIndex]['reply'];
+// }
+
+function buildEdit(reply){
+  if(reply==0){
+    return "修改";
+  }else{
+    return "";
+  }
+}
+
 function openEdit(id){
   art.dialog.open('edit.html?category=1&recordId='+id,{
       padding:0,
@@ -140,22 +163,22 @@ $(function(){
   <table class="table table-hover .table_bodyer" >
     <thead>
       <th>内容</th>
-      <th>是否批准</th>
       <th>区域</th>
       <th>分公司</th>
       <th>业务员</th>
       <th>日期</th>
+      <th>是否批准</th>
       <th>操作</th>
     </thead>
     <tbody id="id_list">
     <tr style="display:none">
       <td>${title}</td>
-      <td class="runscript">getEnumTextByCode(pizhu,${reply})</td>
       <td>${quyu}</td>
       <td>${deptName}</td>
       <td>${uname}</td>
       <td>${addtime}</td>
-      <td><a href="javascript:void(0)" onclick="openEdit(${id})" >修改</a> <a href="javascript:void(0)" onclick="deleteQJ(${id})">删除</a></td>
+      <td><a href="javascript:void(0)" onclick="openPiYue(${id})"><span class="runscript">getEnumTextByCode(pizhu,${reply})</span></a></td>
+      <td><a href="javascript:void(0)" onclick="deleteQJ(${id})">删除</a> <a href="javascript:void(0)" onclick="openEdit(${id})"><span class="runscript">buildEdit(${reply})</span></a> </td>
     </tr>
     </tbody>
   </table>

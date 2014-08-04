@@ -9,6 +9,7 @@ import org.jsoup.select.Elements;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.RoleAuthority;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.entity.UserAuthority;
 
 public class client_list {
 
@@ -22,8 +23,8 @@ public class client_list {
 		String auth = "";
 		if(!"all".equals(dataScope)){
 			if(user!=null){
-				List<RoleAuthority> authorities = user.getRole().Authorities();
-				for(RoleAuthority ra : authorities){
+				List<UserAuthority> authorities = user.Authorities();
+				for(UserAuthority ra : authorities){
 					if((dataScope+"_assign_by_dept").equals(ra.name)){
 						auth += ra.name;
 						break;

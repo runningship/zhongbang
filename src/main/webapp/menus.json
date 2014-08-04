@@ -693,6 +693,18 @@
 			"name":"rs_users_list",
 			"text":"人员列表",
 			"type":"menu"
+		},{
+			"name":"rs_users_userEdit",
+			"text":"修改用户",
+			"type":"menu"
+		},{
+			"name":"rs_users_resetPwd",
+			"text":"重置密码",
+			"type":"menu"
+		},{
+			"name":"rs_users_userAuth",
+			"text":"用户权限",
+			"type":"menu"
 		}]
 	},{
 		"name":"rs_rz",

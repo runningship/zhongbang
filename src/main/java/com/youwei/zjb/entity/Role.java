@@ -45,7 +45,7 @@ public class Role {
 	
 	public Integer num;
 	
-	public List<RoleAuthority> Authorities(){
+	List<RoleAuthority> Authorities(){
 		return SimpDaoTool.getGlobalCommonDaoService().listByParams(RoleAuthority.class, new String[]{"roleId"}, new Object[]{id});
 	}
 }

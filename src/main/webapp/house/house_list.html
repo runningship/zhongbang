@@ -20,6 +20,9 @@
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
 <script type="text/javascript">
 var getParamS=getParam('nav');
+var houseData;
+var queryOptions;
+var authParent = getParam('authParent');
 function fix(TableH,TableB){
   for(var i=0;i<=TableB.find('td:last').index();i++){
     TableH.find('th').eq(i).width(TableB.find('tr').eq(1).find('td').eq(i).width());
@@ -55,9 +58,9 @@ function getHuseList(a){
 //    async:false,
     data:a,
     success: function(data){
-    var getStr=JSON.parse(data);
-        buildHtmlWithJsonArray("id_House_list",getStr['page']['data']);
-        Page.setPageInfo(getStr['page']);
+        houseData=JSON.parse(data);
+        buildHtmlWithJsonArray("id_House_list",houseData['page']['data']);
+        Page.setPageInfo(houseData['page']);
         fix($('.TableH'),$('.TableB'));
 
       if(getParamS=="del"){
@@ -77,9 +80,9 @@ function onSubmit_Form(){
     return false;
   });
 }
-var getStr;
+
 function getEnumText(category,code){
-  var arr = getStr[category];
+  var arr = queryOptions[category];
   for(var i=0;i<arr.length;i++){
     if(arr[i]['code']==code){
       return arr[i]['name'];
@@ -90,7 +93,7 @@ function getEnumText(category,code){
 var dialog_see;
 function dialogs(id){
 //  if(dialog_see){art.dialog.list['SeeHouse'].close();}
-    dialog_see=art.dialog.open('house_see.html?hid='+id,{
+    dialog_see=art.dialog.open('house_see.html?authParent='+authParent+'&hid='+id,{
       id:'SeeHouse',
       title:'查看房源详情',
       height:430,
@@ -120,7 +123,19 @@ function openHouseXingzhi(id,xingzhi){
 function doSearch(){
   getHuseList(formSerialize($('form[name=form1]')));
 }
-
+function canView(xingzhi){
+  //审核员
+  if(xingzhi==5){
+    if(houseData['shy']=="true"){
+      return true;
+    }else{
+      return false;
+    }
+  }else{
+    return true;
+  }
+  
+}
 function qingkong(){
   window.location.reload();
 }
@@ -143,20 +158,20 @@ function setDateSec(select){
 }
 
 $(function(){
+    $('#authParent').val(authParent);
     onSubmit_Form();
     setMainHeight();
     $.get('/zb/c/house/getQueryOptions', function(data) {
-    getStr=JSON.parse(data);
-    //  alert(getStr['datetype'])
-    buildHtmlWithJsonArray("id_chaoxiang",getStr['chaoxiang'],true,1); //朝向
-    buildHtmlWithJsonArray("id_fangxing",getStr['fangxing'],true,1);   //户型
-    buildHtmlWithJsonArray("id_leibie",getStr['leibie'],true,1);       //类别
-    buildHtmlWithJsonArray("id_louxing",getStr['louxing'],true);     //楼型
-    buildHtmlWithJsonArray("id_jiaoyi",getStr['jiaoyi'],true,1);       //交易
-    buildHtmlWithJsonArray("id_quyu",getStr['quyu'],true);           //区域
-    buildHtmlWithJsonArray("id_zhuangtai",getStr['zhuangtai'],true,1); //状态
-    buildHtmlWithJsonArray("id_xingzhi",getStr['xingzhi'],true); //房型
-    buildHtmlWithJsonArray("id_datetype",getStr['datetype'],true,1); //房型
+    queryOptions=JSON.parse(data);
+    buildHtmlWithJsonArray("id_chaoxiang",queryOptions['chaoxiang'],true,1); //朝向
+    buildHtmlWithJsonArray("id_fangxing",queryOptions['fangxing'],true,1);   //户型
+    buildHtmlWithJsonArray("id_leibie",queryOptions['leibie'],true,1);       //类别
+    buildHtmlWithJsonArray("id_louxing",queryOptions['louxing'],true);     //楼型
+    buildHtmlWithJsonArray("id_jiaoyi",queryOptions['jiaoyi'],true,1);       //交易
+    buildHtmlWithJsonArray("id_quyu",queryOptions['quyu'],true);           //区域
+    buildHtmlWithJsonArray("id_zhuangtai",queryOptions['zhuangtai'],true,1); //状态
+    buildHtmlWithJsonArray("id_xingzhi",queryOptions['xingzhi'],true); //房型
+    buildHtmlWithJsonArray("id_datetype",queryOptions['datetype'],true,1); //房型
     Page.Init();
     $('select').each(function(index,obj){
       if(obj.name=='dateType'){
@@ -168,7 +183,8 @@ $(function(){
       $(obj).prepend('<option value="">所有</option>');
       $(obj).val("");
     });
-    getHuseList('');
+    // getHuseList('');
+    doSearch();
   });
     // $('button').on('click', '.btn', function(event) {
     //   var Thi=$(this),
@@ -177,7 +193,7 @@ $(function(){
     //     window.location.href='house_list.html?nav='+getParamS
     //   }
     // });
-  $('#id_House_list').on('click', 'a', function(event) {
+  $('.id_House_list').on('click', 'a', function(event) {
     var Thi=$(this),
     rel=Thi.data('rel'),
     this_hid=Thi.data('hid');
@@ -239,12 +255,54 @@ $(function(){
           });
         },cancel:true
       });
+    }else if(rel=='piliang'){
+      if($('.piliang').hasClass('hidden')){
+        $('.piliang').removeClass('hidden');
+      }else{
+        $('.piliang').addClass('hidden');
+      }
+    }else if(rel=='quanshan'){
+      art.dialog({
+        title: '警告',
+        content: '恢复数据？',
+        ok: function () {
+          var DeleteBatchsAction;
+          if(getParamS=="del"){
+            DeleteBatchsAction='physicalDeleteBatch';
+          }else{
+            DeleteBatchsAction='softDeleteBatch';
+          }
+          var ids=$("input[name='ids']").serialize();
+          YW.ajax({
+            url:'/zb/c/house/'+DeleteBatchsAction,
+            data:ids,
+            type:'POST',
+            timeout:5000,
+            dataType:'json',
+            success:function (data, textStatus) {
+              getHuseList('');
+              art.dialog.tips('操作成功');
+            }
+          });
+        },cancel:true
+      });
     }
     return false;
   }).on('click', 'tr', function(event) {
     var Thi=$(this),
     this_hid=Thi.data('hid');
-    dialogs(this_hid);
+    //alert(Thi.find('.piliang').hasClass('hidden'))
+    if(Thi.find('.piliang').hasClass('hidden')){
+      dialogs(this_hid);
+    }else{
+      var ThiCheckbox=Thi.find('.piliang').find('input[type=checkbox]');
+//      alert(ThiCheckbox.prop('checked'))
+      if(ThiCheckbox.prop('checked')){
+        ThiCheckbox.prop('checked',false);
+      }else{
+        ThiCheckbox.prop('checked',true);
+      }
+    }
   });
 });
 
@@ -265,6 +323,7 @@ $(function(){
 <div class="header">
   <form class="form-horizontal" role="form" name="form1">
     <input type="hidden" class="userInput" name="xpath" value="">
+    <input type="hidden" id="authParent" name="authParent" value="">
     <div class="clearfix">
       <div class="input-group ">
         <span class="input-group-addon">时间段</span>
@@ -408,7 +467,7 @@ $(function(){
  
 </div>
 <div class="mainer">
-  <table class="table table-hover TableB nobr" >
+  <table class="table table-hover TableB nobr id_House_list" >
     <tr>
       <th>房源编号</th>
       <th>类别</th>
@@ -427,11 +486,11 @@ $(function(){
       <th auth="$${authParent}_xingzhi">性质</th>
       <th>状态</th>
       <!-- <th>房配客</th> -->
-      <th>操作</th>
+      <th>操作 <a auth="$${authParent}_del" href="" class="btn btn-xs btn-warning " data-rel="piliang">批</a> <span class="piliang hidden"><a href="" class="btn btn-xs btn-danger " data-rel="quanshan">删</a></span></th>
     </tr>
     <tbody id="id_House_list">
     <tr data-hid="${id}" style="display:none">
-      <td>${houseNumber}</td>
+      <td><span class="piliang hidden"><input type="checkbox" name="ids" value="${id}"> </span>${houseNumber}</td>
       <td>${leibie}</td>
       <td>${quyu}</td>
       <td >${area} ${dhao}#${fhao}</td>
@@ -452,7 +511,7 @@ $(function(){
         <a auth="$${authParent}_edit" href="#" class="edit" data-hid="${id}" data-rel="edit">修改</a>
         <a auth="$${authParent}_del" href="##" class="del" data-hid="${id}" data-rel="del">删除</a>
         <a auth="$${authParent}_recover" href="###" class="revert hidden" data-hid="${id}" data-rel="revert">恢复</a>
-        <a href="####" class="see" data-hid="${id}" data-rel="see">查看</a></td>
+        <a href="javascript:void(0)" show="canView(${xingzhi})" class="see" data-hid="${id}" data-rel="see">查看</a></td>
     </tr>
     </tbody>
   </table>

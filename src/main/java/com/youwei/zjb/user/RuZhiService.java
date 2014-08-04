@@ -16,6 +16,7 @@ import com.youwei.zjb.entity.User;
 import com.youwei.zjb.sys.OperatorService;
 import com.youwei.zjb.sys.OperatorType;
 import com.youwei.zjb.user.entity.RenShiReview;
+import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.JSONHelper;
 
 @Module(name="/user/ruzhi/")
@@ -33,7 +34,7 @@ public class RuZhiService {
 		List<Map> spList = dao.listAsMap("select r.id as id, r.sprId as sprId, u.uname as spr , r.sh as sh from User u, RenShiReview r where r.category='join' and r.userId=? and u.id=r.sprId",userId);
 		mv.data.put("roles", JSONHelper.toJSONArray(roles));
 		mv.data.put("rqtjs", RuQiTuJin.toJsonArray());
-		mv.data.put("user", JSONHelper.toJSON(user));
+		mv.data.put("user", JSONHelper.toJSON(user,DataHelper.dateSdf.toPattern()));
 		mv.data.put("myId", ThreadSession.getUser().id);
 		mv.data.getJSONObject("user").put("cid", comp.id);
 		mv.data.put("spList", JSONHelper.toJSONArray(spList));

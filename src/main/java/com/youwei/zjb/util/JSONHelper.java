@@ -51,15 +51,20 @@ public class JSONHelper {
 		}
 		return result;
 	}
-	public static JSONObject toJSON(Object obj){
+	
+	public static JSONObject toJSON(Object obj , String timeFormat){
 		if(obj==null){
 			return new JSONObject();
 		}
 		JsonConfig cfg = new JsonConfig();
 		cfg.setIgnorePublicFields(false);
-		cfg.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
-		cfg.registerJsonValueProcessor(Timestamp.class, new JsonDateValueProcessor());
+		cfg.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor(timeFormat));
+		cfg.registerJsonValueProcessor(Timestamp.class, new JsonDateValueProcessor(timeFormat));
 		return JSONObject.fromObject(obj, cfg);
+	}
+	
+	public static JSONObject toJSON(Object obj){
+		return toJSON(obj,"");
 	}
 	
 	public static JSONArray toJSONArray(List<?> list){

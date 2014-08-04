@@ -115,6 +115,12 @@ var IM = {
 		}
 		
 		$('#chatWindow').css('display','');
+		YW.ajax({
+	        url:'/zb/c/im/setRead?myId='+Im.myId+'&contactId='+contactId,
+	        type:'get',
+	        success:function (data, textStatus) {
+	        }
+      	});
 		// if(IM.chatWindow!=null && IM.chatWindowOpen){
 		// 	// chatWindowLeft = chatWindow.DOM.wrap[0].offsetLeft;
 		// 	// chatWindowTop = chatWindow.DOM.wrap[0].offsetTop;
