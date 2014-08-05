@@ -7,4 +7,6 @@ public class AdminQuery extends AbstractQuery{
 	public String title;
 	public String addtimeStart;
 	public String addtimeEnd;
+	public Integer sh;
+	public String xpath;
 }

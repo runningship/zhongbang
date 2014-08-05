@@ -24,7 +24,7 @@ var authParent;
 function getList(search){
   var url='/zb/c/contract/list?claid='+claid;
   YW.ajax({
-    type: 'get',
+    type: 'post',
     url: url,
     data:search,
     success: function(data){

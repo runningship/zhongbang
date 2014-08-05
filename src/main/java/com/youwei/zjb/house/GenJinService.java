@@ -98,6 +98,11 @@ public class GenJinService {
 			params.add("%"+query.area+"%");
 		}
 		
+		if(StringUtils.isNotEmpty(query.conts)){
+			hql.append(" and gj.conts like ?");
+			params.add("%"+query.conts+"%");
+		}
+		
 		if(StringUtils.isNotEmpty(query.bianhao)){
 			hql.append(" and bianhao like ?");
 			params.add("%"+query.bianhao+"%");

@@ -20,7 +20,7 @@ var classId;
 function getList(search){
   var url='/zb/c/feedback/list';
   YW.ajax({
-    type: 'get',
+    type: 'post',
     url: url,
     data:search,
     success: function(data){

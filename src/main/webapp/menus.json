@@ -132,7 +132,7 @@
 		}]
 		},{
 			"name":"fy_other_setting",
-			"text":"房源设置",
+			"text":"楼盘字典",
 			"type":"menu"
 		},{
 			"name":"fy_other_recycle",
@@ -829,6 +829,27 @@
 			"name":"xz_table_list_del",
 			"text":"删除",
 			"type":"menu"
+		},{
+			"name":"xz_table_list_shenhe",
+			"text":"审核",
+			"type":"menu"
+		},{
+			"name":"xz_table_list_data",
+			"text":"数据权限",
+			"type":"virtual",
+			"children":[{
+				"name":"xz_table_list_data_dept",
+				"text":"分公司",
+				"type":"menu"
+			},{
+				"name":"xz_table_list_data_quyu",
+				"text":"区域",
+				"type":"menu"
+			},{
+				"name":"xz_table_list_data_all",
+				"text":"所有",
+				"type":"menu"
+			}]
 		}]
 	}]
 },{
@@ -968,6 +989,58 @@
 			}]
 		}]
 	}]
+},{
+	"name":"cw",
+	"type":"module",
+	"text":"财务管理",
+	"children":[{
+		"name":"cw_finance",
+		"text":"财务管理",
+		"type":"virtual",
+		"children":[{
+			"name":"cw_finance_fenlei",
+			"text":"财务分类",
+			"type":"virtual",
+			"children":[{
+				"name":"cw_finance_fenlei_list",
+				"text":"列表",
+				"type":"menu"
+			},{
+				"name":"cw_finance_fenlei_add",
+				"text":"新增",
+				"type":"menu"
+			},{
+				"name":"cw_finance_fenlei_edit",
+				"text":"修改",
+				"type":"menu"
+			},{
+				"name":"cw_finance_fenlei_del",
+				"text":"删除",
+				"type":"menu"
+			}]
+		},{
+			"name":"cw_finance_data",
+			"text":"财务数据",
+			"type":"virtual",
+			"children":[{
+				"name":"cw_finance_data_list",
+				"text":"列表",
+				"type":"menu"
+			},{
+				"name":"cw_finance_data_add",
+				"text":"新增",
+				"type":"menu"
+			},{
+				"name":"cw_finance_data_edit",
+				"text":"修改",
+				"type":"menu"
+			},{
+				"name":"cw_finance_data_del",
+				"text":"删除",
+				"type":"menu"
+			}]
+		}]
+	}]	
 },{
 	"name":"oa",
 	"type":"module",

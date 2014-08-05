@@ -23,7 +23,7 @@ var queryOpts;
 function getList(search){
   var url='/zb/c/admin/class/list';
   YW.ajax({
-    type: 'get',
+    type: 'post',
     url: url,
     data:search,
     success: function(data){
@@ -40,6 +40,44 @@ function doSearch(){
   return false;
 }
 
+function openAdd(){
+  art.dialog.open('fenlei_add.html',{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:140,
+      width:400
+  });
+}
+
+function deleteFenLei(id){
+  art.dialog({
+    title:'提示',
+    content:'确定删除此分类吗？',
+    lock:true,
+    ok:function(){
+      YW.ajax({
+        type: 'get',
+        url: '/zb/c/admin/deleteAdminClass?id='+id,
+        success: function(data){
+          alert('删除成功');
+          getList();
+        }
+      });
+    }
+  });
+  
+}
+
+function openEdit(id){
+  art.dialog.open('fenlei_edit.html?id='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:140,
+      width:400
+  });
+}
 
 function openTemplate(id){
   art.dialog.open('temp_edit.html?classId='+id,{
@@ -73,7 +111,10 @@ $(function(){
 </head>
 <body class="hlist bodyer" style="overflow:auto">
 
-<div class="header">
+<div class="header" >
+  <div class="btn-group">
+    <button onclick="openAdd();" class="btn btn-primary ">新增</button>
+  </div>
   <form name="form1">
     
   </form>
@@ -87,7 +128,7 @@ $(function(){
     <tbody id="id_list">
     <tr style="display:none">
       <td>${title}</td>
-      <td><a onclick="openTemplate(${id})" href="javascript:void(0)">模板</a> <a onclick="openBuZhou(${id})" href="javascript:void(0)" >步骤</a></td>
+      <td><a onclick="openTemplate(${id})" href="javascript:void(0)">模板</a> <a onclick="openBuZhou(${id})" href="javascript:void(0)" >步骤</a> <a onclick="openEdit(${id})" href="javascript:void(0)" >修改</a> <a onclick="deleteFenLei(${id})" href="javascript:void(0)" >删除</a></td>
     </tr>
     </tbody>
   </table>

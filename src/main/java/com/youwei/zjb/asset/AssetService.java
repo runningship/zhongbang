@@ -13,9 +13,11 @@ import org.bc.web.ModelAndView;
 import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
+import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.asset.entity.Asset;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
 
 /**
@@ -50,22 +52,36 @@ public class AssetService {
 	}
 	
 	@WebMethod
-	public ModelAndView list(Page<Map> page, String title , String xpath){
+	public ModelAndView list(Page<Map> page, AssetsQuery query){
 		ModelAndView mv = new ModelAndView();
-		StringBuilder hql = new StringBuilder("select a.id as id, a.djia as djia, a.zjia as zjia ,a.count as count, a.beizhu as beizhu,a.name as name, a.edittime as edittime,"
+		StringBuilder sum = new StringBuilder("select sum(a.count) as totalCount,sum(a.zjia) as totalPrice from Asset a ,Department d where d.id=a.deptId ");
+		
+		StringBuilder hql = new StringBuilder("select a.id as id, a.djia as djia, a.zjia as zjia ,a.count as count, a.beizhu as beizhu,a.name as name, a.addtime as edittime,"
 				+ " d.namea as deptName,q.namea as quyu from Asset a,Department d, Department q where d.id=a.deptId and q.id=d.fid");
 		List<Object> params = new ArrayList<Object>();
-		if(StringUtils.isNotEmpty(title)){
+		if(StringUtils.isNotEmpty(query.title)){
 			hql.append(" and a.name like ?");
-			params.add("%"+title+"%");
+			sum.append(" and a.name like ?");
+			params.add("%"+query.title+"%");
 		}
-		if(StringUtils.isNotEmpty(xpath)){
+		if(StringUtils.isNotEmpty(query.xpath)){
 			hql.append(" and d.path like ?");
-			params.add(xpath+"%");
+			sum.append(" and d.path like ?");
+			params.add(query.xpath+"%");
 		}
+		hql.append(HqlHelper.buildDateSegment("a.addtime", query.addtimeStart, DateSeparator.After, params));
+		hql.append(HqlHelper.buildDateSegment("a.addtime", query.addtimeEnd, DateSeparator.Before, params));
+		
+		sum.append(HqlHelper.buildDateSegment("a.addtime", query.addtimeStart, DateSeparator.After, params));
+		sum.append(HqlHelper.buildDateSegment("a.addtime", query.addtimeEnd, DateSeparator.Before, params));
+		
 		hql.append(" order by a.addtime desc");
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));
+		
+		List<Map> result = dao.listAsMap(sum.toString(), params.toArray());
+		mv.data.put("totalCount", result.get(0).get("totalCount"));
+		mv.data.put("totalPrice", result.get(0).get("totalPrice"));
 		return mv;
 	}
 	

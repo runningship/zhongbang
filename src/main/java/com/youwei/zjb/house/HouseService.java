@@ -412,6 +412,15 @@ public class HouseService {
 			hql.append(" and h.chanquan like ?");
 			params.add("%"+query.chanquan+"%");
 		}
+		if(StringUtils.isNotEmpty(query.dhao)){
+			hql.append(" and h.dhao like ?");
+			params.add("%"+query.dhao+"%");
+		}
+		
+		if(StringUtils.isNotEmpty(query.fhao)){
+			hql.append(" and h.fhao like ?");
+			params.add("%"+query.fhao+"%");
+		}
 		
 		if(query.userId!=null){
 			hql.append(" and h.userId= ? ");
@@ -436,7 +445,7 @@ public class HouseService {
 				break;
 			}
 		}
-		mv.data.put("page", JSONHelper.toJSON(page,DataHelper.dateSdf.toPattern()));
+		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;
 	}
 	

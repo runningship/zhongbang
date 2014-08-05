@@ -23,7 +23,7 @@ var queryOpts;
 function getList(search){
   var url='/zb/c/assets/list';
   YW.ajax({
-    type: 'get',
+    type: 'post',
     url: url,
     data:search,
     success: function(data){
@@ -31,6 +31,8 @@ function getList(search){
       dataArr = getStr['page']['data'];
       buildHtmlWithJsonArray("id_list",dataArr);
       Page.setPageInfo(getStr['page']);
+      $('#totalCount').text(getStr['totalCount']);
+      $('#totalPrice').text(getStr['totalPrice']);
     }
   });
 }
@@ -91,10 +93,15 @@ $(function(){
       <span class="input-group-addon">标题</span>
       <input type="text" class="form-control" name="title">
     </div>
-    <div class="input-group input-group-select-n2"style="width:400px">
+    <div class="input-group input-group-select-n2"style="width:370px">
       <span class="input-group-addon">分公司</span>
       <select class="form-control get_comp" name="form_cid" style="width:150px"></select>
       <select class="form-control get_quyu" name="form_did" style="width:150px"></select>
+    </div>
+    <div class="input-group" style="width:400px">
+      <span class="input-group-addon">登记时间</span>
+      <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:120px;border-radius:0;">
+      <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:120px">
     </div>
     <div class="btn-group" >
       <button onclick="doSearch();return false" class="btn btn-primary btn_subnmit">搜索</button>
@@ -130,6 +137,9 @@ $(function(){
   </table>
 </div>
 
+<div>
 <div class="footer foot_page_box"></div>
+<div style="position:absolute;bottom:15px;right:100px;">总数: <span id="totalCount"></span>, 总价<span id="totalPrice"></span></div>
+</div>
 </body>
 </html>

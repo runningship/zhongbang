@@ -76,7 +76,11 @@ $(function(){
   }
 
   $('#id').val(recordId);
-  ue = UE.getEditor('editor');
+  ue = UE.getEditor('editor',{
+    toolbars: [
+        ['fullscreen', 'source', 'undo', 'redo', 'bold']
+    ]
+  });
   ue.addListener( 'ready', function( editor ) {
     //ue.setHeight(150);
     get();
@@ -94,7 +98,7 @@ document.getElementById('integral').innerText=obj.value;
 .table td{ font-weight: bold;}
 </style>
 </head>
-<body class="hlist bodyer" style="overflow:auto">
+<body style="overflow:auto">
 <form name="textForm"  method="get">
 <input type="hidden" name="id" id="id" />
 <input type="hidden" name="conts" id="conts" />

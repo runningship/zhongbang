@@ -70,6 +70,7 @@ function init(){
       myId = json.userId;
       hostname = json.hostname;
       $('#win_im').click();
+      var notices = json.notices;
       // chatWindow.close();
     }
   });
@@ -112,11 +113,10 @@ function openChat(e,hidden){
       resize:false,
       skin:'idialog',
       close:function(){
-        // $(art.dialog.opener.document).find('.idialog').remove();
         this.hide();
         return false;
       }
-    });
+    }).time(1.5);
   }else{
     chatWindow.show();
     var xx = $('.idialog')
@@ -288,6 +288,11 @@ box-shadow: 0px 1px 5px #000;
   </li>
   <li auth="zc" class="desktop_icon" id="win11" path="/zb/v/assets/index.html"> <span class="icon"><img src="/zb/style/icon/ico_b_zichan_big.png"/></span>
     <div class="text">资产管理
+      <div class="right_cron"></div>
+    </div>
+  </li>
+  <li auth="cw" class="desktop_icon" id="win15" path="/zb/v/caiwu/index.html"> <span class="icon"><img src="/zb/style/icon/ico_b_caiwu_big.png"/></span>
+    <div class="text">财务管理
       <div class="right_cron"></div>
     </div>
   </li>

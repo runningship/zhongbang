@@ -47,14 +47,14 @@ public class UserAdjustService {
 		Department newDept = dao.get(Department.class, adjust.newDeptId);
 		mv.data.put("newDeptName", newDept.namea);
 		
-		User fyTo = dao.get(User.class, adjust.fyTo);
-		if(fyTo!=null){
-			mv.data.put("fyTo", fyTo.uname);
-		}
-		User kyTo = dao.get(User.class, adjust.kyTo);
-		if(kyTo!=null){
-			mv.data.put("kyTo", kyTo.uname);
-		}
+//		User fyTo = dao.get(User.class, adjust.fyTo);
+//		if(fyTo!=null){
+//			mv.data.put("fyTo", fyTo.uname);
+//		}
+//		User kyTo = dao.get(User.class, adjust.kyTo);
+//		if(kyTo!=null){
+//			mv.data.put("kyTo", kyTo.uname);
+//		}
 		mv.data.put("reason", adjust.reason);
 		mv.data.put("jiaojie", adjust.jiaojie);
 		
@@ -70,9 +70,9 @@ public class UserAdjustService {
 		if(po!=null){
 			throw new GException(PlatformExceptionType.BusinessException,"已提交过相同的职务调整申请");
 		}
-		if(ua.userId.equals(ua.fyTo) || ua.userId.equals(ua.kyTo)){
-			throw new GException(PlatformExceptionType.BusinessException, "客源或房源调整不正确");
-		}
+//		if(ua.userId.equals(ua.fyTo) || ua.userId.equals(ua.kyTo)){
+//			throw new GException(PlatformExceptionType.BusinessException, "客源或房源调整不正确");
+//		}
 		List<User> sprList = UserHelper.getUserWithAuthority("rs_zwtz_list");
 		if(sprList==null || sprList.size()==0){
 			throw new GException(PlatformExceptionType.BusinessException, "没有用户拥有职务审核权限，请先在系统管理中设置职务调整审核人.或者联系系统管理员为您处理");
@@ -101,11 +101,22 @@ public class UserAdjustService {
 		StringBuilder hql = new StringBuilder();
 		List<Object> params = new ArrayList<Object>();
 		User user = ThreadSession.getUser();
-		if(user==null){
-			user = dao.get(User.class, 316);
-		}
-		hql.append("select ud.id as id, review.sh as tzsh,ud.applyTime as applyTime, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
-				+ "from User  u, Department d,Role r ,UserAdjust ud, RenShiReview review where u.id=ud.userId and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? and review.category='"+RenShiReview.Adjust+"' ");
+		hql.append("select ud.id as id, review.sh as tzsh,ud.applyTime as applyTime, ud.passTime as passTime, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
+				+ "from User  u, Department d,Role r ,UserAdjust ud, RenShiReview review where review.sh=0 and u.id=ud.userId and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? and review.category='"+RenShiReview.Adjust+"' ");
+		params.add(user.id);
+		page = dao.findPage(page, hql.toString(), true, params.toArray());
+		mv.data.put("page", JSONHelper.toJSON(page));
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView listAdjustReviewed(UserQuery query , Page<Map> page){
+		ModelAndView mv = new ModelAndView();
+		StringBuilder hql = new StringBuilder();
+		List<Object> params = new ArrayList<Object>();
+		User user = ThreadSession.getUser();
+		hql.append("select ud.id as id, review.sh as tzsh,ud.applyTime as applyTime, ud.passTime as passTime, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
+				+ "from User  u, Department d,Role r ,UserAdjust ud, RenShiReview review where u.id=ud.userId and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? and review.sh<>0 and review.category='"+RenShiReview.Adjust+"' ");
 		params.add(user.id);
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));
@@ -153,12 +164,12 @@ public class UserAdjustService {
 			dao.saveOrUpdate(user);
 			user.orgpath = newDept.path+user.id;
 			dao.saveOrUpdate(user);
-			if(adjust.fyTo!=null){
-				dao.execute("update House set uid = ? where uid = ?", adjust.fyTo , adjust.userId);
-			}
-			if(adjust.kyTo!=null){
-				dao.execute("update Client set uid = ? where uid = ?", adjust.kyTo , adjust.userId);
-			}
+//			if(adjust.fyTo!=null){
+//				dao.execute("update House set uid = ? where uid = ?", adjust.fyTo , adjust.userId);
+//			}
+//			if(adjust.kyTo!=null){
+//				dao.execute("update Client set uid = ? where uid = ?", adjust.kyTo , adjust.userId);
+//			}
 		}
 		User operUser = ThreadSession.getUser();
 		Role oldRole = dao.get(Role.class, adjust.oldRoleId);

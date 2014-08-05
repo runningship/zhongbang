@@ -135,6 +135,13 @@ $(function(){
 </script>
 <style type="text/css">
   .table{ margin-bottom: 0px;}
+  .input-group.input-group-too { width: 100px;}
+  .input-group.input-group-too input.form-control{ width: 100%; padding: 6px 4px; text-align: center;}
+  .input-group.input-group-too .input-group-addon{ padding: 6px 4px; border-radius: 0;}
+  .input-group {width: 130px;}
+  .form-control{ padding: 6px 6px;}
+  .input-group-addon{ padding: 6px 6px}
+  .input-group-select {width: 555px;}
 </style>
 </head>
 <body class="hlist bodyer" style="overflow:auto">
@@ -143,44 +150,53 @@ $(function(){
     
     <form name="form1">
       <input type="hidden" class="userInput" name="xpath" value="">
-    <div class="input-group ">
-        <span class="input-group-addon">审核</span>
-        <select class="form-control " name="sh" id="id_shenhe">
-          <option value="">所有</option>
-          <option value="${name}">${name}</option>
-        </select>
-    </div>
-    <div class="input-group ">
-        <span class="input-group-addon">交易</span>
-        <select class="form-control " name="jiaoyi" id="id_jiaoyi">
-          <option value="">所有</option>
-          <option value="${name}">${name}</option>
-        </select>
-    </div>
-    <div class="input-group" style="width:192px;">
-      <span class="input-group-addon">房源编号</span>
-      <input type="text" class="form-control" name="bianhao">
-    </div>
-    <div class="input-group input-group-max">
-      <span class="input-group-addon">楼盘</span>
-      <input type="text" class="form-control" name="area">
-    </div>
-    <div class="btn-group">
-      <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
-    </div>
-    <br/><br/>
-    <div class="input-group">
-      <span class="input-group-addon">登记时间</span>
-      <input type="text" id="idTimes" class="form-control" name="addtimeStart" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})"  style="width:150px;border-radius:0;">
-      <input type="text" class="form-control" name="addtimeEnd" id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" style="width:150px">
-    </div>
-    <div class="input-group input-group-mt3 input-group-select" style="margin-top:1px;">
-      <span class="input-group-addon">跟进人</span>
-      <select class="form-control get_comp" name="form_cid"></select>
-      <select class="form-control get_quyu" name="form_did"></select>
-      <select class="form-control get_user" name="form_uid"></select>
-    </div>
-    
+        <div class="clearfix" style="width:998px;">
+        <div class="input-group ">
+          <span class="input-group-addon">审核</span>
+          <select class="form-control " name="sh" id="id_shenhe">
+            <option value="">所有</option>
+            <option value="${name}">${name}</option>
+          </select>
+        </div>
+        <div class="input-group ">
+          <span class="input-group-addon">交易</span>
+          <select class="form-control " name="jiaoyi" id="id_jiaoyi">
+            <option value="">所有</option>
+            <option value="${name}">${name}</option>
+          </select>
+        </div>
+        <div class="input-group" style="width:192px;">
+          <span class="input-group-addon">房源编号</span>
+          <input type="text" class="form-control" name="bianhao">
+        </div>
+        <div class="input-group input-group-max">
+          <span class="input-group-addon">楼盘</span>
+          <input type="text" class="form-control" name="area">
+        </div>
+        <div class="btn-group">
+          <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
+        </div>
+      </div>
+
+      <div class="clearfix">
+        <div class="input-group">
+          <span class="input-group-addon">登记时间</span>
+          <input type="text" id="idTimes" class="form-control" name="addtimeStart" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})"  style="width:150px;border-radius:0;">
+          <input type="text" class="form-control" name="addtimeEnd" id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" style="width:150px">
+        </div>
+        <div class="input-group input-group-max">
+          <span class="input-group-addon">内容</span>
+          <input type="text" class="form-control" name="conts">
+        </div>
+        <br/>
+        <br/>
+        <div class="input-group input-group-mt3 input-group-select" style="margin-top:1px;">
+          <span class="input-group-addon">跟进人</span>
+          <select class="form-control get_comp" name="form_cid"></select>
+          <select class="form-control get_quyu" name="form_did"></select>
+          <select class="form-control get_user" name="form_uid"></select>
+        </div>
+      </div>
     </form>
 </div>
 <div class="mainer">

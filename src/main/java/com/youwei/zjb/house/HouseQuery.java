@@ -33,4 +33,6 @@ public class HouseQuery extends AbstractQuery{
 	public String area;
 	public String houseNumber;
 	public String authParent;
+	public String dhao;
+	public String fhao;
 }

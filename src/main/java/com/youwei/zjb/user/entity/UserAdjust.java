@@ -39,15 +39,15 @@ public class UserAdjust {
 	
 	public Date passTime;
 	
-	/**
-	 * 房源调整到指定人
-	 */
-	public Integer fyTo;
-	
-	/**
-	 * 客源调整到指定人
-	 */
-	public Integer kyTo;
+//	/**
+//	 * 房源调整到指定人
+//	 */
+//	public Integer fyTo;
+//	
+//	/**
+//	 * 客源调整到指定人
+//	 */
+//	public Integer kyTo;
 	
 	/**
 	 * 0 未审核，1 通过 ,2 不通过

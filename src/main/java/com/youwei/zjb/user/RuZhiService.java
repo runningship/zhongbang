@@ -42,6 +42,17 @@ public class RuZhiService {
 	}
 	
 	@WebMethod
+	public ModelAndView delete(int rid){
+		RenShiReview po = dao.get(RenShiReview.class, rid);
+		dao.delete(po);
+		long count = dao.countHqlResult("from RenShiReview where userid=? and sh=0 and category='join' ", po.userId);
+		if(count==0){
+			User user = dao.get(User.class, po.userId);
+			dao.delete(user);
+		}
+		return new ModelAndView();
+	}
+	@WebMethod
 	public ModelAndView pass(int spId){
 		ModelAndView mv = new ModelAndView();
 		RenShiReview po = dao.get(RenShiReview.class, spId);

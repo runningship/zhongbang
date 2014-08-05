@@ -48,6 +48,7 @@ $(function(){
 <style type="text/css">
   .table{ margin-bottom: 0px;}
   th{width:100px; text-align: right}
+  .filebox a{ padding: 5px 10px; background-color: #55CCFF; border:1px solid #0099FF; margin-right: 5px; color: #FFF;}
 </style>
 </head>
 <body style="overflow:auto">
@@ -67,7 +68,7 @@ $(function(){
     </tr>
     <tr>
       <th>附件:</th>
-      <td id="content">
+      <td id="content" class="filebox">
         <a href="/zb/file/download?bizType=${bizType}&recordId=${recordId}&file=${id}" name="attachment">${filename}</a>
       </td>
     </tr>

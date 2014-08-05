@@ -22,7 +22,7 @@ var classId;
 function getList(search){
   var url='/zb/c/admin/listProcessClass?classId='+classId;
   YW.ajax({
-    type: 'get',
+    type: 'post',
     url: url,
     data:search,
     success: function(data){

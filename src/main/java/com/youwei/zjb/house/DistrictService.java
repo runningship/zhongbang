@@ -3,7 +3,7 @@ package com.youwei.zjb.house;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.sourceforge.pinyin4j.PinyinHelper;
+import javax.transaction.Transactional;
 
 import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
@@ -22,7 +22,7 @@ import com.youwei.zjb.util.JSONHelper;
 @Module(name="/areas/")
 public class DistrictService {
 
-	CommonDaoService service = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
+	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
 	
 	@WebMethod
 	public ModelAndView add(District district){
@@ -30,13 +30,13 @@ public class DistrictService {
 		if(StringUtils.isEmpty(district.name)){
 			throw new GException(PlatformExceptionType.BusinessException,"小区名不能为空");
 		}
-		District po = service.getUniqueByKeyValue(District.class, "name", district.name);
+		District po = dao.getUniqueByKeyValue(District.class, "name", district.name);
 		if(po!=null){
 			throw new GException(PlatformExceptionType.BusinessException,"小区名重复");
 		}
 		district.pinyin=DataHelper.toPinyin(district.name);
 		district.pyShort=DataHelper.toPinyinShort(district.name);
-		service.saveOrUpdate(district);
+		dao.saveOrUpdate(district);
 		mv.data.put("msg", "添加成功");
 		return mv;
 	}
@@ -44,8 +44,18 @@ public class DistrictService {
 	@WebMethod
 	public ModelAndView get(int areaId){
 		ModelAndView mv = new ModelAndView();
-		District area = service.get(District.class, areaId);
+		District area = dao.get(District.class, areaId);
 		mv.data.put("area", JSONHelper.toJSON(area));
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView delete(int id){
+		ModelAndView mv = new ModelAndView();
+		District area = dao.get(District.class, id);
+		if(area!=null){
+			dao.delete(area);
+		}
 		return mv;
 	}
 	
@@ -62,13 +72,14 @@ public class DistrictService {
 			params.add(search);
 			params.add(search);
 		}
-		page = service.findPage(page, hql.toString(), params.toArray());
+		page = dao.findPage(page, hql.toString(), params.toArray());
 		mv.data.put("result", 0);
 		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;
 	}
 	
 	@WebMethod
+	@Transactional
 	public ModelAndView update(District district){
 		ModelAndView mv = new ModelAndView();
 		if(district.id==null){
@@ -77,9 +88,12 @@ public class DistrictService {
 		if(StringUtils.isEmpty(district.name)){
 			throw new GException(PlatformExceptionType.BusinessException, "小区名不能为空");
 		}
+		District po = dao.get(District.class, district.id);
 		district.pinyin=DataHelper.toPinyin(district.name);
 		district.pyShort=DataHelper.toPinyinShort(district.name);
-		service.saveOrUpdate(district);
+		dao.saveOrUpdate(district);
+		//更新房源
+		dao.execute("update House set area=? where area=?", district.name , po.name);
 		mv.data.put("msg", "保存成功");
 		return mv;
 	}

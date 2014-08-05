@@ -106,10 +106,20 @@ public class ViewServlet extends HttpServlet{
 					target = target.replace("$${authParent}", authParent);
 				}
 				boolean auth = false;
-				for(UserAuthority ra : authList){
-					if(ra.name.equals(target)){
-						auth = true;
-						break;
+				if(target.startsWith("!")){
+					auth = true;
+					for(UserAuthority ra : authList){
+						if(("!"+ra.name).equals(target)){
+							auth = false;
+							break;
+						}
+					}
+				}else{
+					for(UserAuthority ra : authList){
+						if(ra.name.equals(target)){
+							auth = true;
+							break;
+						}
 					}
 				}
 				if(auth==false){

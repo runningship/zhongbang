@@ -1,11 +1,7 @@
 package com.youwei.zjb.asset;
 
-import com.youwei.zjb.AbstractQuery;
-
-public class SupplyQuery extends AbstractQuery{
+public class AssetsQuery {
 	public String title;
-	
-	public Integer shenhe;
 	
 	public String xpath;
 	

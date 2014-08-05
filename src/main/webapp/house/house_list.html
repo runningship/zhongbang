@@ -317,6 +317,13 @@ $(function(){
   .xingzhi-5{color:#7126C9;}
   .xingzhi-4{color:#01A7F5;}
   .xingzhi-2{color:#aaaaaa;}
+  .input-group.input-group-too { width: 100px;}
+  .input-group.input-group-too input.form-control{ width: 100%; padding: 6px 4px; text-align: center;}
+  .input-group.input-group-too .input-group-addon{ padding: 6px 4px; border-radius: 0;}
+  .input-group {width: 130px;}
+  .input-group-addon{ padding: 6px 6px}
+  .form-control{ padding: 6px 6px;}
+  .input-group-select {width: 555px;}
 </style>
 </head>
 <body class="hlist bodyer" style="overflow-y:auto">
@@ -329,9 +336,9 @@ $(function(){
         <span class="input-group-addon">时间段</span>
         <select class="form-control " onchange='setDateSec(this)'>
           <option value="1">今日房源</option>
-          <option value="3">三天内房源</option>
-          <option value="7">七天内房源</option>
-          <option value="30">一个月房源</option>
+          <option value="3">三天内</option>
+          <option value="7">七天内</option>
+          <option value="30">一个月内</option>
         </select>
       </div>
      <!--  <div class="btn-group">
@@ -364,22 +371,20 @@ $(function(){
           <li><label><input type="checkbox" name="xingzhi" value="${name}"> ${name}</label>
         </ul>
       </div>
-      <div class="input-group input-group-min">
-        <span class="input-group-addon">交易</span>
-        <select class="form-control " name="jiaoyis" id="id_jiaoyi">
-          <option value="">所有</option>
-          <option value="${name}">${name}</option>
-        </select>
-      </div>
       <div class="input-group input-group-max">
         <span class="input-group-addon">楼盘</span>
-        <input type="text" class="form-control" name="area">
+        <input type="text" class="form-control" name="area" placeholder="楼盘名称(最少字)">
+      </div>
+      <div class="input-group input-group-too" style="width:128px;">
+        <input type="text" class="form-control" name="dhao" placeholder="栋号">
+        <span class="input-group-addon">#</span>
+        <input type="text" class="form-control" name="fhao" placeholder="房号">
       </div>
     </div>
 
     <div class="clearfix">
       <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width:75px;">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width:60px;">
           区域<span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" id="id_quyu">
@@ -387,12 +392,19 @@ $(function(){
         </ul>
       </div>
       <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width:75px;">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width:60px;">
           楼型<span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" id="id_louxing">
           <li><label><input type="checkbox" name="louxing" value="${name}" /> ${name}</label></li>
         </ul>
+      </div>
+      <div class="input-group input-group-min">
+        <span class="input-group-addon">交易</span>
+        <select class="form-control " name="jiaoyis" id="id_jiaoyi">
+          <option value="">所有</option>
+          <option value="${name}">${name}</option>
+        </select>
       </div>
       <div class="input-group input-group-min">
         <span class="input-group-addon">房型</span>
@@ -408,25 +420,25 @@ $(function(){
           <option value="${name}">${name}</option>
         </select>
       </div>
-      <div class="input-group" style="width:192px;">
+      <div class="input-group" style="width:130px;">
         <span class="input-group-addon">编号</span>
-        <input type="text" class="form-control" name="houseNumber">
+        <input type="text" class="form-control" name="houseNumber" placeholder="编号">
       </div>
-      <div class="input-group input-group-max">
+      <div class="input-group" style="width:170px;">
         <span class="input-group-addon">产权证</span>
-        <input type="text" class="form-control" name="chanquan">
+        <input type="text" class="form-control" name="chanquan" placeholder="产权号">
       </div>
     </div>
 
-    <div class="clearfix" style="width:900px;">
+    <div class="clearfix" style="width:998px;">
       <div class="input-group">
-        <span class="input-group-addon" style="padding:8px;">日期</span>
+        <span class="input-group-addon">日期</span>
         <select class="form-control" id="id_datetype" name="dateType">
           <option value="">所有</option>
           <option value="${name}">${name}</option>
         </select>
-        <input type="text" class="form-control" name="dateStart" id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})">
-        <input type="text" class="form-control" name="dateEnd" id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})">
+        <input type="text" class="form-control" name="dateStart" id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" placeholder="">
+        <input type="text" class="form-control" name="dateEnd" id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" placeholder="">
       </div>
       <div class="input-group cs">
         <span class="input-group-addon">售价</span>
@@ -440,24 +452,28 @@ $(function(){
       </div>
       <div class="input-group">
         <span class="input-group-addon">面积</span>
-        <input type="text" class="form-control" name="mianjiStart">
-        <input type="text" class="form-control" name="mianjiEnd">
+        <input type="text" class="form-control" name="mianjiStart" placeholder="面积开始(M²)">
+        <input type="text" class="form-control" name="mianjiEnd" placeholder="面积结束(M²)">
       </div>
       <div class="input-group">
         <span class="input-group-addon">楼层</span>
-        <input type="text" class="form-control" name="lcengStart">
-        <input type="text" class="form-control" name="lcengEnd">
+        <input type="text" class="form-control" name="lcengStart" placeholder="楼层">
+        <input type="text" class="form-control" name="lcengEnd" placeholder="楼层">
       </div>
 
+      <div class="input-group" style="width:170px;">
+        <span class="input-group-addon">手机</span>
+        <input type="text" class="form-control" name="tel" placeholder="11位内数字">
+      </div>
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary btn_subnmit">搜索提交</button>
+        <button type="button" class="btn" data-type="qingkong" onclick="qingkong();">清空</button>
+      </div>
       <div class="input-group input-group-select">
         <span class="input-group-addon">发布人</span>
         <select class="form-control get_comp" name="form_cid"></select>
         <select class="form-control get_quyu" name="form_did"></select>
         <select class="form-control get_user" name="form_uid"></select>
-      </div>
-      <div class="btn-group">
-        <button type="submit" class="btn btn-primary btn_subnmit">搜索提交</button>
-        <button type="button" class="btn" data-type="qingkong" onclick="qingkong();">清空</button>
       </div>
       <br/><br/><br/>
     </div>
@@ -483,7 +499,7 @@ $(function(){
       <th>年代</th>
       <th>发布时间</th>
       <th>发布人</th>
-      <th auth="$${authParent}_xingzhi">性质</th>
+      <th>性质</th>
       <th>状态</th>
       <!-- <th>房配客</th> -->
       <th>操作 <a auth="$${authParent}_del" href="" class="btn btn-xs btn-warning " data-rel="piliang">批</a> <span class="piliang hidden"><a href="" class="btn btn-xs btn-danger " data-rel="quanshan">删</a></span></th>
@@ -504,7 +520,8 @@ $(function(){
       <td>${dateyear}</td>
       <td>${dateadd}</td>
       <td>${forlxr}</td>
-      <td auth="$${authParent}_xingzhi" ><a href="javascript:void(0)" onclick="openHouseXingzhi(${id},${xingzhi})"><span class='runscript xingzhi-${xingzhi}'>getEnumText('xingzhi',${xingzhi})</span></a></td>
+      <td ><span auth="!$${authParent}_xingzhi" class='runscript xingzhi-${xingzhi}'>getEnumText('xingzhi',${xingzhi})</span>
+        <a auth="$${authParent}_xingzhi" href="javascript:void(0)" onclick="openHouseXingzhi(${id},${xingzhi})"><span class='runscript xingzhi-${xingzhi}'>getEnumText('xingzhi',${xingzhi})</span></a></td>
       <td class='runscript'>getEnumText('zhuangtai',${ztai})</td>
       <!-- <td>有</td> -->
       <td>

@@ -77,7 +77,11 @@ $(function(){
     return;
   }
   $('#id').val(recordId);
-  ue = UE.getEditor('editor');
+  ue = UE.getEditor('editor',{
+    toolbars: [
+        ['fullscreen', 'source', 'undo', 'redo', 'bold']
+    ]
+  });
   ue.addListener( 'ready', function( editor ) {
     //ue.setHeight(150);
     get();
@@ -85,50 +89,68 @@ $(function(){
 });
 
 </script>
-
+<style type="text/css">
+.table{ margin-bottom: 0;}
+.table td{ font-weight: bold;}
+</style>
 </head>
-<body class="hlist bodyer" style="overflow:auto">
-<form name="textForm"  action="/example/html5/demo_form.asp" method="get">
+<body style="overflow:auto">
+<form name="textForm" method="get">
 <input type="hidden" name="id" id="id" />
 <input type="hidden" name="conts" id="conts" />
-<span >
 
-  <div id="recordId" >
-    <div>
-      <span>外出时间: </span><span id="outTime" ></span>
-    </div>
-    <div>
-      <span>返回时间: </span><span id="backTime" ></span>
-    </div>
-    </div>
-    <div>
-      <span>外出原因: </span><p id="outCont"></p>
-    </div>
-    <div>
-        <span>返回总结: </span><span id="onCont" ></span>
-    </div>
-    <div>
-      <span>附件: </span>
-      <span id="content">
-        <div>
-          <a href="/zb/file/download?bizType=${bizType}&recordId=${recordId}&file=${id}" name="attachment">${filename}</a>
+<span id="recordId">
+  <table class="table">
+    <tr>
+      <th>外出时间:</th>
+      <td id="outTime"></td>
+    </tr>
+    <tr>
+      <th>返回时间:</th>
+      <td id="backTime"></td>
+    </tr>
+    <tr>
+      <th>外出原因:</th>
+      <td id="outCont"></td>
+    </tr>
+    <tr>
+      <th>返回总结:</th>
+      <td id="onCont"></td>
+    </tr>
+    <tr>
+      <th>附件:</th>
+      <td>
+        <span id="content">
+          <div>
+            <a href="/zb/file/download?bizType=${bizType}&recordId=${recordId}&file=${id}" name="attachment">${filename}</a>
+          </div>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <th>评价:</th>
+      <td style="margin-top:10px;margin-left:10px;">
+        <span id="editor" type="text/plain" style="width:500px;height:150px;"></span>
+      </td>
+    </tr>
+    <tr>
+      <th>评分：:</th>
+      <td style="margin-top:10px;margin-left:10px;">
+        <span id="integral">0</span>
+        <input type="range" onchange=change(this); style="width:300px" id="integral_point" name="integral" min="-10" max="10"  value="0"/>
+      </td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>
+        <div id="submit" class="btn-group">
+          <button onclick="save();" class="btn btn-primary ">提交</button>
         </div>
-      </span>
-    </div>
-    <div>
-      <span>评价 </span>
-      <div style="margin-top:10px;margin-left:10px;">
-      <span id="editor" type="text/plain" style="width:500px;height:150px;"></span>
-      </div>
-    </div>
-    <div>
-      评分：<span id="integral">0</span><br/>
-      <input type="range" onchange=change(this); style="width:300px" id="integral_point" name="integral" min="-10" max="10"  value="0"/>
-    </div>
+      </td>
+    </tr>
+  </table>
+
 </span>
 </form>
-<div id="submit" class="btn-group">
-  <button onclick="save();" class="btn btn-primary ">提交</button>
-</div>
 </body>
 </html>

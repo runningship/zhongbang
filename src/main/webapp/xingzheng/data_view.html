@@ -48,15 +48,11 @@ function loadData(){
 
 function buildBanliYiJian(rowIndex){
   var data = processList[rowIndex];
-  if(myId==data['processorId'] && data['flag']==0){
-    return '<input id="process_conts" type="text"/><button onclick="banli('+data['id']+',this)">确定</button>';
-  }else{
-    var txt = data['conts'];
-    if(txt==""){
-      txt = "等待完成...";
-    }
-    return txt;
+  var txt = data['conts'];
+  if(txt==""){
+    txt = "等待完成...";
   }
+  return txt;
 }
 
 function banli(pid , btn){
@@ -134,7 +130,7 @@ $(function(){
     <div id="attachList">
       <span style="display:none">
         <div>
-          <a target="_blank" href="/zb/file/download?bizType=xingzheng&recordId=${recordId}&file=${id}">${filename}</a> 
+          <a  href="/zb/file/download?bizType=xingzheng&recordId=${recordId}&file=${id}">${filename}</a> 
         </div>
       </span>
     </div>

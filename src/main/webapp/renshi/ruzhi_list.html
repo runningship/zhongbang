@@ -51,6 +51,25 @@ function openReview(id){
   });
 }
 
+function deleteRuzhi(rid){
+  art.dialog({
+    title:'提示',
+    content:'确定删除这条记录吗？',
+    lock:true,
+    ok:function(){
+      YW.ajax({
+        type: 'POST',
+        url: '/zb/c/user/ruzhi/delete?rid='+rid,
+        data:'',
+        success: function(data){
+          art.dialog.tips('删除成功');
+          doSearch();
+        }
+      });
+    }
+  });
+}
+
 function getAction(rzsh){
   if(rzsh==0){
     return "审核";
@@ -168,6 +187,7 @@ $(function(){
       <td>${address}</td>
       <td>${rqsj}</td>
       <td><a onclick="openReview(${uid})" class="runscript" href="javascript:void(0)">getAction(${rzsh})</a> 
+          <a onclick="deleteRuzhi(${rid})" href="javascript:void(0)">删除</a> 
       </td>
     </tr>
     </tbody>

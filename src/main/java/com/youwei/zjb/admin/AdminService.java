@@ -78,16 +78,26 @@ public class AdminService {
 	@WebMethod
 	public ModelAndView listTable(AdminQuery query,Page<Map> page){
 		ModelAndView mv = new ModelAndView();
-		StringBuilder hql = new StringBuilder("select t.title as title ,u.id as userId, u.uname as uname, c.title  as classTitle ,t.addtime as addtime "
-				+ ",t.id as id from AdminTable t, User u, AdminClass c where t.userId=u.id and t.classId=c.id and t.sh=1");
+		StringBuilder hql = new StringBuilder("select t.title as title ,t.sh as sh ,u.id as userId, u.uname as uname, c.title  as classTitle ,t.addtime as addtime "
+				+ ",t.id as id from AdminTable t, User u, AdminClass c where t.userId=u.id and t.classId=c.id ");
 		List<Object> params = new ArrayList<Object>();
 		if(query.classId!=null){
 			hql.append(" and t.classId=? ");
 			params.add(query.classId);
 		}
+		if(query.sh==null){
+			query.sh=1;
+		}
+		if(query.sh==1){
+			hql.append(" and t.sh=1 ");
+		}
 		if(StringUtils.isNotEmpty(query.title)){
 			hql.append(" and t.title like ? ");
 			params.add("%"+query.title+"%");
+		}
+		if(StringUtils.isNotEmpty(query.xpath)){
+			hql.append(" and u.orgpath like ? ");
+			params.add("%"+query.xpath+"%");
 		}
 		hql.append(HqlHelper.buildDateSegment("t.addtime", query.addtimeStart, DateSeparator.After, params));
 		hql.append(HqlHelper.buildDateSegment("t.addtime", query.addtimeEnd, DateSeparator.Before, params));
@@ -122,7 +132,11 @@ public class AdminService {
 		ModelAndView mv = new ModelAndView();
 		List<ProcessClass> processClassList = dao.listByParams(ProcessClass.class, new String[]{"adminClassId"}, new Object[]{table.classId});
 		table.addtime = new Date();
-		table.sh=1;
+		if(processClassList==null || processClassList.isEmpty()){
+			table.sh=1;
+		}else{
+			table.sh=0;
+		}
 		dao.saveOrUpdate(table);
 		for(ProcessClass pc : processClassList){
 			Process pro = new Process();
@@ -194,11 +208,39 @@ public class AdminService {
 		po.conts = conts;
 		po.flag =1 ;
 		dao.saveOrUpdate(po);
+		//如果所有步骤都完成，则更新主表，审核通过
+		long count = dao.countHqlResult("from Process where tableId=? and  flag=0 ", po.tableId);
+		if(count==0){
+			AdminTable table = dao.get(AdminTable.class, po.tableId);
+			table.sh=1;
+			dao.saveOrUpdate(table);
+		}
 		mv.data.put("result", 0);
 		mv.data.put("msg", "保存成功");
 		return mv;
 	}
 	
+	@WebMethod
+	public ModelAndView addAdminClass(AdminClass ac){
+		ModelAndView mv = new ModelAndView();
+		AdminClass po = dao.getUniqueByKeyValue(AdminClass.class, "title", ac.title);
+		if(po!=null){
+			throw new GException(PlatformExceptionType.BusinessException, "存在相同的的分类名称");
+		}
+		ac.fid=1;
+		ac.flag=1;
+		dao.saveOrUpdate(ac);
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView deleteAdminClass(int id){
+		AdminClass po = dao.get(AdminClass.class, id);
+		if(po!=null){
+			dao.delete(po);
+		}
+		return new ModelAndView();
+	}
 	@WebMethod
 	public ModelAndView addProcessClass(ProcessClass pc){
 		ModelAndView mv = new ModelAndView();

@@ -110,6 +110,10 @@ public class UserService {
 		}
 		mv.data.put("userId", user.id);
 		mv.data.put("hostname", ConfigCache.get("domainName", "zb.zhongjiebao.com"));
+		// 新通知
+		String hql = "select nc.fenlei as fenlei,count(*) as total from Notice n, NoticeReceiver nr , NoticeClass nc where nr.receiverId=? and n.id=nr.noticeId and nc.id=n.claid and nr.hasRead=0 group by nc.fenlei";
+		List<Map> notices = dao.listAsMap(hql, new Object[]{user.id});
+		mv.data.put("notices", JSONHelper.toJSONArray(notices));
 		return mv;
 	}
 	
@@ -297,7 +301,7 @@ public class UserService {
 		StringBuilder hql = new StringBuilder();
 		List<Object> params = new ArrayList<Object>();
 		User user = ThreadSession.getUser();
-		hql.append("select review.sh as rzsh, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
+		hql.append("select review.sh as rzsh, u.uname as uname,u.id as uid ,r.title as title , review.id as rid,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
 				+ "from User  u, Department d,Role r , RenShiReview review where u.sh=0 and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? and review.category='join' ");
 		params.add(user.id);
 		query.sh=null;

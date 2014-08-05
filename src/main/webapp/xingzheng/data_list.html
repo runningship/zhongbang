@@ -99,18 +99,36 @@ function openView(id){
   });
 }
 
+function openBanli(id){
+  art.dialog.open('data_banli.html?tableId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1080
+  });
+}
+
 function isSelf(pubUserId,userId){
   return pubUserId==userId;
+}
+
+function buildShenHe(sh){
+  if(sh==0){
+    return "审核";
+  }else{
+    return "已审核";
+  }
 }
 
 $(function(){
   // var claid = getParam('claid');
   // $('#classId').val(claid);
-  getList();
   $.get('/zb/c/admin/class/list', function(data) {
     queryOpts=JSON.parse(data);
     buildHtmlWithJsonArray("adminClassList",queryOpts['page']['data']);
     buildHtmlWithJsonArray("adminClassList2",queryOpts['page']['data']);
+    doSearch();
   });
   Page.Init();
     jQuery.hotkeys.add('return',function(e){
@@ -137,6 +155,8 @@ $(function(){
 
   <div style="">
   <form name="form1" onsubmit="return doSearch();">
+    <input auth="xz_table_list_shenhe" type="hidden" name="sh" value="0" />
+    <input type="hidden" class="userInput" name="xpath" value="">
     <div class="btn-group">
       <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:30px;padding:0px 10px 0px 10px;width:150px;"><span id="btn_class_select">分 类</span> <span class="caret"></span></button>
       <ul class="dropdown-menu">
@@ -149,6 +169,12 @@ $(function(){
     <div class="input-group input-group-max">
       <span class="input-group-addon">标题</span>
       <input type="text" class="form-control" name="title">
+    </div>
+   <div class="input-group input-group-select">
+      <span class="input-group-addon">发布人</span>
+      <select class="form-control get_comp" name="form_cid"></select>
+      <select class="form-control get_quyu" name="form_did"></select>
+      <select class="form-control get_user" name="form_uid"></select>
     </div>
     <div class="input-group" style="width:355px">
       <span class="input-group-addon">日期</span>
@@ -178,7 +204,8 @@ $(function(){
       <td>${uname}</td>
       <td>${addtime}</td>
       <td>${classTitle}</td>
-      <td><a onclick="openView(${id})" href="javascript:void(0)">查看</a> <a auth="xz_table_list_edit" onclick="openEdit(${id})" href="javascript:void(0)">修改</a> 
+      <td><a onclick="openView(${id})" href="javascript:void(0)">查看</a> <a auth="xz_table_list_shenhe" class="runscript" onclick="openBanli(${id})" href="javascript:void(0)">buildShenHe(${sh})</a>
+       <a auth="xz_table_list_edit" onclick="openEdit(${id})" href="javascript:void(0)">修改</a> 
       <a auth="xz_table_list_del" href="javascript:void(0)" onclick="deleteData(${id});">删除</a></td>
     </tr>
     </tbody>

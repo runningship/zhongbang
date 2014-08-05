@@ -424,7 +424,7 @@ var IM = {
 				    ok: function () {
 				        art.dialog.opener.logout();
 				    },
-				    cancel: true
+				    cancel: false
 				});
 				
 			}

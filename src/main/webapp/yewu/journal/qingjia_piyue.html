@@ -91,7 +91,11 @@ $(function(){
 
   $('#id').val(recordId);
   
-  ue = UE.getEditor('editor');
+  ue = UE.getEditor('editor',{
+    toolbars: [
+        ['fullscreen', 'source', 'undo', 'redo', 'bold']
+    ]
+  });
   ue.addListener( 'ready', function( editor ) {
     //ue.setHeight(350);
     getContent();
@@ -100,43 +104,51 @@ $(function(){
 
 </script>
 </head>
-<body style="overflow:hidden; overflow-y: auto;">
+<body style="overflow:auto">
   <form name="textForm" style="margin-top:10px;">
     <input type="hidden" name="contb" id="contb" />
     <input type="hidden" name="category" id="category" />
     <input type="hidden" name="id" id="id" />
-<span >
-    <div class="clearfix" id="recordId">
-    <div>
-      <span>添加时间: </span><span id="addtime" ></span>
-    </div>
-    </div>
-    <div>
-      <span>标题: </span><span id="title"></span>
-    </div>
-    <div>
-        <span>内容: </span><span id="conta" ></span>
-    </div>
-    <div>
-      <span>附件: </span>
-      <span id="attachList">
-        <div>
-          <a href="/zb/file/download?bizType=${bizType}&recordId=${recordId}&file=${id}" name="attachment">${filename}</a>
-        </div>
-      </span>
-    </div>
-    <div>
-      <span>批阅： </span>
-      <div style="margin-top:10px;margin-left:10px;">
-      <span id="editor" type="text/plain" style="width:500px;height:150px;"></span>
-      </div>
-    </div>
+    <span id="recordId">
+      <table class="table">
+        <tr>
+          <th>添加时间:</th>
+          <td id="addtime"></td>
+        </tr>
+        <tr>
+          <th>标题:</th>
+          <td id="title"></td>
+        </tr>
+        <tr>
+          <th>内容:</th>
+          <td id="conta"></td>
+        </tr>
+        <tr>
+          <th>附件:</th>
+          <td>
+            <span id="attachList">
+              <div>
+                <a href="/zb/file/download?bizType=${bizType}&recordId=${recordId}&file=${id}" name="attachment">${filename}</a>
+              </div>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <th>批阅：:</th>
+          <td style="margin-top:10px;margin-left:10px;">
+            <span id="editor" type="text/plain" style="width:500px;height:150px;"></span>
+          </td>
+        </tr>
+        <tr>
+          <th></th>
+          <td>
+            <div id="submit" class="btn-group tj">
+              <button onclick="save();" class="btn btn-primary ">提交</button>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </span>
   </form>
-   <div style="margin-top:10px;margin-left:10px; margin-bottom:10px;">
-    <span id="editor" type="text/plain" style="width:99%;height:400px;"></span>
-  </div>
-<div class="btn-group tj">
-  <button onclick="save(); return false" class="btn btn-primary " >提交</button>
-</div>
 </body>
 </html>

@@ -18,4 +18,6 @@ public class GenJinQuery extends AbstractQuery {
 	
 	public String area;
 	
+	public String conts;
+	
 }
