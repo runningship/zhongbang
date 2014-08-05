@@ -59,7 +59,7 @@ function deleteData(id){
     url: '/zb/c/admin/deleteTable?tableId='+id,
     data:'',
     success: function(data){
-      getList();
+      doSearch();
       alert("删除成功")
     }
   });
