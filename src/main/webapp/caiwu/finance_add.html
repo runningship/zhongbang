@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>发布公告</title>
+<link rel="stylesheet" href="/zb/style/css.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/style/house.css">
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/uploadify/jquery.uploadify.js"></script>
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<link href="/zb/js/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.all.js"> </script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+var recordId;
+var ue;
+function save(){
+  $('#conts').val(ue.getContent());
+  var text = $('form[name=textForm]').serialize();
+  YW.ajax({
+    type: 'POST',
+    url: '/zb/c/caiwu/add',
+    data:text,
+    success: function(data){
+      art.dialog.tips('保存成功,您还可以添加附件.');
+      recordId = JSON.parse(data)['recordId'];
+      initFileUpload();
+      art.dialog.opener.doSearch();
+    }
+  });
+  return false;
+}
+
+function initFileUpload(){
+  $('#file_upload').uploadify({
+      'swf'      : '/zb/js/uploadify/uploadify.swf',
+      'uploader' : '/zb/file/upload?bizType=caiwu&recordId='+recordId,
+      'buttonText': '上传附件',
+      'removeTimeout': 0.1,
+      'fileSizeLimit' : '5MB',
+      'onUploadError' : function(file, errorCode, errorMsg, errorString){
+          console.log('The file ' + file.name + ' could not be uploaded: ' + errorString);
+      },
+      'onUploadComplete':function(file){
+          console.log('finish:'+file);
+          getAttachList();
+      },
+      'onUploadSuccess' : function(file, data, response) {
+        var json = JSON.parse(data);
+        if(json['result']!=0){
+          $('#' + file.id).find('.data').html('-文件上传失败,'+json['msg']);
+          // console('The file ' + file.name + ' was successfully uploaded with a response of ' + response + ':' + data);
+        }
+      },
+      'onQueueComplete' : function(queueData) {
+        console.log(queueData);
+      }
+      // Put your options here
+  });
+}
+
+function getAttachList(){
+  YW.ajax({
+    type: 'get',
+    url: '/zb/c/attachment/list?bizType=caiwu&recordId='+recordId,
+    data:'',
+    success: function(result){
+      var data = JSON.parse(result)['data'];
+      buildHtmlWithJsonArray("attachList",data);
+    }
+  });
+}
+
+function deleteAttach(id){
+  YW.ajax({
+    type: 'get',
+    url: '/zb/c/attachment/delete?id='+id,
+    data:'',
+    success: function(result){
+      getAttachList();
+    }
+  });
+}
+
+function processSelected(userArr){
+  var names = [];
+  var ids = [];
+  for(var i=0;i<userArr.length;i++){
+    names.push(userArr[i]['text']);
+    ids.push(userArr[i]['userId']);
+  }
+  $('#names').val(names.toString());
+  $('#receivers').val(ids.toString());
+}
+
+$(function(){
+  var claid = getParam('claid');
+  if(claid==null || claid==""){
+    alert("未指明的分类");
+    return;
+  }
+  $('#claid').val(claid);
+  var claName = getParam('claName');
+  $('#fenlei').val(decodeURI(claName));
+  ue = UE.getEditor('editor');
+  ue.addListener( 'ready', function( editor ) {
+    //ue.setHeight(350);
+  });
+});
+
+</script>
+</head>
+<body class="hlist bodyer" style="overflow:auto">
+  <form name="textForm" style="position:relative;height:40px;width:100%">
+    <input type="hidden" name="claid" id="claid" />
+    <input type="hidden" name="conts" id="conts" />
+    <input type="hidden" name="receivers" id="receivers" />
+    <div class="input-group input-group-max">
+      <span class="input-group-addon">  标 题</span>
+      <input type="text" class="form-control" name="title">
+    </div>
+    <div class="input-group input-group-max" >
+      <span class="input-group-addon">  类 别</span>
+      <input type="text" class="form-control" readonly="true" id="fenlei">
+    </div>
+  </form>
+    
+  <div style="margin-top:40px;margin-left:10px;">
+    <span id="editor" type="text/plain" style="width:1024px;height:200px;"></span>
+  </div>
+  <div>
+  <button onclick="save();return false;" style="margin-left:10px;margin-top:5px;" class="btn btn-primary">提交</button>
+  </div>
+<div>
+    <input id="file_upload" name="file_upload" style="display:none;margin-top:5px;">
+</div>
+<div id="attachList">
+  <span style="display:none">
+    <div>
+      <a target="_blank" href="/zb/file/download?bizType=${bizType}&recordId=${recordId}&file=${id}">${filename}</a> <a href="javascript:void(0)" onclick="deleteAttach(${id})">删除</a>
+    </div>
+  </span>
+</div>
+
+</body>
+</html>

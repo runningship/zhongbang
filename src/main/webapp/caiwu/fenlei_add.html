@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>添加公告分类</title>
+<link rel="stylesheet" href="/zb/style/css.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/style/house.css">
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript">
+var queryOpts;
+
+function doSave(){
+  var data = formSerialize($('form[name=form1]'));
+  YW.ajax({
+    type: 'POST',
+    url: '/zb/c/caiwu/addFenLei',
+    data:data,
+    success: function(data){
+      art.dialog.close();
+      art.dialog.tips('添加成功');
+      art.dialog.opener.getList();
+    }
+  });
+  return false;
+}
+
+
+$(function(){
+});
+
+</script>
+</head>
+<body style="overflow:hidden">
+
+<div class="header" style="position:relative;height:50px;width:100%">
+  <form name="form1" onsubmit="doSave();return false;">
+    <div class="input-group " style="float:none;margin-top:15px;width:300px;">
+      <span class="input-group-addon">分类名称: </span>
+      <input type="text" class="form-control" desc="分类名称" name="fenlei">
+    </div>
+  </form>
+  <div class="btn-group" style="float:none;margin-top:15px;">
+    <button onclick="doSave()" class="btn btn-primary btn_subnmit">保存</button>
+  </div>
+</div>
+
+</body>
+</html>

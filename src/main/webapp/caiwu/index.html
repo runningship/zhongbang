@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+<meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<meta HTTP-EQUIV="expires" CONTENT="0">
+<title>财务管理</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link rel="stylesheet" href="/zb/style/css.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/style/house.css">
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $(document).on('click', '.aNavBtn', function(event) {
+        var aHref=$(this).attr( 'target');
+        $('#caiwu_iframe').attr('src',aHref);
+        return false;
+    });
+    $('.sider').find('a').eq(0).click();
+});
+
+function select(fenleiId){
+    var oldTarget= $('#data_list').attr('target');
+    $('#data_list').attr('target',oldTarget+"?claid="+fenleiId);
+    $('#data_list').click();
+    $('#data_list').attr('target',oldTarget);
+}
+</script>
+</head>
+<body>
+    <div class="body hmain">
+        <div class="sider">
+            <dl auth="cw_finance" class="sidedl">
+                <dt></dt>
+                <dd auth="cw_finance_fenlei" ><a class="aNavBtn" href="javascript:void(0)"  target="fenlei_list.html" >财务分类</a></dd>
+                <dd auth="cw_finance_data" ><a id="data_list" class="aNavBtn" href="javascript:void(0)" target="data_list.html" >报表列表</a></dd>
+            </dl>
+            
+        </div>
+        <div class="mainer">
+            <iframe src="" id="caiwu_iframe" name="caiwu_iframe" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+    </div>
+</body>
+</html>
