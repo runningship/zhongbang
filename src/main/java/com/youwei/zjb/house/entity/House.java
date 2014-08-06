@@ -21,6 +21,9 @@ public class House {
 	@Column(name = "did")
 	public Integer deptId;
 
+	/**
+	 * 发布人
+	 */
 	@Column(name = "uid")
 	public Integer userId;
 
@@ -112,7 +115,7 @@ public class House {
 	public String tel;
 
 	/**
-	 * 发布人
+	 * 业务员
 	 */
 	public String forlxr;
 
@@ -147,6 +150,14 @@ public class House {
 	public Date dateadd;
 
 	public Date dategenjin;
+	
+	public Date datedel;
+	
+	/**
+	 * 删除人
+	 */
+	@Column(name="fordel")
+	public String userdel;
 
 	/**
 	 * 收藏此房源的人

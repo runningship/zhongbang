@@ -31,4 +31,14 @@ public enum State {
 		}
 		return arr;
 	}
+	
+	public static State parse(String code){
+		int c = Integer.parseInt(code);
+		for(State st : State.values()){
+			if(st.code==c){
+				return st;
+			}
+		}
+		return null;
+	}
 }

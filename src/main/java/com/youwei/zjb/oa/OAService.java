@@ -56,7 +56,7 @@ public class OAService {
 		Page<Map> page = new Page<Map>();
 		page.setPageSize(5);
 		for(NoticeClass fenlei: fenLeiList){
-			StringBuilder hql = new StringBuilder("select  n.id as noticeId, n.title as title, n.addtime as addtime, nc.fenlei as classTitle, u.uname as uname from Notice n, NoticeReceiver nr , NoticeClass nc , User u where n.id=nr.noticeId and n.claid=nc.id and u.id=n.userId and n.claid=? and nr.receiverId=? order by n.addtime desc");
+			StringBuilder hql = new StringBuilder("select  n.id as noticeId, n.title as title, n.addtime as addtime, nc.fenlei as classTitle, u.uname as uname, nr.hasRead as hasRead from Notice n, NoticeReceiver nr , NoticeClass nc , User u where n.id=nr.noticeId and n.claid=nc.id and u.id=n.userId and n.claid=? and nr.receiverId=? order by n.addtime desc");
 			Page<Map> noticeList = dao.findPage(page, hql.toString(),true, new Object[]{fenlei.id , user.id});
 			mv.data.put(fenlei.fenlei, JSONHelper.toJSONArray(noticeList.getResult()));
 		}

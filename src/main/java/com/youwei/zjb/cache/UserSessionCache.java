@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.GException;
 import org.bc.sdak.utils.LogUtil;
@@ -70,5 +73,17 @@ public class UserSessionCache {
 			dao.delete(us);
 			LogUtil.info("session[id="+us.sessionId+"] was removed for user[id="+us.userId+"]");
 		}
+	}
+	
+	public static JSONArray getOnlineUsers(){
+		JSONArray arr = new JSONArray();
+		for(String userId : map.keySet()){
+			JSONObject jobj = new JSONObject();
+			User user = map.get(userId);
+			jobj.put("userId",user.id);
+			jobj.put("name", user.uname);
+			arr.add(jobj);
+		}
+		return arr;
 	}
 }

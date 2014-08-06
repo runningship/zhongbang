@@ -19,6 +19,7 @@
 var classId;
 var ue;
 function save(){
+  jisuan();
   var text = $('form[name=form1]').serialize();
   YW.ajax({
     type: 'POST',
@@ -28,6 +29,16 @@ function save(){
       alert('保存成功.');
     }
   });
+}
+
+function jisuan(){
+  var c = $('#count').val();
+  var p = $('#djia').val();
+  if(isNaN(c*p)){
+    $('#zjia').val(0);
+  }else{
+    $('#zjia').val(c*p);
+}
 }
 
 $(function(){
@@ -46,16 +57,16 @@ $(function(){
     </div>
     <div class="input-group input-group-max" style="float:none;margin-top:10px;">
       <span class="input-group-addon">数量</span>
-      <input type="text" class="form-control" desc="数量" name="count">
+      <input type="text" class="form-control" desc="数量" name="count" id="count" onblur="jisuan()">
     </div>
     <div class="input-group input-group-max" style="float:none;margin-top:10px;">
       <span class="input-group-addon">单价</span>
-      <input type="text" class="form-control" desc="单价" name="djia">
+      <input type="text" class="form-control" desc="单价" name="djia" id="djia" onblur="jisuan()">
       <span class="input-group-addon">元</span>
     </div>
     <div class="input-group input-group-max" style="float:none;margin-top:10px;">
       <span class="input-group-addon">总价</span>
-      <input type="text" class="form-control" name="zjia">
+      <input type="text" class="form-control" name="zjia" id="zjia">
       <span class="input-group-addon">元</span>
     </div>
     <div class="input-group input-group-max" style="float:none;margin-top:10px;">

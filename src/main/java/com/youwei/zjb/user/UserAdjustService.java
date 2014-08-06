@@ -162,7 +162,7 @@ public class UserAdjustService {
 			user.roleId = adjust.newRoleId;
 			user.deptId = adjust.newDeptId;
 			dao.saveOrUpdate(user);
-			user.orgpath = newDept.path+user.id;
+			user.orgpath = newDept.path+"-"+user.id;
 			dao.saveOrUpdate(user);
 //			if(adjust.fyTo!=null){
 //				dao.execute("update House set uid = ? where uid = ?", adjust.fyTo , adjust.userId);

@@ -13,7 +13,7 @@ public enum JiaoYi {
 	
 	private int code;
 	
-	private JiaoYi( int code){
+	JiaoYi( int code){
 		this.code = code;
 	}
 
@@ -31,5 +31,14 @@ public enum JiaoYi {
 			arr.add(jobj);
 		}
 		return arr;
+	}
+	
+	public static JiaoYi valueOf(int code){
+		for(JiaoYi jy : JiaoYi.values()){
+			if(jy.code==code){
+				return jy;
+			}
+		}
+		return null;
 	}
 }

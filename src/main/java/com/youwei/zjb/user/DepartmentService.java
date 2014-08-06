@@ -33,7 +33,7 @@ public class DepartmentService {
 		Department parent = dao.get(Department.class, dept.fid);
 		dao.saveOrUpdate(dept);
 		if(parent.path!=null){
-			dept.path=parent.path+dept.id;
+			dept.path=parent.path+"-"+dept.id;
 		}else{
 			dept.path=String.valueOf(dept.id);
 		}
@@ -55,7 +55,7 @@ public class DepartmentService {
 		po.namea = dept.namea;
 		po.fid = dept.fid;
 		Department parent = dao.get(Department.class, dept.fid);
-		po.path = parent.path+po.id;
+		po.path = parent.path+"-"+po.id;
 		dao.saveOrUpdate(po);
 		return new ModelAndView();
 	}

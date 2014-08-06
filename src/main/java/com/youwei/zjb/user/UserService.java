@@ -277,7 +277,7 @@ public class UserService {
 		user.pwd = SecurityHelper.Md5(DataHelper.User_Default_Password);
 		
 		dao.saveOrUpdate(user);
-		user.orgpath = dept.path+user.id;
+		user.orgpath = dept.path+"-"+user.id;
 		dao.saveOrUpdate(user);
 //		 添加审批项
 		for(User spr : sprList){
@@ -382,6 +382,20 @@ public class UserService {
 		fillQuery(query,hql,params);
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page , DataHelper.dateSdf.toPattern()));
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView sessions(){
+		ModelAndView mv = new ModelAndView();
+		mv.data.put("sessions", UserSessionCache.getOnlineUsers());
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView removeSession(int userId){
+		ModelAndView mv = new ModelAndView();
+		UserSessionCache.removeUserSession(userId);
 		return mv;
 	}
 	

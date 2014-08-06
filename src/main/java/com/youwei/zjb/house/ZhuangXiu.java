@@ -33,4 +33,13 @@ public enum ZhuangXiu {
 		}
 		return arr;
 	}
+	
+	public static ZhuangXiu valueOf(int code){
+		for(ZhuangXiu zx : ZhuangXiu.values()){
+			if(zx.code==code){
+				return zx;
+			}
+		}
+		return null;
+	}
 }

@@ -36,6 +36,27 @@ function funSubmit(){
   });
   return false;
 }
+
+function jisuandjia(){
+  var m = $('#mianji').val();
+  var z = $('#zjia').val();
+  if(isNaN(m*z)){
+    $('#djia').val(0);
+  }else{
+    $('#djia').val(z/m);
+  }
+}
+
+function jisuanzjia(){
+  var m = $('#mianji').val();
+  var d = $('#djia').val();
+  if(isNaN(m*d)){
+    $('#zjia').val(0);
+  }else{
+    $('#zjia').val(m*d);
+}
+}
+
 $(function(){
   var claid = getParam('claid');
   $('#claid').val(claid);
@@ -140,19 +161,19 @@ td{border-top:0px;}
       <td>
         <div class="input-group">
           <span class="input-group-addon">面积</span>
-          <input type="text" class="form-control" desc="面积" name="mianji" >
+          <input type="text" class="form-control" desc="面积" name="mianji"  id="mianji">
         </div>
       </td>
       <td>
         <div class="input-group">
           <span class="input-group-addon">总价</span>
-          <input type="text" class="form-control" placeholder="单位：元" desc="总价" name="zjia">
+          <input type="text" class="form-control" placeholder="单位：元" desc="总价" name="zjia" id="zjia" onblur="jisuandjia()">
         </div>
       </td>
       <td>
         <div class="input-group">
           <span class="input-group-addon">单价</span>
-          <input type="text" class="form-control" placeholder="单位：元" desc="单价" name="djia">
+          <input type="text" class="form-control" placeholder="单位：元" desc="单价" name="djia" id="djia" onblur="jisuanzjia()">
         </div>
       </td>
       <td>

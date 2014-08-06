@@ -31,9 +31,7 @@ import org.bc.sdak.utils.LogUtil;
 import org.bc.web.ModelAndView;
 import org.bc.web.WebParam;
 
-import com.youwei.zjb.house.HouseAttribute;
 import com.youwei.zjb.util.DataHelper;
-import com.youwei.zjb.util.HqlHelper;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class ServletHelper {

@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="/zb/style/css.css">
 <link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
+<link rel="stylesheet" href="/zb/style/house_addr.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
@@ -18,6 +19,7 @@
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
+<script type="text/javascript" src="/zb/js/house_addr.js"></script>
 <script type="text/javascript">
 /*
   $('form').on('submit', function() {alert('go')
@@ -167,9 +169,11 @@ $(function(){
         </div>
       </td>
       <td colspan="2">
-        <div class="input-group colspan2">
+        <div class="input-group colspan2" style="position:relative; z-index:99">
           <span class="input-group-addon" style="padding:8px;">楼盘</span>
-          <input type="text" class="form-control" name="area" value="${area}" placeholder="楼盘名称">
+          <input type="hidden" class="form-control" name="Address" id="Address">
+          <input type="text" class="form-control" id="area" name="area" value="${area}" onkeyup="keyupdeal(event);" onkeydown="keydowndeal(event);" onclick="keyupdeal(event);" autocomplete="off" placeholder="楼盘名称">
+          <div id="suggest" style="position:absolute;"></div>
         </div>
       </td>
       <td colspan="2">

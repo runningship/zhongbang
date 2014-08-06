@@ -48,9 +48,10 @@ text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；
 .j_ul_com p{ color:#999;}
 .j_ul_com th{ font-weight:normal;}
 
-
 .j_ul_com.row-fluid a{display:inline-block; width:48%; padding:5px 0;}
 .flat2{width:370px; float:left; margin-right:10px;height: 200px;}
+.text0{color:red;}
+.text1{display: none;}
 </style>
 <script type="text/javascript">
 var xingqi = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
@@ -135,6 +136,7 @@ $(function(){
                 </div>
                 <span id="item_body_${id}">
                   <div class="item_body">
+                  <span class="text${hasRead}">新</span>
                     <a onclick="openView(${noticeId},'${fenlei}')" href="javascript:void(0)" style="width:70%;overflow: hidden;text-overflow: ellipsis;">${title}</a><span style="float:right;">${addtime}</span>
                   </div>
                 </span>

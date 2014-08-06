@@ -18,6 +18,7 @@ public class JSONHelper {
 	public static JSONObject toJSON(Page<?> page){
 		return toJSON(page,"");
 	}
+	@SuppressWarnings("rawtypes")
 	public static JSONObject toJSON(Page<?> page,String timeFormat){
 		if(page==null){
 			return new JSONObject();

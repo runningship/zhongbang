@@ -103,6 +103,9 @@ public class GrandServlet extends HttpServlet{
 					rd.forward(req, resp);
 				}
 			}
+		}catch(IllegalArgumentException ex){
+			LogUtil.log(Level.WARN, "error request="+path, ex);
+			ex.printStackTrace(resp.getWriter());
 		}catch(Exception ex){
 			resp.setStatus(500);
 			//go to error page 

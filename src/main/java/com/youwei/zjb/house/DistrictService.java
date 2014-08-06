@@ -79,6 +79,30 @@ public class DistrictService {
 	}
 	
 	@WebMethod
+	public ModelAndView search(String area){
+		ModelAndView mv = new ModelAndView();
+		StringBuilder hql = new StringBuilder("from District where 1=1 ");
+		List<Object> params = new ArrayList<Object>();
+		if(StringUtils.isNotEmpty(area)){
+			area = "%"+area+"%";
+			hql.append(" and (name like ?  or quyu like ? or pinyin like ? or pyShort like ?)");
+			params.add(area);
+			params.add(area);
+			params.add(area);
+			params.add(area);
+		}
+		List<District> list = dao.listByParams(District.class, hql.toString(), params.toArray());
+		StringBuilder tmp = new StringBuilder("<dl>");
+		for(int i=0;i<list.size();i++){
+			District d = list.get(i);
+			tmp.append("<dd value='"+i+"' onclick='form_submit();' onmouseover='mo(this.value);' onmouseout='this.style.backgroundColor='><strong style='color:#696;'>"+d.name+"</strong><small>"+d.name+"</small><big>"+d.quyu+"</big></dd>");
+		}
+		tmp.append("</dl>");
+		mv.returnText = tmp.toString();
+		return mv;
+	}
+	
+	@WebMethod
 	@Transactional
 	public ModelAndView update(District district){
 		ModelAndView mv = new ModelAndView();

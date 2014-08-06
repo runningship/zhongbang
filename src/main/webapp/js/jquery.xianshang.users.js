@@ -192,6 +192,13 @@ function formSerialize(form){
     if(userId==undefined){
         userId="";
     }
-    form.find('input[name=xpath]').val(quyuId + dianId + userId);
+    var xpath =quyuId;
+    if(dianId!=null && dianId!=undefined && dianId!=""){
+        xpath=xpath+"-"+dianId;
+    }
+    if(userId!=null && userId!=undefined && userId!=""){
+        xpath=xpath+"-"+userId;
+    }
+    form.find('input[name=xpath]').val(xpath);
     return form.serialize();
 }

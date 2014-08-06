@@ -37,19 +37,31 @@ function getHuseList(a){
     $('td.cz').remove();
     $('th.cz').remove();
     $('div.cz').remove();
+    $('td.sc').remove();
+    $('th.sc').remove();
   }else if(getParamS=="chuzu"){
     url='/zb/c/house/listRent';
     $('td.cs').remove();
     $('th.cs').remove();
     $('div.cs').remove();
+    $('td.sc').remove();
+    $('th.sc').remove();
   }else if(getParamS=="del"){
     url='/zb/c/house/listRecycle';
+    $('td.sy').remove();
+    $('th.sy').remove();
   }else if(getParamS=="my"){
     url='/zb/c/house/listMy';
+    $('td.sc').remove();
+    $('th.sc').remove();
   }else if(getParamS=="fav"){
     url='/zb/c/house/fav/list';
+    $('td.sc').remove();
+    $('th.sc').remove();
   }else{
     url='/zb/c/house/listAll';
+    $('td.sc').remove();
+    $('th.sc').remove();
   }
 //  alert(url)
   YW.ajax({
@@ -442,18 +454,18 @@ $(function(){
       </div>
       <div class="input-group cs">
         <span class="input-group-addon">售价</span>
-        <input type="text" class="form-control" name="sjiaStart" placeholder="单位(万元)">
-        <input type="text" class="form-control" name="sjiaEnd" placeholder="单位(万元)">
+        <input type="text" class="form-control" name="sjiaStart" desc="售价" placeholder="单位(万元)">
+        <input type="text" class="form-control" name="sjiaEnd" desc="售价" placeholder="单位(万元)">
       </div>
       <div class="input-group cz">
         <span class="input-group-addon">租金</span>
-        <input type="text" class="form-control" name="zjiaStart" placeholder="元/月">
-        <input type="text" class="form-control" name="zjiaEnd" placeholder="元/月">
+        <input type="text" class="form-control" name="zjiaStart" desc="租金" placeholder="元/月">
+        <input type="text" class="form-control" name="zjiaEnd" desc="租金" placeholder="元/月">
       </div>
       <div class="input-group">
         <span class="input-group-addon">面积</span>
-        <input type="text" class="form-control" name="mianjiStart" placeholder="面积开始(M²)">
-        <input type="text" class="form-control" name="mianjiEnd" placeholder="面积结束(M²)">
+        <input type="text" class="form-control" name="mianjiStart" desc="面积" placeholder="面积开始(M²)">
+        <input type="text" class="form-control" name="mianjiEnd" desc="面积" placeholder="面积结束(M²)">
       </div>
       <div class="input-group">
         <span class="input-group-addon">楼层</span>
@@ -497,8 +509,10 @@ $(function(){
       <th class="cz">租金</th>
       <th>装潢</th>
       <th>年代</th>
-      <th>发布时间</th>
-      <th>发布人</th>
+      <th class="sy">发布时间</th>
+      <th class="sy">发布人</th>
+      <th class="sc">删除时间</th>
+      <th class="sc">删除人</th>
       <th>性质</th>
       <th>状态</th>
       <!-- <th>房配客</th> -->
@@ -518,8 +532,10 @@ $(function(){
       <td class="cz">${zjia}</td>
       <td class='runscript'>getEnumText('zhuangxiu',${zhuangxiu})</td>
       <td>${dateyear}</td>
-      <td>${dateadd}</td>
-      <td>${forlxr}</td>
+      <td class="sy">${dateadd}</td>
+      <td class="sy">${fbr}</td>
+      <td class="sc">${datedel}</td>
+      <td class="sc">${userdel}</td>
       <td ><span auth="!$${authParent}_xingzhi" class='runscript xingzhi-${xingzhi}'>getEnumText('xingzhi',${xingzhi})</span>
         <a auth="$${authParent}_xingzhi" href="javascript:void(0)" onclick="openHouseXingzhi(${id},${xingzhi})"><span class='runscript xingzhi-${xingzhi}'>getEnumText('xingzhi',${xingzhi})</span></a></td>
       <td class='runscript'>getEnumText('zhuangtai',${ztai})</td>

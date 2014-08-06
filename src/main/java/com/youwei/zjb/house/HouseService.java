@@ -1,10 +1,22 @@
 package com.youwei.zjb.house;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+import jxl.write.biff.RowsExceededException;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
@@ -28,6 +40,7 @@ import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.entity.UserAuthority;
 import com.youwei.zjb.house.entity.Favorite;
+import com.youwei.zjb.house.entity.GenJin;
 import com.youwei.zjb.house.entity.House;
 import com.youwei.zjb.sys.OperatorService;
 import com.youwei.zjb.sys.OperatorType;
@@ -82,6 +95,7 @@ public class HouseService {
 	
 	@WebMethod
 	public ModelAndView update(House house){
+		
 		ModelAndView mv = new ModelAndView();
 		String py = DataHelper.toPinyin(house.quyu);
 		if(StringUtils.isNotEmpty(py) && py.length()>0){
@@ -90,6 +104,7 @@ public class HouseService {
 			LogUtil.warning("生成房源编号失败,houseId="+house.id);
 		}
 		House po = service.get(House.class, house.id);
+		String gjStr = DataHelper.compareHouse(po, house);
 		house.isdel = po.isdel;
 		house.dateadd = po.dateadd;
 		house.userId = po.userId;
@@ -100,6 +115,17 @@ public class HouseService {
 		}
 		service.saveOrUpdate(house);
 		User user = ThreadSession.getUser();
+		if(StringUtils.isNotEmpty(gjStr)){
+		GenJin gj = new GenJin();
+			gj.userId = user.id;
+			gj.bianhao = house.houseNumber;
+			gj.area = house.area +house.dhao+"#"+house.fhao;
+			gj.addtime = new Date();
+			gj.sh=1;
+			gj.conts = gjStr;
+			gj.hid = po.id;
+			service.saveOrUpdate(gj);
+		}
 		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 修改了房源["+house.houseNumber+"]";
 		operService.add(OperatorType.房源记录, operConts);
 		mv.data.put("msg", "修改成功");
@@ -127,9 +153,12 @@ public class HouseService {
 		if(houseId!=null){
 			House po = service.get(House.class, houseId);
 			if(po!=null){
-				po.isdel= 1;
-				service.saveOrUpdate(po);
 				User user = ThreadSession.getUser();
+				po.isdel= 1;
+				po.datedel = new Date();
+				po.userdel = user.uname;
+				service.saveOrUpdate(po);
+				
 				String operConts = "["+user.Department().namea+"-"+user.uname+ "] 删除了房源["+po.area+"]";
 				operService.add(OperatorType.房源记录, operConts);
 			}
@@ -210,14 +239,8 @@ public class HouseService {
 	
 	@WebMethod
 	public ModelAndView listMy(HouseQuery query ,Page<House> page){
-//		User user = ThreadSession.getUser();
-//		if(user==null){
-//			ModelAndView mv = new ModelAndView();
-//			mv.data.put("msg", "用户已经掉线");
-//			return mv;
-//		}
-//		query.userId = user.id;
-		query.userId = 396;
+		User user = ThreadSession.getUser();
+		query.userId = user.id;
 		return listAll(query ,page);
 	}
 	
@@ -270,6 +293,7 @@ public class HouseService {
 		return listAll(query , page);
 	}
 	
+	
 	@WebMethod
 	public ModelAndView view(String authParent , int houseId){
 		User user = ThreadSession.getUser();
@@ -299,17 +323,15 @@ public class HouseService {
 		return mv;
 	}
 	
-	@WebMethod
-	public ModelAndView listAll(HouseQuery query ,Page<House> page){
-		List<Object> params = new ArrayList<Object>();
-		System.out.println(BeanUtil.toString(query));
-		StringBuilder hql = null;
+	private void buildQuery(StringBuilder hql,HouseQuery query , List<Object> params){
+		hql.append(" select h, u.uname as fbr from  House h  ,User u where h.userId=u.id  ");
 		if(StringUtils.isNotEmpty(query.xpath)){
-			hql = new StringBuilder(" select h from  House h  ,User u where h.userId=u.id and u.id is not null and u.orgpath like ? ");
+			hql.append(" and u.orgpath like ? ");
 			params.add(query.xpath+"%");
-		}else{
-			hql = new StringBuilder(" select h  from House  h where 1=1 ");
 		}
+//		else{
+//			hql.append(" select h  from House  h where 1=1 ");
+//		}
 		if(query.xingzhi!=null){
 			hql.append(" and h.xingzhi = ? ");
 			params.add(String.valueOf(query.xingzhi.getCode()));
@@ -433,10 +455,70 @@ public class HouseService {
 			hql.append(" and h.isdel=?");
 			params.add(query.isdel);
 		}
+	}
+	@WebMethod
+	public ModelAndView export(HouseQuery query ,Page<House> page){
+		ModelAndView mv = new ModelAndView();
+		List<Object> params = new ArrayList<Object>();
+		StringBuilder hql = new StringBuilder();
+		buildQuery(hql,query,params);
+		page = service.findPage(page,hql.toString(), true, params.toArray());
+		JSONObject json = JSONHelper.toJSON(page);
+		JSONArray data = json.getJSONArray("data");
+		try {
+			WritableWorkbook workbook = Workbook.createWorkbook(new File("d:" + File.separator + "barcode.xls")) ;
+			 WritableSheet sheet = workbook.createSheet("房源", 0) ;
+			 sheet.addCell(new Label(0, 0, "编号"));
+			 sheet.addCell(new Label(1, 0, "类别"));
+			 sheet.addCell(new Label(2, 0, "区域"));
+			 sheet.addCell(new Label(3, 0, "楼盘名称"));
+			 sheet.addCell(new Label(4, 0, "室厅卫阳"));
+			 sheet.addCell(new Label(5, 0, "楼层"));
+			 sheet.addCell(new Label(6, 0, "面积"));
+			 sheet.addCell(new Label(7, 0, "单价"));
+			 sheet.addCell(new Label(8, 0, "总价"));
+			 sheet.addCell(new Label(9, 0, "装潢"));
+			 sheet.addCell(new Label(10, 0, "年代"));
+			 sheet.addCell(new Label(11, 0, "发布时间"));
+			 sheet.addCell(new Label(12, 0, "发布人"));
+			 sheet.addCell(new Label(13, 0, "性质"));
+			 sheet.addCell(new Label(14, 0, "状态"));
+			 
+//			 for(int index=0;index<list.size();index++){
+//				 House h = list.get(index);
+//				 sheet.addCell(new Label(0, index+1, h.houseNumber));
+//				 sheet.addCell(new Label(1, index+1, h.leibie));
+//				 sheet.addCell(new Label(2, index+1, h.quyu));
+//				 sheet.addCell(new Label(3, index+1, h.area));
+//				 sheet.addCell(new Label(4, index+1, h.hxf+"/"+h.hxt+"/"+h.hxw+"/"+h.hxy));
+//				 sheet.addCell(new Label(5, index+1, h.lceng==null? "":h.lceng.toString()));
+//				 sheet.addCell(new Label(6, index+1, h.mianji==null? "":h.mianji.toString()));
+//				 sheet.addCell(new Label(7, index+1, h.djia==null? "":h.djia.toString()));
+//				 sheet.addCell(new Label(8, index+1, h.sjia==null? "":h.sjia.toString()));
+//				 sheet.addCell(new Label(9, index+1, h.zhuangxiu==null? "":h.zhuangxiu.toString()));
+//				 sheet.addCell(new Label(10, index+1, h.dateyear==null? "":h.dateyear.toString()));
+//				 sheet.addCell(new Label(11, index+1, h.dateadd==null? "":h.dateadd.toString()));
+//				 sheet.addCell(new Label(12, index+1, h.forlxr==null? "":h.forlxr.toString()));
+//				 sheet.addCell(new Label(13, index+1, h.xingzhi==null? "":h.xingzhi.toString()));
+//				 sheet.addCell(new Label(14, index+1, h.ztai==null? "":h.ztai.toString()));
+//			 }
+			 workbook.write();
+			 workbook.close();
+		} catch (IOException  | WriteException e) {
+			e.printStackTrace();
+		}
+		return mv;
+	}
+	@WebMethod
+	public ModelAndView listAll(HouseQuery query ,Page<House> page){
+		List<Object> params = new ArrayList<Object>();
+		StringBuilder hql = new StringBuilder();
+		buildQuery(hql,query,params);
 		page.orderBy = "h.dateadd";
 		page.order = Page.DESC;
 //		hql.append(" and ( isdel= 0 or isdel is null) ");
-		page = service.findPage(page, hql.toString(),params.toArray());
+		page.mergeResult = true;
+		page = service.findPage(page, hql.toString(), true , params.toArray());
 		ModelAndView mv = new ModelAndView();
 		User user = ThreadSession.getUser();
 		for(UserAuthority ua :  user.Authorities()){

@@ -30,4 +30,14 @@ public enum HouseAttribute {
 		}
 		return arr;
 	}
+	
+	public static HouseAttribute parse(String code){
+		int c = Integer.parseInt(code);
+		for(HouseAttribute st : HouseAttribute.values()){
+			if(st.code==c){
+				return st;
+			}
+		}
+		return null;
+	}
 }
