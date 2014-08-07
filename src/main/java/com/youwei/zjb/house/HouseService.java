@@ -39,6 +39,7 @@ import com.youwei.zjb.client.KeHuLaiYuan;
 import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.entity.UserAuthority;
+import com.youwei.zjb.house.entity.District;
 import com.youwei.zjb.house.entity.Favorite;
 import com.youwei.zjb.house.entity.GenJin;
 import com.youwei.zjb.house.entity.House;
@@ -59,6 +60,10 @@ public class HouseService {
 	public ModelAndView add(House house){
 		ModelAndView mv = new ModelAndView();
 		User user = ThreadSession.getUser();
+		District area = service.getUniqueByKeyValue(District.class, "name", house.area);
+		if(area==null){
+			throw new GException(PlatformExceptionType.BusinessException,"楼盘在楼盘字典中不存在，您可以先在楼盘字典中添加该楼盘");
+		}
 		//检查，是否是重复房源.检查条件为,小区名+楼栋号+房号
 		House po = service.getUniqueByParams(House.class, new String[]{"area","dhao","fhao"},new Object[]{house.area,house.dhao,house.fhao});
 		if(po!=null){

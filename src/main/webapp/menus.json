@@ -133,7 +133,16 @@
 		},{
 			"name":"fy_other_setting",
 			"text":"楼盘字典",
-			"type":"menu"
+			"type":"virtual",
+			"children":[{
+				"name":"fy_other_setting_list",
+				"text":"列表",
+				"type":"menu"
+			},{
+				"name":"fy_other_setting_del",
+				"text":"删除",
+				"type":"menu"
+			}]
 		},{
 			"name":"fy_other_recycle",
 			"text":"回收站",
@@ -405,6 +414,10 @@
 			"text":"删除",
 			"type":"menu"
 		},{
+			"name":"yw_jilu_hy_edit",
+			"text":"修改",
+			"type":"menu"
+		},{
 			"name":"yw_jilu_hy_data",
 			"text":"数据权限",
 			"type":"virtual",
@@ -434,6 +447,10 @@
 		},{
 			"name":"yw_jilu_fy_del",
 			"text":"删除",
+			"type":"menu"
+		},{
+			"name":"yw_jilu_fy_edit",
+			"text":"修改",
 			"type":"menu"
 		},{
 			"name":"yw_jilu_fy_data",
@@ -467,6 +484,10 @@
 			"text":"删除",
 			"type":"menu"
 		},{
+			"name":"yw_jilu_zj_edit",
+			"text":"修改",
+			"type":"menu"
+		},{
 			"name":"yw_jilu_zj_data",
 			"text":"数据权限",
 			"type":"virtual",
@@ -496,6 +517,10 @@
 		},{
 			"name":"yw_jilu_kq_del",
 			"text":"删除",
+			"type":"menu"
+		},{
+			"name":"yw_jilu_kq_edit",
+			"text":"修改",
 			"type":"menu"
 		},{
 			"name":"yw_jilu_kq_data",

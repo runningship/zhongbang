@@ -78,6 +78,22 @@ function openView(id){
   });
 }
 
+function openEdit(id){
+  var url = "";
+  if(category==0){
+    url = 'edit_huiyi.html?category='+category+'&recordId='+id;
+  }else{
+    url = 'edit.html?category='+category+'&recordId='+id;
+  }
+  art.dialog.open(url,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:700
+  });
+}
+
 function openAdd(){
   var url = "";
   if(category==0){
@@ -125,7 +141,7 @@ $(function(){
 
 <div class="header">
   <div class="btn-group">
-    <button onclick="openAdd();" class="btn btn-primary">新增1</button>
+    <button onclick="openAdd();" class="btn btn-primary">新增</button>
   </div>
   <form id="form1" name="form1">
     <div class="clearfix">
@@ -168,6 +184,7 @@ $(function(){
       <td>${addtime}</td>
       <td>
         <a onclick="openView(${id})" href="javascript:void(0)" >查看</a>
+        <a auth="$${authParent}_edit" onclick="openEdit(${id})" href="javascript:void(0)" >修改</a>
         <a auth="$${authParent}_del" href="javascript:void(0)" onclick="deleteOut(${id})">删除</a>
       </td>
     </tr>

@@ -48,6 +48,23 @@ function onSubmit_Form(){
   });
 }
 
+function openDel(id){
+  art.dialog({
+    title: '警告',
+    content: '是否确定删除该楼盘字典',
+    ok: function () {
+      YW.ajax({
+        url:'/zb/c/areas/delete?id='+id,
+        data:'',
+        success:function (data, textStatus) {
+            getAreaList();
+            alert('删除成功');
+        }
+      });
+    },cancel:true
+  });
+}
+
 function openEdit(rowIndex){
   if(rowIndex){
     art.dialog.open('areaedit.html?areaId='+rowIndex,{
@@ -132,7 +149,9 @@ $(document).ready(function() {
       <td>${address}</td>
       <td>${pyShort}</td>
       <td>${pinyin}</td>
-      <td><a href="javascript:void(0)" onclick="openEdit(${id})">编辑<span>${maplat},</span><span>${maplng}</span></a></td>
+      <td><a href="javascript:void(0)" onclick="openEdit(${id})">编辑<span>${maplat},</span><span>${maplng}</span></a>
+          <a auth="fy_other_setting_del" href="javascript:void(0)" onclick="openDel(${id})">删除</a>
+      </td>
       
     </tr>
     </tbody>

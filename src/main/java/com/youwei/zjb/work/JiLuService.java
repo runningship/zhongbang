@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
+import org.bc.sdak.GException;
 import org.bc.sdak.Page;
 import org.bc.sdak.TransactionalServiceHelper;
 import org.bc.web.ModelAndView;
@@ -14,6 +15,7 @@ import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
 import com.youwei.zjb.DateSeparator;
+import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.Attachment;
 import com.youwei.zjb.entity.User;
@@ -40,10 +42,30 @@ public class JiLuService {
 	}
 	
 	@WebMethod
+	public ModelAndView update(JiLu jilu){
+		ModelAndView mv = new ModelAndView();
+		if(jilu.id==null){
+			throw new GException(PlatformExceptionType.BusinessException, "记录已不存在");
+		}
+		JiLu po = dao.get(JiLu.class, jilu.id);
+		if(po==null){
+			throw new GException(PlatformExceptionType.BusinessException, "记录已不存在");
+		}
+		po.title=jilu.title;
+		po.conts = jilu.conts;
+		po.starttime = jilu.starttime;
+		po.endtime = jilu.endtime;
+		po.goin = jilu.goin;
+		dao.saveOrUpdate(po);
+		mv.data.put("result", 0);
+		return mv;
+	}
+	
+	@WebMethod
 	public ModelAndView list(JiLuQuery query,Page<Map> page){
 		ModelAndView mv = new ModelAndView();
 		List<Object> params = new ArrayList<Object>();
-		StringBuilder hql = new StringBuilder("select u.uname as uname,q.namea as deptName,q.namea as quyu,j.title as title ,j.addtime as addtime "
+		StringBuilder hql = new StringBuilder("select u.uname as uname,d.namea as deptName,q.namea as quyu,j.title as title ,j.addtime as addtime "
 				+ ",j.id as id , j.category as category from JiLu j, User u,Department d,Department q where j.userId=u.id and u.deptId=d.id and d.fid=q.id");
 		if(query.category!=null){
 			hql.append(" and j.category=?");

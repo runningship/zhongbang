@@ -9,7 +9,9 @@ public enum State {
 	无效(4),
 	暂缓(3),
 	我售(8),
-	已售(7);
+	已售(7),
+	我租(9),
+	已租(10);
 	private int code;
 	
 	private State( int code){
