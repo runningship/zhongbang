@@ -58,7 +58,7 @@ public class UserAdjustService {
 		mv.data.put("reason", adjust.reason);
 		mv.data.put("jiaojie", adjust.jiaojie);
 		
-		List<Map> spList = dao.listAsMap("select r.id as id, r.sprId as sprId, u.uname as spr , r.sh as sh from User u, RenShiReview r where r.category='adjust' and r.userId=? and u.id=r.sprId",adjust.userId);
+		List<Map> spList = dao.listAsMap("select r.id as id, r.sprId as sprId, u.uname as spr , r.sh as sh from User u, RenShiReview r where r.category='adjust' and r.userId=? and u.sh=1 and u.flag=0 and  u.id=r.sprId",adjust.userId);
 		mv.data.put("myId", ThreadSession.getUser().id);
 		mv.data.put("spList", JSONHelper.toJSONArray(spList));
 		return mv;
@@ -102,7 +102,7 @@ public class UserAdjustService {
 		List<Object> params = new ArrayList<Object>();
 		User user = ThreadSession.getUser();
 		hql.append("select ud.id as id, review.sh as tzsh,ud.applyTime as applyTime, ud.passTime as passTime, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
-				+ "from User  u, Department d,Role r ,UserAdjust ud, RenShiReview review where review.sh=0 and u.id=ud.userId and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? and review.category='"+RenShiReview.Adjust+"' ");
+				+ "from User  u, Department d,Role r ,UserAdjust ud, RenShiReview review where review.sh=0 and u.id=ud.userId and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? and u.flag=0 and review.category='"+RenShiReview.Adjust+"' ");
 		params.add(user.id);
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));
@@ -116,24 +116,24 @@ public class UserAdjustService {
 		List<Object> params = new ArrayList<Object>();
 		User user = ThreadSession.getUser();
 		hql.append("select ud.id as id, review.sh as tzsh,ud.applyTime as applyTime, ud.passTime as passTime, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
-				+ "from User  u, Department d,Role r ,UserAdjust ud, RenShiReview review where u.id=ud.userId and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? and review.sh<>0 and review.category='"+RenShiReview.Adjust+"' ");
+				+ "from User  u, Department d,Role r ,UserAdjust ud, RenShiReview review where u.id=ud.userId and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? and u.flag=0 and review.sh<>0 and review.category='"+RenShiReview.Adjust+"' ");
 		params.add(user.id);
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;
 	}
 	
-	@WebMethod
-	public ModelAndView list(String applyTimeStart , Page<Map> page){
-		ModelAndView mv = new ModelAndView();
-		StringBuilder hql = new StringBuilder("select d.namea as deptName,u.address as address ,u.gender as gender, u.uname as uname, r.title as title, u.tel as tel, ad.reason as reason, ad.applyTime as applyTime "
-				+ " ,ad.id as id from User u , UserAdjust ad, Role r ,Department d  where u.id=ad.userId and ad.newRoleId=r.id and u.deptId=d.id");
-		List<Object> params = new ArrayList<Object>();
-		hql.append(HqlHelper.buildDateSegment("applyTime", applyTimeStart, DateSeparator.After, params ));
-		page = dao.findPage(page , hql.toString(), true, params.toArray());
-		mv.data.put("page",  JSONHelper.toJSON(page));
-		return mv;
-	}
+//	@WebMethod
+//	public ModelAndView list(String applyTimeStart , Page<Map> page){
+//		ModelAndView mv = new ModelAndView();
+//		StringBuilder hql = new StringBuilder("select d.namea as deptName,u.address as address ,u.gender as gender, u.uname as uname, r.title as title, u.tel as tel, ad.reason as reason, ad.applyTime as applyTime "
+//				+ " ,ad.id as id from User u , UserAdjust ad, Role r ,Department d  where u.id=ad.userId and ad.newRoleId=r.id and u.deptId=d.id");
+//		List<Object> params = new ArrayList<Object>();
+//		hql.append(HqlHelper.buildDateSegment("applyTime", applyTimeStart, DateSeparator.After, params ));
+//		page = dao.findPage(page , hql.toString(), true, params.toArray());
+//		mv.data.put("page",  JSONHelper.toJSON(page));
+//		return mv;
+//	}
 	
 	@WebMethod
 	public void delete(int adjustId){
@@ -150,7 +150,7 @@ public class UserAdjustService {
 		RenShiReview po = dao.get(RenShiReview.class, spId);
 		po.sh = 1;
 		dao.saveOrUpdate(po);
-		long count = dao.countHqlResult("from RenShiReview where userid=? and sh=0 and category='"+RenShiReview.Adjust+"' ", po.userId);
+		long count = dao.countHqlResult("from RenShiReview r ,User u where r.userId=? and r.sh=0 and u.id=r.sprId and u.sh=1 and u.flag=0 and category='"+RenShiReview.Adjust+"' ", po.userId);
 		UserAdjust adjust = dao.get(UserAdjust.class, adjustId);
 		User user = dao.get(User.class, adjust.userId);
 		Department oldDept = dao.get(Department.class,adjust.oldDeptId);

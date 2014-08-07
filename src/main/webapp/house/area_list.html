@@ -139,6 +139,8 @@ $(document).ready(function() {
       <th>地址</th>
       <th>简拼</th>
       <th>全拼</th>
+      <th>经度</th>
+      <th>纬度</th>
       <th>操作</th>
     </thead>
     <tbody id="id_House_list">
@@ -149,7 +151,9 @@ $(document).ready(function() {
       <td>${address}</td>
       <td>${pyShort}</td>
       <td>${pinyin}</td>
-      <td><a href="javascript:void(0)" onclick="openEdit(${id})">编辑<span>${maplat},</span><span>${maplng}</span></a>
+      <td><span>${maplat}</span></td>
+      <td><span>${maplng}</span></td>
+      <td><a href="javascript:void(0)" onclick="openEdit(${id})">编辑</a>
           <a auth="fy_other_setting_del" href="javascript:void(0)" onclick="openDel(${id})">删除</a>
       </td>
       

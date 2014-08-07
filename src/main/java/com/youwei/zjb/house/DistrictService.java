@@ -95,7 +95,7 @@ public class DistrictService {
 		StringBuilder tmp = new StringBuilder("<dl>");
 		for(int i=0;i<list.size();i++){
 			District d = list.get(i);
-			tmp.append("<dd value='"+i+"' onclick='form_submit();' onmouseover='mo(this.value);' onmouseout='this.style.backgroundColor='><strong style='color:#696;'>"+d.name+"</strong><small>"+d.name+"</small><big>"+d.quyu+"</big></dd>");
+			tmp.append("<dd value='"+i+"' onclick='form_submit();' onmouseover="+"\"mo($(this).attr('value'));\""+"  ><strong style='color:#696;'>"+d.name+"</strong><small>&nbsp;</small><big>"+d.quyu+"</big></dd>");
 		}
 		tmp.append("</dl>");
 		mv.returnText = tmp.toString();

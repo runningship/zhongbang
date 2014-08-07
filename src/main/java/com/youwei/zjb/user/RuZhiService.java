@@ -31,7 +31,7 @@ public class RuZhiService {
 		Department dept = dao.get(Department.class,  user.deptId);
 		Department comp = dao.get(Department.class, dept.fid);
 		List<Role> roles = dao.listByParams(Role.class, "from Role");
-		List<Map> spList = dao.listAsMap("select r.id as id, r.sprId as sprId, u.uname as spr , r.sh as sh from User u, RenShiReview r where r.category='join' and r.userId=? and u.id=r.sprId",userId);
+		List<Map> spList = dao.listAsMap("select r.id as id, r.sprId as sprId, u.uname as spr , r.sh as sh from User u, RenShiReview r where r.category='join' and r.userId=? and u.id=r.sprId and u.sh=1 and u.flag=0",userId);
 		mv.data.put("roles", JSONHelper.toJSONArray(roles));
 		mv.data.put("rqtjs", RuQiTuJin.toJsonArray());
 		mv.data.put("user", JSONHelper.toJSON(user,DataHelper.dateSdf.toPattern()));
@@ -58,7 +58,7 @@ public class RuZhiService {
 		RenShiReview po = dao.get(RenShiReview.class, spId);
 		po.sh = 1;
 		dao.saveOrUpdate(po);
-		long count = dao.countHqlResult("from RenShiReview where userid=? and sh=0 and category='join' ", po.userId);
+		long count = dao.countHqlResult("from RenShiReview r,User u where r.userId=? and r.sh=0 and category='join' and u.id=r.sprId and u.flag=0 and u.sh=1 ", po.userId);
 		if(count==0){
 			User user = dao.get(User.class, po.userId);
 			user.sh=1;

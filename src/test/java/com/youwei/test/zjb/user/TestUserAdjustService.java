@@ -22,11 +22,6 @@ public class TestUserAdjustService {
 		StartUpListener.initDataSource();
 	}
 	
-	@Test
-	public void testList(){
-		ModelAndView mv = service.list("",new Page<Map>());
-		DebugHelper.printResult((List<?>) mv.data.get("data"));
-	}
 	
 	@Test
 	public void testAdd(){

@@ -33,7 +33,7 @@ public class IMService {
 	public ModelAndView getContacts(int userId) {
 		ModelAndView mv = new ModelAndView();
 		List<Map> list = dao.listAsMap("select c.id as id ,c.ownerId as ownerId ,c.contactId as contactId ,c.ugroup as group ,u.uname as contactName, "
-				+ " u.tel as contactTel,d.namea as deptName,u.avatar as avatar from User u,Contact c,Department d where c.contactId=u.id and d.id=u.deptId and c.ownerId=?", new Object[] { userId });
+				+ " u.tel as contactTel,d.namea as deptName,u.avatar as avatar from User u,Contact c,Department d where c.contactId=u.id and d.id=u.deptId and u.sh=1 and u.flag=0 and c.ownerId=?", new Object[] { userId });
 		for(Map map : list){
 			int uid = (int) map.get("contactId");
 			if(IMServer.isUserOnline(uid)){

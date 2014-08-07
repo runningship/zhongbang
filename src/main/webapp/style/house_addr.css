@@ -2,7 +2,7 @@
 /* CSS Document */
 
 
-#suggest { position:absolute;top:63px; left:0; right:0;}
+#suggest { position:absolute;top:34px; left:0; right:0;}
 #suggest dl{padding:2px;background-color:#FFF; border-width:1px; border-style: none solid solid; border-color:#CCC #CCC #CCC #CCC; font-size:12px; margin:0;}
 #suggest dd{position:relative;padding:auto 2px;margin:2px 0px;cursor:hand;line-height:16px;font-size:12px;color:#999;/*每一行的文字颜色*/
 border-bottom:1px #ccc dashed;}

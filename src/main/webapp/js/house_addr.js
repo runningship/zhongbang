@@ -20,19 +20,21 @@ var $$=function(node){
 
 //异步读取数据库数据，将结果显示在suggest div中
 function ajax_keyword(){
-	YW.ajax({
-    type: 'POST',
-    url: '/zb/c/areas/search',
-    data:'area='+$$$("area").value,
-    success: function(data){
-    	if(data){
-        	$$$("suggest").style.display="block";
+if ($$$("area").value=='') {
+    return;
+}
+ YW.ajax({
+        type: 'POST',
+        url: '/zb/c/areas/search',
+        data:'area='+$$$("area").value,
+        success: function(data){
+            if(data){
+                $$$("suggest").style.display="block";
+            }
+            $$$("suggest").innerHTML=unescape(data);
+            j=-1;
         }
-        $$$("suggest").innerHTML=unescape(data);
-        j=-1;
-    }
-  });
-
+      });
     // var xmlhttp;
     // try{
     //     xmlhttp=new XMLHttpRequest();
