@@ -97,6 +97,26 @@ public class UserService {
 	}
 	
 	@WebMethod
+	public ModelAndView search(String username){
+		ModelAndView mv = new ModelAndView();
+		String hql = "select uname as uname , id as userId ,tel as tel from User where uname like ?";
+		List<Map> list = dao.listAsMap(hql, "%"+username+"%");
+		StringBuilder sb = new StringBuilder();
+		if(list.isEmpty()){
+			mv.returnText="empty";
+		}else{
+			for(Map map : list){
+				Object tel = map.get("tel");
+				if(tel==null){
+					tel="";
+				}
+				sb.append("<option tel='"+tel+"' value='"+map.get("userId")+"'>").append(map.get("uname")).append("</option>");
+			}
+			mv.returnText = sb.toString();
+		}
+		return mv;
+	}
+	@WebMethod
 	public ModelAndView initIndex(){
 		ModelAndView mv = new ModelAndView();
 		User user = ThreadSession.getUser();

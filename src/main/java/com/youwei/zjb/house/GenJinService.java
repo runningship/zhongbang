@@ -37,7 +37,7 @@ public class GenJinService {
 		gj.bianhao = house.houseNumber;
 		gj.area = house.area +house.dhao+"#"+house.fhao;
 		gj.addtime = new Date();
-		gj.sh=1;
+		gj.sh=0;
 		service.saveOrUpdate(gj);
 		mv.data.put("msg", "保存成功");
 		return mv;

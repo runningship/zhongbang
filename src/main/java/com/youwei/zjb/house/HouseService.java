@@ -72,7 +72,7 @@ public class HouseService {
 		}else{
 			house.isdel = 0;
 			house.dateadd = new Date();
-			house.userId = user.id;
+//			house.userId = user.id;
 			house.deptId = user.deptId;
 			if(house.sjia ==null){
 				house.sjia=0f;
@@ -112,7 +112,7 @@ public class HouseService {
 		String gjStr = DataHelper.compareHouse(po, house);
 		house.isdel = po.isdel;
 		house.dateadd = po.dateadd;
-		house.userId = po.userId;
+//		house.userId = po.userId;
 		house.deptId = po.deptId;
 		if(house.mianji!=null && house.mianji!=0){
 			int jiage = (int) (house.sjia*10000/house.mianji);
@@ -323,6 +323,7 @@ public class HouseService {
 			Department quyu = dept.Parent();
 			String fbrStr = quyu.namea+" "+dept.namea + " "+fbr.uname;
 			mv.data.put("fbr", fbrStr);
+			mv.data.getJSONArray("house").getJSONObject(0).put("ywy", fbr.uname);
 		}
 		Favorite fav = service.getUniqueByParams(Favorite.class, new String[]{"userId" , "houseId"}, new Object[]{ user.id , houseId });
 		mv.data.put("fav", fav==null ? 0:1);

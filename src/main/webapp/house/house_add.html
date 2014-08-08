@@ -20,6 +20,7 @@
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
 <script type="text/javascript" src="/zb/js/house_addr.js"></script>
+<script type="text/javascript" src="/zb/js/user_complete.js"></script>
 <script type="text/javascript">
 /*
   $('form').on('submit', function() {alert('go')
@@ -127,9 +128,10 @@ $(function(){
           $('#ywy').attr('readonly','true');
         });
       }else{
-        var gerStrNull={"page":{"autoCount":"","currentPageNo":"","firstOfPage":"","lastOfPage":"","pageSize":"","pageUrl":"","totalCount":"","totalPageCount":"","data":[{"id":"","deptId":"","userId":"","cid":"","quyu":"","area":"","dhao":"","fhao":"","luduan":"","lceng":"","zceng":"","lxing":"","hxf":"","hxt":"","hxw":"","hxy":"","chaoxiang":"","zhuangxiu":"","mianji":"","zjia":"","sjia":"","djia":"","lxr":"","tel":"","ywy":"","fortel":"$${myTel}","beizhu":"","jiaoyi":chuzu,"leibie":"","flag":"","xingzhi":"","tuijie":"","dateyear":"","dateweituo":"","datejiaofang":"","dateadd":"","dategenjin":"","fav":"","houseNumber":"","isdel":"","sh":"","chanquan":"","tudizheng":"","fordlr":"","fordlrtel":""}]}}
+        var gerStrNull={"page":{"autoCount":"","currentPageNo":"","firstOfPage":"","lastOfPage":"","pageSize":"","pageUrl":"","totalCount":"","totalPageCount":"","data":[{"id":"","deptId":"","userId":"","cid":"","quyu":"","area":"","dhao":"","fhao":"","luduan":"","lceng":"","zceng":"","lxing":"","hxf":"","hxt":"","hxw":"","hxy":"","chaoxiang":"","zhuangxiu":"","mianji":"","zjia":"","sjia":"","djia":"","lxr":"","tel":"","ywy":"$${myName}","fortel":"$${myTel}","beizhu":"","jiaoyi":chuzu,"leibie":"","flag":"","xingzhi":"","tuijie":"","dateyear":"","dateweituo":"","datejiaofang":"","dateadd":"","dategenjin":"","fav":"","houseNumber":"","isdel":"","sh":"","chanquan":"","tudizheng":"","fordlr":"","fordlrtel":""}]}}
         //gerStrNull=JSON.parse(gerStrNull)
         // buildHtmlWithJsonArray("id_house_see",gerStrNull['page']['data'],true);
+        fillData(gerStrNull['page']['data'][0]);
         $('#id_xingzhi').attr('disabled',"disabled");
       }
   });
@@ -150,7 +152,7 @@ $(function(){
 <form name="form1" method="post" action="/zb/c/house/add" onsubmit="return funSubmit();">
   <input type="hidden" class="form-control" name="id" value="${id}">
   <input type="hidden" class="form-control" name="deptId" value="${deptId}">
-  <input type="hidden" class="form-control" name="userId" value="${userId}">
+  <input type="hidden" class="form-control" id="userId" name="userId" value="${userId}">
   <input type="hidden" class="form-control" name="djia" value="${djia}">
   <table class="table table-condensed">
     <tr>
@@ -315,22 +317,23 @@ $(function(){
           </select>
         </div>
       </td>
-      <td colspan="2">
-        <!-- <div class="input-group">
+      <td >
+        <div class="input-group">
           <span class="input-group-addon">业务员</span>
-          <input type="text" class="form-control" id="ywy" name="ywy" value="${ywy}" onkeyup="user_keyupdeal(event);" onkeydown="user_keydowndeal(event);" onclick="user_keyupdeal(event);" >
-        </div> -->
-        <div class="input-group input-group-select colspan2">
+          <input type="text" class="form-control" id="ywy" name="ywy" value="${ywy}" onkeyup="suggestUser(this.value);" />
+          <div style="position:absolute;top:34px;z-index:100;display:none;overflow-y:auto" id="user_suggest"></div>
+        </div>
+        <!-- <div class="input-group input-group-select colspan2">
           <span class="input-group-addon">业务员</span>
           <select class="form-control get_comp" name="form_cid"></select>
           <select class="form-control get_quyu" name="form_did"></select>
           <select class="form-control get_user" name="form_userId"></select>
-        </div>
+        </div> -->
       </td>
-      <td >
-        <div class="input-group ">
+      <td colspan="2">
+        <div class="input-group colspan2">
           <span class="input-group-addon">电话</span>
-          <input type="text" class="form-control" name="fortel" value="${fortel}" placeholder="业务员电话">
+          <input type="text" class="form-control" name="fortel" id="fortel" value="${fortel}" placeholder="业务员电话">
         </div>
       </td>
     </tr>
