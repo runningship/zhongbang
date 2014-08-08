@@ -8,8 +8,8 @@ import com.youwei.zjb.entity.User;
 public class UserHelper {
 
 	public static List<User> getUserWithAuthority(String authName){
-		String hql = "select u from User u, RoleAuthority ra where u.roleId=ra.roleId and ra.name='"+authName+"'";
-		String hql2 = "select u from User u, UserAuthority ra where u.id=ra.userId and ra.name='"+authName+"'";
+		String hql = "select u from User u, RoleAuthority ra where u.roleId=ra.roleId and u.flag=0 and u.sh=1 and ra.name='"+authName+"'";
+		String hql2 = "select u from User u, UserAuthority ra where u.id=ra.userId and u.flag=0 and u.sh=1 and ra.name='"+authName+"'";
 		List<User> list1 = SimpDaoTool.getGlobalCommonDaoService().listByParams(User.class, hql);
 		List<User> list2 = SimpDaoTool.getGlobalCommonDaoService().listByParams(User.class, hql2);
 		for(User u : list2){

@@ -107,7 +107,9 @@ public class OutService {
 	private void addOutHouse(OutRecord out) {
 		if(StringUtils.isEmpty(out.clients)){
 			//如果是带看需要客源信息
-			throw new GException(PlatformExceptionType.BusinessException,"请选择客源信息");
+			if(out.outHouse==0){
+				throw new GException(PlatformExceptionType.BusinessException,"请选择客源信息");
+			}
 		}
 		if(StringUtils.isEmpty(out.houses)){
 			throw new GException(PlatformExceptionType.BusinessException,"请选择房源信息");

@@ -57,8 +57,16 @@ public class UserAdjustService {
 //		}
 		mv.data.put("reason", adjust.reason);
 		mv.data.put("jiaojie", adjust.jiaojie);
-		
-		List<Map> spList = dao.listAsMap("select r.id as id, r.sprId as sprId, u.uname as spr , r.sh as sh from User u, RenShiReview r where r.category='adjust' and r.userId=? and u.sh=1 and u.flag=0 and  u.id=r.sprId",adjust.userId);
+		List<User> users = UserHelper.getUserWithAuthority("rs_zwtz_list");
+		StringBuilder ids = new StringBuilder();
+		for(int i=0;i<users.size();i++){
+			ids.append(users.get(i).id);
+			if(i<users.size()-1){
+				ids.append(",");
+			}
+		}
+//		List<Map> spList = dao.listAsMap("select r.id as id, r.sprId as sprId, u.uname as spr , r.sh as sh from User u, RenShiReview r where r.category='adjust' and r.userId=? and u.sh=1 and u.flag=0 and  u.id=r.sprId",adjust.userId);
+		List<Map> spList = dao.listAsMap("select r.id as id, r.sprId as sprId, u.uname as spr , r.sh as sh from User u, RenShiReview r where r.category='adjust' and r.userId=? and u.id=r.sprId and r.sprId in ("+ids.toString()+")",adjust.userId);
 		mv.data.put("myId", ThreadSession.getUser().id);
 		mv.data.put("spList", JSONHelper.toJSONArray(spList));
 		return mv;
@@ -150,7 +158,16 @@ public class UserAdjustService {
 		RenShiReview po = dao.get(RenShiReview.class, spId);
 		po.sh = 1;
 		dao.saveOrUpdate(po);
-		long count = dao.countHqlResult("from RenShiReview r ,User u where r.userId=? and r.sh=0 and u.id=r.sprId and u.sh=1 and u.flag=0 and category='"+RenShiReview.Adjust+"' ", po.userId);
+		List<User> users = UserHelper.getUserWithAuthority("rs_zwtz_list");
+		StringBuilder ids = new StringBuilder();
+		for(int i=0;i<users.size();i++){
+			ids.append(users.get(i).id);
+			if(i<users.size()-1){
+				ids.append(",");
+			}
+		}
+//		long count = dao.countHqlResult("from RenShiReview r ,User u where r.userId=? and r.sh=0 and u.id=r.sprId and u.sh=1 and u.flag=0 and category='"+RenShiReview.Adjust+"' ", po.userId);
+		long count = dao.countHqlResult("from RenShiReview r where r.userId=? and r.sh=0 and r.sprId not in ("+ids.toString()+") and category='"+RenShiReview.Adjust+"' ", po.userId);
 		UserAdjust adjust = dao.get(UserAdjust.class, adjustId);
 		User user = dao.get(User.class, adjust.userId);
 		Department oldDept = dao.get(Department.class,adjust.oldDeptId);
@@ -164,12 +181,7 @@ public class UserAdjustService {
 			dao.saveOrUpdate(user);
 			user.orgpath = newDept.path+"-"+user.id;
 			dao.saveOrUpdate(user);
-//			if(adjust.fyTo!=null){
-//				dao.execute("update House set uid = ? where uid = ?", adjust.fyTo , adjust.userId);
-//			}
-//			if(adjust.kyTo!=null){
-//				dao.execute("update Client set uid = ? where uid = ?", adjust.kyTo , adjust.userId);
-//			}
+			int delcount = dao.execute("delete from RenShiReview r where r.userId=? and r.sh=0 and r.sprId not in ("+ids.toString()+") and category='"+RenShiReview.Adjust+"' ", po.userId);
 		}
 		User operUser = ThreadSession.getUser();
 		Role oldRole = dao.get(Role.class, adjust.oldRoleId);

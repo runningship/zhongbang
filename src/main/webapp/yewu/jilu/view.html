@@ -8,10 +8,15 @@
 <link rel="stylesheet" href="/zb/style/css.css">
 <link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
+<link href="/zb/js/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/uploadify/jquery.uploadify.js"></script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.all.js"> </script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript">
 
@@ -25,6 +30,7 @@ function get(){
     url: url,
     success: function(text){
       data = JSON.parse(text);
+      ue.setContent(data['jilu']['conts'] ,false);
       fillData(data['jilu']);
       buildHtmlWithJsonArray("content",data['attachs']);
     }
@@ -34,13 +40,14 @@ function get(){
 function fillData(jilu){
   $('#addtime').html(jilu['addtime']);
   $('#title').html(jilu['title']);
-  $('#conts').html(jilu['conts']);
   if(category==0){
     //会议记录
     $('#starttime').html(jilu['starttime']);
     $('#endtime').html(jilu['endtime']);
     $('#goin').html(jilu['goin']);
-    $('#hy_time').css('display','');
+    $('#hy_starttime').css('display','');
+    $('#hy_endtime').css('display','');
+    $('#hy_goin').css('display','');
     $('#time').css('display','none');
   }
 }
@@ -54,7 +61,15 @@ $(function(){
     alert("加载数据失败");
     return;
   }
-  get();
+  ue = UE.getEditor('editor',{
+    toolbars: [
+        ['fullscreen', 'source', 'undo', 'redo', 'bold']
+    ]
+  });
+  ue.addListener( 'ready', function( editor ) {
+    //ue.setHeight(350);
+    get(); 
+  });
 });
 
 </script>
@@ -71,32 +86,31 @@ $(function(){
       <th>时间:</th>
       <td id="addtime"></td>
     </tr>
-    <tr id="hy_time" style="display:none">
-      <th>客户:</th>
-      <td id="clientInfo"></td>
-    </tr>
-  <div id="hy_time" style="display:none">
-    <tr>
+    <tr id="hy_starttime" style="display:none">
       <th>开始时间:</th>
       <td id="starttime"></td>
     </tr>
-    <tr>
+    <tr id="hy_endtime" style="display:none">
       <th>结束时间:</th>
       <td id="endtime"></td>
     </tr>
-    <tr>
+    <tr id="hy_goin" style="display:none">
       <th>参会人员:</th>
       <td id="goin"></td>
     </tr>
-  </div>
     <tr>
       <th>标题:</th>
       <td id="title"></td>
     </tr>
     <tr>
       <th>内容:</th>
-      <td id="conts"></td>
-    </tr>
+      <td>
+    <input id="conts" name="conts" type="hidden" />
+   <div style="margin-top:10px;margin-left:10px; margin-bottom:10px;">
+    <span id="editor" type="text/plain" style="width:99%;height:400px;"></span>
+  </div>
+      </td>
+      </tr>
     <tr>
       <th>附件:</th>
       <td id="content">

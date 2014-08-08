@@ -8,10 +8,15 @@
 <link rel="stylesheet" href="/zb/style/css.css">
 <link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
+<link href="/zb/js/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/uploadify/jquery.uploadify.js"></script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.all.js"> </script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript">
 
@@ -24,6 +29,7 @@ function get(){
     url: url,
     success: function(text){
       data = JSON.parse(text);
+      ue.setContent(data['journal']['conta'] ,false);
       fillData(data['journal']);
       buildHtmlWithJsonArray("content",data['attachs']);
     }
@@ -31,7 +37,6 @@ function get(){
 }
 
 function fillData(journal){
-  $('#conta').html(journal['conta']);
   $('#contb').html(journal['contb']);
   $('#integral').html(journal['integral']);
 }
@@ -41,7 +46,15 @@ $(function(){
     alert("加载数据失败");
     return;
   }
-  get();
+  ue = UE.getEditor('editor',{
+    toolbars: [
+        ['fullscreen', 'source', 'undo', 'redo', 'bold']
+    ]
+  });
+  ue.addListener( 'ready', function( editor ) {
+    //ue.setHeight(350);
+    get(); 
+  });
 });
 
 </script>
@@ -56,8 +69,13 @@ $(function(){
   <table class="table">
     <tr>
       <th>内容:</th>
-      <td id="conta" name="conta">${conta}</td>
-    </tr>
+      <td>
+    <input id="conta" name="conta" type="hidden" />
+   <div style="margin-top:10px;margin-left:10px; margin-bottom:10px;">
+    <span id="editor" type="text/plain" style="width:99%;height:400px;"></span>
+  </div>
+      </td>
+      </tr>
     <tr>
       <th>批语:</th>
       <td id="contb" name="contb">${contb}</td>

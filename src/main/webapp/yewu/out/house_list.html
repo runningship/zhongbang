@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
+<link rel="stylesheet" href="/zb/style/house_addr.css">
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
@@ -18,6 +19,7 @@
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
+<script type="text/javascript" src="/zb/js/house_addr.js"></script>
 <script type="text/javascript">
 var getStr;
 var houseList;
@@ -271,6 +273,12 @@ function chooseHouse(){
         <select class="form-control get_quyu" name="form_did"></select>
         <select class="form-control get_user" name="form_uid"></select>
       </div>
+      <div class="input-group input-group-max">
+        <span class="input-group-addon">楼盘</span>
+        <input type="hidden" class="form-control" name="Address" id="Address">
+        <input type="text" class="form-control" name="area" id="area"  onkeyup="keyupdeal(event);" onkeydown="keydowndeal(event);" onclick="keyupdeal(event);" autocomplete="off" placeholder="楼盘名称(最少字)">
+          <div id="suggest" style="position:absolute;height:400px;overflow-y:auto;z-index: 100;display:none"></div>
+      </div>
     </div>
 
 
@@ -311,7 +319,7 @@ function chooseHouse(){
       <td class='runscript'>getEnumText('zhuangxiu',${zhuangxiu})</td>
       <td>${dateyear}</td>
       <td>${dateadd}</td>
-      <td>${forlxr}</td>
+      <td>${fbr}</td>
       <td class='runscript'>getEnumText('xingzhi',${xingzhi})</td>
       <td class='runscript'>getEnumText('zhuangtai',${ztai})</td>
       </tr>

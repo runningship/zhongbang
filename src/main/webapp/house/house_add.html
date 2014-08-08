@@ -120,15 +120,17 @@ $(function(){
       if(getHid){
         $('form[name=form1]').attr('action', '/zb/c/house/update');
         //alert($('form[name=form1]').attr('action'))
-        $.get('/zb/c/house/listAll?id='+getHid, function(data) {
+        $.get('/zb/c/house/get?id='+getHid, function(data) {
           getStr=JSON.parse(data);
-          fillData(getStr['page']['data'][0]);
+          fillData(getStr['house']);
           // buildHtmlWithJsonArray("id_house_see",getStr['page']['data'],true);
+          $('#ywy').attr('readonly','true');
         });
       }else{
-        var gerStrNull={"page":{"autoCount":"","currentPageNo":"","firstOfPage":"","lastOfPage":"","pageSize":"","pageUrl":"","totalCount":"","totalPageCount":"","data":[{"id":"","deptId":"","userId":"","cid":"","quyu":"","area":"","dhao":"","fhao":"","luduan":"","lceng":"","zceng":"","lxing":"","hxf":"","hxt":"","hxw":"","hxy":"","chaoxiang":"","zhuangxiu":"","mianji":"","zjia":"","sjia":"","djia":"","lxr":"","tel":"","forlxr":"","fortel":"$${myTel}","beizhu":"","jiaoyi":chuzu,"leibie":"","flag":"","xingzhi":"","tuijie":"","dateyear":"","dateweituo":"","datejiaofang":"","dateadd":"","dategenjin":"","fav":"","houseNumber":"","isdel":"","sh":"","chanquan":"","tudizheng":"","fordlr":"","fordlrtel":""}]}}
+        var gerStrNull={"page":{"autoCount":"","currentPageNo":"","firstOfPage":"","lastOfPage":"","pageSize":"","pageUrl":"","totalCount":"","totalPageCount":"","data":[{"id":"","deptId":"","userId":"","cid":"","quyu":"","area":"","dhao":"","fhao":"","luduan":"","lceng":"","zceng":"","lxing":"","hxf":"","hxt":"","hxw":"","hxy":"","chaoxiang":"","zhuangxiu":"","mianji":"","zjia":"","sjia":"","djia":"","lxr":"","tel":"","ywy":"","fortel":"$${myTel}","beizhu":"","jiaoyi":chuzu,"leibie":"","flag":"","xingzhi":"","tuijie":"","dateyear":"","dateweituo":"","datejiaofang":"","dateadd":"","dategenjin":"","fav":"","houseNumber":"","isdel":"","sh":"","chanquan":"","tudizheng":"","fordlr":"","fordlrtel":""}]}}
         //gerStrNull=JSON.parse(gerStrNull)
-        buildHtmlWithJsonArray("id_house_see",gerStrNull['page']['data'],true);
+        // buildHtmlWithJsonArray("id_house_see",gerStrNull['page']['data'],true);
+        $('#id_xingzhi').attr('disabled',"disabled");
       }
   });
 });
@@ -173,11 +175,11 @@ $(function(){
           <span class="input-group-addon" style="padding:8px;">楼盘</span>
           <input type="hidden" class="form-control" name="Address" id="Address">
           <input type="text" class="form-control" id="area" name="area" value="${area}" onkeyup="keyupdeal(event);" onkeydown="keydowndeal(event);" onclick="keyupdeal(event);" autocomplete="off" placeholder="楼盘名称">
-          <div id="suggest" style="position:absolute;height:400px;overflow-y:auto"></div>
+          <div id="suggest" style="position:absolute;height:400px;overflow-y:auto;display:none"></div>
         </div>
       </td>
       <td colspan="2">
-          <input type="text" class="form-control pull-left w40b" name="dhao" value="${dhao}" placeholder="栋号"><span style="display: block;float: left;height:20px; line-height: 20px;">#&nbsp;</span>
+          <input type="text" class="form-control pull-left w40b" name="dhao" value="${dhao}" placeholder="栋号"><span style="display: block;float: left;height:20px; line-height: 20px;">#</span>
           <input type="text" class="form-control pull-left w40b" name="fhao" value="${fhao}" placeholder="房号">
       </td>
     </tr>
@@ -194,7 +196,7 @@ $(function(){
         <div class="input-group">
           <span class="input-group-addon" style="padding:8px;">户型</span>
           <input type="text" class="form-control" name="hxf" value="${hxf}" placeholder="室">
-          <span class="input-group-addon" style="padding:8px;">房</span>
+          <span class="input-group-addon" style="padding:8px;">室</span>
         </div>
       </td>
       <td class="w160px">
@@ -313,14 +315,20 @@ $(function(){
           </select>
         </div>
       </td>
-      <td>
-        <div class="input-group">
+      <td colspan="2">
+        <!-- <div class="input-group">
           <span class="input-group-addon">业务员</span>
-          <input type="text" class="form-control" name="forlxr" readonly="true" value="$${myName}" >
+          <input type="text" class="form-control" id="ywy" name="ywy" value="${ywy}" onkeyup="user_keyupdeal(event);" onkeydown="user_keydowndeal(event);" onclick="user_keyupdeal(event);" >
+        </div> -->
+        <div class="input-group input-group-select colspan2">
+          <span class="input-group-addon">业务员</span>
+          <select class="form-control get_comp" name="form_cid"></select>
+          <select class="form-control get_quyu" name="form_did"></select>
+          <select class="form-control get_user" name="form_userId"></select>
         </div>
       </td>
-      <td colspan="2">
-        <div class="input-group colspan2">
+      <td >
+        <div class="input-group ">
           <span class="input-group-addon">电话</span>
           <input type="text" class="form-control" name="fortel" value="${fortel}" placeholder="业务员电话">
         </div>

@@ -28,7 +28,7 @@ if ($$$("area").value=='') {
         url: '/zb/c/areas/search',
         data:'area='+$$$("area").value,
         success: function(data){
-            if(data){
+            if(data!='empty'){
                 $$$("suggest").style.display="block";
             }
             $$$("suggest").innerHTML=unescape(data);

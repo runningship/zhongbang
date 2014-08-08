@@ -50,8 +50,16 @@ public class UserQuitService {
 		}
 		mv.data.put("reason", uq.reason);
 		mv.data.put("jiaojie", uq.jiaojie);
-		
-		List<Map> spList = dao.listAsMap("select r.id as id, r.sprId as sprId, u.uname as spr , r.sh as sh from User u, RenShiReview r where r.category='quit' and r.userId=? and u.id=r.sprId",uq.userId);
+		List<User> users = UserHelper.getUserWithAuthority("rs_lzsq_list");
+		StringBuilder ids = new StringBuilder();
+		for(int i=0;i<users.size();i++){
+			ids.append(users.get(i).id);
+			if(i<users.size()-1){
+				ids.append(",");
+			}
+		}
+		List<Map> spList = dao.listAsMap("select r.id as id, r.sprId as sprId, u.uname as spr , r.sh as sh from User u, RenShiReview r where r.category='quit' and r.userId=? and u.id=r.sprId and r.sprId in("+ids.toString()+")",uq.userId);
+//		List<Map> spList = dao.listAsMap("select r.id as id, r.sprId as sprId, u.uname as spr , r.sh as sh from User u, RenShiReview r where r.category='quit' and r.userId=? and u.id=r.sprId ",uq.userId);
 		mv.data.put("myId", ThreadSession.getUser().id);
 		mv.data.put("spList", JSONHelper.toJSONArray(spList));
 		return mv;
@@ -130,7 +138,17 @@ public class UserQuitService {
 		}
 		po.sh = 1;
 		dao.saveOrUpdate(po);
-		long count = dao.countHqlResult("from RenShiReview where userid=? and sh=0 and category='quit' ", po.userId);
+		List<User> users = UserHelper.getUserWithAuthority("rs_lzsq_list");
+		StringBuilder ids = new StringBuilder();
+		for(int i=0;i<users.size();i++){
+			ids.append(users.get(i).id);
+			if(i<users.size()-1){
+				ids.append(",");
+			}
+		}
+		
+		long count = dao.countHqlResult("from RenShiReview where userid=? and sh=0 and category='quit' and sprId in ("+ids.toString()+")", po.userId);
+//		long count = dao.countHqlResult("from RenShiReview where userid=? and sh=0 and category='quit' ", po.userId);
 		UserQuit uq = dao.get(UserQuit.class, lizhiId);
 		User user = dao.get(User.class, po.userId);
 		if(count==0){
@@ -146,6 +164,8 @@ public class UserQuitService {
 			user.flag = 1;
 			user.lzsj = uq.leaveTime;
 			dao.saveOrUpdate(user);
+			//清理无用的审批记录
+			int delcount = dao.execute("delete from RenShiReview where userid=? and sh=0 and category='quit' and sprId not in ("+ids.toString()+")", po.userId);
 		}
 		User operUser = ThreadSession.getUser();
 		String operConts = "["+operUser.Department().namea+"-"+operUser.uname+ "] 审核通过了用户["+user.Department().namea+"-"+user.uname+"] 的离职申请";

@@ -100,9 +100,9 @@ function deleteOut(id){
 
 $(function(){
   onSubmit_Form();
-  doSearch();
   $.get('/zb/c/house/getQueryOptions', function(data) {
     queryOpts=JSON.parse(data);
+    doSearch();
   });
   Page.Init();
 });

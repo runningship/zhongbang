@@ -92,13 +92,18 @@ public class DistrictService {
 			params.add(area);
 		}
 		List<District> list = dao.listByParams(District.class, hql.toString(), params.toArray());
-		StringBuilder tmp = new StringBuilder("<dl>");
-		for(int i=0;i<list.size();i++){
-			District d = list.get(i);
-			tmp.append("<dd value='"+i+"' onclick='form_submit();' onmouseover="+"\"mo($(this).attr('value'));\""+"  ><strong style='color:#696;'>"+d.name+"</strong><small>&nbsp;</small><big>"+d.quyu+"</big></dd>");
+		if(list.isEmpty()){
+			mv.returnText="empty";
+		}else{
+			StringBuilder tmp = new StringBuilder("<dl>");
+			for(int i=0;i<list.size();i++){
+				District d = list.get(i);
+				tmp.append("<dd value='"+i+"' onclick='form_submit();' onmouseover="+"\"mo($(this).attr('value'));\""+"  ><strong style='color:#696;'>"+d.name+"</strong><small>&nbsp;</small><big>"+d.quyu+"</big></dd>");
+			}
+			tmp.append("</dl>");
+			mv.returnText = tmp.toString();
 		}
-		tmp.append("</dl>");
-		mv.returnText = tmp.toString();
+		
 		return mv;
 	}
 	

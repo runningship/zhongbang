@@ -70,6 +70,7 @@ var Thi=$('form');
   //    async:false,
       data:formSerialize(Thi),
       success: function(data){
+        art.dialog.close();
         art.dialog.opener.doSearch();
         alert('保存成功');
       }

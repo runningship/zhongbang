@@ -250,6 +250,16 @@ public class HouseService {
 	}
 	
 	@WebMethod
+	public ModelAndView get(int id){
+		ModelAndView mv = new ModelAndView();
+		House house = service.get(House.class, id);
+		User ywy = service.get(User.class,house.userId);
+		mv.data.put("house", JSONHelper.toJSON(house));
+		mv.data.getJSONObject("house").put("ywy", ywy.uname);
+		return mv;
+	}
+	
+	@WebMethod
 	public ModelAndView getQueryOptions(){
 		ModelAndView mv = new ModelAndView();
 		mv.data.put("chaoxiang", ChaoXiang.toJsonArray());
