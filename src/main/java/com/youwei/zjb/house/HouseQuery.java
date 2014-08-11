@@ -35,4 +35,5 @@ public class HouseQuery extends AbstractQuery{
 	public String authParent;
 	public String dhao;
 	public String fhao;
+	public String tel;
 }

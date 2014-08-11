@@ -356,6 +356,12 @@ public class HouseService {
 			hql.append(" and h.area like ?");
 			params.add("%"+query.area+"%");
 		}
+		if(StringUtils.isNotEmpty(query.tel)){
+			hql.append(" and (h.tel like ? or h.fortel like ? or h.fordlrtel like ?)");
+			params.add("%"+query.tel+"%");
+			params.add("%"+query.tel+"%");
+			params.add("%"+query.tel+"%");
+		}
 		if(StringUtils.isNotEmpty(query.houseNumber)){
 			hql.append(" and h.houseNumber like ?");
 			params.add("%"+query.houseNumber+"%");
