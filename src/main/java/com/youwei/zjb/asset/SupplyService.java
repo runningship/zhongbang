@@ -60,15 +60,18 @@ CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(Common
 		StringBuilder hql = new StringBuilder("select o.id as id, o.djia as djia, o.zjia as zjia ,o.count as count, o.beizhu as beizhu,o.title as title, o.addtime as addtime,"
 				+ " o.xgr as xgr, d.namea as deptName, q.namea as quyu from OfficeSupply o,Department d , Department q where d.id=o.deptId and q.id=d.fid ");
 		List<Object> params = new ArrayList<Object>();
+		List<Object> sumparams = new ArrayList<Object>();
 		if(StringUtils.isNotEmpty(query.title)){
 			hql.append(" and o.title like ?");
 			sum.append(" and o.title like ?");
 			params.add("%"+query.title+"%");
+			sumparams.add("%"+query.title+"%");
 		}
 		if(query.shenhe!=null){
 			hql.append(" and o.shenhe=? ");
 			sum.append(" and o.shenhe=? ");
 			params.add(query.shenhe);
+			sumparams.add(query.shenhe);
 		}
 		if(StringUtils.isNotEmpty(query.xpath)){
 			hql.append(" and d.path like ?");
@@ -78,10 +81,10 @@ CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(Common
 		hql.append(HqlHelper.buildDateSegment("o.addtime", query.addtimeStart, DateSeparator.After, params));
 		hql.append(HqlHelper.buildDateSegment("o.addtime", query.addtimeEnd, DateSeparator.Before, params));
 		
-		sum.append(HqlHelper.buildDateSegment("o.addtime", query.addtimeStart, DateSeparator.After, params));
-		sum.append(HqlHelper.buildDateSegment("o.addtime", query.addtimeEnd, DateSeparator.Before, params));
+		sum.append(HqlHelper.buildDateSegment("o.addtime", query.addtimeStart, DateSeparator.After, sumparams));
+		sum.append(HqlHelper.buildDateSegment("o.addtime", query.addtimeEnd, DateSeparator.Before, sumparams));
 		
-		List<Map> result = dao.listAsMap(sum.toString(), params.toArray());
+		List<Map> result = dao.listAsMap(sum.toString(), sumparams.toArray());
 		mv.data.put("totalCount", result.get(0).get("totalCount"));
 		mv.data.put("totalPrice", result.get(0).get("totalPrice"));
 		

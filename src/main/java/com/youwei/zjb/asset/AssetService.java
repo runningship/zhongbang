@@ -59,27 +59,31 @@ public class AssetService {
 		StringBuilder hql = new StringBuilder("select a.id as id, a.djia as djia, a.zjia as zjia ,a.count as count, a.beizhu as beizhu,a.name as name, a.addtime as edittime,"
 				+ " d.namea as deptName,q.namea as quyu from Asset a,Department d, Department q where d.id=a.deptId and q.id=d.fid");
 		List<Object> params = new ArrayList<Object>();
+		List<Object> sumparams = new ArrayList<Object>();
 		if(StringUtils.isNotEmpty(query.title)){
 			hql.append(" and a.name like ?");
 			sum.append(" and a.name like ?");
 			params.add("%"+query.title+"%");
+			sumparams.add("%"+query.title+"%");
 		}
 		if(StringUtils.isNotEmpty(query.xpath)){
 			hql.append(" and d.path like ?");
 			sum.append(" and d.path like ?");
 			params.add(query.xpath+"%");
+			sumparams.add(query.xpath+"%");
 		}
 		hql.append(HqlHelper.buildDateSegment("a.addtime", query.addtimeStart, DateSeparator.After, params));
 		hql.append(HqlHelper.buildDateSegment("a.addtime", query.addtimeEnd, DateSeparator.Before, params));
 		
-		sum.append(HqlHelper.buildDateSegment("a.addtime", query.addtimeStart, DateSeparator.After, params));
-		sum.append(HqlHelper.buildDateSegment("a.addtime", query.addtimeEnd, DateSeparator.Before, params));
+		sum.append(HqlHelper.buildDateSegment("a.addtime", query.addtimeStart, DateSeparator.After, sumparams));
+		sum.append(HqlHelper.buildDateSegment("a.addtime", query.addtimeEnd, DateSeparator.Before, sumparams));
+		
 		
 		hql.append(" order by a.addtime desc");
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));
 		
-		List<Map> result = dao.listAsMap(sum.toString(), params.toArray());
+		List<Map> result = dao.listAsMap(sum.toString(), sumparams.toArray());
 		mv.data.put("totalCount", result.get(0).get("totalCount"));
 		mv.data.put("totalPrice", result.get(0).get("totalPrice"));
 		return mv;

@@ -340,7 +340,7 @@ public class HouseService {
 	}
 	
 	private void buildQuery(StringBuilder hql,HouseQuery query , List<Object> params){
-		hql.append(" select h, u.uname as fbr from  House h  ,User u where h.userId=u.id  ");
+		hql.append(" select h, u.uname as fbr,d.namea as dname from  House h  ,User u,Department d where h.userId=u.id  and u.deptId=d.id");
 		if(StringUtils.isNotEmpty(query.xpath)){
 			hql.append(" and u.orgpath like ? ");
 			params.add(query.xpath+"%");
