@@ -41,6 +41,8 @@ function setArea(search){
     data:search,
     success: function(data){
       var getAreas=JSON.parse(data);
+      art.dialog.close();
+      art.dialog.opener.getAreaList();
       art.dialog.tips('保存成功')
     }
   })
