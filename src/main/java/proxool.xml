@@ -20,7 +20,7 @@
 -->
 <proxool>  
     <alias>mySqlProxool</alias>  
-    <driver-url>jdbc:mysql://192.168.1.125:3306/zhongbang?characterEncoding=utf-8</driver-url>  
+    <driver-url>jdbc:mysql://localhost:3306/zhongbang?characterEncoding=utf-8</driver-url>  
     <driver-class>com.mysql.jdbc.Driver</driver-class>  
     <driver-properties>  
         <property name="user" value="root"/>  
