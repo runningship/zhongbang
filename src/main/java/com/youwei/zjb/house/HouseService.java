@@ -72,7 +72,7 @@ public class HouseService {
 		}else{
 			house.isdel = 0;
 			house.dateadd = new Date();
-//			house.userId = user.id;
+			house.userId = user.id;
 			house.deptId = user.deptId;
 			if(house.sjia ==null){
 				house.sjia=0f;

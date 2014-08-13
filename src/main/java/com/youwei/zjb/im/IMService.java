@@ -73,7 +73,9 @@ public class IMService {
 		JSONArray arr = new JSONArray();
 		for(Integer uid : IMServer.conns.keySet()){
 			User u = dao.get(User.class, uid);
-			arr.add(u.uname);
+			if(u!=null){
+				arr.add(u.uname);
+			}
 		}
 		mv.data.put("onlien users", arr);
 		return mv;

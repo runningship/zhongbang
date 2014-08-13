@@ -122,7 +122,9 @@ public class DistrictService {
 		district.pyShort=DataHelper.toPinyinShort(district.name);
 		dao.saveOrUpdate(district);
 		//更新房源
-		dao.execute("update House set area=? where area=?", district.name , po.name);
+		if(!po.name.equals(district.name) || !po.quyu.equals(district.quyu)){
+			dao.execute("update House set area=? ,quyu=? where area=?", district.name ,district.quyu, po.name);
+		}
 		mv.data.put("msg", "保存成功");
 		return mv;
 	}
