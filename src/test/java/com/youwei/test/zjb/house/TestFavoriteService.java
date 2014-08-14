@@ -27,15 +27,6 @@ public class TestFavoriteService {
 		service.add(169);
 	}
 	
-	@Test
-	public void testQuery(){
-		User user = new User();
-		user.id = 207;
-		ThreadSession.setUser(user);
-		ModelAndView mv = service.list(null);
-//		printResult(list);
-	}
-	
 	private void printResult(List<House> list){
 		for(House h : list){
 			System.out.println(BeanUtil.toString(h));

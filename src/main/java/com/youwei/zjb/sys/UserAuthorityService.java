@@ -44,8 +44,7 @@ public class UserAuthorityService {
 	public ModelAndView getUserMenus(int userId){
 		ModelAndView mv = new ModelAndView();
 		try {
-			HttpServletRequest req = ThreadSession.getHttpServletRequest();
-			String text = FileUtils.readFileToString(new File(req.getServletContext().getRealPath("/")+File.separator+"menus.json"), "utf8");
+			String text = FileUtils.readFileToString(new File(ThreadSession.getHttpSession().getServletContext().getRealPath("/")+File.separator+"menus.json"), "utf8");
 			JSONArray jarr = JSONArray.fromObject(text);
 			List<UserAuthority> list = dao.listByParams(UserAuthority.class, new String[]{"userId","type"}, new Object[]{ userId ,"menu"});
 			for(UserAuthority ra : list){

@@ -176,17 +176,6 @@ public class TestHouseService {
 		printResult(mv);
 	}
 	
-	@Test
-	public void testListUserId(){
-		HouseService hs = new HouseService();
-		HouseQuery hq = new HouseQuery();
-		User user = new User();
-		user.id = 333;
-		ThreadSession.setUser(user);
-		ModelAndView mv = hs.listMy(hq,new Page<House>());
-		printResult(mv);
-	}
-	
 	private void printResult(ModelAndView mv){
 		List<House> houses = (List<House>) mv.data.get("houses");
 		for(House house : houses){

@@ -1,13 +1,12 @@
 package com.youwei.zjb;
 
-import com.youwei.zjb.entity.User;
+import javax.servlet.http.HttpSession;
 
-import javax.servlet.http.HttpServletRequest;
+import com.youwei.zjb.entity.User;
 public class ThreadSession {
 
-	private static final ThreadLocal<User> User= new ThreadLocal<User>();
-	
-	private static final ThreadLocal<HttpServletRequest> HttpServletRequest = new ThreadLocal<HttpServletRequest>();
+
+	private static final ThreadLocal<HttpSession> HttpSession = new ThreadLocal<HttpSession>();
 	
 	private static final ThreadLocal<Boolean> superAdmin = new ThreadLocal<Boolean>();
     private ThreadSession() {  
@@ -21,28 +20,24 @@ public class ThreadSession {
     	superAdmin.set(sup);
     }
     
-    public static User getUser() {  
-        return User.get(); 
-    }  
-  
-    public static void setUser(User user) {  
-        User.set(user);
+    public static HttpSession getHttpSession(){
+    	return HttpSession.get();
     }
     
-    public static HttpServletRequest getHttpServletRequest(){
-    	return HttpServletRequest.get();
+    public static void setHttpSession(HttpSession session){
+    	HttpSession.set(session);
     }
     
-    public static void setHttpServletRequest(HttpServletRequest request){
-    	HttpServletRequest.set(request);
+    public static User getUser(){
+    	HttpSession session = HttpSession.get();
+    	if(session==null){
+    		return null;
+    	}
+    	return (User)session.getAttribute("user");
     }
-    
     public static String getIp(){
-    	HttpServletRequest req = ThreadSession.getHttpServletRequest();
-    	String ip = req.getHeader("x-forwarded-for");
-		if (ip == null) {
-			ip = req.getRemoteAddr();
-		}
-		return ip;
+    	HttpSession session = HttpSession.get();
+    	return (String)session.getAttribute("ip");
     }
+
 }

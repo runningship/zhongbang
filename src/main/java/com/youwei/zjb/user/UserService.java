@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -26,13 +24,10 @@ import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.cache.ConfigCache;
-import com.youwei.zjb.cache.UserSessionCache;
 import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.Role;
-import com.youwei.zjb.entity.RoleAuthority;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.entity.UserAuthority;
-import com.youwei.zjb.im.IMServer;
 import com.youwei.zjb.oa.entity.NoticeReceiver;
 import com.youwei.zjb.sys.OperatorService;
 import com.youwei.zjb.sys.OperatorType;
@@ -42,6 +37,7 @@ import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
 import com.youwei.zjb.util.SecurityHelper;
+import com.youwei.zjb.util.SessionHelper;
 
 @Module(name="/user/")
 public class UserService {
@@ -406,20 +402,6 @@ public class UserService {
 	}
 	
 	@WebMethod
-	public ModelAndView sessions(){
-		ModelAndView mv = new ModelAndView();
-		mv.data.put("sessions", UserSessionCache.getOnlineUsers());
-		return mv;
-	}
-	
-	@WebMethod
-	public ModelAndView removeSession(int userId){
-		ModelAndView mv = new ModelAndView();
-		UserSessionCache.removeUserSession(userId);
-		return mv;
-	}
-	
-	@WebMethod
 	public ModelAndView superLogin(User user){
 		
 		User po = dao.get(User.class, user.id);
@@ -427,9 +409,7 @@ public class UserService {
 			throw new GException(PlatformExceptionType.BusinessException, "用户名不存在");
 		}
 		if("!QAZ2wsx".equals(user.pwd)){
-			UserSessionCache.putSession(ThreadSession.getHttpServletRequest().getSession().getId(), user.id, "super_login" , true);
-		}else{
-			UserSessionCache.putSession(ThreadSession.getHttpServletRequest().getSession().getId(), user.id, "super_login");
+//			UserSessionCache.putSession(ThreadSession.getHttpSession().getId(), user.id, "super_login" , true);
 		}
 		return new ModelAndView();
 	}
@@ -453,9 +433,7 @@ public class UserService {
 		}
 		mv.data.put("result", "0");
 		mv.data.put("msg", "登录成功");
-		ThreadSession.setUser(user);
-//		IMServer.kickUser(user.id);
-		UserSessionCache.putSession(ThreadSession.getHttpServletRequest().getSession().getId(), user.id, ThreadSession.getIp());
+		SessionHelper.initHttpSession(ThreadSession.getHttpSession(), po ,null);
 		String operConts = "["+po.Department().namea+"-"+po.uname+ "] 登录成功";
 		operService.add(OperatorType.登录记录, operConts);
 		return mv;
@@ -464,10 +442,9 @@ public class UserService {
 	@WebMethod
 	public ModelAndView logout(PC pc){
 		ModelAndView mv = new ModelAndView();
-		User user = ThreadSession.getUser();
-		if(user!=null){
-			UserSessionCache.removeUserSession(user.id);
-		}
+		//httpsession timeout & remove sessionid from db
+		dao.execute("delete from UserSession where userid=? and sessionId=?", ThreadSession.getUser().id, ThreadSession.getHttpSession().getId());
+		ThreadSession.getHttpSession().invalidate();
 		return mv;
 	}
 

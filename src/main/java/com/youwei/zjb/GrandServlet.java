@@ -11,7 +11,6 @@ import javassist.NotFoundException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,17 +19,12 @@ import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Level;
-import org.apache.log4j.Priority;
 import org.bc.sdak.GException;
 import org.bc.sdak.TransactionalServiceHelper;
 import org.bc.sdak.utils.LogUtil;
 import org.bc.web.Handler;
 import org.bc.web.ModelAndView;
 import org.bc.web.ModuleManager;
-
-import com.youwei.zjb.cache.UserSessionCache;
-import com.youwei.zjb.entity.User;
-import com.youwei.zjb.util.SessionHelper;
 
 
 public class GrandServlet extends HttpServlet{
@@ -44,14 +38,6 @@ public class GrandServlet extends HttpServlet{
 		resp.setCharacterEncoding("utf8");
 		resp.setContentType("text/html");
 		String path = req.getPathInfo();
-		SessionHelper.updateSession(req);
-		req.getSession().getAttribute("user");
-		User u = UserSessionCache.getUser(req.getSession().getId());
-		if(u==null){
-			//TODO
-		}
-		ThreadSession.setUser(u);
-		ThreadSession.setHttpServletRequest(req);
 		LogUtil.info(path);
 		if("/".equals(path)){
 			processRootRequest(req, resp);

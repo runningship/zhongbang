@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -133,8 +131,7 @@ public class AuthorityService {
 	public ModelAndView getRoleMenus(int roleId){
 		ModelAndView mv = new ModelAndView();
 		try {
-			HttpServletRequest req = ThreadSession.getHttpServletRequest();
-			String text = FileUtils.readFileToString(new File(req.getServletContext().getRealPath("/")+File.separator+"menus.json"), "utf8");
+			String text = FileUtils.readFileToString(new File(ThreadSession.getHttpSession().getServletContext().getRealPath("/")+File.separator+"menus.json"), "utf8");
 			JSONArray jarr = JSONArray.fromObject(text);
 			List<RoleAuthority> list = dao.listByParams(RoleAuthority.class, new String[]{"roleId","type"}, new Object[]{ roleId ,"menu"});
 			for(RoleAuthority ra : list){

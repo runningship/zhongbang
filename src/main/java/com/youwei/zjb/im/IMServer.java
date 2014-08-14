@@ -80,9 +80,9 @@ public class IMServer extends WebSocketServer{
 		JSONObject data = JSONObject.fromObject(message);
 		if("login".equals(data.getString("type"))){
 			int userId = data.getInt("userId");
-			if(conns.containsKey(userId)){
-				kickUser(userId);
-			}
+//			if(conns.containsKey(userId)){
+//				kickUser(userId);
+//			}
 			conns.put(userId, conn);
 			User user = dao.get(User.class,userId);
 			if(user.avatar==null){

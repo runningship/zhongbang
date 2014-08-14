@@ -1,32 +1,28 @@
 package com.youwei.zjb.util;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
-import org.apache.commons.lang.StringUtils;
-import org.bc.sdak.utils.LogUtil;
+import javax.servlet.http.HttpSession;
 
-import com.youwei.zjb.cache.UserSessionCache;
+import com.youwei.zjb.SimpDaoTool;
+import com.youwei.zjb.entity.User;
+import com.youwei.zjb.entity.UserSession;
 
 public class SessionHelper {
-	public static void updateSession(HttpServletRequest req){
-		if(req.getSession().isNew()==false){
-			return;
+	public static void initHttpSession(HttpSession session, User user, UserSession us) {
+		session.setAttribute("user", user);
+		if(us==null){
+			us = new UserSession();
+			us.addtime = new Date();
+			us.sessionId = session.getId();
+			us.userId = user.id;
+			us.ip = (String) session.getAttribute("ip");
+		}else{
+			us.sessionId = session.getId();
+			us.updatetime = new Date();
+			us.ip = (String) session.getAttribute("ip");
 		}
-		String oldSessionId = "";
-		if(req.getCookies()==null){
-			return;
-		}
-		for(Cookie coo : req.getCookies()){
-			if("JSESSIONID".equals(coo.getName())){
-				oldSessionId = coo.getValue();
-				break;
-			}
-		}
-		if(StringUtils.isEmpty(oldSessionId)){
-			return;
-		}
-		UserSessionCache.updateSession(oldSessionId, req.getSession().getId());
-		LogUtil.info("old session ["+oldSessionId+"] to new session ["+req.getSession().getId()+"]");
+		SimpDaoTool.getGlobalCommonDaoService().saveOrUpdate(us);
+		session.removeAttribute("relogin");
 	}
 }

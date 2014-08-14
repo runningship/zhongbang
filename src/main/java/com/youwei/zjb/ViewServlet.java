@@ -5,42 +5,22 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.logging.Level;
 
-import javassist.ClassClassPath;
-import javassist.ClassPool;
-import javassist.CtClass;
-import javassist.CtMethod;
-import javassist.NotFoundException;
-
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-import org.bc.sdak.GException;
-import org.bc.sdak.TransactionalServiceHelper;
 import org.bc.sdak.utils.LogUtil;
-import org.bc.web.Handler;
-import org.bc.web.ModelAndView;
-import org.bc.web.ModuleManager;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.youwei.zjb.cache.UserSessionCache;
-import com.youwei.zjb.entity.RoleAuthority;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.entity.UserAuthority;
-import com.youwei.zjb.util.JSONHelper;
-import com.youwei.zjb.util.SessionHelper;
 
 
 public class ViewServlet extends HttpServlet{
@@ -59,19 +39,11 @@ public class ViewServlet extends HttpServlet{
 //		}
 		
 		//com.youwei.zjb.view.client.client_list
-		SessionHelper.updateSession(req);
-//		req.getSession().setMaxInactiveInterval(20);
 		resp.setContentType(getMimeType(path));
 		if(!path.endsWith(".html")){
 			return;
 		}
-		User user = UserSessionCache.getUser(req.getSession().getId());
-		if(user==null){
-			//返回登录
-//			return;
-			resp.sendRedirect(req.getContextPath()+"/login/login.html");
-			return;
-		}
+		User user = ThreadSession.getUser();
 		String filePath = req.getServletContext().getRealPath("/")+path;
 		String html = FileUtils.readFileToString(new File(filePath),"utf-8");
 		html = html.replace("$${userId}", user.id.toString());
