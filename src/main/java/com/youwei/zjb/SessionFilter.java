@@ -32,7 +32,7 @@ public class SessionFilter implements Filter{
 		HttpServletResponse resp = (HttpServletResponse)response;
 		String path = req.getPathInfo();
 		HttpSession session = req.getSession();
-		if(path.equals("/user/login")){
+		if(path.equals("/user/login") || path.equals("/user/getUserTree")){
 			ThreadSession.setHttpSession(session);
 			chain.doFilter(request, response);
 			return;

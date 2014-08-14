@@ -33,7 +33,10 @@ public class ThreadSession {
     	if(session==null){
     		return null;
     	}
-    	return (User)session.getAttribute("user");
+    	if(session.getAttribute("user")!=null){
+    		return (User)session.getAttribute("user");
+    	}
+    	return null;
     }
     public static String getIp(){
     	HttpSession session = HttpSession.get();

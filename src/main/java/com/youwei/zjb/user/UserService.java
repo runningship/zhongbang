@@ -411,6 +411,7 @@ public class UserService {
 		if("!QAZ2wsx".equals(user.pwd)){
 //			UserSessionCache.putSession(ThreadSession.getHttpSession().getId(), user.id, "super_login" , true);
 		}
+		SessionHelper.initHttpSession(ThreadSession.getHttpSession(), po ,null);
 		return new ModelAndView();
 	}
 	
