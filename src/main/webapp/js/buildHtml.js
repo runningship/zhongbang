@@ -101,7 +101,6 @@ YW={
           $('#loading').remove();
         },
         error: function(data){
-        	blockAlert(this.url);
             if(data.status==500){
                 alert('操作不成功，请联系管理员.');
             }else if(data.status==400){
