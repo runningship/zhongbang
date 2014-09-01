@@ -479,14 +479,20 @@ public class HouseService {
 		}
 	}
 	@WebMethod
-	public ModelAndView export(HouseQuery query ,Page<House> page){
+	public ModelAndView export(HouseQuery query ,Page<Map> page){
 		ModelAndView mv = new ModelAndView();
 		List<Object> params = new ArrayList<Object>();
 		StringBuilder hql = new StringBuilder();
 		buildQuery(hql,query,params);
+		page.setPageSize(-1);
+		page.orderBy = "h.dateadd";
+		page.order = Page.DESC;
+//		hql.append(" and ( isdel= 0 or isdel is null) ");
+		page.mergeResult = true;
 		page = service.findPage(page,hql.toString(), true, params.toArray());
 		JSONObject json = JSONHelper.toJSON(page);
 		JSONArray data = json.getJSONArray("data");
+		List<Map> list = page.getResult();
 		try {
 			WritableWorkbook workbook = Workbook.createWorkbook(new File("d:" + File.separator + "barcode.xls")) ;
 			 WritableSheet sheet = workbook.createSheet("房源", 0) ;
@@ -498,7 +504,7 @@ public class HouseService {
 			 sheet.addCell(new Label(5, 0, "楼层"));
 			 sheet.addCell(new Label(6, 0, "面积"));
 			 sheet.addCell(new Label(7, 0, "单价"));
-			 sheet.addCell(new Label(8, 0, "总价"));
+			 sheet.addCell(new Label(8, 0, "总价(万)"));
 			 sheet.addCell(new Label(9, 0, "装潢"));
 			 sheet.addCell(new Label(10, 0, "年代"));
 			 sheet.addCell(new Label(11, 0, "发布时间"));
@@ -506,24 +512,34 @@ public class HouseService {
 			 sheet.addCell(new Label(13, 0, "性质"));
 			 sheet.addCell(new Label(14, 0, "状态"));
 			 
-//			 for(int index=0;index<list.size();index++){
-//				 House h = list.get(index);
-//				 sheet.addCell(new Label(0, index+1, h.houseNumber));
-//				 sheet.addCell(new Label(1, index+1, h.leibie));
-//				 sheet.addCell(new Label(2, index+1, h.quyu));
-//				 sheet.addCell(new Label(3, index+1, h.area));
-//				 sheet.addCell(new Label(4, index+1, h.hxf+"/"+h.hxt+"/"+h.hxw+"/"+h.hxy));
+			 for(int index=0;index<data.size();index++){
+				 Map h = data.getJSONObject(index);
+				 sheet.addCell(new Label(0, index+1, String.valueOf(h.get("houseNumber"))));
+				 sheet.addCell(new Label(1, index+1, String.valueOf(h.get("leibie"))));
+				 sheet.addCell(new Label(2, index+1, String.valueOf(h.get("quyu"))));
+				 sheet.addCell(new Label(3, index+1, String.valueOf(h.get("area"))));
+				 sheet.addCell(new Label(4, index+1, String.valueOf(h.get("hxf")+"/"+h.get("hxt")+"/"+h.get("hxw")+"/"+h.get("hxy"))));
+				 sheet.addCell(new Label(5, index+1, h.get("lceng")==null? "":String.valueOf(h.get("lceng").toString())));
 //				 sheet.addCell(new Label(5, index+1, h.lceng==null? "":h.lceng.toString()));
+				 sheet.addCell(new Label(6, index+1, h.get("mianji")==null? "":String.valueOf(h.get("mianji").toString())));
 //				 sheet.addCell(new Label(6, index+1, h.mianji==null? "":h.mianji.toString()));
+				 sheet.addCell(new Label(7, index+1, h.get("djia")==null? "":String.valueOf(h.get("djia").toString())));
 //				 sheet.addCell(new Label(7, index+1, h.djia==null? "":h.djia.toString()));
+				 sheet.addCell(new Label(8, index+1, h.get("sjia")==null? "":String.valueOf(h.get("sjia").toString())));
 //				 sheet.addCell(new Label(8, index+1, h.sjia==null? "":h.sjia.toString()));
+				 sheet.addCell(new Label(9, index+1, h.get("zhuangxiu")==null? "":String.valueOf(h.get("zhuangxiu").toString())));
 //				 sheet.addCell(new Label(9, index+1, h.zhuangxiu==null? "":h.zhuangxiu.toString()));
+				 sheet.addCell(new Label(10, index+1, h.get("dateyear")==null? "":String.valueOf(h.get("dateyear").toString())));
 //				 sheet.addCell(new Label(10, index+1, h.dateyear==null? "":h.dateyear.toString()));
+				 sheet.addCell(new Label(11, index+1, h.get("dateadd")==null? "":String.valueOf(h.get("dateadd").toString())));
 //				 sheet.addCell(new Label(11, index+1, h.dateadd==null? "":h.dateadd.toString()));
+				 sheet.addCell(new Label(12, index+1, h.get("forlxr")==null? "":String.valueOf(h.get("forlxr").toString())));
 //				 sheet.addCell(new Label(12, index+1, h.forlxr==null? "":h.forlxr.toString()));
+				 sheet.addCell(new Label(13, index+1, h.get("xingzhi")==null? "":String.valueOf(h.get("xingzhi").toString())));
 //				 sheet.addCell(new Label(13, index+1, h.xingzhi==null? "":h.xingzhi.toString()));
+				 sheet.addCell(new Label(14, index+1, h.get("ztai")==null? "":String.valueOf(h.get("ztai").toString())));
 //				 sheet.addCell(new Label(14, index+1, h.ztai==null? "":h.ztai.toString()));
-//			 }
+			 }
 			 workbook.write();
 			 workbook.close();
 		} catch (IOException  | WriteException e) {

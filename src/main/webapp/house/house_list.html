@@ -87,8 +87,19 @@ function getHuseList(a){
     }
   });
 }
-function onSubmit_Form(){
+function expprt(){
+  YW.ajax({
+    type: 'POST',
+    url: '/zb/c/house/export',
+//    async:false,
+    data:a,
+    success: function(data){
+      alert('导出成功')；
+    }
+  })
+}
 
+function onSubmit_Form(){
   $('form[name=form1]').on('submit', function(event) {
     getHuseList(formSerialize($(this)));
     return false;
@@ -490,6 +501,9 @@ $(function(){
         <select class="form-control get_comp" name="form_cid"></select>
         <select class="form-control get_quyu" name="form_did"></select>
         <select class="form-control get_user" name="form_uid"></select>
+      </div>
+      <div class="btn-group">
+        <button type="" class="btn btn-primary" onclick="export();">导出房源</button>
       </div>
       <br/><br/><br/>
     </div>
