@@ -57,7 +57,9 @@ public class UserAdjustService {
 //		}
 		mv.data.put("reason", adjust.reason);
 		mv.data.put("jiaojie", adjust.jiaojie);
-		List<User> users = UserHelper.getUserWithAuthority("rs_zwtz_list");
+		User target = dao.get(User.class, adjust.userId);
+		List<User> users = UserHelper.getUserWithAuthority("rs_zwtz_list","rs_zwtz_data" , target);
+//		List<User> users = UserHelper.getUserWithAuthority("rs_zwtz_list");
 		StringBuilder ids = new StringBuilder();
 		for(int i=0;i<users.size();i++){
 			ids.append(users.get(i).id);
@@ -81,7 +83,8 @@ public class UserAdjustService {
 //		if(ua.userId.equals(ua.fyTo) || ua.userId.equals(ua.kyTo)){
 //			throw new GException(PlatformExceptionType.BusinessException, "客源或房源调整不正确");
 //		}
-		List<User> sprList = UserHelper.getUserWithAuthority("rs_zwtz_list");
+		User target = dao.get(User.class, ua.userId);
+		List<User> sprList = UserHelper.getUserWithAuthority("rs_zwtz_list","rs_zwtz_data" , target);
 		if(sprList==null || sprList.size()==0){
 			throw new GException(PlatformExceptionType.BusinessException, "没有用户拥有职务审核权限，请先在系统管理中设置职务调整审核人.或者联系系统管理员为您处理");
 		}
@@ -109,9 +112,13 @@ public class UserAdjustService {
 		StringBuilder hql = new StringBuilder();
 		List<Object> params = new ArrayList<Object>();
 		User user = ThreadSession.getUser();
-		hql.append("select ud.id as id, review.sh as tzsh,ud.applyTime as applyTime, ud.passTime as passTime, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
-				+ "from User  u, Department d,Role r ,UserAdjust ud, RenShiReview review where review.sh=0 and u.id=ud.userId and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? and u.flag=0 and review.category='"+RenShiReview.Adjust+"' ");
+		String xpath = UserHelper.getDataScope(user, "rs_zwtz");
+		hql.append("select ud.id as id, review.sh as tzsh,ud.applyTime as applyTime, ud.passTime as passTime, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, "
+				+ " u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
+				+ "from User  u, Department d,Role r ,UserAdjust ud, RenShiReview review where review.sh=0 and u.id=ud.userId and u.roleId = r.id and d.id = u.deptId "
+				+ " and u.id=review.userId and review.sprId=? and u.flag=0 and u.orgpath like ?  and review.category='"+RenShiReview.Adjust+"' ");
 		params.add(user.id);
+		params.add(xpath+"%");
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;
@@ -123,9 +130,12 @@ public class UserAdjustService {
 		StringBuilder hql = new StringBuilder();
 		List<Object> params = new ArrayList<Object>();
 		User user = ThreadSession.getUser();
+		String xpath = UserHelper.getDataScope(user, "rs_zwtz");
 		hql.append("select ud.id as id, review.sh as tzsh,ud.applyTime as applyTime, ud.passTime as passTime, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
-				+ "from User  u, Department d,Role r ,UserAdjust ud, RenShiReview review where u.id=ud.userId and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? and u.flag=0 and review.sh<>0 and review.category='"+RenShiReview.Adjust+"' ");
+				+ "from User  u, Department d,Role r ,UserAdjust ud, RenShiReview review where u.id=ud.userId and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? "
+				+ " and u.flag=0 and u.orgpath like ? and review.sh<>0 and review.category='"+RenShiReview.Adjust+"' ");
 		params.add(user.id);
+		params.add(xpath+"%");
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;
@@ -158,7 +168,9 @@ public class UserAdjustService {
 		RenShiReview po = dao.get(RenShiReview.class, spId);
 		po.sh = 1;
 		dao.saveOrUpdate(po);
-		List<User> users = UserHelper.getUserWithAuthority("rs_zwtz_list");
+		UserAdjust adjust = dao.get(UserAdjust.class, adjustId);
+		User target = dao.get(User.class, adjust.userId);
+		List<User> users = UserHelper.getUserWithAuthority("rs_zwtz_list","rs_zwtz_data" , target);
 		StringBuilder ids = new StringBuilder();
 		for(int i=0;i<users.size();i++){
 			ids.append(users.get(i).id);
@@ -167,8 +179,8 @@ public class UserAdjustService {
 			}
 		}
 //		long count = dao.countHqlResult("from RenShiReview r ,User u where r.userId=? and r.sh=0 and u.id=r.sprId and u.sh=1 and u.flag=0 and category='"+RenShiReview.Adjust+"' ", po.userId);
-		long count = dao.countHqlResult("from RenShiReview r where r.userId=? and r.sh=0 and r.sprId not in ("+ids.toString()+") and category='"+RenShiReview.Adjust+"' ", po.userId);
-		UserAdjust adjust = dao.get(UserAdjust.class, adjustId);
+		long count = dao.countHqlResult("from RenShiReview r where r.userId=? and r.sh=0 and r.sprId  in ("+ids.toString()+") and category='"+RenShiReview.Adjust+"' ", po.userId);
+		
 		User user = dao.get(User.class, adjust.userId);
 		Department oldDept = dao.get(Department.class,adjust.oldDeptId);
 		Department newDept = dao.get(Department.class,adjust.newDeptId);

@@ -87,16 +87,19 @@ function getHuseList(a){
     }
   });
 }
-function expprt(){
-  YW.ajax({
-    type: 'POST',
-    url: '/zb/c/house/export',
-//    async:false,
-    data:a,
-    success: function(data){
-      alert('导出成功')；
-    }
-  })
+
+function houseExport(){
+  var form = $('form[name=form1]');
+  form.attr('action','/zb/c/house/export');
+  form.submit();
+  // YW.ajax({
+  //   type: 'POST',
+  //   url: '/zb/c/house/export',
+  //   data:a,
+  //   success: function(data){
+  //     alert('导出成功');
+  //   }
+  // });
 }
 
 function onSubmit_Form(){
@@ -184,7 +187,8 @@ function setDateSec(select){
 
 $(function(){
     $('#authParent').val(authParent);
-    onSubmit_Form();
+    // onSubmit_Form();
+    // doSearch();
     setMainHeight();
     $.get('/zb/c/house/getQueryOptions', function(data) {
     queryOptions=JSON.parse(data);
@@ -493,7 +497,7 @@ $(function(){
         <input type="text" class="form-control" name="tel" placeholder="11位内数字">
       </div>
       <div class="btn-group">
-        <button type="submit" class="btn btn-primary btn_subnmit">搜索提交</button>
+        <button type="submit" class="btn btn-primary" onclick="doSearch();">搜索提交</button>
         <button type="button" class="btn" data-type="qingkong" onclick="qingkong();">清空</button>
       </div>
       <div class="input-group input-group-select">
@@ -503,7 +507,7 @@ $(function(){
         <select class="form-control get_user" name="form_uid"></select>
       </div>
       <div class="btn-group">
-        <button type="" class="btn btn-primary" onclick="export();">导出房源</button>
+        <button type="" class="btn btn-primary" onclick="houseExport();">导出房源</button>
       </div>
       <br/><br/><br/>
     </div>

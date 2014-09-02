@@ -32,8 +32,9 @@ public class SessionFilter implements Filter{
 		HttpServletResponse resp = (HttpServletResponse)response;
 		String path = req.getPathInfo();
 		HttpSession session = req.getSession();
+		ThreadSession.setHttpSession(session);
+		ThreadSession.setHttpSession(resp);
 		if(path.equals("/user/login") || path.equals("/user/getUserTree")){
-			ThreadSession.setHttpSession(session);
 			chain.doFilter(request, response);
 			return;
 		}
@@ -62,7 +63,6 @@ public class SessionFilter implements Filter{
 						return;
 					}
 					SessionHelper.initHttpSession(session,user , us);
-					ThreadSession.setHttpSession(session);
 				}
 			}
 		}else{
@@ -73,7 +73,6 @@ public class SessionFilter implements Filter{
 					relogin(req, resp);
 					return;
 				}
-				ThreadSession.setHttpSession(session);
 			}
 			
 		}

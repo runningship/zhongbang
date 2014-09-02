@@ -31,7 +31,9 @@ public class RuZhiService {
 		Department dept = dao.get(Department.class,  user.deptId);
 		Department comp = dao.get(Department.class, dept.fid);
 		List<Role> roles = dao.listByParams(Role.class, "from Role");
-		List<User> users = UserHelper.getUserWithAuthority("rs_rz_list");
+//		List<User> users = UserHelper.getUserWithAuthority("rs_rz_list");
+		List<User> users = UserHelper.getUserWithAuthority("rs_rz_list","rs_rz_data" , user);
+		
 		StringBuilder ids = new StringBuilder();
 		for(int i=0;i<users.size();i++){
 			ids.append(users.get(i).id);
@@ -67,7 +69,9 @@ public class RuZhiService {
 		RenShiReview po = dao.get(RenShiReview.class, spId);
 		po.sh = 1;
 		dao.saveOrUpdate(po);
-		List<User> users = UserHelper.getUserWithAuthority("rs_rz_list");
+//		List<User> users = UserHelper.getUserWithAuthority("rs_rz_list");
+		User target = dao.get(User.class, po.userId);
+		List<User> users = UserHelper.getUserWithAuthority("rs_rz_list","rs_rz_data" , target);
 		StringBuilder ids = new StringBuilder();
 		for(int i=0;i<users.size();i++){
 			ids.append(users.get(i).id);

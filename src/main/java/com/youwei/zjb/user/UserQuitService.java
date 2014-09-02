@@ -50,7 +50,7 @@ public class UserQuitService {
 		}
 		mv.data.put("reason", uq.reason);
 		mv.data.put("jiaojie", uq.jiaojie);
-		List<User> users = UserHelper.getUserWithAuthority("rs_lzsq_list");
+		List<User> users = UserHelper.getUserWithAuthority("rs_lzsq_list","rs_lizhi_data" , user);
 		StringBuilder ids = new StringBuilder();
 		for(int i=0;i<users.size();i++){
 			ids.append(users.get(i).id);
@@ -81,7 +81,9 @@ public class UserQuitService {
 		if(uq.userId.equals(uq.fyTo) || uq.userId.equals(uq.kyTo)){
 			throw new GException(PlatformExceptionType.BusinessException,"客源或房源调整不正确");
 		}
-		List<User> sprList = UserHelper.getUserWithAuthority("rs_lzsq_list");
+		User target = dao.get(User.class, uq.userId);
+//		List<User> sprList = UserHelper.getUserWithAuthority("rs_lzsq_list");
+		List<User> sprList = UserHelper.getUserWithAuthority("rs_lzsq_list","rs_lizhi_data" , target);
 		if(sprList==null || sprList.size()==0){
 			throw new GException(PlatformExceptionType.BusinessException, "没有用户拥有离职审核权限，请先在系统管理中设置离职整审核人.或者联系系统管理员为您处理");
 		}
@@ -111,14 +113,18 @@ public class UserQuitService {
 		StringBuilder hql = new StringBuilder();
 		List<Object> params = new ArrayList<Object>();
 		User user = ThreadSession.getUser();
+		String xpath = UserHelper.getDataScope(user, "rs_lizhi");
 		hql.append("select uq.id as id, review.sh as lzsh,uq.applyTime as applyTime, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
-				+ "from User  u, Department d,Role r ,UserQuit uq, RenShiReview review where u.id=uq.userId and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? and review.category='"+RenShiReview.Quit+"' ");
+				+ "from User  u, Department d,Role r ,UserQuit uq, RenShiReview review where u.id=uq.userId and u.roleId = r.id and d.id = u.deptId "
+				+ " and u.id=review.userId and review.sprId=? and u.orgpath like ? and review.category='"+RenShiReview.Quit+"' ");
 		params.add(user.id);
+		params.add(xpath+"%");
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page));
 		return mv;
 	}
 	
+	//无用
 	@WebMethod
 	public ModelAndView list(Page<Map> page){
 		ModelAndView mv = new ModelAndView();
@@ -138,7 +144,9 @@ public class UserQuitService {
 		}
 		po.sh = 1;
 		dao.saveOrUpdate(po);
-		List<User> users = UserHelper.getUserWithAuthority("rs_lzsq_list");
+//		List<User> users = UserHelper.getUserWithAuthority("rs_lzsq_list");
+		User target = dao.get(User.class, po.userId);
+		List<User> users = UserHelper.getUserWithAuthority("rs_lzsq_list","rs_lizhi_data" , target);
 		StringBuilder ids = new StringBuilder();
 		for(int i=0;i<users.size();i++){
 			ids.append(users.get(i).id);

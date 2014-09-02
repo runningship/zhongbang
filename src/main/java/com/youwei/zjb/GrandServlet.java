@@ -74,10 +74,12 @@ public class GrandServlet extends HttpServlet{
 				if(StringUtils.isNotEmpty(mv.contentType)){
 					resp.setContentType(mv.contentType);
 				}
-				if(StringUtils.isNotEmpty(mv.returnText)){
-					resp.getWriter().write(mv.returnText);
-				}else{
-					resp.getWriter().write(mv.data.toString());
+				if(!mv.isStream){
+					if(StringUtils.isNotEmpty(mv.returnText)){
+						resp.getWriter().write(mv.returnText);
+					}else{
+						resp.getWriter().write(mv.data.toString());
+					}
 				}
 			}else{
 				ServletHelper.fillMV(req,mv);

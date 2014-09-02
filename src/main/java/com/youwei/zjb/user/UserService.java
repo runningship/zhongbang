@@ -282,7 +282,8 @@ public class UserService {
 		if(po!=null){
 			throw new GException(PlatformExceptionType.BusinessException,  "身份证号已经存在");
 		}
-		List<User> sprList = UserHelper.getUserWithAuthority("rs_rz_list");
+//		List<User> sprList = UserHelper.getUserWithAuthority("rs_rz_list");
+		List<User> sprList = UserHelper.getUserWithAuthority("rs_rz_list","rs_rz_data" , user);
 		if(sprList==null || sprList.size()==0){
 			throw new GException(PlatformExceptionType.BusinessException,  "没有用户拥有入职登记审核权限，请先在系统管理中设置入职登记审核人.或者联系系统管理员为您处理");
 		}
@@ -317,9 +318,12 @@ public class UserService {
 		StringBuilder hql = new StringBuilder();
 		List<Object> params = new ArrayList<Object>();
 		User user = ThreadSession.getUser();
+		String xpath = UserHelper.getDataScope(user, "rs_rz");
 		hql.append("select review.sh as rzsh, u.uname as uname,u.id as uid ,r.title as title , review.id as rid,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
-				+ "from User  u, Department d,Role r , RenShiReview review where u.sh=0 and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? and review.category='join' ");
+				+ "from User  u, Department d,Role r , RenShiReview review where u.sh=0 and u.roleId = r.id and d.id = u.deptId and u.id=review.userId "
+				+ " and review.sprId=? and u.orgpath like ? and review.category='join' ");
 		params.add(user.id);
+		params.add(xpath+"%");
 		query.sh=null;
 		fillQuery(query,hql,params);
 		page = dao.findPage(page, hql.toString(), true, params.toArray());

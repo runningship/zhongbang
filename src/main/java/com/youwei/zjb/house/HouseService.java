@@ -1,6 +1,7 @@
 package com.youwei.zjb.house;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import jxl.Workbook;
 import jxl.write.Label;
@@ -18,6 +22,8 @@ import jxl.write.biff.RowsExceededException;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.GException;
@@ -481,6 +487,8 @@ public class HouseService {
 	@WebMethod
 	public ModelAndView export(HouseQuery query ,Page<Map> page){
 		ModelAndView mv = new ModelAndView();
+		mv.isStream = true;
+		mv.contentType="application/octet-stream";
 		List<Object> params = new ArrayList<Object>();
 		StringBuilder hql = new StringBuilder();
 		buildQuery(hql,query,params);
@@ -492,9 +500,12 @@ public class HouseService {
 		page = service.findPage(page,hql.toString(), true, params.toArray());
 		JSONObject json = JSONHelper.toJSON(page);
 		JSONArray data = json.getJSONArray("data");
-		List<Map> list = page.getResult();
 		try {
-			WritableWorkbook workbook = Workbook.createWorkbook(new File("d:" + File.separator + "barcode.xls")) ;
+			 HttpServletResponse resp = ThreadSession.getHttpServletResponse();
+			 resp.setContentType("application/octet-stream");
+			 ServletOutputStream out = resp.getOutputStream();
+			WritableWorkbook workbook = Workbook.createWorkbook(out) ;
+			resp.addHeader("Content-Disposition", "attachment;filename=" + new String("房源列表.xls".getBytes("utf-8"),"ISO-8859-1"));
 			 WritableSheet sheet = workbook.createSheet("房源", 0) ;
 			 sheet.addCell(new Label(0, 0, "编号"));
 			 sheet.addCell(new Label(1, 0, "类别"));
@@ -542,6 +553,11 @@ public class HouseService {
 			 }
 			 workbook.write();
 			 workbook.close();
+			 
+//	        resp.addHeader("Content-Length", "" + workbook.);
+//			FileInputStream ins = FileUtils.openInputStream(file);
+//			IOUtils.copy(ins, out);
+//			IOUtils.closeQuietly(ins);
 		} catch (IOException  | WriteException e) {
 			e.printStackTrace();
 		}

@@ -17,6 +17,7 @@ public class ModelAndView {
 	
 	public String returnText = "";
 	
+	public boolean isStream;
 	public ModelAndView(){
 		
 	}

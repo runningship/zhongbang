@@ -39,7 +39,7 @@ public class PcService {
 		
 		if(StringUtils.isEmpty(pc.baseboard) && StringUtils.isEmpty(pc.cpu) && StringUtils.isEmpty(pc.harddrive) && StringUtils.isEmpty(pc.bios)){
 			mv.data.put("result", "2");
-			mv.data.put("msg", "机器码为空，不能授权，可能是由于您安装的是精简版的操作系统.");
+			mv.data.put("msg", "机器码为空，不能授权，可能是由于您安装的是精简版的操作系统.请运行安装目录下的 修复.bat 文件尝试修复");
 			return mv;
 		}
 		

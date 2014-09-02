@@ -1,5 +1,6 @@
 package com.youwei.zjb;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.youwei.zjb.entity.User;
@@ -7,6 +8,8 @@ public class ThreadSession {
 
 
 	private static final ThreadLocal<HttpSession> HttpSession = new ThreadLocal<HttpSession>();
+	
+	private static final ThreadLocal<HttpServletResponse> Resp = new ThreadLocal<HttpServletResponse>();
 	
 	private static final ThreadLocal<Boolean> superAdmin = new ThreadLocal<Boolean>();
     private ThreadSession() {  
@@ -26,6 +29,14 @@ public class ThreadSession {
     
     public static void setHttpSession(HttpSession session){
     	HttpSession.set(session);
+    }
+    
+    public static HttpServletResponse getHttpServletResponse(){
+    	return Resp.get();
+    }
+    
+    public static void setHttpSession(HttpServletResponse resp){
+    	Resp.set(resp);
     }
     
     public static User getUser(){
