@@ -148,7 +148,7 @@ public class DataHelper {
 			sb.append("租金: "+old.zjia+"-->"+newH.zjia).append("<br/>");
 		}
 		if(old.zhuangxiu!=null && newH.zhuangxiu!=null && !newH.zhuangxiu.equals(old.zhuangxiu)){
-			sb.append("装修: "+ZhuangXiu.valueOf(old.zhuangxiu)+"-->"+ ZhuangXiu.valueOf(newH.zhuangxiu)).append("<br/>");
+			sb.append("装修: "+ZhuangXiu.parse(old.zhuangxiu)+"-->"+ ZhuangXiu.parse(newH.zhuangxiu)).append("<br/>");
 		}
 		if(old.zceng!=null && newH.zceng!=null && !newH.zceng.equals(old.zceng)){
 			sb.append("总层数: "+old.zceng+"-->"+newH.zceng).append("<br/>");

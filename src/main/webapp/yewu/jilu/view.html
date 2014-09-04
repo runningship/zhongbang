@@ -33,6 +33,7 @@ function get(){
       ue.setContent(data['jilu']['conts'] ,false);
       fillData(data['jilu']);
       buildHtmlWithJsonArray("content",data['attachs']);
+      fixTableFullScreen(ue);
     }
   });
 }
@@ -69,6 +70,11 @@ $(function(){
   ue.addListener( 'ready', function( editor ) {
     //ue.setHeight(350);
     get(); 
+  });
+  ue.addListener( 'fullscreenchanged', function( editor ) {
+    if(ue.ui.isFullScreen()==false){
+      fixTableFullScreen(ue);
+    }
   });
 });
 
@@ -107,14 +113,14 @@ $(function(){
       <td>
     <input id="conts" name="conts" type="hidden" />
    <div style="margin-top:10px;margin-left:10px; margin-bottom:10px;">
-    <span id="editor" type="text/plain" style="width:99%;height:400px;"></span>
+    <span id="editor" type="text/plain" style="width:99%;height:160px;"></span>
   </div>
       </td>
       </tr>
     <tr>
       <th>附件:</th>
       <td id="content">
-        <div>
+        <div style="display:none">
           <a href="/zb/file/download?bizType=${bizType}&recordId=${recordId}&file=${id}" name="attachment">${filename}</a>
         </div>
       </td>

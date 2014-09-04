@@ -77,6 +77,7 @@ CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(Common
 			hql.append(" and d.path like ?");
 			sum.append(" and d.path like ?");
 			params.add(query.xpath+"%");
+			sumparams.add(query.xpath+"%");
 		}
 		hql.append(HqlHelper.buildDateSegment("o.addtime", query.addtimeStart, DateSeparator.After, params));
 		hql.append(HqlHelper.buildDateSegment("o.addtime", query.addtimeEnd, DateSeparator.Before, params));

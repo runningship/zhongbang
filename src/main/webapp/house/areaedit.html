@@ -42,7 +42,7 @@ function setArea(search){
     success: function(data){
       var getAreas=JSON.parse(data);
       art.dialog.close();
-      art.dialog.opener.getAreaList();
+      art.dialog.opener.getAreaList(search);
       art.dialog.tips('保存成功')
     }
   })

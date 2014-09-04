@@ -33,6 +33,7 @@ function get(){
       data = JSON.parse(text);
       fillData(data['out']);
       buildHtmlWithJsonArray("content",data['attachs']);
+      fixTableFullScreen(ue);
     }
   });
 }
@@ -94,6 +95,11 @@ $(function(){
     getContent();
     get();
   });
+  ue.addListener( 'fullscreenchanged', function( editor ) {
+    if(ue.ui.isFullScreen()==false){
+      fixTableFullScreen(ue);
+    }
+  });
 });
 
 </script>
@@ -133,7 +139,7 @@ $(function(){
       <th>看房总结:</th>
       <td>
         <div>
-          <span id="editor" type="text/plain" style="width:500px;height:100px;"></span>
+          <span id="editor" type="text/plain" style="width:99%;height:100px;"></span>
         </div>
       </td>
     </tr>

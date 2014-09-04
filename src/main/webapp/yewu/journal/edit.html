@@ -97,6 +97,7 @@ function getContent(){
       ue.setContent(json['journal']['conta'] ,false);
       initFileUpload();
       getAttachList();
+      fixTableFullScreen(ue);
     }
   });
 }
@@ -119,7 +120,11 @@ $(function(){
     //ue.setHeight(350);
     getContent();
   });
-  // getContent();
+  ue.addListener( 'fullscreenchanged', function( editor ) {
+    if(ue.ui.isFullScreen()==false){
+      fixTableFullScreen(ue);
+    }
+  });
 });
 
 </script>

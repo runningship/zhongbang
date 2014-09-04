@@ -32,6 +32,7 @@ function get(){
       ue.setContent(data['journal']['conta'] ,false);
       fillData(data['journal']);
       buildHtmlWithJsonArray("content",data['attachs']);
+      fixTableFullScreen(ue);
     }
   });
 }
@@ -50,6 +51,11 @@ $(function(){
     toolbars: [
         ['fullscreen', 'source', 'undo', 'redo', 'bold']
     ]
+  });
+  ue.addListener( 'fullscreenchanged', function( editor ) {
+    if(ue.ui.isFullScreen()==false){
+      fixTableFullScreen(ue);
+    }
   });
   ue.addListener( 'ready', function( editor ) {
     //ue.setHeight(350);
@@ -87,7 +93,8 @@ $(function(){
     <tr>
       <th>附件:</th>
       <td id="content" class="filebox">
-        <a href="/zb/file/download?bizType=${bizType}&recordId=${recordId}&file=${id}" name="attachment">${filename}</a>
+      <div style="display:none">
+        <a href="/zb/file/download?bizType=${bizType}&recordId=${recordId}&file=${id}" name="attachment">${filename}</a></div>
       </td>
     </tr>
   </table>
