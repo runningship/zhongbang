@@ -258,6 +258,12 @@ public class UserService {
 		po.address = user.address;
 		po.rqsj = user.rqsj;
 		po.rqtj = user.rqtj;
+		if(user.roleId!=null){
+			po.roleId = user.roleId;
+		}
+		if(user.deptId!=null){
+			po.deptId = user.deptId;
+		}
 		dao.saveOrUpdate(po);
 		return mv;
 	}

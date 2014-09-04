@@ -28,7 +28,7 @@ function doSave(){
     url: '/zb/c/user/update',
     data:data,
     success: function(data){
-      alert('修改成功');
+      alert('保存成功');
     }
   });
   return false;
@@ -166,11 +166,10 @@ $(function(){
           <option value="${name}">${name}</option>
       </select>
     </div>
-    <div class="btn-group"style="float:none;margin-top:15px;">
-      <button class="btn btn-primary btn_subnmit" onclick="doSave();">保存</button>
-    </div>
-    
   </form>
+  <div class="btn-group"style="float:none;margin-top:15px;">
+      <button class="btn btn-primary " onclick="doSave();">保存</button>
+    </div>
  <!--  <div class="btn-group" style="float:none;margin-top:15px;">
     <button onclick="doSave()" class="btn btn-primary btn_subnmit">审核并通过</button>
   </div> -->

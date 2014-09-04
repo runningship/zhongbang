@@ -1,10 +1,12 @@
 package com.youwei.zjb.user;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.GException;
 import org.bc.sdak.Page;
@@ -24,6 +26,7 @@ import com.youwei.zjb.sys.OperatorService;
 import com.youwei.zjb.sys.OperatorType;
 import com.youwei.zjb.user.entity.RenShiReview;
 import com.youwei.zjb.user.entity.UserAdjust;
+import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
 
@@ -39,10 +42,11 @@ public class UserAdjustService {
 		User user = dao.get(User.class, adjust.userId);
 		mv.data.put("uname", user.uname);
 		mv.data.put("oldTitle", user.getRole().title);
-		
+		mv.data.put("adjustId", adjust.id);
 		Role newRole = dao.get(Role.class, adjust.newRoleId);
 		mv.data.put("newTitle", newRole.title);
 		
+		mv.data.put("moveTime",adjust.moveTime==null?"": DataHelper.dateSdf.format(adjust.moveTime));
 		mv.data.put("oldDeptName", user.Department().namea );
 		Department newDept = dao.get(Department.class, adjust.newDeptId);
 		mv.data.put("newDeptName", newDept.namea);
@@ -164,11 +168,20 @@ public class UserAdjustService {
 	}
 	
 	@WebMethod
-	public void update(UserAdjust vo){
-		UserAdjust po = dao.get(UserAdjust.class, vo.id);
+	public ModelAndView updateMovetime(String moveTime,int id){
+		UserAdjust po = dao.get(UserAdjust.class, id);
 		if(po!=null){
-			
+			if(StringUtils.isNotEmpty(moveTime)){
+				try {
+					po.moveTime = DataHelper.dateSdf.parse(moveTime);
+				} catch (ParseException e) {
+				}
+			}else{
+				po.moveTime=null;
+			}
+			dao.saveOrUpdate(po);
 		}
+		return new ModelAndView();
 	}
 	
 	@Transactional
