@@ -20,6 +20,18 @@ var spList;
 var myId;
 var lizhiId;
 
+function doSave(){
+  var data = formSerialize($('form[name=form1]'));
+  YW.ajax({
+    type: 'POST',
+    url: '/zb/c/user/update',
+    data:data,
+    success: function(data){
+      alert('修改成功');
+    }
+  });
+  return false;
+}
 function fillData(data){
     $('#uname').text(data['uname']);
     $('#oldDeptName').text(data['oldDeptName']);
@@ -27,6 +39,8 @@ function fillData(data){
     $('#fyTo').text(data['fyTo']);
     $('#kyTo').text(data['kyTo']);
     $('#reason').text(data['reason']);
+    $('#userId').val(user['id']);
+    $('#idTimes').text(data['leaveTime']);
     $('#jiaojie').text(data['jiaojie']);
 }
 
@@ -81,6 +95,7 @@ $(function(){
 <div class="header" style="position:relative;height:50px;width:100%">
   
   <form name="form1" >
+    <input type="hidden" id="userId" name="userId" />
     <div class="input-group " style="float:none;">
       <span class="input-group-addon">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</span>
       <span type="text" class="form-control" id="uname" style="width:150px;" ></span>
@@ -110,6 +125,14 @@ $(function(){
      <div class="input-group " style="float:none;margin-top:15px;width:300px;">
       <span class="input-group-addon">实物交接</span>
       <span type="text" class="form-control" id="jiaojie"></span>
+    </div>
+    <div class="btn-group"style="float:none;margin-top:15px;">
+      <button class="btn btn-primary btn_subnmit" onclick="doSave();">保存</button>
+    </div>
+    <div class="input-group" style="float:none;margin-top:15px;">
+      <span class="input-group-addon">离职时间</span>
+      <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="leaveTime" style="width:150px;border-radius:0;">
+      <input type="text" id="idTime"  onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" style="width:150px;display:none">
     </div>
     
   </form>

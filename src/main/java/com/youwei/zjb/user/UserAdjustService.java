@@ -58,6 +58,7 @@ public class UserAdjustService {
 		mv.data.put("reason", adjust.reason);
 		mv.data.put("jiaojie", adjust.jiaojie);
 		User target = dao.get(User.class, adjust.userId);
+		//选择被调整人所在区域和总部具有审核权限的用户
 		List<User> users = UserHelper.getUserWithAuthority("rs_zwtz_list","rs_zwtz_data" , target);
 //		List<User> users = UserHelper.getUserWithAuthority("rs_zwtz_list");
 		StringBuilder ids = new StringBuilder();
@@ -99,6 +100,7 @@ public class UserAdjustService {
 			review.sh=0;
 			review.sprId = spr.id;
 			review.userId = user.id;
+			review.itemId = ua.id;
 			dao.saveOrUpdate(review);
 		}
 		ModelAndView mv = new ModelAndView();
@@ -116,7 +118,7 @@ public class UserAdjustService {
 		hql.append("select ud.id as id, review.sh as tzsh,ud.applyTime as applyTime, ud.passTime as passTime, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, "
 				+ " u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
 				+ "from User  u, Department d,Role r ,UserAdjust ud, RenShiReview review where review.sh=0 and u.id=ud.userId and u.roleId = r.id and d.id = u.deptId "
-				+ " and u.id=review.userId and review.sprId=? and u.flag=0 and u.orgpath like ?  and review.category='"+RenShiReview.Adjust+"' ");
+				+ " and ud.id=review.itemId and review.sprId=? and u.flag=0 and u.orgpath like ?  and review.category='"+RenShiReview.Adjust+"' ");
 		params.add(user.id);
 		params.add(xpath+"%");
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
@@ -132,7 +134,7 @@ public class UserAdjustService {
 		User user = ThreadSession.getUser();
 		String xpath = UserHelper.getDataScope(user, "rs_zwtz");
 		hql.append("select ud.id as id, review.sh as tzsh,ud.applyTime as applyTime, ud.passTime as passTime, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
-				+ "from User  u, Department d,Role r ,UserAdjust ud, RenShiReview review where u.id=ud.userId and u.roleId = r.id and d.id = u.deptId and u.id=review.userId and review.sprId=? "
+				+ "from User  u, Department d,Role r ,UserAdjust ud, RenShiReview review where u.id=ud.userId and u.roleId = r.id and d.id = u.deptId and ud.id=review.itemId and review.sprId=? "
 				+ " and u.flag=0 and u.orgpath like ? and review.sh<>0 and review.category='"+RenShiReview.Adjust+"' ");
 		params.add(user.id);
 		params.add(xpath+"%");
@@ -161,6 +163,14 @@ public class UserAdjustService {
 		}
 	}
 	
+	@WebMethod
+	public void update(UserAdjust vo){
+		UserAdjust po = dao.get(UserAdjust.class, vo.id);
+		if(po!=null){
+			
+		}
+	}
+	
 	@Transactional
 	@WebMethod
 	public ModelAndView pass(int adjustId , int spId){
@@ -178,8 +188,9 @@ public class UserAdjustService {
 				ids.append(",");
 			}
 		}
+		//查询还有多少人未审批
 //		long count = dao.countHqlResult("from RenShiReview r ,User u where r.userId=? and r.sh=0 and u.id=r.sprId and u.sh=1 and u.flag=0 and category='"+RenShiReview.Adjust+"' ", po.userId);
-		long count = dao.countHqlResult("from RenShiReview r where r.userId=? and r.sh=0 and r.sprId  in ("+ids.toString()+") and category='"+RenShiReview.Adjust+"' ", po.userId);
+		long count = dao.countHqlResult("from RenShiReview r where r.itemId=? and r.sh=0 and r.sprId  in ("+ids.toString()+") and category='"+RenShiReview.Adjust+"' ", po.itemId);
 		
 		User user = dao.get(User.class, adjust.userId);
 		Department oldDept = dao.get(Department.class,adjust.oldDeptId);

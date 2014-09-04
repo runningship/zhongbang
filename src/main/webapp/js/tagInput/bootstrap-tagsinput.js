@@ -348,6 +348,14 @@
         $input.attr('size', Math.max(this.inputSize, $input.val().length));
       }, self));
 
+      // on blur
+      self.$container.on('blur', 'input', $.proxy(function(event) {
+          var $input = $(event.target);
+          self.add($input.val());
+          $input.val('');
+          event.preventDefault();
+      }, self));
+
       // Remove icon clicked
       self.$container.on('click', '[data-role=remove]', $.proxy(function(event) {
         self.remove($(event.target).closest('.tag').data('item'));

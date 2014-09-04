@@ -17,6 +17,9 @@ public class RenShiReview {
 	 */
 	public Integer userId;
 	
+	//待审核项
+	public Integer itemId;
+	
 	/**
 	 * 审批人
 	 */

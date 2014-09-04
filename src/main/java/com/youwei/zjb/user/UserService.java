@@ -422,10 +422,10 @@ public class UserService {
 	@WebMethod
 	public ModelAndView login(User user,PC pc){
 		ModelAndView mv = new ModelAndView();
-		if(!SecurityHelper.validate(pc)){
-			LogUtil.info("未授权的机器,pc="+BeanUtil.toString(pc)+",user="+BeanUtil.toString(user));
-			throw new GException(PlatformExceptionType.BusinessException, "机器未授权,请重新授权");
-		}
+//		if(!SecurityHelper.validate(pc)){
+//			LogUtil.info("未授权的机器,pc="+BeanUtil.toString(pc)+",user="+BeanUtil.toString(user));
+//			throw new GException(PlatformExceptionType.BusinessException, "机器未授权,请重新授权");
+//		}
 		if(user.id==null){
 			throw new GException(PlatformExceptionType.BusinessException, "用户名不存在");
 		}

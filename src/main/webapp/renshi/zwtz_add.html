@@ -82,6 +82,11 @@ $(function(){
           <option value="${id}">${title}</option>
       </select>
     </div>
+    <div class="input-group" style="float:none;margin-top:15px;">
+      <span class="input-group-addon">调整时间</span>
+      <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="moveTime" style="width:150px;border-radius:0;">
+      <input type="text" id="idTime"  onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" style="width:150px;display:none">
+    </div>
     <div class="input-group " style="float:none;margin-top:15px;width:300px;">
       <span class="input-group-addon">原&nbsp;&nbsp;&nbsp;由</span>
       <input type="text" class="form-control" name="reason">

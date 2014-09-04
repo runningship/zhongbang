@@ -3,6 +3,7 @@ package com.youwei.zjb.user;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.TransactionalServiceHelper;
 import org.bc.web.ModelAndView;
@@ -41,14 +42,17 @@ public class RuZhiService {
 				ids.append(",");
 			}
 		}
+		if(!StringUtils.isEmpty(ids.toString())){
+			List<Map> spList = dao.listAsMap("select r.id as id, r.sprId as sprId, u.uname as spr , r.sh as sh from User u, RenShiReview r where r.category='join' and r.userId=? and u.id=r.sprId and sprId in ("+ids.toString()+")",userId);
+			mv.data.put("spList", JSONHelper.toJSONArray(spList));
+		}
 //		List<Map> spList = dao.listAsMap("select r.id as id, r.sprId as sprId, u.uname as spr , r.sh as sh from User u, RenShiReview r where r.category='join' and r.userId=? and u.id=r.sprId and u.sh=1 and u.flag=0",userId);
-		List<Map> spList = dao.listAsMap("select r.id as id, r.sprId as sprId, u.uname as spr , r.sh as sh from User u, RenShiReview r where r.category='join' and r.userId=? and u.id=r.sprId and sprId in ("+ids.toString()+")",userId);
+		
 		mv.data.put("roles", JSONHelper.toJSONArray(roles));
 		mv.data.put("rqtjs", RuQiTuJin.toJsonArray());
 		mv.data.put("user", JSONHelper.toJSON(user,DataHelper.dateSdf.toPattern()));
 		mv.data.put("myId", ThreadSession.getUser().id);
 		mv.data.getJSONObject("user").put("cid", comp.id);
-		mv.data.put("spList", JSONHelper.toJSONArray(spList));
 		return mv;
 	}
 	

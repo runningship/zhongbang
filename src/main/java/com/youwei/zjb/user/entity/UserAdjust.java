@@ -39,6 +39,11 @@ public class UserAdjust {
 	
 	public Date passTime;
 	
+	/**
+	 * 最终调动时间，有可能1号申请，2好通过，但5号人才完成调动
+	 */
+	public Date moveTime;
+	
 //	/**
 //	 * 房源调整到指定人
 //	 */

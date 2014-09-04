@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="/zb/style/css.css">
 <link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
+<link rel="stylesheet" href="/zb/js/ueditor1_4_3/themes/default/css/ueditor.css">
 <link href="/zb/js/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
@@ -19,7 +20,6 @@
 <script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript">
-
 var data;
 var recordId;
 function get(){
@@ -36,6 +36,7 @@ function get(){
     }
   });
 }
+
 
 function fillData(journal){
   $('#contb').html(journal['contb']);
@@ -59,7 +60,12 @@ $(function(){
   });
   ue.addListener( 'ready', function( editor ) {
     //ue.setHeight(350);
-    get(); 
+    get();
+  });
+  ue.addListener( 'fullscreenchanged', function( editor ) {
+    if(ue.ui.isFullScreen()==false){
+      fixTableFullScreen(ue);
+    }
   });
 });
 
@@ -68,6 +74,7 @@ $(function(){
   .table{ margin-bottom: 0px;}
   th{width:100px; text-align: right}
   .filebox a{ padding: 5px 10px; background-color: #55CCFF; border:1px solid #0099FF; margin-right: 5px; color: #FFF;}
+  table{width: 100%}
 </style>
 </head>
 <body style="overflow:auto">

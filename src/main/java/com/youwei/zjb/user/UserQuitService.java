@@ -94,6 +94,7 @@ public class UserQuitService {
 			review.sh=0;
 			review.sprId = spr.id;
 			review.userId = uq.userId;
+			review.itemId = uq.id;
 			dao.saveOrUpdate(review);
 		}
 		mv.data.put("msg", "申请成功");
@@ -116,7 +117,7 @@ public class UserQuitService {
 		String xpath = UserHelper.getDataScope(user, "rs_lizhi");
 		hql.append("select uq.id as id, review.sh as lzsh,uq.applyTime as applyTime, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
 				+ "from User  u, Department d,Role r ,UserQuit uq, RenShiReview review where u.id=uq.userId and u.roleId = r.id and d.id = u.deptId "
-				+ " and u.id=review.userId and review.sprId=? and u.orgpath like ? and review.category='"+RenShiReview.Quit+"' ");
+				+ " and uq.id=review.itemId and review.sprId=? and u.orgpath like ? and review.category='"+RenShiReview.Quit+"' ");
 		params.add(user.id);
 		params.add(xpath+"%");
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
@@ -155,7 +156,7 @@ public class UserQuitService {
 			}
 		}
 		
-		long count = dao.countHqlResult("from RenShiReview where userid=? and sh=0 and category='quit' and sprId in ("+ids.toString()+")", po.userId);
+		long count = dao.countHqlResult("from RenShiReview where itemId=? and sh=0 and category='quit' and sprId in ("+ids.toString()+")", po.itemId);
 //		long count = dao.countHqlResult("from RenShiReview where userid=? and sh=0 and category='quit' ", po.userId);
 		UserQuit uq = dao.get(UserQuit.class, lizhiId);
 		User user = dao.get(User.class, po.userId);
@@ -179,5 +180,13 @@ public class UserQuitService {
 		String operConts = "["+operUser.Department().namea+"-"+operUser.uname+ "] 审核通过了用户["+user.Department().namea+"-"+user.uname+"] 的离职申请";
 		operService.add(OperatorType.人事记录, operConts);
 		return new ModelAndView();
+	}
+	
+	@WebMethod
+	public void update(UserQuit vo){
+		UserQuit po = dao.get(UserQuit.class, vo.id);
+		if(po!=null){
+			dao.saveOrUpdate(po);
+		}
 	}
 }

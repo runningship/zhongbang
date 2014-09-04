@@ -20,6 +20,19 @@ var queryOpts;
 var spList;
 var myId;
 
+function doSave(){
+  var data = formSerialize($('form[name=form1]'));
+  YW.ajax({
+    type: 'POST',
+    url: '/zb/c/user/update',
+    data:data,
+    success: function(data){
+      alert('修改成功');
+    }
+  });
+  return false;
+}
+
 function fillData(data){
     $('#uname').text(data['uname']);
     $('#oldDeptName').text(data['oldDeptName']);
@@ -29,6 +42,8 @@ function fillData(data){
     $('#fyTo').text(data['fyTo']);
     $('#kyTo').text(data['kyTo']);
     $('#reason').text(data['reason']);
+    $('#adjustId').val(user['id']);
+    $('#idTimes').text(data['moveTime']);
     $('#jiaojie').text(data['jiaojie']);
 }
 
@@ -83,6 +98,7 @@ $(function(){
 <div class="header" style="position:relative;height:50px;width:100%">
   
   <form name="form1" >
+    <input type="hidden" id="adjustId" name="adjustId" />
     <div class="input-group " style="float:none;">
       <span class="input-group-addon">姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</span>
       <span type="text" class="form-control" id="uname" style="width:150px;" ></span>
@@ -103,15 +119,11 @@ $(function(){
       <span class="input-group-addon">新职务&nbsp;&nbsp;&nbsp;</span>
       <span type="text" class="form-control" id="newTitle" style="width:150px;"></span>
     </div>
-    
-<!--     <div class="input-group " style="float:none;margin-top:15px;">
-      <span class="input-group-addon">房源调整</span>
-      <span type="text" class="form-control" id="fyTo" style="width:150px;"></span>
+    <div class="input-group" style="float:none;margin-top:15px;">
+      <span class="input-group-addon">调整时间</span>
+      <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="moveTime" style="width:150px;border-radius:0;">
+      <input type="text" id="idTime"  onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" style="width:150px;display:none">
     </div>
-    <div class="input-group " style="float:none;margin-top:15px;">
-      <span class="input-group-addon">客源调整</span>
-      <span type="text" class="form-control" id="kyTo" style="width:150px;"></span>
-    </div> -->
     
      <div class="input-group " style="float:none;margin-top:15px;width:300px;">
       <span class="input-group-addon">原&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由</span>
@@ -120,6 +132,9 @@ $(function(){
      <div class="input-group " style="float:none;margin-top:15px;width:300px;">
       <span class="input-group-addon">实物交接</span>
       <span type="text" class="form-control" id="jiaojie"></span>
+    </div>
+    <div class="btn-group"style="float:none;margin-top:15px;">
+      <button class="btn btn-primary btn_subnmit" onclick="doSave();">保存</button>
     </div>
     
   </form>
