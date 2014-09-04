@@ -168,3 +168,8 @@ function fillData(data){
     $(obj).val(data[$(obj).attr('name')]);
   });
 }
+
+function fixTableFullScreen(ue){
+  $(ue.container).find('.edui-editor-iframeholder').css('width','100%');
+  $(ue.body).find('table').css('width','100%');
+}
