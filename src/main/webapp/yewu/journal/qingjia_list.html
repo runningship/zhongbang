@@ -166,7 +166,9 @@ $(function(){
       <th>区域</th>
       <th>分公司</th>
       <th>业务员</th>
-      <th>日期</th>
+      <th>开始时间</th>
+      <th>结束时间</th>
+      <th>有效天数</th>
       <th>是否批准</th>
       <th>操作</th>
     </thead>
@@ -176,7 +178,9 @@ $(function(){
       <td>${quyu}</td>
       <td>${deptName}</td>
       <td>${uname}</td>
-      <td>${addtime}</td>
+      <td>${starttime}</td>
+      <td>${endtime}</td>
+      <td>${qjdays}</td>
       <td><a href="javascript:void(0)" onclick="openPiYue(${id})"><span class="runscript">getEnumTextByCode(pizhu,${reply})</span></a></td>
       <td><a href="javascript:void(0)" onclick="deleteQJ(${id})">删除</a> <a href="javascript:void(0)" onclick="openEdit(${id})"><span class="runscript">buildEdit(${reply})</span></a> </td>
     </tr>

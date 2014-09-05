@@ -63,10 +63,10 @@ public class JournalService {
 	public ModelAndView list(OutQuery query ,Page<Map> page){
 		ModelAndView mv = new ModelAndView();
 		StringBuilder hql = new StringBuilder("select j.id as id,d.namea as deptName ,q.namea as quyu, u.uname as uname, j.title as title, "
-				+ "j.addtime as addtime, j.reply as reply from Journal j , User u , Department d,Department q where j.userId=u.id and u.deptId=d.id and q.id=d.fid");
+				+ "j.addtime as addtime,j.starttime as starttime,j.endtime as endtime,j.qjdays as qjdays ,  j.reply as reply from Journal j , User u , Department d,Department q where j.userId=u.id and u.deptId=d.id and q.id=d.fid");
 		List<Object> params = new ArrayList<Object>();
-		hql.append(HqlHelper.buildDateSegment("j.addtime", query.addtimeStart, DateSeparator.After, params));
-		hql.append(HqlHelper.buildDateSegment("j.addtime", query.addtimeEnd, DateSeparator.Before, params));
+		hql.append(HqlHelper.buildDateSegment("j.starttime", query.addtimeStart, DateSeparator.After, params));
+		hql.append(HqlHelper.buildDateSegment("j.starttime", query.addtimeEnd, DateSeparator.Before, params));
 		if(query.category!=null){
 			hql.append(" and j.category=? ");
 			params.add(query.category);
@@ -89,6 +89,26 @@ public class JournalService {
 	}
 	
 	@WebMethod
+	public ModelAndView tongji(OutQuery query ,Page<Map> page){
+		ModelAndView mv = new ModelAndView();
+		List<Object> params = new ArrayList<Object>();
+		StringBuilder hql = new StringBuilder("select d.namea as dname,q.namea as qname, u.uname as uname , sum(j.qjdays) as total from Journal j,User u,Department d,Department q where u.id=j.userId and u.deptId=d.id and d.fid=q.id and j.category=1");
+		hql.append(HqlHelper.buildDateSegment("j.starttime", query.addtimeStart, DateSeparator.After, params));
+		hql.append(HqlHelper.buildDateSegment("j.starttime", query.addtimeEnd, DateSeparator.Before, params));
+		if(StringUtils.isNotEmpty(query.xpath)){
+			hql.append("u.orgpath like ? ");
+			params.add(query.xpath+"%");
+		}
+		hql.append(" group by j.userId");
+		
+//		long total = dao.countHql("select count(*) from ("+hql.toString()+") xx"); 
+//		page = dao.findPage(page, hql.toString(), true ,params.toArray());
+		List<Map> list = dao.listAsMap(hql.toString(), params.toArray());
+		mv.data.put("page", JSONHelper.toJSONArray(list));
+		return mv;
+	}
+	
+	@WebMethod
 	public ModelAndView update(Journal journal){
 		ModelAndView mv = new ModelAndView();
 		if(journal.id==null){
@@ -100,6 +120,9 @@ public class JournalService {
 		}
 		po.title=journal.title;
 		po.conta = journal.conta;
+		po.starttime = journal.starttime;
+		po.endtime = journal.endtime;
+		po.qjdays = journal.qjdays;
 		dao.saveOrUpdate(po);
 		mv.data.put("result", 0);
 		return mv;

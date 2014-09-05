@@ -23,6 +23,7 @@ import com.youwei.zjb.sys.OperatorType;
 import com.youwei.zjb.user.entity.RenShiReview;
 import com.youwei.zjb.user.entity.UserAdjust;
 import com.youwei.zjb.user.entity.UserQuit;
+import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.JSONHelper;
 
 @Module(name="/user/lizhi/")
@@ -37,9 +38,9 @@ public class UserQuitService {
 		User user = dao.get(User.class, uq.userId);
 		mv.data.put("uname", user.uname);
 		mv.data.put("oldTitle", user.getRole().title);
-		
+		mv.data.put("leaveTime",uq.leaveTime==null?"": DataHelper.dateSdf.format(uq.leaveTime));
 		mv.data.put("oldDeptName", user.Department().namea );
-		
+		mv.data.put("quitId", uq.id);
 		User fyTo = dao.get(User.class, uq.fyTo);
 		if(fyTo!=null){
 			mv.data.put("fyTo", fyTo.uname);

@@ -40,6 +40,11 @@ function getAreaList(search){
   });
 }
 
+function doSearch(){
+  var search = $("form[name=form1]").serialize(); //自动将form表单封装成json
+    getAreaList(search);
+}
+
 function onSubmit_Form(){
   $('form[name=form1]').on('submit', function(event) {
   var search = $("form[name=form1]").serialize(); //自动将form表单封装成json
@@ -82,27 +87,26 @@ function openEdit(rowIndex){
     })
   }
 }
-/*  return false;
-  var json = dataArr[rowIndex];
-  id=json['id'];
-  lats=json['maplat'];
-  lngs=json['maplng']
-  areas = json['name'];
-  address = json['address'];
-  var tmp = [];
-  tmp.push(json);
-  buildHtmlWithJsonArray('info',tmp);
 
-  var mapDiv = $('#map');
-  mapDiv.css({"width":"1080px","height":"600px"});
-  addMarker();
+function combineArea(){
+  var ids = []
+  var names = [];
+  $("input[name='ids']").each(function(index,obj){
+    if (index==0){
+      return;
+    }
+    if(obj.checked==false){
+      return;
+    }
+    ids.push($(obj).val());
   });
-*/
-  // mapDiv.css('opacity',1);
-//  $('#mapDiv').css('opacity',1);
-//  mapDiv.parent()[0].parentElement.style.width='100%';
-//  mapDiv.parent()[0].parentElement.style.height='100%'
-  // mapDiv.css({"width":"100%","height":"100%"});
+  art.dialog.open('combineAera.html?ids='+ids,{
+      height:100,
+      width:300,
+      title:'合并楼盘',
+    })
+}
+
 $(document).ready(function() {
   onSubmit_Form();
   getAreaList();
@@ -133,6 +137,7 @@ $(document).ready(function() {
 <div class="mainer">
   <table class="table table-hover .table_bodyer" >
     <thead>
+      <th><a href="javascript:void(0)" onclick="combineArea();" >合并</a></th>
       <th>编号</th>
       <th>区域</th>
       <th>楼盘名称</th>
@@ -145,6 +150,7 @@ $(document).ready(function() {
     </thead>
     <tbody id="id_House_list">
     <tr style="display:none">
+      <td><input style="margin-left:20px;margin-right:20px;" type="checkbox" name="ids" value="${id}" rowIndex="${rowIndex}" /></td>
       <td>${id}</td>
       <td>${quyu}</td>
       <td>${name}</td>

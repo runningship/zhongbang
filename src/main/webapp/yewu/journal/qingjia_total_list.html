@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>职位调整已审核</title>
+<title>请假登记</title>
 <link rel="stylesheet" href="/zb/style/css.css">
 <link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet" href="/zb/style/house.css">
@@ -19,29 +19,27 @@
 <script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 var queryOpts;
-var genderArr = [{"name":"男","code":1},{"name":"女","code":0}];
+var dataArr;
 function getList(search){
-  var url='/zb/c/user/zwtz/listAdjustReviewed';
+  var url='/zb/c/journal/tongji';
   YW.ajax({
     type: 'POST',
     url: url,
     data:search,
     success: function(data){
       var getStr=JSON.parse(data);
-      dataArr = getStr['page']['data'];
+      dataArr = getStr['page'];
       buildHtmlWithJsonArray("id_list",dataArr);
       Page.setPageInfo(getStr['page']);
     }
   });
 }
 
-function getAction(sh){
-  if(sh==0){
-    return "审核";
-  }
-  if(sh==1){
-    return "已审核";
-  }
+function onSubmit_Form(){
+  $('form[name=form1]').on('submit', function(event) {
+    doSearch();
+    return false;
+  });
 }
 
 function doSearch(){
@@ -49,22 +47,15 @@ function doSearch(){
   return false;
 }
 
-function openReview(id){
-  art.dialog.open('zwtz_review.html?adjustId='+id,{
-      padding:0,
-      resize:true,
-      lock:1,
-      height:600,
-      width:1080
-  });
-}
+// function openPiYue(rowIndex){
+//   var piyue = dataArr[rowIndex]['reply'];
+// }
 
 $(function(){
-  getList();
-  $.get('/zb/c/user/allRoles', function(data) {
+  onSubmit_Form();
+  doSearch();
+  $.get('/zb/c/house/getQueryOptions', function(data) {
     queryOpts=JSON.parse(data);
-    buildHtmlWithJsonArray("id_roles",queryOpts['roles'],true);
-    $('#id_roles').prepend($('<option value="">所有</option>'));
   });
   Page.Init();
 });
@@ -72,42 +63,45 @@ $(function(){
 </script>
 <style type="text/css">
   .table{ margin-bottom: 0px;}
+  input-group-select{ width: 400px;}
 </style>
 </head>
 <body class="hlist bodyer" style="overflow:auto">
 
 <div class="header">
   <form name="form1">
-  </form>
-  <div class="btn-group">
-    <button onclick="doSearch();return false;" style="display:none" class="btn btn-primary btn_subnmit">搜索</button>
-  </div>
+    <input type="hidden" class="userInput" name="xpath" value="">
+    
+      <div class="clearfix">
+        <div class="input-group" style="width:400px">
+          <span class="input-group-addon">登记时间</span>
+          <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:150px;border-radius:0;">
+          <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:150px">
+        </div>
+        <div class="input-group input-group-select">
+          <span class="input-group-addon">分公司</span>
+          <select class="form-control get_comp" name="form_cid"></select>
+          <select class="form-control get_quyu" name="form_did"></select>
+          <select class="form-control get_user" name="form_uid"></select>
+        </div>
+        <div class="btn-group">
+          <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
+        </div>
+      </div>
+    </form>
 </div>
 <div class="mainer">
   <table class="table table-hover .table_bodyer" >
     <thead>
-      <th>姓名/性别</th>
-      <th>公司</th>
-      <th>职务</th>
-      <th>电话</th>
-      <th>地址</th>
-      <th>申请时间</th>
-      <th>通过时间</th>
-      <th>调整时间</th>
-      <th>操作</th>
+      <th>业务员</th>
+      <th>区域-分公司</th>
+      <th>工作日</th>
     </thead>
     <tbody id="id_list">
     <tr style="display:none">
-      <td>${uname}(<span class='runscript'>getEnumTextByCode(genderArr,${gender})</span>)</td>
-      <td>${deptName}</td>
-      <td>${title}</td>
-      <td>${tel}</td>
-      <td>${address}</td>
-      <td>${applyTime}</td>
-      <td>${passTime}</td>
-      <td>${moveTime}</td>
-      <td><a onclick="openReview(${id})" class="runscript" href="javascript:void(0)">getAction(${tzsh})</a> 
-      </td>
+      <td>${uname}</td>
+      <td>${qname}-${dname}</td>
+      <td>${total}</td>
     </tr>
     </tbody>
   </table>

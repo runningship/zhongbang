@@ -1,5 +1,6 @@
 package com.youwei.zjb.house;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +47,25 @@ public class DistrictService {
 		ModelAndView mv = new ModelAndView();
 		District area = dao.get(District.class, areaId);
 		mv.data.put("area", JSONHelper.toJSON(area));
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView getBatch(String ids){
+		ModelAndView mv = new ModelAndView();
+		if(ids==null){
+			throw new GException(PlatformExceptionType.BusinessException, "请先选择楼盘");
+		}
+		StringBuilder vids = new StringBuilder();
+		String[] arr = ids.split(",");
+		for(int i=0;i<arr.length;i++){
+			vids.append(arr[i]);
+			if(i<arr.length-1){
+				vids.append(",");
+			}
+		}
+		List<District> list = dao.listByParams(District.class, "from District where id in ("+vids.toString()+")");
+		mv.data.put("areas", JSONHelper.toJSONArray(list));
 		return mv;
 	}
 	
@@ -129,5 +149,25 @@ public class DistrictService {
 		return mv;
 	}
 	
-	
+	@WebMethod
+	@org.bc.sdak.Transactional
+	public ModelAndView merge(String ids , Integer targetId){
+		ids = URLDecoder.decode(ids);
+		ModelAndView mv = new ModelAndView();
+		if(ids==null){
+			throw new GException(PlatformExceptionType.BusinessException, "请先选择要合并的楼盘");
+		}
+		District po = dao.get(District.class, targetId);
+		for(String lpid : ids.split(",")){
+			if(targetId.toString().equals(lpid)){
+				continue;
+			}
+			District lp = dao.get(District.class, Integer.valueOf(lpid));
+			if(lp!=null){
+				dao.delete(lp);
+				dao.execute("update House set area=? where area=?", po.name ,lp.name);
+			}
+		}
+		return mv;
+	}
 }

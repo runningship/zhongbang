@@ -101,6 +101,7 @@ function loadData(){
       $('#username').val(json['username']);
       $('#title').val(json['adminTable']['title']);
       $('#adminClass').val(json['adminClass']);
+      fixTableFullScreen(ue);
     },
     error:function(data){
       alert('加载数据失败,'+data.responseText);
@@ -118,6 +119,11 @@ $(function(){
   ue = UE.getEditor('editor');
   ue.addListener( 'ready', function( editor ) {
     loadData();
+  });
+  ue.addListener( 'fullscreenchanged', function( editor ) {
+    if(ue.ui.isFullScreen()==false){
+      fixTableFullScreen(ue);
+    }
   });
   initFileUpload();
   getAttachList();
@@ -149,7 +155,7 @@ $(function(){
     <input type="hidden" id="conts" name="conts" />
   </form>
   <div style="margin-left:10px;margin-top:50px;">
-    <span id="editor" type="text/plain" style="width:800px;height:250px;"></span>
+    <span id="editor" type="text/plain" style="width:99%;height:250px;"></span>
   </div>
 </div>
 <div style="margin-top:5px;margin-left:5px;">

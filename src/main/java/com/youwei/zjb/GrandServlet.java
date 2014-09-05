@@ -113,7 +113,7 @@ public class GrandServlet extends HttpServlet{
 			}
 		}
 		long end = System.currentTimeMillis();
-		System.out.println(path+":"+(end-start)+"毫秒");
+		LogUtil.info(path+":"+(end-start)+"毫秒");
 	}
 
 	private void processGException(HttpServletResponse resp ,GException ex){

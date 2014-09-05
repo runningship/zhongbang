@@ -53,4 +53,8 @@ public class Journal {
 	
 	public Date addtime;
 	
+	/**
+	 * 请假有效天数
+	 */
+	public Float qjdays;
 }

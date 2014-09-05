@@ -364,7 +364,7 @@
 		}]
 	},{
 		"name":"yw_journal_work",
-		"text":"工作日志",
+		"text":"工作日清",
 		"type":"virtual",
 		"children":[{
 			"name":"yw_journal_work_list",

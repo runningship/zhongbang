@@ -91,11 +91,10 @@ $(function(){
     toolbars: [
         ['fullscreen']
     ],
-    autoHeightEnabled: false
+    autoHeightEnabled: true
   });
   ue.addListener( 'ready', function( editor ) {
     loadData();
-    ue.setDisabled();
   });
   ue.addListener( 'fullscreenchanged', function( editor ) {
     if(ue.ui.isFullScreen()==false){

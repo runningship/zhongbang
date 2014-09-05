@@ -137,7 +137,7 @@ public class UserAdjustService {
 		List<Object> params = new ArrayList<Object>();
 		User user = ThreadSession.getUser();
 		String xpath = UserHelper.getDataScope(user, "rs_zwtz");
-		hql.append("select ud.id as id, review.sh as tzsh,ud.applyTime as applyTime, ud.passTime as passTime, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
+		hql.append("select ud.id as id, review.sh as tzsh,ud.applyTime as applyTime,ud.moveTime as moveTime, ud.passTime as passTime, u.uname as uname,u.id as uid ,r.title as title ,u.tel as tel,u.sfz as sfz, u.gender as gender,u.address as address,u.rqsj as rqsj, u.lzsj as lzsj,d.namea as deptName "
 				+ "from User  u, Department d,Role r ,UserAdjust ud, RenShiReview review where u.id=ud.userId and u.roleId = r.id and d.id = u.deptId and ud.id=review.itemId and review.sprId=? "
 				+ " and u.flag=0 and u.orgpath like ? and review.sh<>0 and review.category='"+RenShiReview.Adjust+"' ");
 		params.add(user.id);
