@@ -19,6 +19,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.entity.UserAuthority;
 
@@ -47,6 +48,10 @@ public class ViewServlet extends HttpServlet{
 		String filePath = req.getServletContext().getRealPath("/")+path;
 		String html = FileUtils.readFileToString(new File(filePath),"utf-8");
 		html = html.replace("$${userId}", user.id.toString());
+		Department dept = user.Department();
+		html = html.replace("$${userId}", user.Department().id.toString());
+		html = html.replace("$${did}", dept.id.toString());
+		html = html.replace("$${qid}", dept.Parent().id.toString());
 		html = html.replace("$${myName}", user.uname);
 		html = html.replace("$${myTel}", user.tel==null? "": user.tel);
 		Document doc = Jsoup.parse(html);

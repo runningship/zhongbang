@@ -106,8 +106,15 @@ function fixQueryOptions(arr){
   }
   return result;
 }
+function selectYwy(qid,did,uid){
+  $('#forlxr_cid').val(qid);
+  $('#forlxr_cid').change();
+  $('#forlxr_did').val(did);
+  $('#forlxr_did').change();
+  $('#forlxrId').val(uid);
+}
 $(function(){
-
+  
   $.get('/zb/c/house/getQueryOptions', function(data) {
     QueryOptions=JSON.parse(data);
     buildHtmlWithJsonArray("id_chaoxiang",QueryOptions['chaoxiang'],true); //朝向
@@ -118,22 +125,30 @@ $(function(){
     buildHtmlWithJsonArray("id_zhuangtai",QueryOptions['zhuangtai'],true); //状态
     buildHtmlWithJsonArray("id_xingzhi",QueryOptions['xingzhi'],true); //房型
     buildHtmlWithJsonArray("id_zhuangxiu",QueryOptions['zhuangxiu'],true);   //装修
-      if(getHid){
-        $('form[name=form1]').attr('action', '/zb/c/house/update');
-        //alert($('form[name=form1]').attr('action'))
-        $.get('/zb/c/house/get?id='+getHid, function(data) {
-          getStr=JSON.parse(data);
-          fillData(getStr['house']);
-          // buildHtmlWithJsonArray("id_house_see",getStr['page']['data'],true);
-          $('#ywy').attr('readonly','true');
-        });
-      }else{
-        var gerStrNull={"page":{"autoCount":"","currentPageNo":"","firstOfPage":"","lastOfPage":"","pageSize":"","pageUrl":"","totalCount":"","totalPageCount":"","data":[{"id":"","deptId":"","userId":"","cid":"","quyu":"","area":"","dhao":"","fhao":"","luduan":"","lceng":"","zceng":"","lxing":"","hxf":"","hxt":"","hxw":"","hxy":"","chaoxiang":"","zhuangxiu":"","mianji":"","zjia":"","sjia":"","djia":"","lxr":"","tel":"","ywy":"$${myName}","fortel":"$${myTel}","beizhu":"","jiaoyi":chuzu,"leibie":"","flag":"","xingzhi":"","tuijie":"","dateyear":"","dateweituo":"","datejiaofang":"","dateadd":"","dategenjin":"","fav":"","houseNumber":"","isdel":"","sh":"","chanquan":"","tudizheng":"","fordlr":"","fordlrtel":""}]}}
-        //gerStrNull=JSON.parse(gerStrNull)
-        // buildHtmlWithJsonArray("id_house_see",gerStrNull['page']['data'],true);
-        fillData(gerStrNull['page']['data'][0]);
-        $('#id_xingzhi').attr('disabled',"disabled");
-      }
+    
+    if(getHid){
+      $('form[name=form1]').attr('action', '/zb/c/house/update');
+      //alert($('form[name=form1]').attr('action'))
+      $.get('/zb/c/house/get?id='+getHid, function(data) {
+        getStr=JSON.parse(data);
+        fillData(getStr);
+        // buildHtmlWithJsonArray("id_house_see",getStr['page']['data'],true);
+        // $('#ywy').attr('readonly','true');
+        var qid = getStr['forlxr_qid'];
+        if(qid==null || qid==undefined || qid==""){
+          qid=$${qid};
+        }
+        selectYwy(qid,getStr['forlxr_did'],getStr['forlxrId']);
+      });
+    }else{
+      var gerStrNull={"page":{"autoCount":"","currentPageNo":"","firstOfPage":"","lastOfPage":"","pageSize":"","pageUrl":"","totalCount":"","totalPageCount":"","data":[{"id":"","deptId":"","userId":"","cid":"","quyu":"","area":"","dhao":"","fhao":"","luduan":"","lceng":"","zceng":"","lxing":"","hxf":"","hxt":"","hxw":"","hxy":"","chaoxiang":"","zhuangxiu":"","mianji":"","zjia":"","sjia":"","djia":"","lxr":"","tel":"","ywy":"$${myName}","fortel":"$${myTel}","beizhu":"","jiaoyi":chuzu,"leibie":"","flag":"","xingzhi":"","tuijie":"","dateyear":"","dateweituo":"","datejiaofang":"","dateadd":"","dategenjin":"","fav":"","houseNumber":"","isdel":"","sh":"","chanquan":"","tudizheng":"","fordlr":"","fordlrtel":""}]}}
+      //gerStrNull=JSON.parse(gerStrNull)
+      // buildHtmlWithJsonArray("id_house_see",gerStrNull['page']['data'],true);
+      fillData(gerStrNull['page']['data'][0]);
+      selectYwy($${qid},$${did},$${userId});
+      $('#id_xingzhi').attr('readonly',"readonly");
+    }
+    
   });
 });
 </script>
@@ -181,8 +196,8 @@ $(function(){
         </div>
       </td>
       <td colspan="2">
-          <input type="text" class="form-control pull-left w40b" name="dhao" value="${dhao}" placeholder="栋号"><span style="display: block;float: left;height:20px; line-height: 20px;">#</span>
-          <input type="text" class="form-control pull-left w40b" name="fhao" value="${fhao}" placeholder="房号">
+          <input type="text" class="form-control pull-left w40b" name="dhao"  placeholder="栋号"><span style="display: block;float: left;height:20px; line-height: 20px;">#</span>
+          <input type="text" class="form-control pull-left w40b" name="fhao" placeholder="房号">
       </td>
     </tr>
     <tr>
@@ -197,26 +212,26 @@ $(function(){
       <td class="w160px">
         <div class="input-group">
           <span class="input-group-addon" style="padding:8px;">户型</span>
-          <input type="text" class="form-control" name="hxf" value="${hxf}" placeholder="室">
+          <input type="text" class="form-control" name="hxf" placeholder="室">
           <span class="input-group-addon" style="padding:8px;">室</span>
         </div>
       </td>
       <td class="w160px">
         <div class="input-group">
-          <input type="text" class="form-control" name="hxt" value="${hxt}" placeholder="厅">
+          <input type="text" class="form-control" name="hxt" placeholder="厅">
           <span class="input-group-addon" style="padding:8px;">厅</span>
         </div>
       </td>
       <td class="w160px">
         <div class="input-group">
-          <input type="text" class="form-control" name="hxw" value="${hxw}" placeholder="卫">
+          <input type="text" class="form-control" name="hxw" placeholder="卫">
           <span class="input-group-addon" style="padding:8px;">卫</span>
         </div>
       </td>
       <td class="w160px">
         <div class="input-group">
           <span class="input-group-addon">年代</span>
-          <input type="text" class="form-control" name="dateyear" value="${dateyear}" placeholder="楼盘年代">
+          <input type="text" class="form-control" name="dateyear" placeholder="楼盘年代">
         </div>
       </td>
     </tr>
@@ -224,31 +239,31 @@ $(function(){
       <td>
         <div class="input-group">
           <span class="input-group-addon">楼层</span>
-          <input type="text" class="form-control" name="lceng" value="${lceng}" placeholder="所在楼层">
+          <input type="text" class="form-control" name="lceng" placeholder="所在楼层">
         </div>
       </td>
       <td>
         <div class="input-group">
           <span class="input-group-addon">总层</span>
-          <input type="text" class="form-control" name="zceng" value="${zceng}" placeholder="总楼层">
+          <input type="text" class="form-control" name="zceng"  placeholder="总楼层">
         </div>
       </td>
       <td>
         <div class="input-group">
           <span class="input-group-addon">面积</span>
-          <input type="text" class="form-control" name="mianji" value="${mianji}" placeholder="面积(平方)">
+          <input type="text" class="form-control" name="mianji" placeholder="面积(平方)">
         </div>
       </td>
       <td>
         <div class="input-group">
           <span class="input-group-addon">价格</span>
-          <input type="text" class="form-control" name="sjia" value="${sjia}" placeholder="出售总价(万元)">
+          <input type="text" class="form-control" name="sjia" placeholder="出售总价(万元)">
         </div>
       </td>
       <td>
         <div class="input-group">
           <span class="input-group-addon">租金</span>
-          <input type="text" class="form-control" name="zjia" value="${zjia}" placeholder="租金">
+          <input type="text" class="form-control" name="zjia" placeholder="租金">
         </div>
       </td>
     </tr>
@@ -318,22 +333,22 @@ $(function(){
         </div>
       </td>
       <td >
-        <div class="input-group">
+         <!-- <div class="input-group">
           <span class="input-group-addon">业务员</span>
           <input type="text" class="form-control" id="ywy" name="ywy" value="${ywy}" onkeyup="suggestUser(this.value);" />
           <div style="position:absolute;top:34px;z-index:100;display:none;overflow-y:auto" id="user_suggest"></div>
-        </div>
-        <!-- <div class="input-group input-group-select colspan2">
-          <span class="input-group-addon">业务员</span>
-          <select class="form-control get_comp" name="form_cid"></select>
-          <select class="form-control get_quyu" name="form_did"></select>
-          <select class="form-control get_user" name="form_userId"></select>
-        </div> -->
-      </td>
-      <td colspan="2">
-        <div class="input-group colspan2">
+        </div > -->
+        <div class="input-group">
           <span class="input-group-addon">电话</span>
           <input type="text" class="form-control" name="fortel" id="fortel" value="${fortel}" placeholder="业务员电话">
+        </div>
+      </td>
+      <td colspan="2">
+        <div class="input-group input-group-select colspan2">
+          <span class="input-group-addon">业务员</span>
+          <select class="form-control get_comp" style="display:none" id="forlxr_cid" name="forlxr_cid"></select>
+          <select class="form-control get_quyu" style="width:50%" id="forlxr_did" name="forlxr_did"></select>
+          <select class="form-control get_user" style="width:50%" id="forlxrId" name="forlxrId"></select>
         </div>
       </td>
     </tr>
@@ -341,19 +356,19 @@ $(function(){
       <td colspan="2">
         <div class="input-group colspan2">
           <span class="input-group-addon">产权</span>
-          <input type="text" class="form-control" name="chanquan" value="${chanquan}" placeholder="产权号">
+          <input type="text" class="form-control" name="chanquan" placeholder="产权号">
         </div>
       </td>
       <td>
         <div class="input-group">
           <span class="input-group-addon">业主名</span>
-          <input type="text" class="form-control" name="lxr" value="${lxr}" placeholder="姓名">
+          <input type="text" class="form-control" name="lxr" placeholder="姓名">
         </div>
       </td>
       <td colspan="2">
         <div class="input-group colspan2">
           <span class="input-group-addon">业主电话</span>
-          <input type="text" class="form-control" name="tel" value="${tel}" placeholder="客户电话">
+          <input type="text" class="form-control" name="tel" placeholder="客户电话">
         </div>
       </td>
     </tr>
@@ -361,19 +376,19 @@ $(function(){
       <td colspan="2">
         <div class="input-group colspan2">
           <span class="input-group-addon">备注</span>
-          <input type="text" class="form-control" name="beizhu" value="${beizhu}"placeholder="备注">
+          <input type="text" class="form-control" name="beizhu" placeholder="备注">
         </div>
       </td>
       <td>
         <div class="input-group">
           <span class="input-group-addon">代理人</span>
-          <input type="text" class="form-control" name="fordlr" value="${fordlr}" placeholder="姓名">
+          <input type="text" class="form-control" name="fordlr" placeholder="姓名">
         </div>
       </td>
       <td colspan="2">
         <div class="input-group colspan2">
           <span class="input-group-addon">代理人电话</span>
-          <input type="text" class="form-control" name="fordlrtel" value="${fordlrtel}" placeholder="代理人电话">
+          <input type="text" class="form-control" name="fordlrtel" placeholder="代理人电话">
         </div>
       </td>
     </tr>

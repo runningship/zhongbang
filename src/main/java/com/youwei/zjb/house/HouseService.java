@@ -25,6 +25,7 @@ import net.sf.json.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Level;
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.GException;
 import org.bc.sdak.Page;
@@ -52,6 +53,7 @@ import com.youwei.zjb.house.entity.House;
 import com.youwei.zjb.sys.OperatorService;
 import com.youwei.zjb.sys.OperatorType;
 import com.youwei.zjb.util.DataHelper;
+import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
 import com.youwei.zjb.work.PiYue;
 
@@ -86,6 +88,12 @@ public class HouseService {
 			if(house.mianji!=null && house.mianji!=0){
 				int jiage = (int) (house.sjia*10000/house.mianji);
 				house.djia = (float) jiage;
+			}
+			try{
+				User ywy = service.get(User.class, Integer.valueOf(house.forlxrId));
+				house.forlxr = ywy.uname;
+			}catch(Exception ex){
+				LogUtil.log(Level.WARN, "业务员信息部正确,forlxr="+house.forlxr, ex);
 			}
 			service.saveOrUpdate(house);
 			String py = DataHelper.toPinyin(house.quyu);
@@ -123,6 +131,12 @@ public class HouseService {
 		if(house.mianji!=null && house.mianji!=0){
 			int jiage = (int) (house.sjia*10000/house.mianji);
 			house.djia = (float) jiage;
+		}
+		try{
+			User ywy = service.get(User.class, Integer.valueOf(house.forlxrId));
+			house.forlxr = ywy.uname;
+		}catch(Exception ex){
+			LogUtil.log(Level.WARN, "业务员信息部正确,forlxr="+house.forlxr, ex);
 		}
 		service.saveOrUpdate(house);
 		User user = ThreadSession.getUser();
@@ -260,8 +274,16 @@ public class HouseService {
 		ModelAndView mv = new ModelAndView();
 		House house = service.get(House.class, id);
 		User ywy = service.get(User.class,house.userId);
-		mv.data.put("house", JSONHelper.toJSON(house));
-		mv.data.getJSONObject("house").put("ywy", ywy.uname);
+		mv.data = JSONHelper.toJSON(house);
+//		mv.data.put("house", JSONHelper.toJSON(house));
+		User forlxr = service.get(User.class, house.forlxrId);
+		if(forlxr!=null){
+			Department dept = service.get(Department.class, forlxr.deptId);
+			Department quyu = dept.Parent();
+			mv.data.put("forlxr_qid", quyu.id);
+			mv.data.put("forlxr_did", dept.id);
+		}
+//		mv.data.getJSONObject("house").put("ywy", ywy.uname);
 		return mv;
 	}
 	
@@ -329,7 +351,7 @@ public class HouseService {
 			Department quyu = dept.Parent();
 			String fbrStr = quyu.namea+" "+dept.namea + " "+fbr.uname;
 			mv.data.put("fbr", fbrStr);
-			mv.data.getJSONArray("house").getJSONObject(0).put("ywy", fbr.uname);
+//			mv.data.getJSONArray("house").getJSONObject(0).put("ywy", fbr.uname);
 		}
 		Favorite fav = service.getUniqueByParams(Favorite.class, new String[]{"userId" , "houseId"}, new Object[]{ user.id , houseId });
 		mv.data.put("fav", fav==null ? 0:1);
@@ -345,153 +367,36 @@ public class HouseService {
 		return mv;
 	}
 	
-	private void buildQuery(StringBuilder hql,HouseQuery query , List<Object> params){
-		hql.append(" select h, u.uname as fbr,d.namea as dname from  House h  ,User u,Department d where h.userId=u.id  and u.deptId=d.id");
-		if(StringUtils.isNotEmpty(query.xpath)){
-			hql.append(" and u.orgpath like ? ");
-			params.add(query.xpath+"%");
-		}
-//		else{
-//			hql.append(" select h  from House  h where 1=1 ");
-//		}
-		if(query.xingzhi!=null){
-			hql.append(" and h.xingzhi = ? ");
-			params.add(String.valueOf(query.xingzhi.getCode()));
-		}
-		if(StringUtils.isNotEmpty(query.area)){
-			hql.append(" and h.area like ?");
-			params.add("%"+query.area+"%");
-		}
-		if(StringUtils.isNotEmpty(query.tel)){
-			hql.append(" and (h.tel like ? or h.fortel like ? or h.fordlrtel like ?)");
-			params.add("%"+query.tel+"%");
-			params.add("%"+query.tel+"%");
-			params.add("%"+query.tel+"%");
-		}
-		if(StringUtils.isNotEmpty(query.houseNumber)){
-			hql.append(" and h.houseNumber like ?");
-			params.add("%"+query.houseNumber+"%");
-		}
-		if(query.id!=null){
-			hql.append(" and h.id = ?");
-			params.add(query.id);
-		}
-		
-		if(query.quyus!=null){
-			hql.append(" and ( ");
-			for(int i=0;i<query.quyus.size();i++){
-				hql.append(" h.quyu = ? ");
-				if(i<query.quyus.size()-1){
-					hql.append(" or ");
-				}
-				params.add(query.quyus.get(i));
-			}
-			hql.append(" )");
-		}
-		
-		if(query.fangxing!=null){
-			hql.append(" and ").append(query.fangxing.getQueryStr());
-		}
-		
-		if(query.jiaoyis!=null){
-			hql.append(" and ( ");
-			for(int i=0;i<query.jiaoyis.size();i++){
-				hql.append(" h. jiaoyi = ? ");
-				if(i<query.jiaoyis.size()-1){
-					hql.append(" or ");
-				}
-				params.add(JiaoYi.valueOf(query.jiaoyis.get(i)).getCode());
-			}
-			hql.append(" )");
-		}
-		if(query.ztai!=null){
-			hql.append(" and h.ztai = ?");
-			params.add(String.valueOf(query.ztai.getCode()));
-		}
-		if(StringUtils.isNotEmpty(query.leibie)){
-			hql.append(" and h.leibie = ? ");
-			params.add(query.leibie);
-		}
-		if(query.sjiaStart!=null){
-			hql.append(" and h.sjia>= ? ");
-			params.add(query.sjiaStart);
-		}
-		if(query.sjiaEnd!=null){
-			hql.append(" and h.sjia<= ? ");
-			params.add(query.sjiaEnd);
-		}
-		if(query.zjiaStart!=null){
-			hql.append(" and h.zjia>= ? ");
-			params.add(query.zjiaStart);
-		}
-		if(query.zjiaEnd!=null){
-			hql.append(" and h.zjia<= ? ");
-			params.add(query.zjiaEnd);
-		}
-		if(query.dateType==null){
-			query.dateType = DateType.首次录入日;
-		}
-		hql.append(buildDateHql(query.dateType,query.dateStart,DateSeparator.After,params));
-		hql.append(buildDateHql(query.dateType,query.dateEnd, DateSeparator.Before , params));
-		
-		if(StringUtils.isNotEmpty(query.louxing)){
-			hql.append(" and h.lxing= ? ");
-			params.add(query.louxing);
-		}
-		if(query.mianjiStart!=null){
-			hql.append(" and h.mianji>= ? ");
-			params.add(query.mianjiStart);
-		}
-		if(query.mianjiEnd!=null){
-			hql.append(" and h.mianji<= ? ");
-			params.add(query.mianjiEnd);
-		}
-		if(query.lcengStart!=null){
-			hql.append(" and h.lceng>= ? ");
-			params.add(query.lcengStart);
-		}
-		if(query.lcengEnd!=null){
-			hql.append(" and h.lceng<= ? ");
-			params.add(query.lcengEnd);
-		}
-		if(StringUtils.isNotEmpty(query.chaoxiang)){
-			hql.append(" and h.chaoxiang= ? ");
-			params.add(query.chaoxiang);
-		}
-		if(StringUtils.isNotEmpty(query.chanquan)){
-			hql.append(" and h.chanquan like ?");
-			params.add("%"+query.chanquan+"%");
-		}
-		if(StringUtils.isNotEmpty(query.dhao)){
-			hql.append(" and h.dhao like ?");
-			params.add("%"+query.dhao+"%");
-		}
-		
-		if(StringUtils.isNotEmpty(query.fhao)){
-			hql.append(" and h.fhao like ?");
-			params.add("%"+query.fhao+"%");
-		}
-		
-		if(query.userId!=null){
-			hql.append(" and h.userId= ? ");
-			params.add(query.userId);
-		}
-		if(query.isdel==null){
-			hql.append(" and ( isdel= 0 or isdel is null) ");
-		}
-		if(query.isdel!=null){
-			hql.append(" and h.isdel=?");
-			params.add(query.isdel);
-		}
-	}
 	@WebMethod
 	public ModelAndView export(HouseQuery query ,Page<Map> page){
 		ModelAndView mv = new ModelAndView();
+		StringBuilder hql = new StringBuilder();
+		List<Object> params = new ArrayList<Object>();
+		if("chushou".equals(query.nav)){
+			if(query.jiaoyis==null){
+				query.jiaoyis = new ArrayList<String>();
+			}
+			query.jiaoyis.add(JiaoYi.仅售.toString());
+			query.jiaoyis.add(JiaoYi.出售.toString());
+			query.jiaoyis.add(JiaoYi.租售.toString());
+		}else if("chuzu".equals(query.nav)){
+			if(query.jiaoyis==null){
+				query.jiaoyis = new ArrayList<String>();
+			}
+			query.jiaoyis.add(JiaoYi.仅租.toString());
+			query.jiaoyis.add(JiaoYi.出租.toString());
+			query.jiaoyis.add(JiaoYi.租售.toString());
+		}
+		if("fav".equals(query.nav)){
+			hql.append(" select h, u.uname as fbr,d.namea as dname from  House h ,Favorite f  ,User u,Department d where h.id=f.houseId and f.userId=? and h.userId=u.id  and u.deptId=d.id");
+//			hql = new StringBuilder("select h from House h,Favorite f where h.id=f.houseId and f.userId="+ThreadSession.getUser().id);
+			params.add(ThreadSession.getUser().id);
+		}else{
+			hql = new StringBuilder(" select h, u.uname as fbr,d.namea as dname from  House h  ,User u,Department d where h.userId=u.id  and u.deptId=d.id");
+		}
 		mv.isStream = true;
 		mv.contentType="application/octet-stream";
-		List<Object> params = new ArrayList<Object>();
-		StringBuilder hql = new StringBuilder();
-		buildQuery(hql,query,params);
+		HqlHelper.buildQuery(hql,query,params);
 		page.setPageSize(-1);
 		page.orderBy = "h.dateadd";
 		page.order = Page.DESC;
@@ -560,7 +465,8 @@ public class HouseService {
 	public ModelAndView listAll(HouseQuery query ,Page<House> page){
 		List<Object> params = new ArrayList<Object>();
 		StringBuilder hql = new StringBuilder();
-		buildQuery(hql,query,params);
+		hql.append(" select h, u.uname as fbr,d.namea as dname from  House h  ,User u,Department d where h.userId=u.id  and u.deptId=d.id");
+		HqlHelper.buildQuery(hql,query,params);
 		page.orderBy = "h.dateadd";
 		page.order = Page.DESC;
 //		hql.append(" and ( isdel= 0 or isdel is null) ");
@@ -578,30 +484,4 @@ public class HouseService {
 		return mv;
 	}
 	
-	private String buildDateHql(DateType dateType,String dateStr,DateSeparator sep,List<Object> params){
-		if(StringUtils.isNotEmpty(dateStr)){
-			if(DateType.建房年代==dateType){
-				params.add(Integer.valueOf(dateStr));
-				if(sep==DateSeparator.Before){
-					return " and " + dateType.getField()+"<=?";
-				}else{
-					return " and " + dateType.getField()+">=?";
-				}
-			}
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			try {
-				Date date = sdf.parse(dateStr);
-				params.add(date);
-				if(sep==DateSeparator.Before){
-					return " and "+dateType.getField()+" <=?";
-				}else{
-					return " and "+dateType.getField()+" >=?";
-				}
-			} catch (ParseException e) {
-				e.printStackTrace();
-				return "";
-			}
-		}
-		return "";
-	}
 }

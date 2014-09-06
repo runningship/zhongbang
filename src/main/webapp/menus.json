@@ -26,6 +26,10 @@
 				"name":"fy_list_sell_xingzhi",
 				"text":"修改房源性质",
 				"type":"menu"
+			},{
+				"name":"fy_list_sell_export",
+				"text":"导出房源",
+				"type":"menu"
 			}]
 		},{
 			"name":"fy_list_rent",
@@ -46,6 +50,10 @@
 			},{
 				"name":"fy_list_rent_xingzhi",
 				"text":"修改房源性质",
+				"type":"menu"
+			},{
+				"name":"fy_list_rent_export",
+				"text":"导出房源",
 				"type":"menu"
 			}]
 		},{
@@ -68,15 +76,24 @@
 				"name":"fy_list_all_xingzhi",
 				"text":"修改房源性质",
 				"type":"menu"
+			},{
+				"name":"fy_list_all_export",
+				"text":"导出房源",
+				"type":"menu"
 			}]
-		},{
-			"name":"fy_list_my",
-			"text":"我的房源",
-			"type":"menu"
 		},{
 			"name":"fy_list_fav",
 			"text":"我的收藏",
-			"type":"menu"
+			"type":"virtual",
+			"children":[{
+				"name":"fy_list_fav_list",
+				"text":"列表",
+				"type":"menu"
+			},{
+				"name":"fy_list_fav_export",
+				"text":"导出",
+				"type":"menu"
+			}]
 		}]
 	},{
 		"name":"fy_add",

@@ -32,12 +32,17 @@ public enum HouseAttribute {
 	}
 	
 	public static HouseAttribute parse(String code){
-		int c = Integer.parseInt(code);
-		for(HouseAttribute st : HouseAttribute.values()){
-			if(st.code==c){
-				return st;
+		try{
+			int c = Integer.parseInt(code);
+			for(HouseAttribute st : HouseAttribute.values()){
+				if(st.code==c){
+					return st;
+				}
 			}
+			return null;
+		}catch(Exception ex){
+			return null;
 		}
-		return null;
+		
 	}
 }

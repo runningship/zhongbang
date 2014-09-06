@@ -118,6 +118,8 @@ public class House {
 	 * 业务员
 	 */
 	public String forlxr;
+	
+	public Integer forlxrId;
 
 	public String fortel;
 

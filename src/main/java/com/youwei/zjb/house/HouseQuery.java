@@ -36,4 +36,6 @@ public class HouseQuery extends AbstractQuery{
 	public String dhao;
 	public String fhao;
 	public String tel;
+	
+	public String nav;
 }
