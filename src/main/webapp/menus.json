@@ -159,6 +159,10 @@
 				"name":"fy_other_setting_del",
 				"text":"删除",
 				"type":"menu"
+			},{
+				"name":"fy_other_setting_merge",
+				"text":"合并",
+				"type":"menu"
 			}]
 		},{
 			"name":"fy_other_recycle",

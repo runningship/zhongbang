@@ -137,7 +137,7 @@ $(document).ready(function() {
 <div class="mainer">
   <table class="table table-hover .table_bodyer" >
     <thead>
-      <th style="text-align:center"><a href="javascript:void(0)" onclick="combineArea();" >合并</a></th>
+      <th auth="fy_other_setting_merge" style="text-align:center"><a href="javascript:void(0)" onclick="combineArea();" >合并</a></th>
       <th>编号</th>
       <th>区域</th>
       <th>楼盘名称</th>
@@ -150,7 +150,7 @@ $(document).ready(function() {
     </thead>
     <tbody id="id_House_list">
     <tr style="display:none">
-      <td><input style="margin-left:20px;margin-right:20px;" type="checkbox" name="ids" value="${id}" rowIndex="${rowIndex}" /></td>
+      <td auth="fy_other_setting_merge"><input style="margin-left:20px;margin-right:20px;" type="checkbox" name="ids" value="${id}" rowIndex="${rowIndex}" /></td>
       <td>${id}</td>
       <td>${quyu}</td>
       <td>${name}</td>
