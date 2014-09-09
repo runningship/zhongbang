@@ -141,7 +141,7 @@ $(function(){
         selectYwy(qid,getStr['forlxr_did'],getStr['forlxrId']);
       });
     }else{
-      var gerStrNull={"page":{"autoCount":"","currentPageNo":"","firstOfPage":"","lastOfPage":"","pageSize":"","pageUrl":"","totalCount":"","totalPageCount":"","data":[{"id":"","deptId":"","userId":"","cid":"","quyu":"","area":"","dhao":"","fhao":"","luduan":"","lceng":"","zceng":"","lxing":"","hxf":"","hxt":"","hxw":"","hxy":"","chaoxiang":"","zhuangxiu":"","mianji":"","zjia":"","sjia":"","djia":"","lxr":"","tel":"","ywy":"$${myName}","fortel":"$${myTel}","beizhu":"","jiaoyi":chuzu,"leibie":"","flag":"","xingzhi":"","tuijie":"","dateyear":"","dateweituo":"","datejiaofang":"","dateadd":"","dategenjin":"","fav":"","houseNumber":"","isdel":"","sh":"","chanquan":"","tudizheng":"","fordlr":"","fordlrtel":""}]}}
+      var gerStrNull={"page":{"autoCount":"","currentPageNo":"","firstOfPage":"","lastOfPage":"","pageSize":"","pageUrl":"","totalCount":"","totalPageCount":"","data":[{"id":"","deptId":"","userId":"","cid":"","quyu":"","area":"","dhao":"","fhao":"","luduan":"","lceng":"","zceng":"","lxing":"","hxf":"","hxt":"","hxw":"","hxy":"","chaoxiang":"","zhuangxiu":"","mianji":"","zjia":"","sjia":"","djia":"","lxr":"","tel":"","ywy":"$${myName}","fortel":"$${myTel}","beizhu":"","jiaoyi":chuzu,"leibie":"","flag":"","xingzhi":"","tuijie":"","dateyear":"","dateweituo":"","datejiaofang":"","dateadd":"","dategenjin":"","fav":"","isdel":"","sh":"","chanquan":"","tudizheng":"","fordlr":"","fordlrtel":""}]}}
       //gerStrNull=JSON.parse(gerStrNull)
       // buildHtmlWithJsonArray("id_house_see",gerStrNull['page']['data'],true);
       fillData(gerStrNull['page']['data'][0]);
@@ -311,10 +311,6 @@ $(function(){
     </tr>
     <tr>
       <td>
-        <!-- <div class="input-group">
-          <span class="input-group-addon">编号</span>
-          <input type="text" class="form-control" name="houseNumber" value="${houseNumber}" placeholder="房源编号">
-        </div> -->
         <div class="input-group">
           <span class="input-group-addon" style="padding:8px;">推介房</span>
           <select class="form-control" id="id_chaoxiang" name="dateType">

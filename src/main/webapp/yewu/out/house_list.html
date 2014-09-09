@@ -30,7 +30,8 @@ function fix(TableH,TableB){
 }
 function setMainHeight(){
   $('.mainer').css({
-    top: $('.header').height()+12,
+    // top: $('.header').height()+12,
+    top:158,
     bottom:$('.footer').height()+1
   });
 }
@@ -105,26 +106,26 @@ $(function(){
     buildHtmlWithJsonArray("id_xingzhi",getStr['xingzhi']); //房型
     buildHtmlWithJsonArray("id_datetype",getStr['datetype'],true); //房型
     Page.Init();
-    $('select').each(function(index,obj){
-      if(obj.name=='dateType'){
-        return;
-      }
-      $(obj).prepend('<option value="">所有</option>');
-      $(obj).val("");
-    })
+    // $('select').each(function(index,obj){
+    //   if(obj.name=='dateType'){
+    //     return;
+    //   }
+    //   $(obj).prepend('<option value="">所有</option>');
+    //   $(obj).val("");
+    // });
   });
 
-  $('#id_House_list').on('click', 'a', function(event) {
-    var Thi=$(this),
-    rel=Thi.data('rel'),
-    this_hid=Thi.data('hid');
-    //alert(rel);
-    if(rel=='edit'){
-    }
-  }).on('click', 'tr', function(event) {
-    var Thi=$(this),
-    this_hid=Thi.data('hid');
-  });
+  // $('#id_House_list').on('click', 'a', function(event) {
+  //   var Thi=$(this),
+  //   rel=Thi.data('rel'),
+  //   this_hid=Thi.data('hid');
+  //   //alert(rel);
+  //   if(rel=='edit'){
+  //   }
+  // }).on('click', 'tr', function(event) {
+  //   var Thi=$(this),
+  //   this_hid=Thi.data('hid');
+  // });
 });
 
 
@@ -287,7 +288,7 @@ function chooseHouse(){
 <div class="mainer">
   <table class="table table-hover TableB" >
     <tr>
-      <th><a href="javascript:void(0)" onclick="chooseHouse();">选择</a></th>
+      <th style="text-align:center"><a href="javascript:void(0)" onclick="chooseHouse();">选择</a></th>
       <th class="font_no_br">房源编号</th>
       <th>类别</th>
       <th>区域</th>
@@ -305,7 +306,7 @@ function chooseHouse(){
       <th>状态</th>
     </tr>
     <tbody id="id_House_list">
-    <tr data-hid="${id}">
+    <tr style="display:none" data-hid="${id}">
       <td><input style="margin-left:20px;margin-right:20px;" type="checkbox" name="ids" rowIndex="${rowIndex}" /></td>
       <td>${houseNumber}</td>
       <td>${leibie}</td>

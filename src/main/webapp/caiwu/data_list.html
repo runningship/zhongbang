@@ -138,6 +138,22 @@ $(function(){
 
   <div style="float:right;margin-right:20px;">
   <form name="form1" onsubmit="return doSearch();">
+    <input type="hidden" class="userInput" name="xpath" value="">
+    <div class="input-group input-group-max">
+      <span class="input-group-addon">标题</span>
+      <input type="text" class="form-control" name="title">
+    </div>
+   <div class="input-group input-group-select">
+      <span class="input-group-addon">发布人</span>
+      <select class="form-control get_comp" name="form_cid"></select>
+      <select class="form-control get_quyu" name="form_did"></select>
+      <select class="form-control get_user" name="form_uid"></select>
+    </div>
+    <div class="input-group" style="width:355px">
+      <span class="input-group-addon">日期</span>
+      <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:120px;border-radius:0;">
+      <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:120px">
+    </div>
     <div class="btn-group">
       <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:35px;padding:0px 10px 0px 10px;width:150px;"><span id="btn_class_select">分 类</span> <span class="caret"></span></button>
       <ul class="dropdown-menu">
@@ -146,6 +162,9 @@ $(function(){
           <li onclick="selectType(${id},'${fenlei}');"><label><span  style="color:black;padding-left:10px;line-height:30px;font-weight:normal">${fenlei}</span></label></li>
         </span>
       </ul>
+    </div>
+    <div class="btn-group">
+      <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
     </div>
     <input type="hidden" id="claid" name="claid" />
   </form>
@@ -156,6 +175,7 @@ $(function(){
   <table class="table table-hover .table_bodyer" >
     <thead>
       <th>标题</th>
+      <th>分公司</th>
       <th>发布人</th>
       <th>发布时间</th>
       <th>分类</th>
@@ -164,6 +184,7 @@ $(function(){
     <tbody id="id_list">
     <tr style="display:none">
       <td>${title}</td>
+      <td>${dname}</td>
       <td>${uname}</td>
       <td>${addtime}</td>
       <td>${classTitle}</td>

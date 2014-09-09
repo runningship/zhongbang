@@ -47,9 +47,15 @@ function doSearch(){
   return false;
 }
 
-// function openPiYue(rowIndex){
-//   var piyue = dataArr[rowIndex]['reply'];
-// }
+function showDetails(id){
+  art.dialog.open('qingjia_detail.html?category=1&dataScope=yw_journal_qj&uid='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1080
+  })
+}
 
 $(function(){
   onSubmit_Form();
@@ -57,7 +63,7 @@ $(function(){
   $.get('/zb/c/house/getQueryOptions', function(data) {
     queryOpts=JSON.parse(data);
   });
-  Page.Init();
+  // Page.Init();
 });
 
 </script>
@@ -96,17 +102,19 @@ $(function(){
       <th>业务员</th>
       <th>区域-分公司</th>
       <th>工作日</th>
+      <th>操作</th>
     </thead>
     <tbody id="id_list">
     <tr style="display:none">
       <td>${uname}</td>
       <td>${qname}-${dname}</td>
       <td>${total}</td>
+      <td><a href="javascript:void(0)" onclick="showDetails(${uid})">详细</a></td>
     </tr>
     </tbody>
   </table>
 </div>
 
-<div class="footer foot_page_box"></div>
+<!-- <div class="footer foot_page_box"></div> -->
 </body>
 </html>

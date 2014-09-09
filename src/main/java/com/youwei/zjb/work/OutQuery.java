@@ -11,4 +11,7 @@ public class OutQuery extends AbstractQuery{
 	 */
 	public Integer kanfang;
 	public String xpath;
+	
+	//查看具体某个人的数据
+	public Integer uid;
 }

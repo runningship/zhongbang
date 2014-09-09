@@ -65,7 +65,7 @@ function clientseletion(cid,cname){
 }
 
 function openhouse(){
-  art.dialog.open('house_list.html?',{
+  art.dialog.open('house_list.html?dataScope=all',{
       padding:0,
       resize:true,
       lock:1,
@@ -88,21 +88,24 @@ function houseseletion(hids,hnames){
 }
 
 </script>
+<style type="text/css">
+  .input-group{margin-top: 10px;}
+</style>
 </head>
 <body class="hlist bodyer" style="overflow:auto">
   <form name="textForm" style="position:relative;width:100%">
     <input id="cid" name="clients" type="hidden" />
     <input type="hidden" name="houses" id="hids" />
-      <div class="input-group " style="float:left;margin-top:0px;">
-        <span class="input-group-addon">外出看房</span>
-        <select class="form-control " name="outHouse" onchange="changeOutHouse(this);" style="width:150px;">
+      <div class="input-group " style="float:left;">
+        <span class="input-group-addon">看房方式</span>
+        <select class="form-control " name="outHouse" onchange="changeOutHouse(this);" style="width:165px;">
           <option value="0">带看</option>
           <option value="1">陪看</option>
           <option value="2">自看</option>
         </select>
       </div>
 
-      <div class="input-group" style="width:500px;margin-left:50px;margin-top:0px">
+      <div class="input-group" style="width:500px;margin-left:50px;">
           <span class="input-group-addon" style="padding:1px 6px">外出时间</span>
           <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="outTime" style="width:180px;border-radius:0;">
           <span class="input-group-addon" style="padding:1px 6px">返回时间</span>
@@ -114,7 +117,7 @@ function houseseletion(hids,hnames){
           <span class="input-group-addon">选择客户</span>
           <input type="text" class="form-control" id="cname" name="clientInfo">
         </div>
-        <div class="btn-group">
+        <div class="btn-group input-group">
           <button onclick="openclient();return false;" class="btn btn-primary ">选择客源</button>
         </div><br><br>
       </span>
@@ -122,11 +125,11 @@ function houseseletion(hids,hnames){
         <span class="input-group-addon">选择房源</span>
         <input style="width:700px" type="text" class="form-control" id="hnames" name="houseInfo">
       </div>
-      <div class="btn-group" >
+      <div class="btn-group " style="margin-top:10px;">
         <button onclick="openhouse();return false;" class="btn btn-primary " style="">选择房源</button>
       </div>
   </form><br><br>
-    <div class="btn-group">
+    <div class="btn-group input-group">
       <button onclick="save();" class="btn btn-primary ">提交</button>
     </div>
 <div>

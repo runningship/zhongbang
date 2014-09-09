@@ -20,6 +20,7 @@
 <script type="text/javascript">
 var queryOpts;
 var dataArr;
+var uid;
 var pizhu=[{
   "name":"待审批",
   "code":0
@@ -99,8 +100,8 @@ function openPiYue(id){
 //   var piyue = dataArr[rowIndex]['reply'];
 // }
 
-function buildEdit(reply,myId,uid){
-  if(reply==0 && myId==uid){
+function buildEdit(reply){
+  if(reply==0){
     return "修改";
   }else{
     return "";
@@ -118,11 +119,13 @@ function openEdit(id){
 }
 
 $(function(){
+  uid = getParam('uid')
+  if(uid==null || uid==""){
+    alert("未指明人员");
+  }
+  $('#uid').val(uid);
   onSubmit_Form();
   doSearch();
-  $.get('/zb/c/house/getQueryOptions', function(data) {
-    queryOpts=JSON.parse(data);
-  });
   Page.Init();
 });
 
@@ -139,19 +142,13 @@ $(function(){
     <button onclick="openAdd();" class="btn btn-primary">新增</button>
   </div>
   <form name="form1">
-    <input type="hidden" class="userInput" name="xpath" value="">
+    <input type="hidden" name="uid" id="uid" value="">
     
       <div class="clearfix">
         <div class="input-group" style="width:400px">
           <span class="input-group-addon">登记时间</span>
           <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:150px;border-radius:0;">
           <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:150px">
-        </div>
-        <div class="input-group input-group-select">
-          <span class="input-group-addon">分公司</span>
-          <select class="form-control get_comp" name="form_cid"></select>
-          <select class="form-control get_quyu" name="form_did"></select>
-          <select class="form-control get_user" name="form_uid"></select>
         </div>
         <div class="btn-group">
           <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
@@ -184,7 +181,7 @@ $(function(){
       <td ><a auth="yw_journal_qj_sh" href="javascript:void(0)" onclick="openPiYue(${id})"><span class="runscript">getEnumTextByCode(pizhu,${reply})</span></a>
             <span auth="!yw_journal_qj_sh" class="runscript">getEnumTextByCode(pizhu,${reply})</span>
       </td>
-      <td><a auth="yw_journal_qj_del" href="javascript:void(0)" onclick="deleteQJ(${id})">删除</a> <a href="javascript:void(0)" onclick="openEdit(${id})"><span class="runscript">buildEdit(${reply},$${userId},${uid})</span></a> </td>
+      <td><a href="javascript:void(0)" onclick="deleteQJ(${id})">删除</a> <a href="javascript:void(0)" onclick="openEdit(${id})"><span class="runscript">buildEdit(${reply})</span></a> </td>
     </tr>
     </tbody>
   </table>

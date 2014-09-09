@@ -31,7 +31,7 @@ function getList(search){
     success: function(data){
       getStr=JSON.parse(data);
       dataArr = getStr['page']['data'];
-      buildHtmlWithJsonArray("id_GJ_list",dataArr);
+      buildHtmlWithJsonArray("id_client_list",dataArr);
       Page.setPageInfo(getStr['page']);
     }
   });
@@ -53,39 +53,9 @@ function chooseClient(row){
   var client = getStr['page']['data'][row];
   art.dialog.close();
   art.dialog.opener.clientseletion(client['id'],client['lxr']+" "+client['tel']);
-  // art.dialog({
-  //   title:'提示',
-  //   content:'确定选择这条客户信息吗？',
-  //   lock:true,
-  //   ok:function(){
-  //     art.dialog.close();
-  //     art.dialog.opener.clientseletion(client['id'],client['lxr']+" "+client['tel']);
-  //   },
-  //   cancel:true
-  // });
+  
 }
 
-function deleteSelected(){
-  var ids = $("input[name='ids']").serialize()
-  art.dialog({
-    title:'提示',
-    content:'确定批量删除客户信息吗？',
-    lock:true,
-    ok:function(){
-      YW.ajax({
-        url:'/zb/c/client/deleteBatch',
-        data:ids,
-        type:'POST',
-        timeout:5000,
-        dataType:'json',
-        success:function (data, textStatus) {
-            doSearch();
-        }
-      });
-    },
-    cancel:true
-  });
-}
 
 $(function(){
   chuzu = getParam('chuzu');
@@ -94,21 +64,22 @@ $(function(){
     return;
   }
   onSubmit_Form();
-  getList();
+  // getList();
   $.get('/zb/c/house/getQueryOptions', function(data) {
     queryOpts=JSON.parse(data);
     buildHtmlWithJsonArray("id_quyu",queryOpts['quyu']);       //区域
     buildHtmlWithJsonArray("id_kehu",queryOpts['kehu'],true,1);       //客户性质
     buildHtmlWithJsonArray("id_kehulaiyuan",queryOpts['kehulaiyuan']); //客户来源
 
-   Page.Init();
-    $('select').each(function(index,obj){
-      if(obj.name=='dateType'){
-        return;
-      }
-      $(obj).prepend('<option value="">所有</option>');
-      $(obj).val("");
-    })
+    Page.Init();
+    // $('select').each(function(index,obj){
+    //   if(obj.name=='dateType'){
+    //     return;
+    //   }
+    //   $(obj).prepend('<option value="">所有</option>');
+    //   $(obj).val("");
+    // });
+    doSearch();
   });
 });
 
@@ -133,14 +104,14 @@ $(function(){
     </div>
       <div class="input-group input-group-min">
         <span class="input-group-addon">性质</span>
-        <select class="form-control " name="kehuxingzhi" id="id_kehu">
+        <select class="form-control " style="width:102px;" name="kehuxingzhi" id="id_kehu">
           <option value="">所有</option>
           <option value="${name}">${name}</option>
         </select>
       </div>
     <div class="btn-group">
       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-        来源 <span class="caret"></span>
+        来 源 <span class="caret"></span>
       </button>
       <ul class="dropdown-menu" role="menu" id="id_kehulaiyuan">
         <li><label><input type="checkbox" name="kehulaiyuan" value="${name}"> ${name}</label>
@@ -154,8 +125,8 @@ $(function(){
         </select>
       </div>
     <div class="input-group input-group-max">
-      <span class="input-group-addon">电话</span>
-      <input type="text" class="form-control" name="tel">
+      <span class="input-group-addon">电&nbsp;&nbsp;&nbsp;话</span>
+      <input type="text" class="form-control" name="tel" style="width:192px;">
     </div>
     
     <div class="btn-group">
@@ -176,9 +147,9 @@ $(function(){
     </div>
     
     </form>
-    <div class="btn-group" style="float:right">
+    <!-- <div class="btn-group" style="float:right">
       <button  class="btn btn-primary btn_subnmit">登记</button>
-    </div>
+    </div> -->
 </div>
 <div class="mainer">
   <table class="table table-hover .table_bodyer" >
@@ -194,8 +165,8 @@ $(function(){
       <th>业务员</th>
       <th>选择</th>
     </thead>
-    <tbody id="id_GJ_list" style="display:">
-    <tr>
+    <tbody id="id_client_list" >
+    <tr style="display:none">
       <td>${id}</td>
       <td>${lxr}</td>
       <td>${tel}</td>

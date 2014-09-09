@@ -165,6 +165,10 @@
 				"type":"menu"
 			}]
 		},{
+			"name":"fy_other_quyu_code",
+			"text":"区域编号",
+			"type":"menu"
+		},{
 			"name":"fy_other_recycle",
 			"text":"回收站",
 			"type":"virtual",
@@ -363,6 +367,10 @@
 		},{
 			"name":"yw_journal_qj_del",
 			"text":"删除",
+			"type":"menu"
+		},{
+			"name":"yw_journal_qj_sh",
+			"text":"审核",
 			"type":"menu"
 		},{
 			"name":"yw_journal_qj_data",
@@ -1083,6 +1091,23 @@
 			},{
 				"name":"cw_finance_data_del",
 				"text":"删除",
+				"type":"menu"
+			}]
+		},{
+			"name":"cw_finance_data",
+			"text":"数据权限",
+			"type":"virtual",
+			"children":[{
+				"name":"cw_finance_data_dept",
+				"text":"分公司",
+				"type":"menu"
+			},{
+				"name":"cw_finance_data_quyu",
+				"text":"区域",
+				"type":"menu"
+			},{
+				"name":"cw_finance_data_all",
+				"text":"所有",
 				"type":"menu"
 			}]
 		}]

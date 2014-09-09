@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.GException;
 import org.bc.sdak.Page;
 import org.bc.sdak.TransactionalServiceHelper;
-import org.bc.sdak.utils.LogUtil;
 import org.bc.web.ModelAndView;
 import org.bc.web.Module;
 import org.bc.web.WebMethod;
@@ -26,7 +23,6 @@ import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
 import com.youwei.zjb.work.entity.Journal;
-import com.youwei.zjb.work.entity.OutRecord;
 
 @Module(name="/journal")
 public class JournalService {
@@ -36,6 +32,11 @@ public class JournalService {
 	@WebMethod
 	public ModelAndView add(Journal journal){
 		ModelAndView mv = new ModelAndView();
+		if(journal.category==1){
+			if(journal.qjdays==null){
+				throw new GException(PlatformExceptionType.BusinessException, "请先填写请假天数");
+			}
+		}
 		journal.addtime = new Date();
 		journal.reply =0;
 		User user = ThreadSession.getUser();
@@ -62,7 +63,7 @@ public class JournalService {
 	@WebMethod
 	public ModelAndView list(OutQuery query ,Page<Map> page){
 		ModelAndView mv = new ModelAndView();
-		StringBuilder hql = new StringBuilder("select j.id as id,d.namea as deptName ,q.namea as quyu, u.uname as uname, j.title as title, "
+		StringBuilder hql = new StringBuilder("select j.id as id,d.namea as deptName ,q.namea as quyu, u.uname as uname,u.id as uid, j.title as title, "
 				+ "j.addtime as addtime,j.starttime as starttime,j.endtime as endtime,j.qjdays as qjdays ,  j.reply as reply from Journal j , User u , Department d,Department q where j.userId=u.id and u.deptId=d.id and q.id=d.fid");
 		List<Object> params = new ArrayList<Object>();
 		hql.append(HqlHelper.buildDateSegment("j.starttime", query.addtimeStart, DateSeparator.After, params));
@@ -70,6 +71,10 @@ public class JournalService {
 		if(query.category!=null){
 			hql.append(" and j.category=? ");
 			params.add(query.category);
+		}
+		if(query.uid!=null){
+			hql.append(" and u.id=? ");
+			params.add(query.uid);
 		}
 		if(StringUtils.isNotEmpty(query.xpath)){
 			hql.append(" and u.orgpath like ? ");
@@ -92,11 +97,11 @@ public class JournalService {
 	public ModelAndView tongji(OutQuery query ,Page<Map> page){
 		ModelAndView mv = new ModelAndView();
 		List<Object> params = new ArrayList<Object>();
-		StringBuilder hql = new StringBuilder("select d.namea as dname,q.namea as qname, u.uname as uname , sum(j.qjdays) as total from Journal j,User u,Department d,Department q where u.id=j.userId and u.deptId=d.id and d.fid=q.id and j.category=1");
+		StringBuilder hql = new StringBuilder("select d.namea as dname,q.namea as qname, u.uname as uname ,u.id as uid, sum(j.qjdays) as total from Journal j,User u,Department d,Department q where u.id=j.userId and u.deptId=d.id and d.fid=q.id and j.category=1");
 		hql.append(HqlHelper.buildDateSegment("j.starttime", query.addtimeStart, DateSeparator.After, params));
 		hql.append(HqlHelper.buildDateSegment("j.starttime", query.addtimeEnd, DateSeparator.Before, params));
 		if(StringUtils.isNotEmpty(query.xpath)){
-			hql.append("u.orgpath like ? ");
+			hql.append(" and u.orgpath like ? ");
 			params.add(query.xpath+"%");
 		}
 		hql.append(" group by j.userId");

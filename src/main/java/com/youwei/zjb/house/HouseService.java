@@ -1,10 +1,6 @@
 package com.youwei.zjb.house;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,31 +14,27 @@ import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
-import jxl.write.biff.RowsExceededException;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Level;
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.GException;
 import org.bc.sdak.Page;
 import org.bc.sdak.TransactionalServiceHelper;
-import org.bc.sdak.utils.BeanUtil;
 import org.bc.sdak.utils.LogUtil;
 import org.bc.web.ModelAndView;
 import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
-import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
-import com.youwei.zjb.client.DaiKuanType;
+import com.youwei.zjb.cache.ConfigService;
 import com.youwei.zjb.client.FuKuan;
-import com.youwei.zjb.client.KeHuXingzhi;
 import com.youwei.zjb.client.KeHuLaiYuan;
+import com.youwei.zjb.client.KeHuXingzhi;
+import com.youwei.zjb.entity.Config;
 import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.entity.UserAuthority;
@@ -96,13 +88,17 @@ public class HouseService {
 				LogUtil.log(Level.WARN, "业务员信息部正确,forlxr="+house.forlxr, ex);
 			}
 			service.saveOrUpdate(house);
-			String py = DataHelper.toPinyin(house.quyu);
-			if(StringUtils.isNotEmpty(py) && py.length()>0){
-				house.houseNumber=  py.toUpperCase().charAt(0)+"-" + house.id;
-				service.saveOrUpdate(house);
-			}else{
-				LogUtil.warning("生成房源编号失败,houseId="+house.id);
-			}
+			Config quyu = service.getUniqueByParams(Config.class, new String[]{"type","name"},new Object[]{"quyu" , house.quyu});
+			house.quyuCode = quyu.pyShort;
+			house.houseNumber = quyu.pyShort+"-"+house.id;
+			service.saveOrUpdate(house);
+//			String py = DataHelper.toPinyin(house.quyu);
+//			if(StringUtils.isNotEmpty(py) && py.length()>0){
+//				house.houseNumber=  py.toUpperCase().charAt(0)+"-" + house.id;
+//				service.saveOrUpdate(house);
+//			}else{
+//				LogUtil.warning("生成房源编号失败,houseId="+house.id);
+//			}
 			mv.data.put("msg", "发布成功");
 			mv.data.put("result", 0);
 		}
@@ -116,12 +112,16 @@ public class HouseService {
 	public ModelAndView update(House house){
 		
 		ModelAndView mv = new ModelAndView();
-		String py = DataHelper.toPinyin(house.quyu);
-		if(StringUtils.isNotEmpty(py) && py.length()>0){
-			house.houseNumber=  py.toUpperCase().charAt(0)+"-" + house.id;
-		}else{
-			LogUtil.warning("生成房源编号失败,houseId="+house.id);
-		}
+		Config quyu = service.getUniqueByParams(Config.class, new String[]{"type","name"},new Object[]{"quyu" , house.quyu});
+		house.quyuCode = quyu.pyShort;
+		house.houseNumber = quyu.pyShort+"-"+house.id;
+		service.saveOrUpdate(house);
+//		String py = DataHelper.toPinyin(house.quyu);
+//		if(StringUtils.isNotEmpty(py) && py.length()>0){
+//			house.houseNumber=  py.toUpperCase().charAt(0)+"-" + house.id;
+//		}else{
+//			LogUtil.warning("生成房源编号失败,houseId="+house.id);
+//		}
 		House po = service.get(House.class, house.id);
 		String gjStr = DataHelper.compareHouse(po, house);
 		house.isdel = po.isdel;
@@ -297,7 +297,8 @@ public class HouseService {
 		mv.data.put("leibie", HouseType.toJsonArray());
 		mv.data.put("jiaoyi", JiaoYi.toJsonArray());
 		mv.data.put("louxing", LouXing.toJsonArray());
-		mv.data.put("quyu", QuYu.toJsonArray());
+//		mv.data.put("quyu", QuYu.toJsonArray());
+		mv.data.put("quyu", JSONHelper.toJSONArray(ConfigService.getConfigList("quyu")));
 		mv.data.put("zhuangtai", State.toJsonArray());
 		mv.data.put("shenhe", ShenHe.toJsonArray());
 		mv.data.put("zhuangxiu", ZhuangXiu.toJsonArray());

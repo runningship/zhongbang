@@ -31,6 +31,11 @@ public class House {
 	public String quyu;
 
 	/**
+	 * 区域编号.区域编号+"-"+房源ID=房源编号
+	 */
+	public String quyuCode;
+	
+	/**
 	 * 楼盘名称
 	 */
 	@Column(nullable=false)

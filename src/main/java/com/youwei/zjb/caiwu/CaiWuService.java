@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.GException;
 import org.bc.sdak.Page;
@@ -14,6 +15,7 @@ import org.bc.web.ModelAndView;
 import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
+import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.caiwu.entity.Finance;
@@ -21,6 +23,7 @@ import com.youwei.zjb.caiwu.entity.FinanceClass;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.oa.entity.Notice;
 import com.youwei.zjb.oa.entity.NoticeClass;
+import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
 
 @Module(name="/caiwu/")
@@ -94,10 +97,20 @@ public class CaiWuService {
 	public ModelAndView list(FinanceQuery query, Page<Map> page){
 		ModelAndView mv = new ModelAndView();
 		List<Object> params = new ArrayList<Object>();
-		StringBuilder hql = new StringBuilder("select n.id as id, n.title as title, n.addtime as addtime, nc.fenlei as classTitle, u.uname as uname from Finance n, FinanceClass nc , User u where n.claid=nc.id and u.id=n.userId");
+		StringBuilder hql = new StringBuilder("select n.id as id, n.title as title, n.addtime as addtime, nc.fenlei as classTitle, u.uname as uname,d.namea as dname from Finance n, FinanceClass nc , User u , Department d where n.claid=nc.id and u.id=n.userId and u.deptId=d.id");
 		if(query.claid!=null){
 			hql.append("  and n.claid=? ");
 			params.add(query.claid);
+		}
+		hql.append(HqlHelper.buildDateSegment("n.addtime", query.addtimeStart, DateSeparator.After, params));
+		hql.append(HqlHelper.buildDateSegment("n.addtime", query.addtimeEnd, DateSeparator.Before, params));
+		if(StringUtils.isNotEmpty(query.xpath)){
+			hql.append(" and u.orgpath like ? ");
+			params.add(query.xpath+"%");
+		}
+		if(StringUtils.isNotEmpty(query.title)){
+			hql.append(" and n.title like ? ");
+			params.add("%"+query.title+"%");
 		}
 		page.orderBy = "n.addtime";
 		page.order = Page.DESC;
