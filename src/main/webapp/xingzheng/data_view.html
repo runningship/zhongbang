@@ -41,7 +41,13 @@ function loadData(){
       myId = json['myId'];
       $('#title').val(json['adminTable']['title']);
       processList = json['processList'];
-      buildHtmlWithJsonArray("id_list",processList,data['attachs']);
+      if(processList==null || processList==undefined || processList.length==0){
+        
+      }else{
+        $('#processListDiv').css('display','');
+        buildHtmlWithJsonArray("id_list",processList);
+      }
+      
       fixTableFullScreen(ue);
     }
   });
@@ -140,7 +146,7 @@ $(function(){
       </span>
     </div>
   </div>
-  <div style="margin-left:10px;">
+  <div id="processListDiv" style="margin-left:10px;display:none">
     <div style="height:35px;background:#ddd;line-height:35px;margin-top:20px;"><span>办理意见</span></div>
     <div class="mainer" style="position:relative;width:100%">
       <table class="table table-hover .table_bodyer" >

@@ -113,13 +113,16 @@ function getEnumText(category,code){
 }
 var dialog_see;
 function dialogs(id){
-//  if(dialog_see){art.dialog.list['SeeHouse'].close();}
+  if(id==null || id=="" || id== "undefined"){
+    return;
+  }else{
     dialog_see=art.dialog.open('house_see.html?authParent='+authParent+'&hid='+id,{
       id:'SeeHouse',
       title:'查看房源详情',
       height:430,
       width:910
     })
+  }
 }
 
 function edit(id){

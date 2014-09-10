@@ -51,28 +51,32 @@ $(function(){
 <div class="header" style="position:relative;height:50px;width:100%">
   <form name="form1">
     
+    <div class="input-group input-group-select-n2" style="float:none;margin-top:10px;width:450px">
+      <span class="input-group-addon">分公司</span>
+      <select class="form-control get_comp" name="form_cid" style="width:180px"></select>
+      <select class="form-control get_quyu" name="deptId" style="width:180px"></select>
+    </div>
     <div class="input-group input-group-max" style="float:none;margin-top:10px;">
-      <span class="input-group-addon">名称</span>
+      <span class="input-group-addon">名&nbsp;&nbsp;&nbsp;称</span>
       <input type="text" class="form-control" desc="名称" name="name">
     </div>
     <div class="input-group input-group-max" style="float:none;margin-top:10px;">
-      <span class="input-group-addon">数量</span>
+      <span class="input-group-addon">数&nbsp;&nbsp;&nbsp;量</span>
       <input type="text" class="form-control" desc="数量" id="count" name="count" onblur="jisuan()">
     </div>
     <div class="input-group input-group-max" style="float:none;margin-top:10px;">
-      <span class="input-group-addon">单价</span>
+      <span class="input-group-addon">单&nbsp;&nbsp;&nbsp;价</span>
       <input type="text" class="form-control" desc="单价" id="djia" name="djia" onblur="jisuan()">
       <span class="input-group-addon">元</span>
     </div>
     
     <div class="input-group input-group-max" style="float:none;margin-top:10px;">
-      <span class="input-group-addon">总价</span>
+      <span class="input-group-addon">总&nbsp;&nbsp;&nbsp;价</span>
       <input type="text" class="form-control" id="zjia" name="zjia">
       <span class="input-group-addon">元</span>
     </div>
-    
     <div class="input-group input-group-max" style="float:none;margin-top:10px;">
-      <span class="input-group-addon">备注</span>
+      <span class="input-group-addon">备&nbsp;&nbsp;&nbsp;注</span>
       <input type="text" class="form-control" name="beizhu">
     </div>
   </form>

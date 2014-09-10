@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
+import org.bc.sdak.GException;
 import org.bc.sdak.Page;
 import org.bc.sdak.TransactionalServiceHelper;
 import org.bc.web.ModelAndView;
@@ -14,8 +15,10 @@ import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
 import com.youwei.zjb.DateSeparator;
+import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.asset.entity.Asset;
+import com.youwei.zjb.entity.Department;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
@@ -30,11 +33,14 @@ public class AssetService {
 	
 	@WebMethod
 	public ModelAndView add(Asset asset){
+		if(asset.deptId==null){
+			throw new GException(PlatformExceptionType.BusinessException, "请先选择分公司");
+		}
 		ModelAndView mv = new ModelAndView();
 		asset.addtime = new Date();
 		asset.edittime = new Date();
 		User user = ThreadSession.getUser();
-		asset.deptId = user.deptId;
+//		asset.deptId = user.deptId;
 		asset.userId = user.id;
 		if(asset.zjia==null){
 			asset.zjia = asset.djia*asset.count;
@@ -47,7 +53,11 @@ public class AssetService {
 	public ModelAndView get(int assetId){
 		ModelAndView mv = new ModelAndView();
 		Asset asset = dao.get(Asset.class , assetId);
-		mv.data.put("asset", JSONHelper.toJSON(asset));
+		Department dept = dao.get(Department.class, asset.deptId);
+		mv.data= JSONHelper.toJSON(asset);
+		if(dept!=null){
+			mv.data.put("qid", dept.Parent().id);
+		}
 		return mv;
 	}
 	
@@ -91,11 +101,14 @@ public class AssetService {
 	
 	@WebMethod
 	public ModelAndView update(Asset asset){
+		if(asset.deptId==null){
+			throw new GException(PlatformExceptionType.BusinessException, "请先选择分公司");
+		}
 		ModelAndView mv = new ModelAndView();
 		asset.edittime = new Date();
 		Asset po = dao.get(Asset.class, asset.id);
 		asset.addtime = po.addtime;
-		asset.deptId = po.deptId;
+//		asset.deptId = po.deptId;
 		dao.saveOrUpdate(asset);
 		return mv;
 	}

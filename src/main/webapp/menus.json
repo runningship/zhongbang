@@ -934,23 +934,23 @@
 				"name":"zc_gd_list_del",
 				"text":"删除",
 				"type":"menu"
+			}]
+		},{
+			"name":"zc_gd_list_data",
+			"text":"数据权限",
+			"type":"virtual",
+			"children":[{
+				"name":"zc_gd_list_data_dept",
+				"text":"分公司",
+				"type":"menu"
 			},{
-				"name":"zc_gd_list_data",
-				"text":"数据权限",
-				"type":"virtual",
-				"children":[{
-					"name":"zc_gd_list_data_dept",
-					"text":"分公司",
-					"type":"menu"
-				},{
-					"name":"zc_gd_list_data_quyu",
-					"text":"区域",
-					"type":"menu"
-				},{
-					"name":"zc_gd_list_data_all",
-					"text":"所有",
-					"type":"menu"
-				}]
+				"name":"zc_gd_list_data_quyu",
+				"text":"区域",
+				"type":"menu"
+			},{
+				"name":"zc_gd_list_data_all",
+				"text":"所有",
+				"type":"menu"
 			}]
 		}]
 	},{
