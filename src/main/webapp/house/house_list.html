@@ -75,7 +75,7 @@ function getHuseList(a){
         houseData=JSON.parse(data);
         buildHtmlWithJsonArray("id_House_list",houseData['page']['data']);
         Page.setPageInfo(houseData['page']);
-        fix($('.TableH'),$('.TableB'));
+        // fix($('.TableH'),$('.TableB'));
 
       if(getParamS=="del"){
         $('a.edit').remove();
@@ -513,7 +513,7 @@ $(function(){
         <select class="form-control get_user" name="form_uid"></select>
       </div>
       <div class="btn-group">
-        <button type="button" class="btn btn-primary" onclick="doSearch();">搜索</button>
+        <button type="button" class="btn btn-primary btn_subnmit" onclick="doSearch();">搜索</button>
         
         <button type="button" class="btn" data-type="qingkong" onclick="qingkong();">清空</button>
         <button type="button" class="btn btn-primary" auth="$${authParent}_export" onclick="houseExport();">导出</button>

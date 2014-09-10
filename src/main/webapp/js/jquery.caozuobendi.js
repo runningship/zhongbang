@@ -5,19 +5,19 @@
  * @version $Id$
  */
 //屏蔽右键菜单
-// document.oncontextmenu = function (event){
-//     if(window.event){
-//         event = window.event;
-//     }try{
-//         var the = event.srcElement;
-//         if (!((the.tagName == "INPUT" && (the.type.toLowerCase() == "text" || the.type.toLowerCase() == "password")) || the.tagName == "TEXTAREA")){
-//             return false;
-//         }
-//         return true;
-//     }catch (e){
-//         return false; 
-//     } 
-// }
+document.oncontextmenu = function (event){
+    if(window.event){
+        event = window.event;
+    }try{
+        var the = event.srcElement;
+        if (!((the.tagName == "INPUT" && (the.type.toLowerCase() == "text" || the.type.toLowerCase() == "password")) || the.tagName == "TEXTAREA")){
+            return false;
+        }
+        return true;
+    }catch (e){
+        return false; 
+    } 
+}
 //屏蔽全选
 document.onselectstart = function (event){
     if(window.event){
