@@ -287,9 +287,18 @@ $(function(){
         $('.piliang').addClass('hidden');
       }
     }else if(rel=='quanshan'){
+       var arr = [];
+        $("input[name='ids']").each(function(index,obj){
+          if(obj.checked && obj.value!="${id}"){
+            arr.push(obj);
+          }
+        });
+        if(arr.length==0){
+          return false;
+        }
       art.dialog({
         title: '警告',
-        content: '恢复数据？',
+        content: '删除到回收站？',
         ok: function () {
           var DeleteBatchsAction;
           if(getParamS=="del"){
@@ -297,7 +306,8 @@ $(function(){
           }else{
             DeleteBatchsAction='softDeleteBatch';
           }
-          var ids=$("input[name='ids']").serialize();
+         
+          var ids=$(arr).serialize();
           YW.ajax({
             url:'/zb/c/house/'+DeleteBatchsAction,
             data:ids,
@@ -306,6 +316,7 @@ $(function(){
             dataType:'json',
             success:function (data, textStatus) {
               getHuseList('');
+              $('#selectAll').attr('checked',false);
               art.dialog.tips('操作成功');
             }
           });
@@ -322,11 +333,11 @@ $(function(){
     }else{
       var ThiCheckbox=Thi.find('.piliang').find('input[type=checkbox]');
 //      alert(ThiCheckbox.prop('checked'))
-      if(ThiCheckbox.prop('checked')){
-        ThiCheckbox.prop('checked',false);
-      }else{
-        ThiCheckbox.prop('checked',true);
-      }
+      // if(ThiCheckbox.prop('checked')){
+      //   ThiCheckbox.prop('checked',false);
+      // }else{
+      //   ThiCheckbox.prop('checked',true);
+      // }
     }
   });
 });
@@ -517,7 +528,7 @@ $(function(){
 <div class="mainer">
   <table class="table table-hover TableB nobr id_House_list" >
     <tr>
-      <th>房源编号</th>
+      <th><span class="piliang hidden"><input id="selectAll" type="checkbox"  onclick="selectAll(this);"> </span>房源编号</th>
       <th>类别</th>
       <th>区域</th>
       <th>楼盘名称</th>

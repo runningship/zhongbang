@@ -247,11 +247,11 @@ function getEnumTexts(category,code){
 
 
 /*-=-=-=-=-=-=-=-=-=[ 全选的多选框 开始 ]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
-function selectAll(){
-  if(this.checked==true){ 
-    checkAll('id'); 
+function selectAll(obj){
+  if(obj.checked==true){ 
+    checkAll('ids'); 
   } else { 
-    clearAll('id'); 
+    clearAll('ids'); 
   }
 }
 function checkAll(name){

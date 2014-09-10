@@ -428,6 +428,7 @@ public class HouseService {
 			 sheet.addCell(new Label(12, 0, "发布人"));
 			 sheet.addCell(new Label(13, 0, "性质"));
 			 sheet.addCell(new Label(14, 0, "状态"));
+			 sheet.addCell(new Label(15, 0, "房主号码"));
 			 
 			 for(int index=0;index<data.size();index++){
 				 Map h = data.getJSONObject(index);
@@ -449,6 +450,7 @@ public class HouseService {
 				 sheet.addCell(new Label(13, index+1, xingzhi==null? "":xingzhi.toString()));
 				 State ztai = State.parse(String.valueOf(h.get("ztai")));
 				 sheet.addCell(new Label(14, index+1, ztai==null? "":ztai.toString()));
+				 sheet.addCell(new Label(15, index+1,h.get("tel")==null?"": h.get("tel").toString()));
 			 }
 			 workbook.write();
 			 workbook.close();
