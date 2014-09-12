@@ -68,6 +68,16 @@ public class OAService {
 	}
 	
 	@WebMethod
+	public ModelAndView getUnReadStatistic(){
+		ModelAndView mv = new ModelAndView();
+		StringBuilder hql = new StringBuilder("select  nc.fenlei as fenlei,count(*) as total from Notice n, NoticeReceiver nr , NoticeClass nc"
+				+ " where n.id=nr.noticeId and n.claid=nc.id  and nr.receiverId=? and nr.hasRead=0 group by nc.fenlei");
+		List<Map> list = dao.listAsMap(hql.toString(), ThreadSession.getUser().id);
+		mv.data.put("oaData", JSONHelper.toJSONArray(list));
+		return mv;
+	}
+	
+	@WebMethod
 	public ModelAndView getNotice(int id){
 		ModelAndView mv = new ModelAndView();
 		Notice po = dao.get(Notice.class, id);

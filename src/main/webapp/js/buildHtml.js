@@ -95,10 +95,12 @@ window.alert = function(data){
 YW={
     options:{
         beforeSend: function(XMLHttpRequest){
-              $(document.body).append('<img src="/zb/style/image/ajax-loading.gif" style="display:block;margin-left:auto;margin-right:auto;" id="loading" />');
+            $('.block-submit').attr('disabled','disabled');
+            $(document.body).append('<img src="/zb/style/image/ajax-loading.gif" style="display:block;margin-left:auto;margin-right:auto;" id="loading" />');
         },
         complete: function(XMLHttpRequest, textStatus){
           $('#loading').remove();
+          $('.block-submit').removeAttr('disabled');
         },
         error: function(data){
             if(data.status==500){
