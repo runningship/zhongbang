@@ -26,6 +26,8 @@ function save(){
     url: '/zb/c/assets/add',
     data:text,
     success: function(data){
+      // window.location.reload();
+      $('.form-control').val('');
       alert('保存成功.');
     }
   });

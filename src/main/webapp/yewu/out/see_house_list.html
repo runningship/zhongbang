@@ -52,6 +52,16 @@ function openView(id){
     })
 }
 
+function openEdit(id){
+    art.dialog.open('see_house_edit.html?recordId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:400,
+      width:900
+    })
+}
+
 function openPiyue(id){
     art.dialog.open('see_house_piyue.html?recordId='+id,{
       padding:0,
@@ -192,7 +202,7 @@ $(function(){
       <td>${outTime}</td>
       <td>${backTime}</td>
       <!-- <td><a onclick="openPiyue(${id})" href="javascript:void(0)" class="runscript">getEnumTextByCode(queryOpts['piyue'],${reply})</a></td> -->
-      <td><a onclick="openView(${id})" href="javascript:void(0)" >查看</a> <a href="javascript:void(0)" onclick="deleteOut(${id})">删除</a></td>
+      <td><a onclick="openEdit(${id})" href="javascript:void(0)" >修改</a> <a href="javascript:void(0)" onclick="deleteOut(${id})">删除</a></td>
       
     </tr>
     </tbody>

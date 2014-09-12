@@ -11,139 +11,142 @@
 <script type="text/javascript" src="/zb/js/jquery.js"></script>
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
-<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
 <script type="text/javascript" src="/zb/js/uploadify/jquery.uploadify.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <link href="/zb/js/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.config.js"></script>
 <script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.all.js"> </script>
 <script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 var recordId;
-var ue;
 function save(){
-  $('#conta').val(ue.getContent());
   var text = $('form[name=textForm]').serialize();
   YW.ajax({
     type: 'POST',
-    url: '/zb/c/journal/update',
+    url: '/zb/c/out/upateOutHouse',
     data:text,
     success: function(data){
-      alert('保存成功');
-      initFileUpload();
+      alert('保存成功.');
+      art.dialog.close()
+      art.dialog.opener.doSearch();
     }
   });
   return false;
 }
 
-function initFileUpload(){
-  $('#file_upload').uploadify({
-      'swf'      : '/zb/js/uploadify/uploadify.swf',
-      'uploader' : '/zb/file/upload?bizType=journal&recordId='+recordId,
-      'buttonText': '上传附件',
-      'removeTimeout': 0.1,
-      'fileSizeLimit' : '5MB',
-      'onUploadError' : function(file, errorCode, errorMsg, errorString){
-          console.log('The file ' + file.name + ' could not be uploaded: ' + errorString);
-      },
-      'onUploadComplete':function(file){
-          console.log('finish:'+file);
-          getAttachList();
-      },
-      'onUploadSuccess' : function(file, data, response) {
-        var json = JSON.parse(data);
-        if(json['result']!=0){
-          $('#' + file.id).find('.data').html('-文件上传失败,'+json['msg']);
-          // console('The file ' + file.name + ' was successfully uploaded with a response of ' + response + ':' + data);
-        }
-      }
-      // Put your options here
+function openclient(){
+  art.dialog.open('client_list.html?dataScope=ky_client_buy&chuzu=0',{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1080
   });
 }
 
-function getAttachList(){
-  YW.ajax({
-    type: 'get',
-    url: '/zb/c/attachment/list?bizType=journal&recordId='+recordId,
-    data:'',
-    success: function(result){
-      var data = JSON.parse(result)['data'];
-      buildHtmlWithJsonArray("attachList",data);
-    }
+function clientseletion(cid,cname){
+  $('#cname').val(cname);  
+  $('#cid').val(cid);
+}
+
+function openhouse(){
+  art.dialog.open('house_list.html?dataScope=all',{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:600,
+      width:1300
   });
 }
 
-function deleteAttach(id){
-  YW.ajax({
-    type: 'get',
-    url: '/zb/c/attachment/delete?id='+id,
-    data:'',
-    success: function(result){
-      getAttachList();
-    }
-  });
+function changeOutHouse(obj){
+  if ($(obj).val()==0) {
+    $("#clientPanel").css('display','block');
+  }else{
+    $("#clientPanel").css('display','none');
+  }
 }
-function getContent(){
+
+function get(){
   YW.ajax({
     type: 'get',
-    url: '/zb/c/journal/get?id='+recordId,
+    url: '/zb/c/out/get?id='+recordId,
     data:'',
     success: function(result){
       var json = JSON.parse(result);
-      $('#title').val(json['journal']['title']);
-      ue.setContent(json['journal']['conta'] ,false);
-      initFileUpload();
-      getAttachList();
+      $('#idTimes').val(json['out']['outTime']);
+      $('#idTime').val(json['out']['backTime']);
+      $('#cname').val(json['out']['clientInfo']);
+      $('#hnames').val(json['out']['houseInfo']);
+      $('#outHouse').val(json['out']['outHouse']);
+      $('#outHouse').change();
     }
   });
 }
+
+function houseseletion(hids,hnames){
+  $('#hnames').val(hnames);
+  $('#hids').val(hids);
+}
+
 $(function(){
-  var category = getParam('category');
-  if(category==null || category==""){
-    alert("未指明的分类");
-  }
-  $('#category').val(category);
-  recordId = getParam('recordId');
+  recordId=getParam('recordId')
   if(recordId==null || recordId==""){
-    alert("加载数据失败");
-    return;
+    alert("未指明的ID");
   }
-
-  $('#id').val(recordId);
-  
-  ue = UE.getEditor('editor');
-  ue.addListener( 'ready', function( editor ) {
-    //ue.setHeight(350);
-    getContent();
-  });
-  // getContent();
+  $('#recordId').val(recordId);
+  get();
 });
-
 </script>
+<style type="text/css">
+  .input-group{margin-top: 10px;}
+</style>
 </head>
 <body class="hlist bodyer" style="overflow:auto">
-  <form name="textForm">
-    <div>
-      <span>标题</span><input type="text" id="title" name="title" />
+  <form name="textForm" style="position:relative;width:100%">
+    <input id="recordId" name="id" type="hidden" />
+    <input id="cid" name="clients" type="hidden" />
+    <input type="hidden" name="houses" id="hids" />
+      <div class="input-group " style="float:left;">
+        <span class="input-group-addon">看房方式</span>
+        <select class="form-control " name="outHouse" onchange="changeOutHouse(this);" id="outHouse" style="width:165px;">
+          <option value="0">带看</option>
+          <option value="1">陪看</option>
+          <option value="2">自看</option>
+        </select>
+      </div>
+
+      <div class="input-group" style="width:500px;margin-left:50px;">
+          <span class="input-group-addon" style="padding:1px 6px">外出时间</span>
+          <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="outTime" style="width:180px;border-radius:0;">
+          <span class="input-group-addon" style="padding:1px 6px">返回时间</span>
+          <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="backTime" style="width:180px">
+      </div><br><br>
+  
+      <span id="clientPanel">
+        <div class="input-group input-group-max">
+          <span class="input-group-addon">选择客户</span>
+          <input type="text" class="form-control" id="cname" name="clientInfo">
+        </div>
+        <div class="btn-group input-group">
+          <button onclick="openclient();return false;" class="btn btn-primary ">选择客源</button>
+        </div><br><br>
+      </span>
+      <div class="input-group input-group-max">
+        <span class="input-group-addon">选择房源</span>
+        <input style="width:700px" type="text" class="form-control" id="hnames" name="houseInfo">
+      </div>
+      <div class="btn-group " style="margin-top:10px;">
+        <button onclick="openhouse();return false;" class="btn btn-primary " style="">选择房源</button>
+      </div>
+  </form><br><br>
+    <div class="btn-group input-group">
+      <button onclick="save();" class="btn btn-primary ">提交</button>
     </div>
-    <input id="conta" name="conta" type="hidden" />
-    <input type="hidden" name="category" id="category" />
-    <input type="hidden" name="id" id="id" />
-  </form>
-   <div style="margin-top:10px;margin-left:10px;">
-    <span id="editor" type="text/plain" style="width:1024px;height:500px;"></span>
-  </div>
-    <button onclick="save();" class="btn btn-primary " style="margin-left:10px;">提交</button>
-  <br/>
 <div>
     <input id="file_upload" name="file_upload" style="display:none">
-</div>
-<div id="attachList">
-  <span style="display:none">
-    <div>
-      <a href="/zb/file/download?bizType=${bizType}&recordId=${recordId}&file=${id}">${filename}</a> <a href="javascript:void(0)" onclick="deleteAttach(${id})">删除</a>
-    </div>
-  </span>
 </div>
 </body>
 </html>

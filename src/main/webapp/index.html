@@ -57,6 +57,7 @@ $(function(){
 	//初始化桌面右键菜单
 	myLib.desktop.contextMenu($(document.body),data,"body",10);
   init();
+  huadong();
 });
 var myId;
 function init(){
@@ -174,6 +175,15 @@ function relogin(){
   });
 }
 
+function huadong(){
+  art.dialog.notice({
+    title: '万象网管',
+    width: 220,
+    content: '尊敬的顾客朋友，您IQ卡余额不足10元，请及时充值',
+    icon: 'face-sad',
+    time: 5 ,
+  });
+}
 function maximize(){
   hex.maximize();
   $('.tbtnMax').css('display','none');

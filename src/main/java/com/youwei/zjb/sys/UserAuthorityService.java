@@ -22,6 +22,7 @@ import org.bc.web.WebMethod;
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.UserAuthority;
+import com.youwei.zjb.util.DataHelper;
 
 @Module(name="/userAuth/")
 public class UserAuthorityService {
@@ -46,6 +47,7 @@ public class UserAuthorityService {
 		try {
 			String text = FileUtils.readFileToString(new File(ThreadSession.getHttpSession().getServletContext().getRealPath("/")+File.separator+"menus.json"), "utf8");
 			JSONArray jarr = JSONArray.fromObject(text);
+			jarr.add(DataHelper.getAdminClassAuth());
 			List<UserAuthority> list = dao.listByParams(UserAuthority.class, new String[]{"userId","type"}, new Object[]{ userId ,"menu"});
 			for(UserAuthority ra : list){
 				setSelected(ra ,jarr);

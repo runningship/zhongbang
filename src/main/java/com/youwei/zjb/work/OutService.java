@@ -36,7 +36,7 @@ public class OutService {
 		ModelAndView mv = new ModelAndView();
 		out.userId = ThreadSession.getUser().id;
 		out.addtime = new Date();
-		if(out.outTime==null || out.backTime==null){
+		if(out.outTime==null){
 			throw new GException(PlatformExceptionType.BusinessException, "您填写的数据不完整");
 		}
 		out.reply = 0;
@@ -91,6 +91,23 @@ public class OutService {
 	private void addOutBiz(OutRecord out) {
 		dao.saveOrUpdate(out);
 		
+	}
+	
+	@WebMethod
+	public ModelAndView upateOutHouse(OutRecord out){
+		OutRecord po = dao.get(OutRecord.class, out.id);
+		if(po==null){
+			throw new GException(PlatformExceptionType.BusinessException, "该记录已不存在");
+		}
+		po.outHouse = out.outHouse;
+		po.outTime = out.outTime;
+		po.backTime = out.backTime;
+		po.houseInfo = out.houseInfo;
+		po.clientInfo = out.clientInfo;
+		po.houses = out.houses;
+		po.clients = out.clients;
+		dao.saveOrUpdate(po);
+		return new ModelAndView();
 	}
 	
 	@WebMethod

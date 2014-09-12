@@ -76,7 +76,7 @@ function deleteQJ(id){
 }
 
 function openAdd(){
-  art.dialog.open('add.html?category=1',{
+  art.dialog.open('add.html?dataScope=yw_journal_qj&category=1',{
       padding:0,
       resize:true,
       lock:1,
@@ -184,7 +184,8 @@ $(function(){
       <td ><a auth="yw_journal_qj_sh" href="javascript:void(0)" onclick="openPiYue(${id})"><span class="runscript">getEnumTextByCode(pizhu,${reply})</span></a>
             <span auth="!yw_journal_qj_sh" class="runscript">getEnumTextByCode(pizhu,${reply})</span>
       </td>
-      <td><a auth="yw_journal_qj_del" href="javascript:void(0)" onclick="deleteQJ(${id})">删除</a> <a href="javascript:void(0)" onclick="openEdit(${id})"><span class="runscript">buildEdit(${reply},$${userId},${uid})</span></a> </td>
+      <td><a auth="yw_journal_qj_del" href="javascript:void(0)" onclick="deleteQJ(${id})">删除</a> 
+          <a auth="yw_journal_qj_edit" href="javascript:void(0)" onclick="openEdit(${id})"><span >修改</span></a> </td>
     </tr>
     </tbody>
   </table>

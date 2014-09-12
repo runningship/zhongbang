@@ -29,7 +29,6 @@ function save(){
     data:text,
     success: function(data){
       alert('保存成功.');
-      recordId = JSON.parse(data)['recordId'];
       art.dialog.close()
       art.dialog.opener.doSearch();
     }
@@ -37,20 +36,8 @@ function save(){
   return false;
 }
 
-function getAttachList(){
-  YW.ajax({
-    type: 'get',
-    url: '/zb/c/attachment/list?bizType=journal&recordId='+recordId,
-    data:'',
-    success: function(result){
-      var data = JSON.parse(result)['data'];
-      buildHtmlWithJsonArray("attachList",data);
-    }
-  });
-}
-
 function openclient(){
-  art.dialog.open('client_list.html?chuzu=0',{
+  art.dialog.open('client_list.html?dataScope=ky_client_buy&chuzu=0',{
       padding:0,
       resize:true,
       lock:1,

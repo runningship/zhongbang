@@ -26,6 +26,7 @@ function save(){
     url: '/zb/c/supply/add',
     data:text,
     success: function(data){
+      $('.form-control').val('');
       alert('保存成功.');
     }
   });

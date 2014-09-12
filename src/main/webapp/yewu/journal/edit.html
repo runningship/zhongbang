@@ -32,7 +32,7 @@ function save(){
     success: function(data){
       art.dialog.opener.getList();
       alert('保存成功');
-      initFileUpload();
+      // initFileUpload();
     }
   });
   return false;
@@ -100,7 +100,7 @@ function getContent(){
       $('#idTime').val(json['journal']['endtime']);
       $('#qjdays').val(json['journal']['qjdays']);
       ue.setContent(json['journal']['conta'] ,false);
-      initFileUpload();
+      
       getAttachList();
       fixTableFullScreen(ue);
     }
@@ -134,15 +134,17 @@ $(function(){
       fixTableFullScreen(ue);
     }
   });
+
+  initFileUpload();
 });
 
 </script>
 </head>
-<body style="overflow:hidden; ">
+<body style="overflow:; ">
   <form name="textForm" style="margin-top:10px;">
     <div class="clearfix">
       <div class="input-group input-group-max">
-        <span class="input-group-addon">日志标题</span>
+        <span class="input-group-addon">标题</span>
         <input type="text" class="form-control" id="title" name="title" />
       </div>
     <input id="conta" name="conta" type="hidden" />
@@ -154,7 +156,7 @@ $(function(){
           <span class="input-group-addon" style="padding:1px 6px">结束时间</span>
           <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="endtime" style="width:180px">
       </div>
-       <div class="input-group input-group-max qj" style="width:300px;">
+       <div class="input-group input-group-max qj" style="width:250px;">
           <span class="input-group-addon">有效天数</span>
           <input type="text" class="form-control" desc="天" name="qjdays" id="qjdays">
         </div>

@@ -3,12 +3,18 @@ package com.youwei.zjb.user;
 import java.util.List;
 
 import com.youwei.zjb.SimpDaoTool;
-import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.entity.UserAuthority;
 
 public class UserHelper {
 
+	/**
+	 * 有审核权限，并且数据权限>quyu
+	 * @param authName
+	 * @param dataScope
+	 * @param target
+	 * @return
+	 */
 	public static List<User> getUserWithAuthority(String authName , String dataScope , User target){
 		String data_qy = dataScope+"_quyu";
 		String quyu = target.Department().Parent().path;

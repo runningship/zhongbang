@@ -19,11 +19,11 @@ import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.admin.entity.AdminClass;
 import com.youwei.zjb.admin.entity.AdminTable;
+import com.youwei.zjb.admin.entity.Process;
 import com.youwei.zjb.admin.entity.ProcessClass;
+import com.youwei.zjb.entity.User;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
-import com.youwei.zjb.admin.entity.Process;
-import com.youwei.zjb.entity.User;
 
 @Module(name="/admin/")
 public class AdminService {
@@ -38,6 +38,24 @@ public class AdminService {
 		page = dao.findPage(page,"select id as id ,title as title from AdminClass  where fid<>0 and flag=? ", true,  new Object[]{1});
 		mv.data.put("result", 0);
 		mv.data.put("page", JSONHelper.toJSON(page));
+		return mv;
+	}
+	
+	@WebMethod(name="class/listofuser")
+	public ModelAndView listAdminClassOfUser(){
+		ModelAndView mv = new ModelAndView();
+		List<String> classList = ThreadSession.getUser().AdminClassList();
+		StringBuilder names = new StringBuilder("(");
+		for(String name : classList){
+			names.append("'").append(name).append("'").append(",");
+		}
+		names.append("''");
+		names.append(")");
+		List<Map> adcList = new ArrayList<Map>();
+		if(!classList.isEmpty()){
+			adcList = dao.listAsMap("select id as id ,title as title from AdminClass where title in "+names.toString());
+		}
+		mv.data.put("list",JSONHelper.toJSONArray(adcList));
 		return mv;
 	}
 	
@@ -99,6 +117,18 @@ public class AdminService {
 			hql.append(" and u.orgpath like ? ");
 			params.add("%"+query.xpath+"%");
 		}
+		List<String> classList = ThreadSession.getUser().AdminClassList();
+		StringBuilder names = new StringBuilder("(");
+		if(classList.isEmpty()){
+			names.append("''");
+		}else{
+			for(String name : classList){
+				names.append("'").append(name).append("'").append(",");
+			}
+			names.append("''");
+			names.append(")");
+		}
+		hql.append(" and c.title in "+names.toString());
 		hql.append(HqlHelper.buildDateSegment("t.addtime", query.addtimeStart, DateSeparator.After, params));
 		hql.append(HqlHelper.buildDateSegment("t.addtime", query.addtimeEnd, DateSeparator.Before, params));
 		page.orderBy = "t.addtime";

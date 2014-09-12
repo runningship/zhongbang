@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
@@ -16,6 +18,7 @@ import org.bc.sdak.utils.LogUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import com.youwei.zjb.SimpDaoTool;
 import com.youwei.zjb.house.HouseAttribute;
 import com.youwei.zjb.house.JiaoYi;
 import com.youwei.zjb.house.State;
@@ -181,5 +184,23 @@ public class DataHelper {
 			sb.append("年代: "+old.dateyear+"-->"+newH.dateyear).append("<br/>");
 		}
 		return sb.toString();
+	}
+	
+	public static JSONObject getAdminClassAuth(){
+		JSONObject xzfl = new JSONObject();
+		xzfl.put("name", "xzfl");
+		xzfl.put("type", "module");
+		xzfl.put("text", "行政分类");
+		JSONArray children = new JSONArray();
+		List<Map> adcList = SimpDaoTool.getGlobalCommonDaoService().listAsMap("select id as id ,title as title from AdminClass where fid=1");
+		for(Map adc: adcList){
+			JSONObject jobj = new JSONObject();
+			jobj.put("type", "menu");
+			jobj.put("name", "xzgl_"+adc.get("title"));
+			jobj.put("text", adc.get("title"));
+			children.add(jobj);
+		}
+		xzfl.put("children", children);
+		return xzfl;
 	}
 }

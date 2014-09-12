@@ -19,6 +19,7 @@
 <script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.all.js"> </script>
 <script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript">
 var recordId;
 var ue;
@@ -42,7 +43,7 @@ function save(){
 function initFileUpload(){
   $('#file_upload').uploadify({
       'swf'      : '/zb/js/uploadify/uploadify.swf',
-      'uploader' : '/file/upload?bizType=journal&recordId='+recordId,
+      'uploader' : '/zb/file/upload?bizType=journal&recordId='+recordId,
       'buttonText': '上传附件',
       'removeTimeout': 0.1,
       'fileSizeLimit' : '5MB',
@@ -97,6 +98,7 @@ $(function(){
   $('#category').val(category);
   if (category==0) {
     $('div.qj').remove();
+    $('#qingjiaren').remove();
   };
 
   ue = UE.getEditor('editor');
@@ -115,6 +117,7 @@ $(function(){
           <input type="text" class="form-control" desc="标题" name="title">
         </div>
       <input id="conta" name="conta" type="hidden" />
+
       <input type="hidden" name="category" id="category" />
         <div class="input-group" style="width:500px;margin-left:10px;margin-top:0px">
           <span class="input-group-addon" style="padding:1px 6px">开始时间</span>
@@ -127,8 +130,14 @@ $(function(){
           <input type="text" class="form-control" desc="天" name="qjdays">
         </div>
     </div>
+    <div id="qingjiaren" class="input-group input-group-select" style="float:none;width:495px;">
+      <span class="input-group-addon">请假人</span>
+      <select class="form-control get_comp" ></select>
+      <select class="form-control get_quyu" ></select>
+      <select class="form-control get_user" name="userId"></select>
+    </div>
   </form>
-  <div style="margin-left:10px; margin-bottom:10px;">
+  <div style="margin-left:10px; margin-bottom:10px;margin-top:4px;">
     <span id="editor" type="text/plain" style="width:1024px;height:300px;"></span>
   </div>
 

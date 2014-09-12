@@ -124,10 +124,10 @@ function buildShenHe(sh){
 $(function(){
   // var claid = getParam('claid');
   // $('#classId').val(claid);
-  $.get('/zb/c/admin/class/list', function(data) {
+  $.get('/zb/c/admin/class/listofuser', function(data) {
     queryOpts=JSON.parse(data);
-    buildHtmlWithJsonArray("adminClassList",queryOpts['page']['data']);
-    buildHtmlWithJsonArray("adminClassList2",queryOpts['page']['data']);
+    buildHtmlWithJsonArray("adminClassList",queryOpts['list']);
+    buildHtmlWithJsonArray("adminClassList2",queryOpts['list']);
     doSearch();
   });
   Page.Init();

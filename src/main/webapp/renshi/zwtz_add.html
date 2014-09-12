@@ -37,8 +37,16 @@ $(function(){
     queryOpts=JSON.parse(data);
     buildHtmlWithJsonArray("id_roles",queryOpts['roles'],true);
     fun_get_comp('to');
-    fun_get_comp('fy_to');
-    fun_get_comp('ky_to');
+    // fun_get_comp('fy_to');
+    // fun_get_comp('ky_to');
+    //被调人只能选择本部门
+    $($('.get_comp')[0].options).each(function(index,obj){
+      if(obj.value=='$${qid}'){
+        return;
+      }
+      $(obj).remove();
+    });
+    $('.get_comp').change();
   });
 });
 

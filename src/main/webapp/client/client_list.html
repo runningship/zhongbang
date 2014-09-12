@@ -196,10 +196,10 @@ $(function(){
   $(document).on('click', '.table .btn,.btnadd.btn', function(event) {
     var Thi=$(this),
     ThiId,    ThiFlag=Thi.data('flag');
-    if(Thi.parents('tr').find('input[name=ids]').length){
-      ThiId=ThiId=Thi.parents('tr').find('input[name=ids]').val()
-    }
-    
+    // if(Thi.parents('tr').find('input[name=ids]').length){
+    //   ThiId=ThiId=Thi.parents('tr').find('input[name=ids]').val()
+    // }
+    ThiId=$(this).attr('client');
     if(ThiFlag=='fy'){
       selectHouse(ThiId);
     }else if(ThiFlag=='fp'){
@@ -336,7 +336,7 @@ function openView(cid){
       <td class='runscript'>getEnumTextByCode(queryOpts['kehu'],${kehu})</td>
       <td>${uname}</td>
       <td><a href="javascript:void(0)" class="btn btn-xs" data-flag="fy">房源</a></td>
-      <td ><a serverId="assign" show="showAssign($${userId},${salesman},'${addtime}','${gjtime}',$${auth})" href="javascript:void(0)" class="btn btn-xs" data-flag="fp">分配</a></td>
+      <td ><a serverId="assign" client="${id}" show="showAssign($${userId},${salesman},'${addtime}','${gjtime}',$${auth})" href="javascript:void(0)" class="btn btn-xs" data-flag="fp">分配</a></td>
       <td><a href="javascript:void(0)" onclick="openView(${id});" class="btn btn-xs" data-flag="view">查看</a>
           <a auth="$${authParent}_edit" href="javascript:void(0)" class="btn btn-xs" data-flag="edit">修改</a>
           <a auth="$${authParent}_del" href="javascript:void(0)"  class="btn btn-xs" data-flag="del">删除</a>

@@ -21,10 +21,12 @@ import org.bc.web.WebMethod;
 
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
+import com.youwei.zjb.admin.entity.AdminClass;
 import com.youwei.zjb.entity.Role;
 import com.youwei.zjb.entity.RoleAuthority;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.sys.entity.Qzy;
+import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.JSONHelper;
 
 @Module(name="/sys/")
@@ -133,6 +135,7 @@ public class AuthorityService {
 		try {
 			String text = FileUtils.readFileToString(new File(ThreadSession.getHttpSession().getServletContext().getRealPath("/")+File.separator+"menus.json"), "utf8");
 			JSONArray jarr = JSONArray.fromObject(text);
+			jarr.add(DataHelper.getAdminClassAuth());
 			List<RoleAuthority> list = dao.listByParams(RoleAuthority.class, new String[]{"roleId","type"}, new Object[]{ roleId ,"menu"});
 			for(RoleAuthority ra : list){
 				setSelected(ra ,jarr);

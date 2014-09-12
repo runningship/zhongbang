@@ -34,12 +34,12 @@ $(document).ready(function(){
         <div class="sider">
             <dl class="sidedl">
                 <dt></dt>
-                <dd><a class="aNavBtn" href="quyu_list.html"  target="renshi_frame" >区域列表</a></dd>
-                <dd><a class="aNavBtn" href="dept_list.html"  target="renshi_frame" >分公司列表</a></dd>
+                <dd auth="rs_users_quyu_list"><a class="aNavBtn" href="quyu_list.html"  target="renshi_frame" >区域列表</a></dd>
+                <dd auth="rs_users_dept_list" ><a class="aNavBtn" href="dept_list.html"  target="renshi_frame" >分公司列表</a></dd>
             </dl>
             <dl auth="rs_users" class="sidedl">
                 <dt></dt>
-                <dd auth="rs_users_list" ><a class="aNavBtn" href="user_list.html?dataScope=all"  target="renshi_frame" >人员列表</a></dd>
+                <dd auth="rs_users_list" ><a class="aNavBtn" href="user_list.html?dataScope=rs_users"  target="renshi_frame" >人员列表</a></dd>
             </dl>
             <dl auth="rs_rz" class="sidedl">
                 <dt></dt>
@@ -48,7 +48,7 @@ $(document).ready(function(){
             </dl>
             <dl auth="rs_zwtz" class="sidedl">
                 <dt></dt>
-                <dd auth="rs_zwtz_add" ><a class="aNavBtn" href="zwtz_add.html?dataScope=rs_zwtz"  target="renshi_frame" >申请调整</a></dd>
+                <dd auth="rs_zwtz_add" ><a class="aNavBtn" href="zwtz_add.html?dataScope=all"  target="renshi_frame" >申请调整</a></dd>
                 <dd auth="rs_zwtz_list" ><a class="aNavBtn" href="zwtz_list.html?dataScope=rs_zwtz"  target="renshi_frame" >待审核</a></dd>
                 <dd auth="rs_zwtz_list" ><a class="aNavBtn" href="zwtz_pass_list.html?dataScope=rs_zwtz"  target="renshi_frame" >已审核</a></dd>
             </dl>

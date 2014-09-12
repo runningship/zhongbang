@@ -1,5 +1,6 @@
 package com.youwei.zjb.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -118,6 +119,25 @@ public class User {
 			ua.name = ra.name;
 			if(!result.contains(ua)){
 				result.add(ua);
+			}
+		}
+		return result;
+	}
+	
+	public List<String> AdminClassList(){
+		List<String> result = new ArrayList<String>();
+		List<RoleAuthority> list1 = SimpDaoTool.getGlobalCommonDaoService().listByParams(RoleAuthority.class, "from RoleAuthority where name like ?", "xzgl_%");
+		for(RoleAuthority ra : list1){
+			String str = ra.name.replace("xzgl_", "");
+			if(!result.contains(str)){
+				result.add(str);
+			}
+		}
+		List<UserAuthority> list2 = SimpDaoTool.getGlobalCommonDaoService().listByParams(UserAuthority.class, "from UserAuthority where name like ?", "xzgl_%");
+		for(UserAuthority ua : list2){
+			String str = ua.name.replace("xzgl_", "");
+			if(!result.contains(str)){
+				result.add(str);
 			}
 		}
 		return result;
