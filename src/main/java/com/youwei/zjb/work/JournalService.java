@@ -40,7 +40,9 @@ public class JournalService {
 		journal.addtime = new Date();
 		journal.reply =0;
 		User user = ThreadSession.getUser();
-//		journal.userId = user.id;
+		if(journal.category==0){
+			journal.userId = user.id;
+		}
 		dao.saveOrUpdate(journal);
 		mv.data.put("result", 0);
 		mv.data.put("recordId", journal.id);

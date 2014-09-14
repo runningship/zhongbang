@@ -120,7 +120,7 @@ public class AdminService {
 		List<String> classList = ThreadSession.getUser().AdminClassList();
 		StringBuilder names = new StringBuilder("(");
 		if(classList.isEmpty()){
-			names.append("''");
+			names.append("'')");
 		}else{
 			for(String name : classList){
 				names.append("'").append(name).append("'").append(",");
