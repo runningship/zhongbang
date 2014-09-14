@@ -116,7 +116,9 @@ $(function(){
   $('#classId').val(classId);
   ue = UE.getEditor('editor');
   ue.addListener( 'ready', function( editor ) {
-    //ue.setHeight(250);
+	  ue.document.onpaste=function(e){
+	      onPasteHandler(ue,e);
+	    }
     loadData();
   });
   

@@ -15,6 +15,7 @@
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/zb/renshi/zwtj.js"></script>
 <script type="text/javascript">
 var queryOpts;
 
@@ -40,13 +41,13 @@ $(function(){
     // fun_get_comp('fy_to');
     // fun_get_comp('ky_to');
     //被调人只能选择本部门
-    $($('.get_comp')[0].options).each(function(index,obj){
-      if(obj.value=='$${qid}'){
-        return;
-      }
-      $(obj).remove();
-    });
-    $('.get_comp').change();
+    // $($('.get_comp')[0].options).each(function(index,obj){
+    //   if(obj.value=='$${qid}'){
+    //     return;
+    //   }
+    //   $(obj).remove();
+    // });
+    // $('.get_comp').change();
   });
 });
 
@@ -67,8 +68,8 @@ $(function(){
 
     <div class="input-group input-group-select" style="float:none;margin-top:15px;">
       <span class="input-group-addon">调整到</span>
-      <select class="form-control get_comp_to" ></select>
-      <select class="form-control get_quyu_to" name="newDeptId"></select>
+      <select class="form-control zwtz_get_comp" ></select>
+      <select class="form-control zwtz_get_quyu" name="newDeptId"></select>
     </div>
     
    <!--  <div class="input-group input-group-select" style="float:none;margin-top:15px;">

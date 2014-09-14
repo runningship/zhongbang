@@ -175,3 +175,28 @@ function fixTableFullScreen(ue){
   $(ue.container).find('.edui-editor-iframeholder').css('width','100%');
   $(ue.body).find('table').css('width','100%');
 }
+
+
+function onPasteHandler(editor,e){
+    var data = e.clipboardData.getData('text/html');
+    if(data==""){
+        data = e.clipboardData.getData('text/plain');
+    }
+
+    data=data.replace('<!--table');
+    var xx = $(data);
+    var style=null;
+    for(var i=0;i<xx.length;i++){
+        if(xx[i].tagName=='STYLE'){
+          style = xx[i];
+          break;
+        }
+    }
+    // editor.document.execCommand('paste');
+    editor.document.head.appendChild(style);
+    data = data+" <br/><br/>"
+    editor.setContent(data,true);
+    $(editor.document).find('td').css('border','solid 1px black');
+    // editor.focus(true);
+    return false;
+}

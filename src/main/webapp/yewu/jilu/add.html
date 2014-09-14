@@ -96,7 +96,12 @@ $(function(){
   $('#category').val(category);
   ue = UE.getEditor('editor');
   ue.addListener( 'ready', function( editor ) {
-    //ue.setHeight(350);
+    // $(ue.document).bind('keyup afterpaste',function(e){
+    //   onPasteHandler(ue,e);
+    // });
+    ue.document.onpaste=function(e){
+      onPasteHandler(ue,e);
+    }
   });
 });
 

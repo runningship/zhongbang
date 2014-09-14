@@ -118,6 +118,9 @@ $(function(){
   $('#tableId').val(tableId);
   ue = UE.getEditor('editor');
   ue.addListener( 'ready', function( editor ) {
+	  ue.document.onpaste=function(e){
+	      onPasteHandler(ue,e);
+	    }
     loadData();
   });
   ue.addListener( 'fullscreenchanged', function( editor ) {
