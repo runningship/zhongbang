@@ -9975,7 +9975,7 @@ UE.plugins['defaultfilter'] = function () {
                     return;
                 }
                 switch (node.tagName) {
-                    case 'style':
+//                    case 'style':
                     case 'script':
                         node.setAttr({
                             cdata_tag: node.tagName,

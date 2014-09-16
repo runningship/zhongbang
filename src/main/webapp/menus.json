@@ -404,6 +404,14 @@
 			"text":"列表",
 			"type":"menu"
 		},{
+			"name":"yw_journal_work_edit",
+			"text":"修改",
+			"type":"menu"
+		},{
+			"name":"yw_journal_work_sh",
+			"text":"批阅",
+			"type":"menu"
+		},{
 			"name":"yw_journal_work_del",
 			"text":"删除",
 			"type":"menu"
@@ -421,6 +429,45 @@
 				"type":"menu"
 			},{
 				"name":"yw_journal_work_data_all",
+				"text":"所有",
+				"type":"menu"
+			}]
+
+		}]
+	},{
+		"name":"yw_journal_week_work",
+		"text":"周呈报表",
+		"type":"virtual",
+		"children":[{
+			"name":"yw_journal_week_work_list",
+			"text":"列表",
+			"type":"menu"
+		},{
+			"name":"yw_journal_week_work_edit",
+			"text":"修改",
+			"type":"menu"
+		},{
+			"name":"yw_journal_week_work_sh",
+			"text":"批阅",
+			"type":"menu"
+		},{
+			"name":"yw_journal_week_work_del",
+			"text":"删除",
+			"type":"menu"
+		},{
+			"name":"yw_journal_week_work_data",
+			"text":"数据权限",
+			"type":"virtual",
+			"children":[{
+				"name":"yw_journal_week_work_data_dept",
+				"text":"分公司",
+				"type":"menu"
+			},{
+				"name":"yw_journal_week_work_data_quyu",
+				"text":"区域",
+				"type":"menu"
+			},{
+				"name":"yw_journal_week_work_data_all",
 				"text":"所有",
 				"type":"menu"
 			}]

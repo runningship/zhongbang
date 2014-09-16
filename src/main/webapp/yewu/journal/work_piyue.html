@@ -45,6 +45,7 @@ function fillData(journal){
   $('#title').html(journal['title']);
   $('#conta').html(journal['conta']);
   $('#contb').html(journal['contb']);
+  $('#pingji').val(journal['pingji']);
   $('#id').html(journal['id']);
   if(journal['reply']==1){
     $('div.tj').remove();
@@ -139,6 +140,16 @@ $(function(){
           <th>批阅：:</th>
           <td style="margin-top:10px;margin-left:10px;">
             <span id="editor" type="text/plain" style="width:99%;height:150px;"></span>
+          </td>
+        </tr>
+        <tr>
+          <th>考核评级：</th>
+          <td>
+          <select class="form-control " name="pingji" id="pingji" style="width:100px;">
+          <option value="C">C</option>
+          <option value="B">B</option>
+          <option value="A">A</option>
+          </select>
           </td>
         </tr>
         <tr>

@@ -36,11 +36,14 @@ public class JournalService {
 			if(journal.qjdays==null){
 				throw new GException(PlatformExceptionType.BusinessException, "请先填写请假天数");
 			}
+			if(journal.userId==null){
+				throw new GException(PlatformExceptionType.BusinessException, "请先选择请假人");
+			}
 		}
 		journal.addtime = new Date();
 		journal.reply =0;
 		User user = ThreadSession.getUser();
-		if(journal.category==0){
+		if(journal.category!=1){
 			journal.userId = user.id;
 		}
 		dao.saveOrUpdate(journal);
@@ -132,17 +135,21 @@ public class JournalService {
 		po.qjdays = journal.qjdays;
 		dao.saveOrUpdate(po);
 		mv.data.put("result", 0);
+		mv.data.put("recordId", po.id);
 		return mv;
 	}
 	
 	@WebMethod
-	public ModelAndView piyue(int id, String contb ){
+	public ModelAndView piyue(int id, String contb , String pingji ){
 		Journal po = dao.get(Journal.class, id);
 		if(po==null){
 			throw new GException(PlatformExceptionType.BusinessException, "该记录已不存在");
 		}
 		po.reply=1;
 		po.contb = contb;
+		if(pingji!=null){
+			po.pingji = pingji;
+		}
 		dao.saveOrUpdate(po);
 		return new ModelAndView();
 	}

@@ -76,12 +76,12 @@ function deleteQJ(id){
 }
 
 function openAdd(){
-  art.dialog.open('add.html?dataScope=yw_journal_qj&category=1',{
+  art.dialog.open('qingjia_add.html?dataScope=yw_journal_qj&category=1',{
       padding:0,
       resize:true,
       lock:1,
-      height:500,
-      width:1080
+      height:window.top.document.body.offsetHeight-45,
+      width:window.top.document.body.offsetWidth
   });
 }
 
@@ -90,8 +90,8 @@ function openPiYue(id){
       padding:0,
       resize:true,
       lock:1,
-      height:550,
-      width:650
+      height:window.top.document.body.offsetHeight-45,
+      width:window.top.document.body.offsetWidth
     })
 }
 
@@ -108,12 +108,12 @@ function buildEdit(reply,myId,uid){
 }
 
 function openEdit(id){
-  art.dialog.open('edit.html?category=1&recordId='+id,{
+  art.dialog.open('qingjia_edit.html?category=1&recordId='+id,{
       padding:0,
       resize:true,
       lock:1,
-      height:600,
-      width:1080
+      height:window.top.document.body.offsetHeight-45,
+      width:window.top.document.body.offsetWidth
   });
 }
 
@@ -162,7 +162,7 @@ $(function(){
 <div class="mainer">
   <table class="table table-hover .table_bodyer" >
     <thead>
-      <th>内容</th>
+      <th>类别</th>
       <th>区域</th>
       <th>分公司</th>
       <th>业务员</th>

@@ -23,16 +23,18 @@
 <script type="text/javascript">
 var recordId;
 var ue;
+var url = '/zb/c/journal/add';
 function save(){
   $('#conta').val(ue.getContent());
   var text = $('form[name=textForm]').serialize();
   YW.ajax({
     type: 'POST',
-    url: '/zb/c/journal/add',
+    url: url,
     data:text,
     success: function(data){
       alert('保存成功,您还可以添加附件.');
       recordId = JSON.parse(data)['recordId'];
+      url = '/zb/c/journal/update?id='+recordId;
       art.dialog.opener.doSearch();
       initFileUpload();
     }
@@ -96,11 +98,6 @@ $(function(){
     alert("未指明的分类");
   }
   $('#category').val(category);
-  if (category==0) {
-    $('div.qj').remove();
-    $('#qingjiaren').remove();
-  };
-
   ue = UE.getEditor('editor');
   ue.addListener( 'ready', function( editor ) {
 	  ue.document.onpaste=function(e){
@@ -127,20 +124,10 @@ $(function(){
           <span class="input-group-addon" style="padding:1px 6px">结束时间</span>
           <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="endtime" style="width:180px">
       </div>
-       <div class="input-group input-group-max qj">
-          <span class="input-group-addon">有效天数</span>
-          <input type="text" class="form-control" desc="天" name="qjdays">
-        </div>
-    </div>
-    <div id="qingjiaren" class="input-group input-group-select" style="float:none;width:495px;">
-      <span class="input-group-addon">请假人</span>
-      <select class="form-control get_comp" ></select>
-      <select class="form-control get_quyu" ></select>
-      <select class="form-control get_user" name="userId"></select>
     </div>
   </form>
   <div style="margin-left:10px; margin-bottom:10px;margin-top:4px;">
-    <span id="editor" type="text/plain" style="width:1024px;height:300px;"></span>
+    <span id="editor" type="text/plain" style="width:99%;height:400px;"></span>
   </div>
 
   <div class="btn-group" style="margin-top:10px;">

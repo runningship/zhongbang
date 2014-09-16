@@ -193,7 +193,7 @@ function onPasteHandler(editor,e){
         }
     }
     // editor.document.execCommand('paste');
-    editor.document.head.appendChild(style);
+    editor.document.body.appendChild(style);
     data = data+" <br/><br/>"
     editor.setContent(data,true);
     $(editor.document).find('td').css('border','solid 1px black');

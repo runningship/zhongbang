@@ -24,16 +24,18 @@
 var recordId;
 var classId;
 var ue;
+var url = '/zb/c/admin/addTable';
 function save(){
   $('#conts').val(ue.getContent());
   var text = $('form[name=form1]').serialize();
   YW.ajax({
     type: 'POST',
-    url: '/zb/c/admin/addTable',
+    url: url,
     data:text,
     success: function(data){
       alert('保存成功,您还可以添加附件.');
       recordId = JSON.parse(data)['recordId'];
+      url = '/zb/c/admin/updateTable?id='+recordId;
       art.dialog.opener.doSearch();
       initFileUpload();
     }
@@ -151,7 +153,7 @@ $(function(){
     <input type="hidden" id="conts" name="conts" />
   </form>
   <div style="margin-left:10px;margin-top:50px;">
-    <span id="editor" type="text/plain" style="width:800px;height:370px;"></span>
+    <span id="editor" type="text/plain" style="width:99%;height:400px;"></span>
   </div>
   <div>
     <input id="file_upload" name="file_upload" style="display:none">

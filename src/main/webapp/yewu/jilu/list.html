@@ -73,8 +73,8 @@ function openView(id){
       padding:0,
       resize:true,
       lock:1,
-      height:400,
-      width:600
+      height:window.top.document.body.offsetHeight-45,
+      width:window.top.document.body.offsetWidth
   });
 }
 
@@ -89,25 +89,30 @@ function openEdit(id){
       padding:0,
       resize:true,
       lock:1,
-      height:600,
-      width:700
+      height:window.top.document.body.offsetHeight-45,
+      width:window.top.document.body.offsetWidth
   });
 }
 
 function openAdd(){
+  var h = 600;
+  var w = 700;
   var url = "";
   if(category==0){
     url = 'add_huiyi.html';
   }else{
+    h=window.top.document.body.offsetHeight-45;
+    w= window.top.document.body.offsetWidth;
     url = 'add.html?category='+category;
   }
-  art.dialog.open(url,{
+  var win = art.dialog.open(url,{
       padding:0,
       resize:true,
       lock:1,
-      height:600,
-      width:700
+      height:h,
+      width:w
   });
+  // win.size(800,1024);
 }
 
 function isHuiYi(){

@@ -22,16 +22,19 @@
 <script type="text/javascript">
 var recordId;
 var ue;
+var url = '/zb/c/jilu/add';
 function save(){
+  console.log(ue.getContent());
   $('#conts').val(ue.getContent());
   var text = $('form[name=textForm]').serialize();
   YW.ajax({
     type: 'POST',
-    url: '/zb/c/jilu/add',
+    url: url,
     data:text,
     success: function(data){
       alert('保存成功,您还可以添加附件.');
       recordId = JSON.parse(data)['recordId'];
+      url = '/zb/c/jilu/update?id='+recordId;
       art.dialog.opener.doSearch();
       initFileUpload();
     }
@@ -128,7 +131,7 @@ $(function(){
   <span>内容: </span>
   </div>
   <div style="margin-left:10px;">
-    <span id="editor" type="text/plain" style="width:99%;height:280px;"></span>
+    <span id="editor" type="text/plain" style="width:99%;height:400px;"></span>
   </div>
   <div style="margin-top:5px;">
       <input id="file_upload" name="file_upload" style="display:none">

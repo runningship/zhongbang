@@ -23,6 +23,9 @@ public class Journal {
 	@Column(name="uid")
 	public Integer userId;
 	
+	/**
+	 * 对于请假登记而言，这个是请假类别
+	 */
 	@Column(nullable=false)
 	public String title;
 	
@@ -35,6 +38,11 @@ public class Journal {
 	public Integer integral;
 	
 	/**
+	 * 考核评级
+	 */
+	public String pingji;
+	/**
+	 * 2.周呈报表
 	 * 1.请假 
 	 * 0.工作日志
 	 */

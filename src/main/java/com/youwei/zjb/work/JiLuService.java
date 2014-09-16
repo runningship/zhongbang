@@ -58,6 +58,7 @@ public class JiLuService {
 		po.goin = jilu.goin;
 		dao.saveOrUpdate(po);
 		mv.data.put("result", 0);
+		mv.data.put("recordId", po.id);
 		return mv;
 	}
 	

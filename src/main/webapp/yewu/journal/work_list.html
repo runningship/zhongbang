@@ -80,8 +80,8 @@ function openAdd(){
       padding:0,
       resize:true,
       lock:1,
-      height:400,
-      width:1080
+      height:window.top.document.body.offsetHeight-45,
+      width:window.top.document.body.offsetWidth
   });
 }
 
@@ -90,8 +90,8 @@ function openEdit(id){
       padding:0,
       resize:true,
       lock:1,
-      height:600,
-      width:1080
+      height:window.top.document.body.offsetHeight-45,
+      width:window.top.document.body.offsetWidth
   });
 }
 
@@ -100,8 +100,8 @@ function openView(id){
       padding:0,
       resize:true,
       lock:1,
-      height:600,
-      width:1080
+      height:window.top.document.body.offsetHeight-45,
+      width:window.top.document.body.offsetWidth
   });
 }
 
@@ -110,8 +110,8 @@ function openPiyue(id){
       padding:0,
       resize:true,
       lock:1,
-      height:600,
-      width:1080
+      height:window.top.document.body.offsetHeight-45,
+      width:window.top.document.body.offsetWidth
   });
 }
 
@@ -174,9 +174,9 @@ $(function(){
       <td>${starttime}</td>
       <td>${endtime}</td>
       <td><a href="javascript:void(0)" onclick="openView(${id})" >查看</a>
-          <a href="javascript:void(0)" onclick="openPiyue(${id})" ><span class="runscript">getEnumTextByCode(pizhu,${reply})</span></a> 
-          <a href="javascript:void(0)" onclick="openEdit(${id})" >修改</a>
-          <a href="javascript:void(0)" onclick="deleteOut(${id})">删除</a></td>
+          <a auth="yw_journal_work_sh" href="javascript:void(0)" onclick="openPiyue(${id})" ><span class="runscript">getEnumTextByCode(pizhu,${reply})</span></a> 
+          <a auth="yw_journal_work_edit" href="javascript:void(0)" onclick="openEdit(${id})" >修改</a>
+          <a auth="yw_journal_work_del" href="javascript:void(0)" onclick="deleteOut(${id})">删除</a></td>
     </tr>
     </tbody>
   </table>

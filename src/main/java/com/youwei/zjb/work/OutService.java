@@ -41,9 +41,11 @@ public class OutService {
 		}
 		out.reply = 0;
 		String hql = "from OutRecord where userId=? and outTime>= ? and backTime<=? ";
-		long count = dao.countHqlResult(hql, out.userId,out.outTime,out.backTime);
-		if(count>0){
-			throw new GException(PlatformExceptionType.BusinessException, "您在该时间段已经有外出记录了");
+		if(out.id==null){
+			long count = dao.countHqlResult(hql, out.userId,out.outTime,out.backTime);
+			if(count>0){
+				throw new GException(PlatformExceptionType.BusinessException, "您在该时间段已经有外出记录了");
+			}
 		}
 		if(out.category==1){
 			addOutBiz(out);
@@ -90,7 +92,6 @@ public class OutService {
 
 	private void addOutBiz(OutRecord out) {
 		dao.saveOrUpdate(out);
-		
 	}
 	
 	@WebMethod
@@ -107,7 +108,9 @@ public class OutService {
 		po.houses = out.houses;
 		po.clients = out.clients;
 		dao.saveOrUpdate(po);
-		return new ModelAndView();
+		ModelAndView mv = new ModelAndView();
+		mv.data.put("recordId", po.id);
+		return mv;
 	}
 	
 	@WebMethod
@@ -118,7 +121,9 @@ public class OutService {
 		}
 		po.onCont = onCont;
 		dao.saveOrUpdate(po);
-		return new ModelAndView();
+		ModelAndView mv = new ModelAndView();
+		mv.data.put("recordId", po.id);
+		return mv;
 	}
 
 	private void addOutHouse(OutRecord out) {
