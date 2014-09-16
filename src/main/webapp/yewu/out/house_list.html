@@ -29,11 +29,11 @@ function fix(TableH,TableB){
   }
 }
 function setMainHeight(){
-  $('.mainer').css({
-    // top: $('.header').height()+12,
-    top:158,
-    bottom:$('.footer').height()+1
-  });
+  // $('.mainer').css({
+  //   top: $('.header').height()-10,
+  //   // top:158,
+  //   bottom:$('.footer').height()+1
+  // });
 }
 
 function getHuseList(a){
@@ -155,7 +155,7 @@ function chooseHouse(){
 </style>
 </head>
 <body class="hlist bodyer">
-<div class="header">
+<div class="header" style="position:relative">
   <form class="form-horizontal" role="form" name="form1">
     <input type="hidden" class="userInput" name="xpath" value="">
     <div class="clearfix">
@@ -285,7 +285,7 @@ function chooseHouse(){
 
   </form>
 </div>
-<div class="mainer">
+<div class="mainer" style="position:relative">
   <table class="table table-hover TableB" >
     <tr>
       <th style="text-align:center"><a href="javascript:void(0)" onclick="chooseHouse();">选择</a></th>
@@ -327,6 +327,6 @@ function chooseHouse(){
     </tbody>
   </table>
 </div>
-<div class="footer foot_page_box"></div>
+<div class="footer foot_page_box" style="position:relative"></div>
 </body>
 </html>

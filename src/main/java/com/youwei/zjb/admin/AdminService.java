@@ -228,6 +228,7 @@ public class AdminService {
 		return mv;
 	}
 	
+	//审核
 	@WebMethod
 	public ModelAndView updateProcess(int pid , String conts){
 		ModelAndView mv = new ModelAndView();
