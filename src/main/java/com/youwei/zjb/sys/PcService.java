@@ -14,7 +14,9 @@ import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
 import com.youwei.zjb.SimpDaoTool;
+import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.Department;
+import com.youwei.zjb.entity.User;
 import com.youwei.zjb.sys.entity.AuthCode;
 import com.youwei.zjb.sys.entity.PC;
 import com.youwei.zjb.util.JSONHelper;
@@ -23,7 +25,7 @@ import com.youwei.zjb.util.JSONHelper;
 public class PcService {
 
 	CommonDaoService dao = TransactionalServiceHelper.getTransactionalService(CommonDaoService.class);
-	
+	OperatorService operService = TransactionalServiceHelper.getTransactionalService(OperatorService.class);
 	@WebMethod
 	public ModelAndView add(PC pc){
 		ModelAndView mv = new ModelAndView();
@@ -85,6 +87,10 @@ public class PcService {
 			hql.append(" and pc.lock=? ");
 			params.add(query.lock);
 		}
+		if(query.id!=null){
+			hql.append(" and pc.id=? ");
+			params.add(query.id);
+		}
 		if(StringUtils.isNotEmpty(query.xpath)){
 			hql.append(" and d.path like ?");
 			params.add(query.xpath+"%");
@@ -100,14 +106,20 @@ public class PcService {
 	public ModelAndView shenhe(Integer pcId){
 		ModelAndView mv = new ModelAndView();
 		PC pc = dao.get(PC.class, pcId);
+		String operConts ="";
+		User user = ThreadSession.getUser();
 		if(pc!=null){
 			if(pc.lock==1){
 				pc.lock=0;
+				operConts = "["+user.Department().namea+"-"+user.uname+ "] 取消了机器的授权 "+pc.id;
 			}else{
 				pc.lock = 1;
+				operConts = "["+user.Department().namea+"-"+user.uname+ "] 授权了机器"+pc.id;
 			}
 			dao.saveOrUpdate(pc);
 		}
+		
+		operService.add(OperatorType.授权记录, operConts);
 		mv.data.put("result", 0);
 		return mv;
 	}

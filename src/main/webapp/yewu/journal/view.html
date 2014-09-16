@@ -41,6 +41,7 @@ function get(){
 function fillData(journal){
   $('#contb').html(journal['contb']);
   $('#integral').html(journal['integral']);
+  $('#pingji').val(journal['pingji']);
 }
 $(function(){
   recordId = getParam('recordId');
@@ -93,10 +94,16 @@ $(function(){
       <th>批语:</th>
       <td id="contb" name="contb">${contb}</td>
     </tr>
-    <tr>
-      <th>打分:</th>
-      <td id="integral" name="integral">${integral}</td>
-    </tr>
+        <tr>
+          <th>考核评级：</th>
+          <td>
+          <select class="form-control " name="pingji" id="pingji" style="width:100px;">
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          </select>
+          </td>
+        </tr>
     <tr>
       <th>附件:</th>
       <td id="content" class="filebox">

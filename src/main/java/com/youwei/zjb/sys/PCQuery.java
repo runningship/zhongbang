@@ -11,4 +11,6 @@ public class PCQuery extends AbstractQuery{
 	public Integer lock;
 	
 	public String xpath;
+	
+	public Integer id;
 }
