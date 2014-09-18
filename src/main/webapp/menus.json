@@ -416,6 +416,10 @@
 			"text":"删除",
 			"type":"menu"
 		},{
+			"name":"yw_journal_work_pingji",
+			"text":"考核评级",
+			"type":"menu"
+		},{
 			"name":"yw_journal_work_data",
 			"text":"数据权限",
 			"type":"virtual",
@@ -453,6 +457,10 @@
 		},{
 			"name":"yw_journal_week_work_del",
 			"text":"删除",
+			"type":"menu"
+		},{
+			"name":"yw_journal_week_work_pingji",
+			"text":"考核评级",
 			"type":"menu"
 		},{
 			"name":"yw_journal_week_work_data",
@@ -533,6 +541,10 @@
 			"text":"修改",
 			"type":"menu"
 		},{
+			"name":"yw_jilu_fy_sh",
+			"text":"批阅",
+			"type":"menu"
+		},{
 			"name":"yw_jilu_fy_data",
 			"text":"数据权限",
 			"type":"virtual",
@@ -566,6 +578,14 @@
 		},{
 			"name":"yw_jilu_zj_edit",
 			"text":"修改",
+			"type":"menu"
+		},{
+			"name":"yw_jilu_zj_sh",
+			"text":"批阅",
+			"type":"menu"
+		},{
+			"name":"yw_jilu_zj_pingji",
+			"text":"考核评级",
 			"type":"menu"
 		},{
 			"name":"yw_jilu_zj_data",

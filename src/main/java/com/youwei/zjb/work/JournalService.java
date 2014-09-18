@@ -23,6 +23,7 @@ import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
 import com.youwei.zjb.work.entity.Journal;
+import com.youwei.zjb.work.entity.PYItem;
 
 @Module(name="/journal")
 public class JournalService {
@@ -57,11 +58,25 @@ public class JournalService {
 		ModelAndView mv = new ModelAndView();
 		Journal journal = dao.get(Journal.class,id);
 		List<Attachment> attachs = dao.listByParams(Attachment.class, new String[]{"bizType" , "recordId"}, new Object[]{"journal" , id});
-		
+		List<PYItem> pyList = dao.listByParams(PYItem.class, "from PYItem where bizId=? and category=?", id,journal.category);
+		PYItem myPy = new PYItem();
+		for(PYItem item : pyList){
+			if(item.uid.equals(ThreadSession.getUser().id)){
+				myPy = item;
+				break;
+			}
+		}
+		pyList.remove(myPy);
 //		String sql = "select j.conta as conta,j.contb as contb,j.integral as integral ,a.bizType as bizType,a.recordId as recordId,a.filename as attachment from work_journal j LEFT JOIN attachment a on j.id=a.recordId where j.id=?";
 //		List<Map> list = dao.listSql(sql, id);
 		mv.data.put("attachs", JSONHelper.toJSONArray(attachs));
+		mv.data.put("pyList", JSONHelper.toJSONArray(pyList));
 		mv.data.put("journal", JSONHelper.toJSON(journal));
+		mv.data.put("myPy", JSONHelper.toJSON(myPy));
+		User targetUser = dao.get(User.class, journal.userId);
+		mv.data.put("qid", targetUser.Department().Parent().id);
+		mv.data.put("did", targetUser.Department().id);
+		mv.data.put("uid", targetUser.id);
 		return mv;
 	}
 	
@@ -69,7 +84,7 @@ public class JournalService {
 	public ModelAndView list(OutQuery query ,Page<Map> page){
 		ModelAndView mv = new ModelAndView();
 		StringBuilder hql = new StringBuilder("select j.id as id,d.namea as deptName ,q.namea as quyu, u.uname as uname,u.id as uid, j.title as title, "
-				+ "j.addtime as addtime,j.starttime as starttime,j.endtime as endtime,j.qjdays as qjdays ,  j.reply as reply from Journal j , User u , Department d,Department q where j.userId=u.id and u.deptId=d.id and q.id=d.fid");
+				+ "j.addtime as addtime,j.starttime as starttime,j.endtime as endtime,j.qjdays as qjdays ,  j.reply as reply ,j.pingji as pingji from Journal j , User u , Department d,Department q where j.userId=u.id and u.deptId=d.id and q.id=d.fid");
 		List<Object> params = new ArrayList<Object>();
 		hql.append(HqlHelper.buildDateSegment("j.starttime", query.addtimeStart, DateSeparator.After, params));
 		hql.append(HqlHelper.buildDateSegment("j.starttime", query.addtimeEnd, DateSeparator.Before, params));
@@ -80,6 +95,10 @@ public class JournalService {
 		if(query.uid!=null){
 			hql.append(" and u.id=? ");
 			params.add(query.uid);
+		}
+		if(query.pingji!=null){
+			hql.append(" and j.pingji=? ");
+			params.add(query.pingji);
 		}
 		if(StringUtils.isNotEmpty(query.xpath)){
 			hql.append(" and u.orgpath like ? ");
@@ -94,7 +113,12 @@ public class JournalService {
 		page = dao.findPage(page, hql.toString(), true ,params.toArray());
 		DataHelper.escapeHtmlField(page.getResult(), "conta");
 		DataHelper.fillDefaultValue(page.getResult(), "reply", PiYue.待批阅.getCode());
-		mv.data.put("page", JSONHelper.toJSON(page));
+		if(query.category!=null && query.category==1){
+			mv.data.put("page", JSONHelper.toJSON(page));
+		}else{
+			mv.data.put("page", JSONHelper.toJSON(page , DataHelper.dateSdf.toPattern()));
+		}
+		
 		return mv;
 	}
 	
@@ -147,6 +171,22 @@ public class JournalService {
 		}
 		po.reply=1;
 		po.contb = contb;
+		User user = ThreadSession.getUser();
+		//批阅项
+		PYItem pypo = dao.getUniqueByParams(PYItem.class, new String[]{"category" , "bizId","uid"}, new Object[]{po.category , po.id , user.id});
+		if(pypo!=null){
+			pypo.conts = contb;
+			dao.saveOrUpdate(pypo);
+		}else{
+			PYItem py = new PYItem();
+			py.category = po.category;
+			py.conts = contb;
+			py.uid = user.id;
+			py.uname = user.uname;
+			py.addtime = new Date();
+			py.bizId = po.id;
+			dao.saveOrUpdate(py);
+		}
 		if(pingji!=null){
 			po.pingji = pingji;
 		}

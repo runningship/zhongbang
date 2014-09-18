@@ -23,16 +23,15 @@
 var recordId;
 var ue;
 function save(){
-  $('#conta').val(ue.getContent());
+  $('#conts').val(ue.getContent());
   var text = $('form[name=textForm]').serialize();
   YW.ajax({
     type: 'POST',
-    url: '/zb/c/journal/update',
+    url: '/zb/c/jilu/update',
     data:text,
     success: function(data){
-      art.dialog.opener.getList();
       alert('保存成功');
-      // initFileUpload();
+      initFileUpload();
     }
   });
   return false;
@@ -41,7 +40,7 @@ function save(){
 function initFileUpload(){
   $('#file_upload').uploadify({
       'swf'      : '/zb/js/uploadify/uploadify.swf',
-      'uploader' : '/zb/file/upload?bizType=journal&recordId='+recordId,
+      'uploader' : '/zb/file/upload?bizType=jilu&recordId='+recordId,
       'buttonText': '上传附件',
       'removeTimeout': 0.1,
       'fileSizeLimit' : '5MB',
@@ -69,7 +68,7 @@ function initFileUpload(){
 function getAttachList(){
   YW.ajax({
     type: 'get',
-    url: '/zb/c/attachment/list?bizType=journal&recordId='+recordId,
+    url: '/zb/c/attachment/list?bizType=jilu&recordId='+recordId,
     data:'',
     success: function(result){
       var data = JSON.parse(result)['data'];
@@ -91,14 +90,13 @@ function deleteAttach(id){
 function getContent(){
   YW.ajax({
     type: 'get',
-    url: '/zb/c/journal/get?id='+recordId,
+    url: '/zb/c/jilu/get?id='+recordId,
     data:'',
     success: function(result){
       var json = JSON.parse(result);
-      $('#idTimes').val(json['journal']['starttime']);
-      $('#idTime').val(json['journal']['endtime']);
-      ue.setContent(json['journal']['conta'] ,false);
-      
+      $('#addtime').val(json['jilu']['addtime']);
+      ue.setContent(json['jilu']['conts'] ,false);
+      initFileUpload();
       getAttachList();
       fixTableFullScreen(ue);
     }
@@ -115,20 +113,12 @@ $(function(){
     alert("加载数据失败");
     return;
   }
-  $('#category').val(category);
-  if (category==0) {
-    $('div.qj').remove();
-  }else if (category==2) {
-    $('div.qj').remove();
-  };
 
   $('#id').val(recordId);
   
   ue = UE.getEditor('editor');
   ue.addListener( 'ready', function( editor ) {
-	  ue.document.onpaste=function(e){
-	      onPasteHandler(ue,e);
-	    }
+    //ue.setHeight(350);
     getContent();
   });
   ue.addListener( 'fullscreenchanged', function( editor ) {
@@ -136,27 +126,24 @@ $(function(){
       fixTableFullScreen(ue);
     }
   });
-
-  initFileUpload();
 });
 
 </script>
 </head>
-<body style="overflow:; ">
+<body style="overflow:hidden; overflow-y: auto;">
   <form name="textForm" style="margin-top:10px;">
     <div class="clearfix">
-    <input id="conta" name="conta" type="hidden" />
+    <div class="input-group">
+      <span class="input-group-addon" style="padding:8px;">时间</span>
+      <input type="text" class="form-control" name="addtime" id="addtime" onFocus="WdatePicker()">
+    </div>
+    <input id="conts" name="conts" type="hidden" />
     <input type="hidden" name="category" id="category" />
     <input type="hidden" name="id" id="id" />
-        <div class="input-group" style="width:300px;margin-left:10px;margin-top:0px">
-          <span class="input-group-addon" style="padding:1px 6px">开始时间</span>
-          <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({dateFmt:'yyyy-MM-dd',onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="starttime" style="width:180px;border-radius:0;">
-          <span class="input-group-addon" style="padding:1px 6px">结束时间</span>
-          <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="endtime" style="width:180px">
-      </div>
     </div>
   </form>
-   <div style="margin-top:10px;margin-left:10px; margin-bottom:10px;display">
+   <div style="margin-top:10px;margin-left:10px; margin-bottom:10px;">
+  <span>内容: </span>
     <span id="editor" type="text/plain" style="width:99%;height:400px;"></span>
   </div>
 <div class="btn-group">

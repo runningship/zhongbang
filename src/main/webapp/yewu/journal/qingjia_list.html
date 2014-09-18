@@ -20,13 +20,6 @@
 <script type="text/javascript">
 var queryOpts;
 var dataArr;
-var pizhu=[{
-  "name":"待审批",
-  "code":0
-},{
-  "name":"已批准",
-  "code":1
-}];
 function getList(search){
   var url='/zb/c/journal/list?category=1';
   YW.ajax({
@@ -108,7 +101,7 @@ function buildEdit(reply,myId,uid){
 }
 
 function openEdit(id){
-  art.dialog.open('qingjia_edit.html?category=1&recordId='+id,{
+  art.dialog.open('qingjia_edit.html?category=1&dataScope=yw_journal_qj&recordId='+id,{
       padding:0,
       resize:true,
       lock:1,
@@ -118,6 +111,11 @@ function openEdit(id){
 }
 
 $(function(){
+  uid = getParam('uid')
+  if(uid!=null || uid!=""){
+    $('div.xz').remove()
+  }
+  $('#uid').val(uid);
   onSubmit_Form();
   doSearch();
   $.get('/zb/c/house/getQueryOptions', function(data) {
@@ -135,11 +133,12 @@ $(function(){
 <body class="hlist bodyer" style="overflow:auto">
 
 <div class="header">
-  <div class="btn-group">
+  <div class="btn-group xz">
     <button onclick="openAdd();" class="btn btn-primary">新增</button>
   </div>
   <form name="form1">
     <input type="hidden" class="userInput" name="xpath" value="">
+    <input type="hidden" name="uid" id="uid" value="">
     
       <div class="clearfix">
         <div class="input-group" style="width:400px">
@@ -147,7 +146,7 @@ $(function(){
           <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:150px;border-radius:0;">
           <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:150px">
         </div>
-        <div class="input-group input-group-select">
+        <div class="input-group input-group-select xz">
           <span class="input-group-addon">分公司</span>
           <select class="form-control get_comp" name="form_cid"></select>
           <select class="form-control get_quyu" name="form_did"></select>
@@ -168,7 +167,7 @@ $(function(){
       <th>业务员</th>
       <th>开始时间</th>
       <th>结束时间</th>
-      <th>有效天数</th>
+      <th>请假天数(工作日)</th>
       <th>是否批准</th>
       <th>操作</th>
     </thead>
@@ -181,9 +180,7 @@ $(function(){
       <td>${starttime}</td>
       <td>${endtime}</td>
       <td>${qjdays}</td>
-      <td ><a auth="yw_journal_qj_sh" href="javascript:void(0)" onclick="openPiYue(${id})"><span class="runscript">getEnumTextByCode(pizhu,${reply})</span></a>
-            <span auth="!yw_journal_qj_sh" class="runscript">getEnumTextByCode(pizhu,${reply})</span>
-      </td>
+      <td ><a auth="yw_journal_qj_sh" href="javascript:void(0)" onclick="openPiYue(${id})">批阅</a></td>
       <td><a auth="yw_journal_qj_del" href="javascript:void(0)" onclick="deleteQJ(${id})">删除</a> 
           <a auth="yw_journal_qj_edit" href="javascript:void(0)" onclick="openEdit(${id})"><span >修改</span></a> </td>
     </tr>

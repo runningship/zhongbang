@@ -78,13 +78,19 @@ function openView(id){
   });
 }
 
+function openPiYue(id){
+    art.dialog.open('mouth_piyue.html?category='+category+'&recordId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:window.top.document.body.offsetHeight-45,
+      width:window.top.document.body.offsetWidth
+    })
+}
+
 function openEdit(id){
   var url = "";
-  if(category==0){
-    url = 'edit_huiyi.html?category='+category+'&recordId='+id;
-  }else{
-    url = 'edit.html?category='+category+'&recordId='+id;
-  }
+    url = 'edit_mouth.html?category='+category+'&recordId='+id;
   art.dialog.open(url,{
       padding:0,
       resize:true,
@@ -98,13 +104,9 @@ function openAdd(){
   var h = 600;
   var w = 700;
   var url = "";
-  if(category==0){
-    url = 'add_huiyi.html';
-  }else{
     h=window.top.document.body.offsetHeight-45;
     w= window.top.document.body.offsetWidth;
-    url = 'add.html?category='+category;
-  }
+    url = 'add_mouth.html?category='+category;
   var win = art.dialog.open(url,{
       padding:0,
       resize:true,
@@ -151,10 +153,19 @@ $(function(){
   <form id="form1" name="form1">
     <div class="clearfix">
       <input type="hidden" class="userInput" name="xpath" value="">
-      <div class="input-group" style="width:400px">
-        <span class="input-group-addon">开始时间</span>
-        <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:150px;border-radius:0;">
-        <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:150px">
+      <div class="input-group" style="width:290px">
+        <span class="input-group-addon">日期</span>
+        <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({dateFmt:'yyyy-MM',onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:120px;border-radius:0;">
+        <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:120px">
+      </div>
+      <div class="input-group " >
+        <span class="input-group-addon">考核评级</span>
+        <select class="form-control" name="pingji" style="width:66px;">
+            <option value="">所有</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+        </select>
       </div>
       <div class="btn-group">
         <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
@@ -168,27 +179,31 @@ $(function(){
         <select class="form-control get_user" name="form_uid"></select>
       </div>
     </div>
+    
   </form>
 </div>
 <div class="mainer">
   <table class="table table-hover .table_bodyer" >
     <thead>
-      <th>标题</th>
+      <!-- <th>标题</th> -->
       <th>区域</th>
       <th>分公司</th>
       <th>业务员</th>
-      <th>开始时间</th>
+      <th>时间</th>
+      <th>评级</th>
       <th>操作</th>
     </thead>
     <tbody id="id_list">
     <tr style="display:none">
-      <td>${title}</td>
+      <!-- <td>${title}</td> -->
       <td>${quyu}</td>
       <td>${deptName}</td>
       <td>${uname}</td>
-      <td>${starttime}</td>
+      <td>${addtime}</td>
+      <td>${pingji}</td>
       <td>
         <a onclick="openView(${id})" href="javascript:void(0)" >查看</a>
+        <a auth="yw_journal_qj_sh" href="javascript:void(0)" onclick="openPiYue(${id})">批阅</a>
         <a auth="$${authParent}_edit" onclick="openEdit(${id})" href="javascript:void(0)" >修改</a>
         <a auth="$${authParent}_del" href="javascript:void(0)" onclick="deleteOut(${id})">删除</a>
       </td>

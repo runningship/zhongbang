@@ -27,7 +27,7 @@ function save(){
   var text = $('form[name=textForm]').serialize();
   YW.ajax({
     type: 'POST',
-    url: '/zb/c/journal/piyue',
+    url: '/zb/c/jilu/piyue',
     data:text,
     success: function(data){
       art.dialog.close();
@@ -38,15 +38,15 @@ function save(){
   return false;
 }
 
-function fillData(journal){
-  $('#starttime').html(journal['starttime']);
-  $('#endtime').html(journal['endtime']);
-  $('#addtime').html(journal['addtime']);
-  $('#title').html(journal['title']);
-  $('#conta').html(journal['conta']);
-  $('#contb').html(journal['contb']);
-  $('#pingji').val(journal['pingji']);
-  $('#id').html(journal['id']);
+function fillData(jilu){
+  $('#starttime').html(jilu['starttime']);
+  $('#endtime').html(jilu['endtime']);
+  $('#addtime').html(jilu['addtime']);
+  $('#title').html(jilu['title']);
+  $('#conta').html(jilu['conts']);
+  $('#contb').html(jilu['contb']);
+  $('#pingji').val(jilu['pingji']);
+  $('#id').html(jilu['id']);
 }
 
 function getAttachList(){
@@ -64,11 +64,11 @@ function getAttachList(){
 function getContent(){
   YW.ajax({
     type: 'get',
-    url: '/zb/c/journal/get?id='+recordId,
+    url: '/zb/c/jilu/get?id='+recordId,
     data:'',
     success: function(result){
       data = JSON.parse(result);
-      fillData(data['journal']);
+      fillData(data['jilu']);
       ue.setContent(data['myPy']['conts'] ,false);
       buildHtmlWithJsonArray("pylist",data['pyList']);
       getAttachList();
@@ -150,7 +150,7 @@ $(function(){
             <span id="editor" type="text/plain" style="width:99%;height:150px;"></span>
           </td>
         </tr>
-        <tr auth="yw_journal_work_pingji">
+        <tr auth="yw_jilu_zj_pingji">
           <th>考核评级：</th>
           <td>
           <select class="form-control " name="pingji" id="pingji" style="width:100px;">

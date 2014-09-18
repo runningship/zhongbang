@@ -70,8 +70,15 @@ function changeOutHouse(obj){
 }
 
 function houseseletion(hids,hnames){
-  $('#hnames').val(hnames);
-  $('#hids').val(hids);
+  if ($('#hnames').val()!="") {
+    var allName = $('#hnames').val()+","+hnames;
+    var allId = $('#hids').val()+","+hids;
+    $('#hnames').val(allName);
+    $('#hids').val(allId);
+  }else{
+    $('#hnames').val(hnames);
+    $('#hids').val(hids);
+  }
 }
 
 </script>

@@ -14,4 +14,6 @@ public class JiLuQuery extends AbstractQuery{
 	public String goin;
 	
 	public String xpath;
+	
+	public String pingji;
 }

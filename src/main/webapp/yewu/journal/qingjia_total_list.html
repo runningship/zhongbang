@@ -48,7 +48,7 @@ function doSearch(){
 }
 
 function showDetails(id){
-  art.dialog.open('qingjia_detail.html?category=1&dataScope=yw_journal_qj&uid='+id,{
+  art.dialog.open('qingjia_list.html?category=1&dataScope=yw_journal_qj&uid='+id,{
       padding:0,
       resize:true,
       lock:1,
@@ -101,7 +101,7 @@ $(function(){
     <thead>
       <th>业务员</th>
       <th>区域-分公司</th>
-      <th>工作日</th>
+      <th>请假天数(工作日)</th>
       <th>操作</th>
     </thead>
     <tbody id="id_list">

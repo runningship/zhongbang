@@ -34,7 +34,12 @@ public class HqlHelper {
 //			}else{
 //				return " and " + fieldName + " >= ? ";
 //			}
-			Date date = sdf.parse(dateStr);
+			Date date;
+			try{
+				date = sdf.parse(dateStr);
+			}catch(ParseException ex){
+				date = DataHelper.monthSdf.parse(dateStr);
+			}
 			if(sep==DateSeparator.Before){
 				Calendar cal = Calendar.getInstance();
 				cal.setTimeInMillis(date.getTime());

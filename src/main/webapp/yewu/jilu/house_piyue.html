@@ -27,7 +27,7 @@ function save(){
   var text = $('form[name=textForm]').serialize();
   YW.ajax({
     type: 'POST',
-    url: '/zb/c/journal/piyue',
+    url: '/zb/c/jilu/piyue',
     data:text,
     success: function(data){
       art.dialog.close();
@@ -38,15 +38,15 @@ function save(){
   return false;
 }
 
-function fillData(journal){
-  $('#starttime').html(journal['starttime']);
-  $('#endtime').html(journal['endtime']);
-  $('#addtime').html(journal['addtime']);
-  $('#title').html(journal['title']);
-  $('#conta').html(journal['conta']);
-  $('#contb').html(journal['contb']);
-  $('#pingji').val(journal['pingji']);
-  $('#id').html(journal['id']);
+function fillData(jilu){
+  $('#starttime').html(jilu['starttime']);
+  $('#endtime').html(jilu['endtime']);
+  $('#addtime').html(jilu['addtime']);
+  $('#title').html(jilu['title']);
+  $('#conts').html(jilu['conts']);
+  $('#contb').html(jilu['contb']);
+  $('#qjdays').html(jilu['qjdays']);
+  $('#id').html(jilu['id']);
 }
 
 function getAttachList(){
@@ -64,11 +64,11 @@ function getAttachList(){
 function getContent(){
   YW.ajax({
     type: 'get',
-    url: '/zb/c/journal/get?id='+recordId,
+    url: '/zb/c/jilu/get?id='+recordId,
     data:'',
     success: function(result){
       data = JSON.parse(result);
-      fillData(data['journal']);
+      fillData(data['jilu']);
       ue.setContent(data['myPy']['conts'] ,false);
       buildHtmlWithJsonArray("pylist",data['pyList']);
       getAttachList();
@@ -108,7 +108,7 @@ $(function(){
 <body style="overflow:auto">
   <form name="textForm" style="margin-top:10px;">
     <input type="hidden" name="contb" id="contb" />
-    <input type="hidden" name="category" id="category" />
+    <!-- <input type="hidden" name="category" id="category" /> -->
     <input type="hidden" name="id" id="id" />
     <span id="recordId">
       <table class="table">
@@ -117,13 +117,17 @@ $(function(){
           <td id="addtime"></td>
         </tr>
         <tr>
-          <th>标题:</th>
+          <th>房源名称:</th>
           <td id="title"></td>
         </tr>
         <tr>
           <th>内容:</th>
-          <td id="conta"></td>
+          <td id="conts"></td>
         </tr>
+        <!-- <tr>
+          <th>请假天数:</th>
+          <td id="qjdays"></td>
+        </tr> -->
         <tr>
           <th>附件:</th>
           <td>
@@ -145,25 +149,15 @@ $(function(){
           </td>
         </tr>
         <tr>
-          <th>我的批阅：</th>
+          <th>我的批阅:</th>
           <td style="margin-top:10px;margin-left:10px;">
             <span id="editor" type="text/plain" style="width:99%;height:150px;"></span>
-          </td>
-        </tr>
-        <tr auth="yw_journal_work_pingji">
-          <th>考核评级：</th>
-          <td>
-          <select class="form-control " name="pingji" id="pingji" style="width:100px;">
-          <option value="A">A</option>
-          <option value="B">B</option>
-          <option value="C">C</option>
-          </select>
           </td>
         </tr>
         <tr>
           <th></th>
           <td>
-            <div id="submit" class="btn-group">
+            <div id="submit" class="btn-group tj">
               <button onclick="save();return false" class="btn btn-primary ">提交</button>
             </div>
           </td>

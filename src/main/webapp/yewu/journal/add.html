@@ -111,18 +111,14 @@ $(function(){
 <body class="hlist bodyer" style="overflow:auto">
   <form name="textForm" style="margin-top:10px;">
     <div class="clearfix">
-       <div class="input-group input-group-max">
-          <span class="input-group-addon">  标 题</span>
-          <input type="text" class="form-control" desc="标题" name="title">
-        </div>
       <input id="conta" name="conta" type="hidden" />
 
       <input type="hidden" name="category" id="category" />
         <div class="input-group" style="width:500px;margin-left:10px;margin-top:0px">
           <span class="input-group-addon" style="padding:1px 6px">开始时间</span>
-          <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="starttime" style="width:180px;border-radius:0;">
+          <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({dateFmt:'yyyy-MM-dd',onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="starttime" style="width:180px;border-radius:0;">
           <span class="input-group-addon" style="padding:1px 6px">结束时间</span>
-          <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="endtime" style="width:180px">
+          <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="endtime" style="width:180px">
       </div>
     </div>
   </form>

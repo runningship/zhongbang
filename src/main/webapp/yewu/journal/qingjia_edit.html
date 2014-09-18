@@ -19,6 +19,7 @@
 <script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.all.js"> </script>
 <script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript">
 var recordId;
 var ue;
@@ -91,7 +92,7 @@ function deleteAttach(id){
 function getContent(){
   YW.ajax({
     type: 'get',
-    url: '/zb/c/journal/get?id='+recordId,
+    url: '/zb/c/journal/get?category=1&id='+recordId,
     data:'',
     success: function(result){
       var json = JSON.parse(result);
@@ -99,7 +100,12 @@ function getContent(){
       $('#idTimes').val(json['journal']['starttime']);
       $('#idTime').val(json['journal']['endtime']);
       $('#qjdays').val(json['journal']['qjdays']);
-      $('#qingjiaren').val(json['journal']['qingjiaren']);
+      $('#qid').val(json['qid']);
+      $('#qid').change();
+      $('#did').val(json['did']);
+      $('#did').change();
+      $('#uid').val(json['uid']);
+
       ue.setContent(json['journal']['conta'] ,false);
       
       getAttachList();
@@ -118,12 +124,6 @@ $(function(){
     alert("加载数据失败");
     return;
   }
-  $('#category').val(category);
-  if (category==0) {
-    $('div.qj').remove();
-  }else if (category==2) {
-    $('div.qj').remove();
-  };
 
   $('#id').val(recordId);
   
@@ -162,15 +162,15 @@ $(function(){
           <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="endtime" style="width:180px">
       </div>
        <div class="input-group input-group-max qj" style="width:250px;">
-          <span class="input-group-addon">有效天数</span>
-          <input type="text" class="form-control" desc="天" name="qjdays" id="qjdays">
+          <span class="input-group-addon">请假天数</span>
+          <input type="text" class="form-control" desc="天" name="qjdays" id="qjdays" placeholder="工作日">
         </div>
     </div>
-    <div id="qingjiaren" class="input-group input-group-select" style="float:none;width:495px;">
+    <div class="input-group input-group-select" style="float:none;width:495px;">
       <span class="input-group-addon">请假人</span>
-      <select class="form-control get_comp" ></select>
-      <select class="form-control get_quyu" ></select>
-      <select class="form-control get_user" name="userId"></select>
+      <select class="form-control get_comp" id="qid"></select>
+      <select class="form-control get_quyu" id="did"></select>
+      <select class="form-control get_user" name="userId" id="uid"></select>
     </div>
   </form>
    <div style="margin-top:10px;margin-left:10px; margin-bottom:10px;display">

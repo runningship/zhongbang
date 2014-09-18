@@ -182,7 +182,13 @@ public class ServletHelper {
 							Date date = DataHelper.dateSdf.parse(pval[0]);
 							f.set(obj, date);
 						} catch (ParseException e1) {
-							e1.printStackTrace();
+							try {
+								Date date = DataHelper.monthSdf.parse(pval[0]);
+								f.set(obj, date);
+							} catch (ParseException e2) {
+								e2.printStackTrace();
+							}
+							
 						}
 					}
         		}else{

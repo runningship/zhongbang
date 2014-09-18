@@ -78,6 +78,16 @@ function openView(id){
   });
 }
 
+function openPiYue(id){
+    art.dialog.open('house_piyue.html?category='+category+'&recordId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:window.top.document.body.offsetHeight-45,
+      width:window.top.document.body.offsetWidth
+    })
+}
+
 function openEdit(id){
   var url = "";
   if(category==0){
@@ -149,35 +159,32 @@ $(function(){
     <button onclick="openAdd();" class="btn btn-primary">新增</button>
   </div>
   <form id="form1" name="form1">
-    <div class="clearfix">
       <input type="hidden" class="userInput" name="xpath" value="">
-      <div class="input-group" style="width:400px">
-        <span class="input-group-addon">开始时间</span>
-        <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:150px;border-radius:0;">
-        <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:150px">
+      <div class="input-group" style="width:320px">
+        <span class="input-group-addon">添加时间</span>
+        <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:120px;border-radius:0;">
+        <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:120px">
       </div>
-      <div class="btn-group">
-        <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
-      </div>
+      
+    <div class="input-group input-group-select">
+      <span class="input-group-addon">分公司</span>
+      <select class="form-control get_comp" name="form_cid"></select>
+      <select class="form-control get_quyu" name="form_did"></select>
+      <select class="form-control get_user" name="form_uid"></select>
     </div>
-    <div class="clearfix">
-      <div class="input-group input-group-select">
-        <span class="input-group-addon">分公司</span>
-        <select class="form-control get_comp" name="form_cid"></select>
-        <select class="form-control get_quyu" name="form_did"></select>
-        <select class="form-control get_user" name="form_uid"></select>
-      </div>
+    <div class="btn-group">
+      <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
     </div>
   </form>
 </div>
 <div class="mainer">
   <table class="table table-hover .table_bodyer" >
     <thead>
-      <th>标题</th>
+      <th>房源地址</th>
       <th>区域</th>
       <th>分公司</th>
       <th>业务员</th>
-      <th>开始时间</th>
+      <th>添加时间</th>
       <th>操作</th>
     </thead>
     <tbody id="id_list">
@@ -186,9 +193,10 @@ $(function(){
       <td>${quyu}</td>
       <td>${deptName}</td>
       <td>${uname}</td>
-      <td>${starttime}</td>
+      <td>${addtime}</td>
       <td>
         <a onclick="openView(${id})" href="javascript:void(0)" >查看</a>
+        <a auth="yw_journal_qj_sh" href="javascript:void(0)" onclick="openPiYue(${id})">批阅</a>
         <a auth="$${authParent}_edit" onclick="openEdit(${id})" href="javascript:void(0)" >修改</a>
         <a auth="$${authParent}_del" href="javascript:void(0)" onclick="deleteOut(${id})">删除</a>
       </td>

@@ -19,10 +19,12 @@ import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.Attachment;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.HqlHelper;
 import com.youwei.zjb.util.JSONHelper;
 import com.youwei.zjb.work.entity.JiLu;
 import com.youwei.zjb.work.entity.Journal;
+import com.youwei.zjb.work.entity.PYItem;
 
 @Module(name="/jilu")
 public class JiLuService {
@@ -66,11 +68,15 @@ public class JiLuService {
 	public ModelAndView list(JiLuQuery query,Page<Map> page){
 		ModelAndView mv = new ModelAndView();
 		List<Object> params = new ArrayList<Object>();
-		StringBuilder hql = new StringBuilder("select u.uname as uname,d.namea as deptName,q.namea as quyu,j.title as title ,j.addtime as addtime "
-				+ ",j.id as id , j.category as category from JiLu j, User u,Department d,Department q where j.userId=u.id and u.deptId=d.id and d.fid=q.id");
+		StringBuilder hql = new StringBuilder("select u.uname as uname,d.namea as deptName,q.namea as quyu,j.title as title ,j.addtime as addtime , j.starttime as starttime "
+				+ ",j.id as id , j.category as category ,j.pingji as pingji from JiLu j, User u,Department d,Department q where j.userId=u.id and u.deptId=d.id and d.fid=q.id");
 		if(query.category!=null){
 			hql.append(" and j.category=?");
 			params.add(query.category);
+		}
+		if(query.pingji!=null){
+			hql.append(" and j.pingji=?");
+			params.add(query.pingji);
 		}
 		if(StringUtils.isNotEmpty(query.goin)){
 			hql.append(" and j.goin like ? ");
@@ -80,13 +86,51 @@ public class JiLuService {
 			hql.append(" and u.orgpath like ? ");
 			params.add(query.xpath+"%");
 		}
-		hql.append(HqlHelper.buildDateSegment("j.addtime", query.addtimeStart, DateSeparator.After, params));
-		hql.append(HqlHelper.buildDateSegment("j.addtime", query.addtimeEnd, DateSeparator.Before, params));
+		if(query.category==1){
+			hql.append(HqlHelper.buildDateSegment("j.addtime", query.addtimeStart, DateSeparator.After, params));
+			hql.append(HqlHelper.buildDateSegment("j.addtime", query.addtimeEnd, DateSeparator.Before, params));
+		}else{
+			hql.append(HqlHelper.buildDateSegment("j.starttime", query.addtimeStart, DateSeparator.After, params));
+			hql.append(HqlHelper.buildDateSegment("j.starttime", query.addtimeEnd, DateSeparator.Before, params));
+		}
 		page.orderBy = "j.addtime";
 		page.order = Page.DESC;
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
-		mv.data.put("page", JSONHelper.toJSON(page));
+		if(query.category!=null && (query.category==2 || query.category==3)){
+			mv.data.put("page", JSONHelper.toJSON(page , DataHelper.monthSdf.toPattern()));
+		}else{
+			mv.data.put("page", JSONHelper.toJSON(page));
+		}
 		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView piyue(int id, String contb , String pingji ){
+		JiLu po = dao.get(JiLu.class, id);
+		if(po==null){
+			throw new GException(PlatformExceptionType.BusinessException, "该记录已不存在");
+		}
+		User user = ThreadSession.getUser();
+		//批阅项
+		PYItem pypo = dao.getUniqueByParams(PYItem.class, new String[]{"category" , "bizId","uid"}, new Object[]{po.category , po.id , user.id});
+		if(pypo!=null){
+			pypo.conts = contb;
+			dao.saveOrUpdate(pypo);
+		}else{
+			PYItem py = new PYItem();
+			py.category = po.category;
+			py.conts = contb;
+			py.uid = user.id;
+			py.uname = user.uname;
+			py.addtime = new Date();
+			py.bizId = po.id;
+			dao.saveOrUpdate(py);
+		}
+		if(pingji!=null){
+			po.pingji = pingji;
+		}
+		dao.saveOrUpdate(po);
+		return new ModelAndView();
 	}
 	
 	@WebMethod
@@ -94,7 +138,17 @@ public class JiLuService {
 		ModelAndView mv = new ModelAndView();
 		JiLu jilu = dao.get(JiLu.class,id);
 		List<Attachment> attachs = dao.listByParams(Attachment.class, new String[]{"bizType" , "recordId"}, new Object[]{"jilu" , id});
-		
+		List<PYItem> pyList = dao.listByParams(PYItem.class, "from PYItem where bizId=? and category=?", id,jilu.category);
+		PYItem myPy = new PYItem();
+		for(PYItem item : pyList){
+			if(item.uid.equals(ThreadSession.getUser().id)){
+				myPy = item;
+				break;
+			}
+		}
+		pyList.remove(myPy);
+		mv.data.put("myPy", JSONHelper.toJSON(myPy));
+		mv.data.put("pyList", JSONHelper.toJSONArray(pyList));
 		mv.data.put("attachs", JSONHelper.toJSONArray(attachs));
 		mv.data.put("jilu", JSONHelper.toJSON(jilu));
 		return mv;

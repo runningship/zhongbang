@@ -14,4 +14,6 @@ public class OutQuery extends AbstractQuery{
 	
 	//查看具体某个人的数据
 	public Integer uid;
+	
+	public String pingji;
 }

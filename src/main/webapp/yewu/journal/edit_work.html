@@ -96,7 +96,6 @@ function getContent(){
     success: function(result){
       var json = JSON.parse(result);
       $('#idTimes').val(json['journal']['starttime']);
-      $('#idTime').val(json['journal']['endtime']);
       ue.setContent(json['journal']['conta'] ,false);
       
       getAttachList();
@@ -149,10 +148,10 @@ $(function(){
     <input type="hidden" name="category" id="category" />
     <input type="hidden" name="id" id="id" />
         <div class="input-group" style="width:300px;margin-left:10px;margin-top:0px">
-          <span class="input-group-addon" style="padding:1px 6px">开始时间</span>
+          <span class="input-group-addon" style="padding:1px 6px">时间</span>
           <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({dateFmt:'yyyy-MM-dd',onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="starttime" style="width:180px;border-radius:0;">
-          <span class="input-group-addon" style="padding:1px 6px">结束时间</span>
-          <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="endtime" style="width:180px">
+          <span class="input-group-addon hidden" style="padding:1px 6px">结束时间</span>
+          <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control hidden" name="endtime" style="width:180px">
       </div>
     </div>
   </form>

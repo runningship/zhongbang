@@ -447,6 +447,7 @@ public class UserService {
 		mv.data.put("msg", "登录成功");
 		SessionHelper.initHttpSession(ThreadSession.getHttpSession(), po ,null);
 		String operConts = "["+po.Department().namea+"-"+po.uname+ "] 登录成功";
+		LogUtil.info("用户"+po.uname+"在机器[cpu="+pc.cpu+",board="+pc.baseboard+",harddrive="+pc.harddrive+",bios="+pc.bios+"]上登录成功");
 		operService.add(OperatorType.登录记录, operConts);
 		return mv;
 	}

@@ -189,7 +189,6 @@ $(function(){
       <th>房源名称</th>
       <th>外出时间</th>
       <th>返回时间</th>
-      <!-- <th>状态</th> -->
       <th>操作</th>
     </thead>
     <tbody id="id_list">
@@ -201,7 +200,6 @@ $(function(){
       <td><div class="div1">${house}</div></td>
       <td>${outTime}</td>
       <td>${backTime}</td>
-      <!-- <td><a onclick="openPiyue(${id})" href="javascript:void(0)" class="runscript">getEnumTextByCode(queryOpts['piyue'],${reply})</a></td> -->
       <td><a onclick="openEdit(${id})" href="javascript:void(0)" >修改</a> <a href="javascript:void(0)" onclick="deleteOut(${id})">删除</a></td>
       
     </tr>

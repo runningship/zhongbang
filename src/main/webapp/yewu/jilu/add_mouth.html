@@ -22,17 +22,21 @@
 <script type="text/javascript">
 var recordId;
 var ue;
+var url = '/zb/c/jilu/add';
 function save(){
-  $('#conta').val(ue.getContent());
+  console.log(ue.getContent());
+  $('#conts').val(ue.getContent());
   var text = $('form[name=textForm]').serialize();
   YW.ajax({
     type: 'POST',
-    url: '/zb/c/journal/update',
+    url: url,
     data:text,
     success: function(data){
-      art.dialog.opener.getList();
-      alert('保存成功');
-      // initFileUpload();
+      alert('保存成功,您还可以添加附件.');
+      recordId = JSON.parse(data)['recordId'];
+      url = '/zb/c/jilu/update?id='+recordId;
+      art.dialog.opener.doSearch();
+      initFileUpload();
     }
   });
   return false;
@@ -41,7 +45,7 @@ function save(){
 function initFileUpload(){
   $('#file_upload').uploadify({
       'swf'      : '/zb/js/uploadify/uploadify.swf',
-      'uploader' : '/zb/file/upload?bizType=journal&recordId='+recordId,
+      'uploader' : '/zb/file/upload?bizType=jilu&recordId='+recordId,
       'buttonText': '上传附件',
       'removeTimeout': 0.1,
       'fileSizeLimit' : '5MB',
@@ -62,14 +66,13 @@ function initFileUpload(){
       'onQueueComplete' : function(queueData) {
         console.log(queueData);
       }
-      // Put your options here
   });
 }
 
 function getAttachList(){
   YW.ajax({
     type: 'get',
-    url: '/zb/c/attachment/list?bizType=journal&recordId='+recordId,
+    url: '/zb/c/attachment/list?bizType=jilu&recordId='+recordId,
     data:'',
     success: function(result){
       var data = JSON.parse(result)['data'];
@@ -88,90 +91,60 @@ function deleteAttach(id){
     }
   });
 }
-function getContent(){
-  YW.ajax({
-    type: 'get',
-    url: '/zb/c/journal/get?id='+recordId,
-    data:'',
-    success: function(result){
-      var json = JSON.parse(result);
-      $('#idTimes').val(json['journal']['starttime']);
-      $('#idTime').val(json['journal']['endtime']);
-      ue.setContent(json['journal']['conta'] ,false);
-      
-      getAttachList();
-      fixTableFullScreen(ue);
-    }
-  });
-}
 $(function(){
   var category = getParam('category');
   if(category==null || category==""){
     alert("未指明的分类");
   }
   $('#category').val(category);
-  recordId = getParam('recordId');
-  if(recordId==null || recordId==""){
-    alert("加载数据失败");
-    return;
-  }
-  $('#category').val(category);
-  if (category==0) {
-    $('div.qj').remove();
-  }else if (category==2) {
-    $('div.qj').remove();
-  };
-
-  $('#id').val(recordId);
-  
   ue = UE.getEditor('editor');
   ue.addListener( 'ready', function( editor ) {
-	  ue.document.onpaste=function(e){
-	      onPasteHandler(ue,e);
-	    }
-    getContent();
-  });
-  ue.addListener( 'fullscreenchanged', function( editor ) {
-    if(ue.ui.isFullScreen()==false){
-      fixTableFullScreen(ue);
+    // $(ue.document).bind('keyup afterpaste',function(e){
+    //   onPasteHandler(ue,e);
+    // });
+    ue.document.onpaste=function(e){
+      onPasteHandler(ue,e);
     }
   });
-
-  initFileUpload();
 });
 
 </script>
+
 </head>
-<body style="overflow:; ">
-  <form name="textForm" style="margin-top:10px;">
-    <div class="clearfix">
-    <input id="conta" name="conta" type="hidden" />
-    <input type="hidden" name="category" id="category" />
-    <input type="hidden" name="id" id="id" />
-        <div class="input-group" style="width:300px;margin-left:10px;margin-top:0px">
-          <span class="input-group-addon" style="padding:1px 6px">开始时间</span>
-          <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({dateFmt:'yyyy-MM-dd',onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="starttime" style="width:180px;border-radius:0;">
-          <span class="input-group-addon" style="padding:1px 6px">结束时间</span>
-          <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="endtime" style="width:180px">
-      </div>
+<body style="overflow:hidden;overflow-y: auto;">
+  
+  <form name="textForm">
+    <input type="hidden" id="conts" name="conts" />
+    <input type="hidden" id="category" name="category" />
+  <div class="clearfix" style="margin-top:10px;">
+   <div class="input-group input-group-max" style="display:none">
+      <span class="input-group-addon">  标 题</span>
+      <input type="text" class="form-control" desc="标题" name="title" value="月度总结">
     </div>
+    <div class="input-group">
+      <span class="input-group-addon" style="padding:8px;">时间</span>
+      <input type="text" class="form-control" name="starttime" id="starttime" onFocus="WdatePicker({dateFmt:'yyyy-MM'})">
+    </div>
+  </div>
   </form>
-   <div style="margin-top:10px;margin-left:10px; margin-bottom:10px;display">
+  <div style="margin-left:10px;">
+  <span>内容: </span>
+  </div>
+  <div style="margin-left:10px;">
     <span id="editor" type="text/plain" style="width:99%;height:400px;"></span>
   </div>
-<div class="btn-group">
-  <button onclick="save();" class="btn btn-primary " >提交</button>
-</div>
-<div style="margin-left:10px;margin-top:50px">
-    <input id="file_upload" name="file_upload" style="display:none">
-</div>
-<div id="attachList" style="margin-left:10px;">
-  <span style="display:none">
-    <div>
-      <a href="/zb/file/download?bizType=${bizType}&recordId=${recordId}&file=${id}">${filename}</a> <a href="javascript:void(0)" onclick="deleteAttach(${id})">删除</a>
-    </div>
-  </span>
-</div>
-    
+  <div style="margin-top:5px;">
+      <input id="file_upload" name="file_upload" style="display:none">
+  </div>
+  <div id="attachList">
+    <span style="display:none">
+      <div>
+        <a href="/file/download?bizType=${bizType}&recordId=${recordId}&file=${id}">${filename}</a> <a href="javascript:void(0)" onclick="deleteAttach(${id})">删除</a>
+      </div>
+    </span>
+  </div>
+  <div class="btn-group">
+    <button onclick="save();" class="btn btn-primary ">提交</button>
+  </div>
 </body>
 </html>

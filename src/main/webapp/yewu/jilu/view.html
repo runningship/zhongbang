@@ -33,6 +33,9 @@ function get(){
       ue.setContent(data['jilu']['conts'] ,false);
       fillData(data['jilu']);
       buildHtmlWithJsonArray("content",data['attachs']);
+      data['pyList'].push(data['myPy']);
+      ue.setContent(data['jilu']['conts'] ,false);
+      buildHtmlWithJsonArray("pylist",data['pyList']);
       fixTableFullScreen(ue);
     }
   });
@@ -40,17 +43,27 @@ function get(){
 
 function fillData(jilu){
   $('#addtime').html(jilu['addtime']);
-  $('#title').html(jilu['title']);
+  $('#pingji').val(jilu['pingji']);
   if(category==0){
     //会议记录
     $('#starttime').html(jilu['starttime']);
     $('#endtime').html(jilu['endtime']);
+    $('#title').html(jilu['title']);
     $('#goin').html(jilu['goin']);
     $('#hy_starttime').css('display','');
     $('#hy_endtime').css('display','');
     $('#hy_goin').css('display','');
+    $('#hy_title').css('display','');
     $('#time').css('display','none');
-  }
+    $('#piyue').css('display','none');
+    $('#piyue2').css('display','none');
+  }else if (category==3) {
+    $('#piyue').css('display','none');
+    $('#piyue2').css('display','none');
+  }else if (category==1) {
+    $('#piyue').css('display','none');
+    $('#piyue2').css('display','none');
+  };
 }
 $(function(){
   category = getParam('category');
@@ -104,7 +117,7 @@ $(function(){
       <th>参会人员:</th>
       <td id="goin"></td>
     </tr>
-    <tr>
+    <tr id="hy_title" style="display:none" >
       <th>标题:</th>
       <td id="title"></td>
     </tr>
@@ -117,6 +130,26 @@ $(function(){
   </div>
       </td>
       </tr>
+        <tr id="piyue">
+          <th>批阅意见:</th>
+          <td>
+            <span id="pylist">
+              <div style="display:none;border-bottom:dashed 1px #ccc">
+                <a>${conts}</a><p>${uname}</p>
+              </div>
+            </span>
+          </td>
+        </tr>
+        <tr id="piyue2">
+          <th>考核评级：</th>
+          <td>
+          <select class="form-control " name="pingji" id="pingji" style="width:100px;">
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          </select>
+          </td>
+        </tr>
     <tr>
       <th>附件:</th>
       <td id="content">

@@ -41,7 +41,7 @@ function save(){
 function fillData(journal){
   $('#starttime').html(journal['starttime']);
   $('#endtime').html(journal['endtime']);
-  $('#addtime').html(journal['addtime']);
+  $('#addtime').html(journal['starttime']+"——"+journal['endtime']);
   $('#title').html(journal['title']);
   $('#conta').html(journal['conta']);
   $('#contb').html(journal['contb']);
@@ -150,7 +150,7 @@ $(function(){
             <span id="editor" type="text/plain" style="width:99%;height:150px;"></span>
           </td>
         </tr>
-        <tr auth="yw_journal_work_pingji">
+        <tr auth="yw_journal_week_work_pingji">
           <th>考核评级：</th>
           <td>
           <select class="form-control " name="pingji" id="pingji" style="width:100px;">

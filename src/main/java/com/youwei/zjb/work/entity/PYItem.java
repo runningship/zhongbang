@@ -7,20 +7,24 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
+/**
+ * 批阅项
+ */
 @Entity
-@Table(name="work_jilu")
-public class JiLu {
+public class PYItem {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public Integer id;
 	
-	@Column(name="uid")
-	public Integer userId;
+	public Integer uid;
+	
+	public String uname;
 	
 	public Date addtime;
+	
+	public Integer bizId;
 	
 	/**
 	 * 0 会议记录，1 优质房源 , 2 月度总结, 3考勤表格
@@ -29,17 +33,5 @@ public class JiLu {
 	public Integer category;
 	
 	public String conts;
-	
-	@Column(nullable=false)
-	public String title;
-	
-	@Column(name="datetime")
-	public Date starttime;
-	
-	public Date endtime;
-	
-	public String goin;
-	
-	public String pingji;
 	
 }

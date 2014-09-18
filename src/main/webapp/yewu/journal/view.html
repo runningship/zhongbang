@@ -32,6 +32,9 @@ function get(){
       ue.setContent(data['journal']['conta'] ,false);
       fillData(data['journal']);
       buildHtmlWithJsonArray("content",data['attachs']);
+      data['pyList'].push(data['myPy']);
+      ue.setContent(data['myPy']['conts'] ,false);
+      buildHtmlWithJsonArray("pylist",data['pyList']);
       fixTableFullScreen(ue);
     }
   });
@@ -90,10 +93,16 @@ $(function(){
   </div>
       </td>
       </tr>
-    <tr>
-      <th>批语:</th>
-      <td id="contb" name="contb">${contb}</td>
-    </tr>
+        <tr>
+          <th>批阅意见:</th>
+          <td>
+            <span id="pylist">
+              <div style="display:none;border-bottom:dashed 1px #ccc">
+                <a>${conts}</a><p>${uname}</p>
+              </div>
+            </span>
+          </td>
+        </tr>
         <tr>
           <th>考核评级：</th>
           <td>
