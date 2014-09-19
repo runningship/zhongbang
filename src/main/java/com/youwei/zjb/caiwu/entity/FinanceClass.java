@@ -15,4 +15,7 @@ public class FinanceClass {
 	
 	@Column(nullable=false,name="title")
 	public String fenlei;
+	
+	@Column(name="conts")
+	public String template;
 }

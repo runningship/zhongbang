@@ -115,9 +115,10 @@ public class DataHelper {
 		if(StringUtils.isNotEmpty(old.fhao) && StringUtils.isNotEmpty(newH.fhao) && !newH.fhao.equals(old.fhao)){
 			sb.append("房号: "+old.fhao+"-->"+newH.fhao).append("<br/>");
 		}
-		if(StringUtils.isNotEmpty(old.forlxr) && StringUtils.isNotEmpty(newH.forlxr) && !newH.forlxr.equals(old.forlxr)){
-			sb.append("业务员: "+old.forlxr+"-->"+newH.forlxr).append("<br/>");
-		}
+//		if(StringUtils.isNotEmpty(old.forlxr) && StringUtils.isNotEmpty(newH.forlxr) && !newH.forlxr.equals(old.forlxr)){
+//			sb.append("业务员: "+old.forlxr+"-->"+newH.forlxr).append("<br/>");
+//		}
+		//TODO 业务员为uid
 		if(StringUtils.isNotEmpty(old.fortel) && StringUtils.isNotEmpty(newH.fortel) && !newH.fortel.equals(old.fortel)){
 			sb.append("业务员电话: "+old.fortel+"-->"+newH.fortel).append("<br/>");
 		}

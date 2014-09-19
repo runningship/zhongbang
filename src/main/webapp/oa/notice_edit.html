@@ -108,6 +108,7 @@ function loadData(){
       $('#title').val(notice['title']);
       $('#claid').val(notice['claid']);
       ue.setContent(notice['conts']);
+      fixTableFullScreen(ue);
       getAttachList();
     }
   });
@@ -140,6 +141,11 @@ $(function(){
 	    }
     loadData();
   });
+  ue.addListener( 'fullscreenchanged', function( editor ) {
+    if(ue.ui.isFullScreen()==false){
+      fixTableFullScreen(ue);
+    }
+  });
   initFileUpload();
 });
 
@@ -158,7 +164,7 @@ $(function(){
     <div class="input-group input-group-max" >
       <span class="input-group-addon">  类 别</span>
       <input type="text" class="form-control" readonly="true" id="fenlei">
-    </div>
+    </div></br></br>
     <div class="input-group input-group-max" style="width:752px;margin-top:5px;">
       <span class="input-group-addon"> 接收人</span>
       <input readonly="true" type="text" class="form-control" id="names">
@@ -166,7 +172,7 @@ $(function(){
   </form>
     
   <div style="margin-top:40px;margin-left:10px;">
-    <span id="editor" type="text/plain" style="width:1024px;height:200px;"></span>
+    <span id="editor" type="text/plain" style="width:99%;height:400px;"></span>
   </div>
   <div>
   <button onclick="save();return false;" class="btn btn-primary" style="margin-left:10px;margin-top:5px;">提交</button>

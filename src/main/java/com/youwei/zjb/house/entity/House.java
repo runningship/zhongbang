@@ -117,15 +117,22 @@ public class House {
 	 */
 	public String lxr;
 
+	/**
+	 * 房主电话
+	 */
 	public String tel;
 
 	/**
-	 * 业务员
+	 * 发布人姓名
 	 */
-	public String forlxr;
+	public String fbr;
 	
-	public Integer forlxrId;
+	/**
+	 * 发布人id
+	 */
+	public Integer fbrId;
 
+	//业务员电话
 	public String fortel;
 
 	public String beizhu;

@@ -1185,24 +1185,28 @@
 				"text":"修改",
 				"type":"menu"
 			},{
+				"name":"cw_finance_data_sh",
+				"text":"审核",
+				"type":"menu"
+			},{
 				"name":"cw_finance_data_del",
 				"text":"删除",
 				"type":"menu"
 			}]
 		},{
-			"name":"cw_finance_data",
+			"name":"cw_finance_data_data",
 			"text":"数据权限",
 			"type":"virtual",
 			"children":[{
-				"name":"cw_finance_data_dept",
+				"name":"cw_finance_data_data_dept",
 				"text":"分公司",
 				"type":"menu"
 			},{
-				"name":"cw_finance_data_quyu",
+				"name":"cw_finance_data_data_quyu",
 				"text":"区域",
 				"type":"menu"
 			},{
-				"name":"cw_finance_data_all",
+				"name":"cw_finance_data_data_all",
 				"text":"所有",
 				"type":"menu"
 			}]

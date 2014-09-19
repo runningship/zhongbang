@@ -319,6 +319,13 @@ public class UserService {
 	}
 	
 	@WebMethod
+	public ModelAndView get(int id){
+		ModelAndView mv = new ModelAndView();
+		User po = dao.get(User.class, id);
+		mv.data.put("tel", po.tel);
+		return mv;
+	}
+	@WebMethod
 	public ModelAndView listRuZhi(UserQuery query , Page<Map> page){
 		ModelAndView mv = new ModelAndView();
 		StringBuilder hql = new StringBuilder();

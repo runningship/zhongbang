@@ -72,7 +72,7 @@ public class HouseService {
 		}else{
 			house.isdel = 0;
 			house.dateadd = new Date();
-			house.userId = user.id;
+//			house.userId = user.id;
 			house.deptId = user.deptId;
 			if(house.sjia ==null){
 				house.sjia=0f;
@@ -82,10 +82,10 @@ public class HouseService {
 				house.djia = (float) jiage;
 			}
 			try{
-				User ywy = service.get(User.class, Integer.valueOf(house.forlxrId));
-				house.forlxr = ywy.uname;
+				house.fbrId = user.id;
+				house.fbr = user.uname;
 			}catch(Exception ex){
-				LogUtil.log(Level.WARN, "业务员信息部正确,forlxr="+house.forlxr, ex);
+				LogUtil.log(Level.WARN, "业务员信息不正确,forlxr="+house.fbr, ex);
 			}
 			service.saveOrUpdate(house);
 			Config quyu = service.getUniqueByParams(Config.class, new String[]{"type","name"},new Object[]{"quyu" , house.quyu});
@@ -110,8 +110,8 @@ public class HouseService {
 	
 	@WebMethod
 	public ModelAndView update(House house){
-		
 		ModelAndView mv = new ModelAndView();
+		User user = ThreadSession.getUser();
 		Config quyu = service.getUniqueByParams(Config.class, new String[]{"type","name"},new Object[]{"quyu" , house.quyu});
 		house.quyuCode = quyu.pyShort;
 		house.houseNumber = quyu.pyShort+"-"+house.id;
@@ -132,16 +132,17 @@ public class HouseService {
 			int jiage = (int) (house.sjia*10000/house.mianji);
 			house.djia = (float) jiage;
 		}
-		try{
-			User ywy = service.get(User.class, Integer.valueOf(house.forlxrId));
-			house.forlxr = ywy.uname;
-		}catch(Exception ex){
-			LogUtil.log(Level.WARN, "业务员信息部正确,forlxr="+house.forlxr, ex);
-		}
+//		try{
+//			User ywy = service.get(User.class, Integer.valueOf(house.fbrId));
+//			house.userId = ywy.id;
+//			house.fbr = user.uname;
+//		}catch(Exception ex){
+//			LogUtil.log(Level.WARN, "业务员信息不正确,forlxr="+house.fbr, ex);
+//		}
 		service.saveOrUpdate(house);
-		User user = ThreadSession.getUser();
+		
 		if(StringUtils.isNotEmpty(gjStr)){
-		GenJin gj = new GenJin();
+			GenJin gj = new GenJin();
 			gj.userId = user.id;
 			gj.bianhao = house.houseNumber;
 			gj.area = house.area +house.dhao+"#"+house.fhao;
@@ -276,7 +277,7 @@ public class HouseService {
 		User ywy = service.get(User.class,house.userId);
 		mv.data = JSONHelper.toJSON(house);
 //		mv.data.put("house", JSONHelper.toJSON(house));
-		User forlxr = service.get(User.class, house.forlxrId);
+		User forlxr = service.get(User.class, house.fbrId);
 		if(forlxr!=null){
 			Department dept = service.get(Department.class, forlxr.deptId);
 			Department quyu = dept.Parent();
@@ -346,7 +347,11 @@ public class HouseService {
 		List<House> list = new ArrayList<House>();
 		list.add(house);
 		mv.data.put("house", JSONHelper.toJSONArray(list));
+//		User fbr = service.get(User.class, house.fbrId);
+		//把业务员当作发布人
 		User fbr = service.get(User.class, house.userId);
+		User ywy = service.get(User.class, house.userId);
+		mv.data.getJSONArray("house").getJSONObject(0).put("ywy", ywy.uname);
 		if(fbr!=null){
 			Department dept = fbr.Department();
 			Department quyu = dept.Parent();
@@ -468,7 +473,7 @@ public class HouseService {
 	public ModelAndView listAll(HouseQuery query ,Page<House> page){
 		List<Object> params = new ArrayList<Object>();
 		StringBuilder hql = new StringBuilder();
-		hql.append(" select h, u.uname as fbr,d.namea as dname from  House h  ,User u,Department d where h.userId=u.id  and u.deptId=d.id");
+		hql.append(" select h, u.uname as ywy,d.namea as dname from  House h  ,User u,Department d where h.userId=u.id  and u.deptId=d.id");
 		HqlHelper.buildQuery(hql,query,params);
 		page.orderBy = "h.dateadd";
 		page.order = Page.DESC;

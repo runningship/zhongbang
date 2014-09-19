@@ -83,6 +83,24 @@ function openAdd(id,name){
   });
 }
 
+function openBanli(id){
+  art.dialog.open('finance_banli.html?tableId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:window.top.document.body.offsetHeight-45,
+      width:window.top.document.body.offsetWidth
+  });
+}
+
+function buildShenHe(sh){
+  if(sh==0){
+    return "审核";
+  }else{
+    return "已审核";
+  }
+}
+
 function openEdit(id,name){
   art.dialog.open('finance_edit.html?recordId='+id+'&claName='+name,{
       padding:0,
@@ -135,8 +153,17 @@ $(function(){
       </span>
     </ul>
   </div>
+    <div class="btn-group">
+      <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:30px;padding:0px 10px 0px 10px;width:150px;"><span id="btn_class_select">分 类</span> <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        <li onclick="selectType('','所有')"><label><span  style="color:black;padding-left:10px;line-height:30px;font-weight:normal">所有</span></label></li>
+        <span id="adminClassList2">
+          <li onclick="selectType(${id},'${fenlei}');"><label><span  style="color:black;padding-left:10px;line-height:30px;font-weight:normal">${fenlei}</span></label></li>
+        </span>
+      </ul>
+    </div>
 
-  <div style="float:right;margin-right:20px;">
+  <div >
   <form name="form1" onsubmit="return doSearch();">
     <input type="hidden" class="userInput" name="xpath" value="">
     <div class="input-group input-group-max">
@@ -153,15 +180,6 @@ $(function(){
       <span class="input-group-addon">日期</span>
       <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:120px;border-radius:0;">
       <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:120px">
-    </div>
-    <div class="btn-group">
-      <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:35px;padding:0px 10px 0px 10px;width:150px;"><span id="btn_class_select">分 类</span> <span class="caret"></span></button>
-      <ul class="dropdown-menu">
-        <li onclick="selectType('','所有')"><label><span  style="color:black;padding-left:10px;line-height:30px;font-weight:normal">所有</span></label></li>
-        <span id="adminClassList2">
-          <li onclick="selectType(${id},'${fenlei}');"><label><span  style="color:black;padding-left:10px;line-height:30px;font-weight:normal">${fenlei}</span></label></li>
-        </span>
-      </ul>
     </div>
     <div class="btn-group">
       <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
@@ -190,7 +208,9 @@ $(function(){
       <td>${classTitle}</td>
       <td><a onclick="openView(${id},'${classTitle}')" href="javascript:void(0)">查看</a>
         <a auth="cw_finance_data_edit" onclick="openEdit(${id},'${classTitle}')" href="javascript:void(0)">修改</a> 
-        <a auth="cw_finance_data_del" href="javascript:void(0)" onclick="deleteData(${id});">删除</a></td>
+        <a auth="cw_finance_data_del" href="javascript:void(0)" onclick="deleteData(${id});">删除</a>
+        <a auth="cw_finance_data_sh" style="display:inline-block;width:40px;" class="runscript" onclick="openBanli(${id})" href="javascript:void(0)">buildShenHe(${sh})</a>
+        </td>
     </tr>
     </tbody>
   </table>

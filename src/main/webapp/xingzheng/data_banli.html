@@ -34,7 +34,6 @@ function loadData(){
     success: function(data){
       var json = JSON.parse(data);
       var conts = json['adminTable']['conts'];
-      // $('#editor').html(conts);
       ue.setContent(conts);
       $('#username').val(json['username']);
       $('#adminClass').val(json['adminClass']);

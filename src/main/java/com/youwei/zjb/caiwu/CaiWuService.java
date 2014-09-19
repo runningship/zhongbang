@@ -18,8 +18,13 @@ import org.bc.web.WebMethod;
 import com.youwei.zjb.DateSeparator;
 import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.ThreadSession;
+import com.youwei.zjb.admin.entity.AdminClass;
+import com.youwei.zjb.admin.entity.Process;
+import com.youwei.zjb.admin.entity.ProcessClass;
 import com.youwei.zjb.caiwu.entity.Finance;
 import com.youwei.zjb.caiwu.entity.FinanceClass;
+import com.youwei.zjb.caiwu.entity.FinanceProcess;
+import com.youwei.zjb.caiwu.entity.FinanceProcessClass;
 import com.youwei.zjb.entity.User;
 import com.youwei.zjb.oa.entity.Notice;
 import com.youwei.zjb.oa.entity.NoticeClass;
@@ -34,6 +39,10 @@ public class CaiWuService {
 	@WebMethod
 	public ModelAndView addFenLei(FinanceClass fc){
 		ModelAndView mv =new ModelAndView();
+		FinanceClass po = dao.getUniqueByKeyValue(FinanceClass.class, "fenlei", fc.fenlei);
+		if(po!=null){
+			throw new GException(PlatformExceptionType.BusinessException, "存在相同的的分类名称");
+		}
 		dao.saveOrUpdate(fc);
 		mv.data.put("msg", "添加成功");
 		return mv;
@@ -52,9 +61,17 @@ public class CaiWuService {
 	public ModelAndView get(int id){
 		ModelAndView mv = new ModelAndView();
 		Finance po = dao.get(Finance.class, id);
+		FinanceClass fc = dao.get(FinanceClass.class, po.claid);
 		mv.data.put("finance", JSONHelper.toJSON(po));
+		List<FinanceProcess> processList = dao.listByParams(FinanceProcess.class, "from FinanceProcess where financeId=? order by ordera", po.id);
+		mv.data.put("processList", JSONHelper.toJSONArray(processList));
+		User user = dao.get(User.class, po.userId);
+		mv.data.put("username", user.uname);
+		mv.data.put("fenlei", JSONHelper.toJSON(fc));
+		mv.data.put("myId", ThreadSession.getUser().id);
 		return mv;
 	}
+	
 	
 	@WebMethod
 	public ModelAndView update(Finance finance){
@@ -79,8 +96,24 @@ public class CaiWuService {
 		User user = ThreadSession.getUser();
 		finance.userId= user.id;
 		finance.addtime = new Date();
-		finance.sh=0;
+		List<FinanceProcessClass> processClassList = dao.listByParams(FinanceProcessClass.class, new String[]{"claid"}, new Object[]{finance.claid});
+		if(processClassList==null || processClassList.isEmpty()){
+			finance.sh=1;
+		}else{
+			finance.sh=0;
+		}
 		dao.saveOrUpdate(finance);
+		for(FinanceProcessClass pc : processClassList){
+			FinanceProcess pro = new FinanceProcess();
+			pro.addtime = new Date();
+			pro.claid = finance.claid;
+			pro.processorId = pc.uid;
+			pro.uname = pc.username;
+			pro.ordera = pc.ordera;
+			pro.financeId = finance.id;
+			pro.flag = 0;
+			dao.saveOrUpdate(pro);
+		}
 		mv.data.put("recordId", finance.id);
 		return mv;
 	}
@@ -97,7 +130,7 @@ public class CaiWuService {
 	public ModelAndView list(FinanceQuery query, Page<Map> page){
 		ModelAndView mv = new ModelAndView();
 		List<Object> params = new ArrayList<Object>();
-		StringBuilder hql = new StringBuilder("select n.id as id, n.title as title, n.addtime as addtime, nc.fenlei as classTitle, u.uname as uname,d.namea as dname from Finance n, FinanceClass nc , User u , Department d where n.claid=nc.id and u.id=n.userId and u.deptId=d.id");
+		StringBuilder hql = new StringBuilder("select n.id as id, n.title as title, n.sh as sh, n.addtime as addtime, nc.fenlei as classTitle, u.uname as uname,d.namea as dname from Finance n, FinanceClass nc , User u , Department d where n.claid=nc.id and u.id=n.userId and u.deptId=d.id");
 		if(query.claid!=null){
 			hql.append("  and n.claid=? ");
 			params.add(query.claid);
@@ -119,6 +152,25 @@ public class CaiWuService {
 		return mv;
 	}
 
+	@WebMethod
+	public ModelAndView addFinanceClass(FinanceClass ac){
+		ModelAndView mv = new ModelAndView();
+		FinanceClass po = dao.getUniqueByKeyValue(FinanceClass.class, "fenlei", ac.fenlei);
+		if(po!=null){
+			throw new GException(PlatformExceptionType.BusinessException, "存在相同的的分类名称");
+		}
+		dao.saveOrUpdate(ac);
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView deleteFinanceClass(int id){
+		FinanceClass po = dao.get(FinanceClass.class, id);
+		if(po!=null){
+			dao.delete(po);
+		}
+		return new ModelAndView();
+	}
 	
 	@WebMethod
 	public ModelAndView deleteFenLei(int id){

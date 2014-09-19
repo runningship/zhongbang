@@ -121,10 +121,10 @@ public class OAService {
 		if(StringUtils.isEmpty(receivers)){
 			throw new GException(PlatformExceptionType.BusinessException, "请先选择接收人");
 		}
-		Notice po = dao.getUniqueByKeyValue(Notice.class, "title", notice.title);
-		if(po!=null){
-			throw new GException(PlatformExceptionType.BusinessException,"该标题已存在");
-		}
+//		Notice po = dao.getUniqueByKeyValue(Notice.class, "title", notice.title);
+//		if(po!=null){
+//			throw new GException(PlatformExceptionType.BusinessException,"该标题已存在");
+//		}
 		User user = ThreadSession.getUser();
 		notice.userId = user.id;
 		notice.addtime = new Date();

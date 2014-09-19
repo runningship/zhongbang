@@ -1,6 +1,10 @@
 function buildHtmlWithJsonArray(id,json,removeTemplate ,tempIndex){
     var subCatagory = $('#'+id);
+
     var dhtml = subCatagory.html();
+    if(dhtml==undefined){
+        return;
+    }
     if(tempIndex==null){
         tempIndex=0;
     }

@@ -33,7 +33,6 @@ function get(){
       fillData(data['journal']);
       buildHtmlWithJsonArray("content",data['attachs']);
       data['pyList'].push(data['myPy']);
-      ue.setContent(data['myPy']['conts'] ,false);
       buildHtmlWithJsonArray("pylist",data['pyList']);
       fixTableFullScreen(ue);
     }
@@ -65,11 +64,6 @@ $(function(){
   ue.addListener( 'ready', function( editor ) {
     //ue.setHeight(350);
     get();
-  });
-  ue.addListener( 'fullscreenchanged', function( editor ) {
-    if(ue.ui.isFullScreen()==false){
-      fixTableFullScreen(ue);
-    }
   });
 });
 

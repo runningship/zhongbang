@@ -67,6 +67,20 @@ function initFileUpload(){
   });
 }
 
+function loadData(){
+  YW.ajax({
+    type: 'get',
+    url: '/zb/c/caiwu/getFenLei?id='+claid,
+    data:'',
+    success: function(data){
+      var json = JSON.parse(data);
+      var template = json['fenlei']['template'];
+      ue.setContent(template);
+      $('#fenlei').val(json['fenlei']['fenlei']);
+    }
+  });
+}
+
 function getAttachList(){
   YW.ajax({
     type: 'get',
@@ -90,6 +104,8 @@ function deleteAttach(id){
   });
 }
 
+var claid;
+
 function processSelected(userArr){
   var names = [];
   var ids = [];
@@ -102,7 +118,7 @@ function processSelected(userArr){
 }
 
 $(function(){
-  var claid = getParam('claid');
+  claid = getParam('claid');
   if(claid==null || claid==""){
     alert("未指明的分类");
     return;
@@ -115,6 +131,7 @@ $(function(){
 	  ue.document.onpaste=function(e){
 	      onPasteHandler(ue,e);
 	    }
+      loadData();
   });
 });
 

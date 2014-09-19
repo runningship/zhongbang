@@ -112,7 +112,8 @@ function openEdit(id){
 
 $(function(){
   uid = getParam('uid')
-  if(uid!=null || uid!=""){
+  var detail = getParam('detail')
+  if(detail==1){
     $('div.xz').remove()
   }
   $('#uid').val(uid);
