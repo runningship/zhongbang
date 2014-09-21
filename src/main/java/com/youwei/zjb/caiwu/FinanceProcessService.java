@@ -14,6 +14,7 @@ import com.youwei.zjb.admin.entity.AdminClass;
 import com.youwei.zjb.admin.entity.AdminTable;
 import com.youwei.zjb.admin.entity.Process;
 import com.youwei.zjb.admin.entity.ProcessClass;
+import com.youwei.zjb.caiwu.entity.Finance;
 import com.youwei.zjb.caiwu.entity.FinanceClass;
 import com.youwei.zjb.caiwu.entity.FinanceProcess;
 import com.youwei.zjb.caiwu.entity.FinanceProcessClass;
@@ -99,7 +100,7 @@ public class FinanceProcessService {
 		//如果所有步骤都完成，则更新主表，审核通过
 		long count = dao.countHqlResult("from FinanceProcess where financeId=? and  flag=0 ", po.financeId);
 		if(count==0){
-			AdminTable table = dao.get(AdminTable.class, po.financeId);
+			Finance table = dao.get(Finance.class, po.financeId);
 			table.sh=1;
 			dao.saveOrUpdate(table);
 		}
