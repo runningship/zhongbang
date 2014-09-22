@@ -21,6 +21,7 @@
 var queryOpts;
 var claid;
 var authParent;
+var dataScope;
 function getList(search){
   var url='/zb/c/contract/list?claid='+claid;
   YW.ajax({
@@ -42,7 +43,7 @@ function doSearch(){
 }
 
 function openEdit(contractId){
-  art.dialog.open('edit.html?contractId='+contractId,{
+  art.dialog.open('edit.html?dataScope='+dataScope+'&contractId='+contractId,{
       padding:0,
       resize:true,
       lock:1,
@@ -52,7 +53,7 @@ function openEdit(contractId){
 }
 
 function openView(contractId){
-  art.dialog.open('view.html?authParent='+authParent+'&contractId='+contractId,{
+  art.dialog.open('view.html?dataScope='+dataScope+'&authParent='+authParent+'&contractId='+contractId,{
       padding:0,
       resize:true,
       lock:1,
@@ -92,6 +93,7 @@ $(function(){
   });
   claid = getParam('claid');
   authParent = getParam('authParent');
+  dataScope = getParam('dataScope');
   $.get('/zb/c/contract/proClassList?claid='+claid, function(data) {
     queryOpts=JSON.parse(data);
     buildHtmlWithJsonArray("id_proClassList",queryOpts['proClassList'],true,1);

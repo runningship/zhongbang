@@ -15,6 +15,10 @@
 				"text":"列表",
 				"type":"menu"
 			},{
+				"name":"fy_list_sell_view",
+				"text":"查看",
+				"type":"menu"
+			},{
 				"name":"fy_list_sell_del",
 				"text":"删除",
 				"type":"menu"
@@ -44,6 +48,10 @@
 				"text":"删除",
 				"type":"menu"
 			},{
+				"name":"fy_list_rent_view",
+				"text":"查看",
+				"type":"menu"
+			},{
 				"name":"fy_list_rent_edit",
 				"text":"修改",
 				"type":"menu"
@@ -63,6 +71,10 @@
 			"children":[{
 				"name":"fy_list_all_list",
 				"text":"列表",
+				"type":"menu"
+			},{
+				"name":"fy_list_all_view",
+				"text":"查看",
 				"type":"menu"
 			},{
 				"name":"fy_list_all_del",
@@ -374,7 +386,7 @@
 			"type":"menu"
 		},{
 			"name":"yw_journal_qj_sh",
-			"text":"审核",
+			"text":"批阅",
 			"type":"menu"
 		},{
 			"name":"yw_journal_qj_data",
@@ -1271,6 +1283,10 @@
 				"text":"删除",
 				"type":"menu"
 			}]
+		},{
+			"name":"oa_other_sites",
+			"text":"网址收藏",
+			"type":"menu"
 		}]
 	}]
 },{

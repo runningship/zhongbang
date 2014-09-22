@@ -3,6 +3,9 @@ package com.youwei.zjb.sys;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
+
+import org.apache.commons.lang.StringUtils;
 import org.bc.sdak.CommonDaoService;
 import org.bc.sdak.GException;
 import org.bc.sdak.TransactionalServiceHelper;
@@ -11,6 +14,9 @@ import org.bc.web.Module;
 import org.bc.web.WebMethod;
 
 import com.youwei.zjb.PlatformExceptionType;
+import com.youwei.zjb.ThreadSession;
+import com.youwei.zjb.entity.User;
+import com.youwei.zjb.entity.UserAuthority;
 import com.youwei.zjb.sys.entity.Bzy;
 import com.youwei.zjb.util.JSONHelper;
 
@@ -24,7 +30,7 @@ public class BzyService {
 		ModelAndView mv = new ModelAndView();
 		Bzy po = dao.getUniqueByKeyValue(Bzy.class, "userId", bzy.userId);
 		if(po!=null){
-			throw new GException(PlatformExceptionType.BusinessException, "不能添加重复的办证员");
+			throw new GException(PlatformExceptionType.BusinessException, "不能添加重复的交易员");
 		}
 		if(bzy.userId==null){
 			throw new GException(PlatformExceptionType.BusinessException, "请先选择签证员");
@@ -55,4 +61,5 @@ public class BzyService {
 		mv.data.put("data", JSONHelper.toJSONArray(list));
 		return mv;
 	}
+	
 }

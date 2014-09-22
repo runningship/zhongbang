@@ -17,6 +17,7 @@
 <script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/zb/hetong/bizman.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
 <script type="text/javascript">
 
@@ -64,7 +65,7 @@ $(function(){
     QueryOptions=JSON.parse(data);
     buildHtmlWithJsonArray("id_yongtu",QueryOptions['yongtu'],true); //房屋类型
     buildHtmlWithJsonArray("id_daikuan_lx",QueryOptions['daikuan_lx'],true); //贷款类型
-    buildHtmlWithJsonArray("id_qzy",QueryOptions['qzy'],true); //签证人
+    // buildHtmlWithJsonArray("id_qzy",QueryOptions['qzy'],true); //签证人
     $('.get_comp').val(QueryOptions['myQuyuId']);
     $('.get_comp').change();
     $('.get_quyu').val(QueryOptions['myDeptId']);
@@ -140,16 +141,22 @@ td{border-top:0px;}
       </td>
     </tr>
     <tr>
-      <td>
-        <div class="input-group">
+      <td colspan="2">
+        <!-- <div class="input-group">
           <span class="input-group-addon" style="padding:8px;">签证员</span>
           <select class="form-control" id="id_qzy" name="qzy">
             <option value="${name}">${name}</option>
           </select>
+        </div> -->
+        <div class="input-group input-group-select" style="width:600px;">
+          <span class="input-group-addon">交易员</span>
+          <select class="form-control bizman_get_comp" ></select>
+          <select class="form-control bizman_get_quyu" ></select>
+          <select class="form-control bizman_get_user" name="bizman"></select>
         </div>
       </td>
-      <td colspan="3">
-        <div class="input-group input-group-select" style="width:700px;">
+      <td colspan="2">
+        <div class="input-group input-group-select" style="width:600px;">
           <span class="input-group-addon">业务员</span>
           <select class="form-control get_comp" name="form_cid"></select>
           <select class="form-control get_quyu" name="ywDeptId"></select>

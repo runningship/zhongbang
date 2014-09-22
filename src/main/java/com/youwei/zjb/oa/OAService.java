@@ -23,6 +23,7 @@ import com.youwei.zjb.entity.User;
 import com.youwei.zjb.oa.entity.Notice;
 import com.youwei.zjb.oa.entity.NoticeClass;
 import com.youwei.zjb.oa.entity.NoticeReceiver;
+import com.youwei.zjb.oa.entity.SiteInfo;
 import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.JSONHelper;
 
@@ -62,6 +63,8 @@ public class OAService {
 		}
 		AttenceService as = new AttenceService();
 		ModelAndView asmv = as.listMy();
+		List<SiteInfo> list = dao.listByParams(SiteInfo.class, "from SiteInfo order by ordera desc");
+		mv.data.put("list", JSONHelper.toJSONArray(list));
 		mv.data.put("attences", asmv.data.getJSONArray("attences"));
 		mv.data.put("now", DataHelper.sdf.format(new Date()));
 		return mv;

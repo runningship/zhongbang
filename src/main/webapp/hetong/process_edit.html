@@ -12,8 +12,8 @@
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
-<script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<script type="text/javascript" src="/zb/hetong/bizman.js"></script>
 <script type="text/javascript">
 
 function save(){
@@ -38,6 +38,11 @@ function get(id){
     success: function(data){
       var json = JSON.parse(data);
       fillData(json['process']);
+      $('.bizman_get_comp').val(json['bizman_qid']);
+      $('.bizman_get_comp').change();
+      $('.bizman_get_quyu').val(json['bizman_did']);
+      $('.bizman_get_quyu').change();
+      $('.bizman_get_user').val(json['process']['blrId']);
     }
   });
 }
@@ -53,30 +58,38 @@ $(function(){
   <form name="textForm" class="form-horizontal" role="form">
     <input class="form-control" type="hidden" name="id" />
     <div class="form-group">
-      <label for="compname" class="col-xs-3 control-label">办理事项</label>
+      <label for="compname" class="col-xs-3 control-label" style="width:80px;margin-left:20px;">办理事项</label>
       <div class="col-xs-9">
-        <input type="text" readonly="true" class="form-control" name="title">
+        <input type="text" readonly="true" class="form-control" style="width:150px;" name="title">
       </div>
     </div>
+    <!-- <div class="input-group input-group-select" style="width:500px;">
+      <span class="input-group-addon">交易员</span>
+      <select class="form-control bizman_get_comp" ></select>
+      <select class="form-control bizman_get_quyu" ></select>
+      <select class="form-control bizman_get_user" name="blrId"></select>
+    </div> -->
     <div class="form-group">
-      <label for="compname" class="col-xs-3 control-label">办理人</label>
-      <div class="col-xs-9">
-        <input type="text" class="form-control"   name="blr">
+      <label for="compname" class="col-xs-3 control-label" style="width:80px;margin-left:20px;">办理人</label>
+      <div class="input-group input-group-select" style="width:500px;margin-left:14px;">
+        <select class="form-control bizman_get_comp" ></select>
+        <select class="form-control bizman_get_quyu" ></select>
+        <select class="form-control bizman_get_user" name="blrId"></select>
       </div>
     </div>
 
     <div class="form-group">
-      <label for="compname" class="col-xs-3 control-label">办理日期</label>
+      <label for="compname" class="col-xs-3 control-label" style="width:80px;margin-left:20px;">办理日期</label>
       <div class="col-xs-9">
-        <input type="text" class="form-control" name="endtime" id="idTimes" onFocus="WdatePicker()">
+        <input type="text" class="form-control" name="endtime" style="width:150px;" id="idTimes" onFocus="WdatePicker()">
       </div>
     </div>
-    <div class="form-group">
+   <!--  <div class="form-group">
       <label for="compname" class="col-xs-3 control-label">办理总结</label>
       <div class="col-xs-9">
         <input type="text" class="form-control"  name="conts">
       </div>
-    </div>
+    </div> -->
    
   </form>
    <div class="form-group">

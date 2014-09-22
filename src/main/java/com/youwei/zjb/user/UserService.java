@@ -93,6 +93,19 @@ public class UserService {
 	}
 	
 	@WebMethod
+	public ModelAndView getBizmanTree(){
+		ModelAndView mv = new ModelAndView();
+		String sql = "select q.id as qid , q.namea as pname, d.id as did, d.namea as cname , b.userId as userId ,u.uname as user from Bzy b , User u ,Department d , "
+				+ " Department q where b.userId=u.id and u.deptId=d.id and d.fid=q.id";
+		//{qid=2, pname=瑶海营销中心, did=3, user=赵燕萍, cname=临泉路分公司, userId=417}
+		List<Map> users = dao.listAsMap(sql);
+		Map<String, JSONArray> quyus = groupByQuyu(users);
+		Map<String, JSONArray> depts = groupByDeptId(users);
+		JSONArray root = merge(quyus,depts,users);
+		mv.data.put("result", root.toString());
+		return mv;
+	}
+	@WebMethod
 	public ModelAndView search(String username){
 		ModelAndView mv = new ModelAndView();
 		String hql = "select uname as uname , id as userId ,tel as tel from User where uname like ?";

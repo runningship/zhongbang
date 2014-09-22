@@ -45,8 +45,14 @@ function fillData(journal){
   $('#title').html(journal['title']);
   $('#conta').html(journal['conta']);
   $('#contb').html(journal['contb']);
-  $('#pingji').val(journal['pingji']);
   $('#id').html(journal['id']);
+  if (journal['pingji']!="") {
+    $('#pingji2').css('display','none');
+    $('#pingji1').html(journal['pingji']);
+  }else {
+    $('#pingji3').css('display','none');
+    $('#pingji').val(journal['pingji']);
+  };
 }
 
 function getAttachList(){
@@ -150,7 +156,7 @@ $(function(){
             <span id="editor" type="text/plain" style="width:99%;height:150px;"></span>
           </td>
         </tr>
-        <tr auth="yw_journal_work_pingji">
+        <tr auth="yw_journal_work_pingji" id="pingji2" >
           <th>考核评级：</th>
           <td>
           <select class="form-control " name="pingji" id="pingji" style="width:100px;">
@@ -159,6 +165,10 @@ $(function(){
           <option value="C">C</option>
           </select>
           </td>
+        </tr>
+        <tr id="pingji3" >
+          <th>考核评级：</th>
+          <td id="pingji1"></td>
         </tr>
         <tr>
           <th></th>

@@ -17,6 +17,7 @@
 <script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/zb/hetong/bizman.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
 <script type="text/javascript">
 
@@ -65,10 +66,10 @@ function openAddYongjinProxy(id){
 function openEditProcess(id){
   art.dialog.open('process_edit.html?id='+id,{
       padding:0,
-      resize:true,
+      resize:false,
       lock:1,
-      height:'300',
-      width:'400'
+      height:'270',
+      width:'600'
   });
 }
 
@@ -93,19 +94,20 @@ function fillData(contract){
 function buildBlr(rowIndex){
   var action = actions[rowIndex];
   if(action.flag==2){
-    return action.blr;
+    return '<span style="padding-left:10px;">'+action.blr+'</span>';
   }
-  if(action.qian==2){
-    return '<div><input style="width:200px;" type="text" class="form-control" id="blr_'+rowIndex+'" name="blr" ></div>';
-  }
-  var bzr = editPageData['bzy'];
-  var str = '<select name="blr" id="blr_'+rowIndex+'" style="width:200px;">'
-  for(var i=0;i<bzr.length;i++){
-    var name =  bzr[i]['name'];
-    var option = '<option value="'+name+'">'+name+'</option>';
-    str +=option;
-  }
-  str+='</select>';
+  // if(action.qian==2){
+  //   return '<div><input style="width:200px;" type="text" class="form-control" id="blr_'+rowIndex+'" name="blr" ></div>';
+  // }
+  // var bzr = editPageData['bzy'];
+  // var str = '<select name="blr" id="blr_'+rowIndex+'" style="width:200px;">'
+  // for(var i=0;i<bzr.length;i++){
+  //   var name =  bzr[i]['name'];
+  //   var option = '<option value="'+name+'">'+name+'</option>';
+  //   str +=option;
+  // }
+  // str+='</select>';
+  var str = '<div class="input-group input-group-select" style="width:500px;"><select class="form-control bizman_get_comp_'+rowIndex+'" ></select><select class="form-control bizman_get_quyu_'+rowIndex+'" ></select><select class="form-control bizman_get_user_'+rowIndex+'" id="bizman_'+rowIndex+'"></select></div>';
   return str;
 }
 
@@ -149,7 +151,7 @@ function ignoreAction(rowIndex){
 
 function doProcess(rowIndex){
   var action = actions[rowIndex];
-  var data = 'blr='+$('#blr_'+rowIndex).val()+'&conts='+$('#conts_'+rowIndex).val()+'&endtime='+$('#endtime_'+rowIndex).val();
+  var data = 'blrId='+$('#bizman_'+rowIndex).val()+'&conts='+$('#conts_'+rowIndex).val()+'&endtime='+$('#endtime_'+rowIndex).val();
   YW.ajax({
     type: 'POST',
     url: '/zb/c/contract/process/doProcess?id='+action.id,
@@ -170,7 +172,7 @@ $(function(){
     actions = editPageData['actions']
     buildHtmlWithJsonArray("id_yongtu",editPageData['yongtu'],true); //房屋类型
     buildHtmlWithJsonArray("id_daikuan_lx",editPageData['daikuan_lx'],true); //贷款类型
-    buildHtmlWithJsonArray("id_qzy",editPageData['qzy'],true); //签证人
+    // buildHtmlWithJsonArray("id_qzy",editPageData['qzy'],true); //签证人
     fillData(editPageData['contract']);
     buildHtmlWithJsonArray("id_list",editPageData['actions']);
     buildHtmlWithJsonArray("id_list_yongjin",editPageData['yongjins']);
@@ -182,6 +184,18 @@ $(function(){
     if(editPageData['yongjinProxys'].length==0){
       $('#thead_yongjinProxys').remove();
       // $('#table_yongjinProxys').append('<tr><td colspan="3">等待财务添加...</td></tr>');
+    }
+    try{
+      $('.bizman_get_comp').val(editPageData['bizman_qid']);
+      $('.bizman_get_comp').change();
+      $('.bizman_get_quyu').val(editPageData['bizman_did']);
+      $('.bizman_get_quyu').change();
+      $('.bizman_get_user').val(editPageData['contract']['bizman']);
+    }catch(e){
+      console.log(e);
+    }
+    for(var i=0;i<actions.length;i++){
+      bizman_fun_get_comp(''+i);
     }
   });
 });
@@ -268,11 +282,17 @@ table.table>thead>tr>th, table.table>tbody>tr>th, table.table>tfoot>tr>th, table
     </tr>
     <tr>
       <td>
-        <div class="input-group">
+        <!-- <div class="input-group">
           <span class="input-group-addon" style="padding:8px;">签证员</span>
           <select class="form-control" id="id_qzy" name="qzy">
             <option value="${name}">${name}</option>
           </select>
+        </div> -->
+        <div class="input-group input-group-select" style="width:600px;">
+          <span class="input-group-addon">交易员</span>
+          <select class="form-control bizman_get_comp" ></select>
+          <select class="form-control bizman_get_quyu" ></select>
+          <select class="form-control bizman_get_user" name="bizman"></select>
         </div>
       </td>
       <td colspan="3">
@@ -408,20 +428,27 @@ table.table>thead>tr>th, table.table>tbody>tr>th, table.table>tfoot>tr>th, table
   </table>
   </form>
   <div style="background:#ddd;font-weight:bold;height:30px;line-height:30px;"><span style="padding-left:10px;font-size:16px;">办理情况: </span></div>
-  <table style="width:100%">
+  <table style="width:">
     <tr>
-      <th>办理事项</th>
-      <th>办理人</th>
+      <th style="padding:15px;width:80px;">办理事项</th>
+      <th style="padding:15px;">办理人</th>
       <th>办理结束日期</th>
-      <th>办理总结</th>
+      <!-- <th>办理总结</th> -->
       <th>状态</th>
     </tr>
     <tbody id="id_list">
     <tr style="height:40px;display:none">
-      <td style="vertical-align:middle">${title}</td>
+      <td style="vertical-align:middle;padding-left:15px;">${title}</td>
       <td style="vertical-align:middle" class="runscript">buildBlr(${rowIndex})</td>
-      <td style="vertical-align:middle" class="runscript">buildBlrq(${rowIndex})</td>
-      <td style="vertical-align:middle" class="runscript">buildZj(${rowIndex})</td>
+      <!-- <td style="vertical-align:middle;width:550px;" >
+        <div class="input-group input-group-select" style="width:500px;">
+          <select class="form-control bizman_get_comp" ></select>
+          <select class="form-control bizman_get_quyu" ></select>
+          <select class="form-control bizman_get_user" name="bizman"></select>
+        </div>
+      </td> -->
+      <td style="vertical-align:middle;width:180px;" class="runscript">buildBlrq(${rowIndex})</td>
+      <!-- <td style="vertical-align:middle" class="runscript">buildZj(${rowIndex})</td> -->
       <td style="vertical-align:middle" class="runscript">buildZt(${rowIndex})</td>
     </tr>
     </tbody>

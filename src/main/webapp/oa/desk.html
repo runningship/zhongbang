@@ -74,8 +74,8 @@ function init(){
       $(data.fenlei).each(function(index){
         buildHtmlWithJsonArray('item_body_'+this.id,data[this.fenlei]);
       });
-      buildHtmlWithJsonArray('attences',data.attences);
-      
+      // buildHtmlWithJsonArray('attences',data.attences);
+      buildHtmlWithJsonArray('sites',data.list);
     }
   });
   var today = new Date();
@@ -100,6 +100,10 @@ function openView(id,name){
 
 function more(fenleiId){
   window.parent.select(fenleiId);
+}
+
+function openIE(url){
+  hex.openExternal(url);
 }
 
 function buildAttence(type){
@@ -143,39 +147,16 @@ $(function(){
             </div>
           </div>
         </span>
+
         <div class="flat2">
           <div class="row-fluid item_box" >
               <div class="item_head">
                 <h3>网址收藏</h3>
               </div>
-              <span >
-                <div class="item_body">
-                   <a href="http://www.ganji.com" title="http://www.ganji.com">赶集网</a>
-                </div>
-                <div class="item_body">
-                   <a href="http://hf.soufun.com" title="http://hf.soufun.com">搜房网</a>
-                </div>
-                <div class="item_body">
-                   <a href="http://hf.soufun.com" title="http://hf.soufun.com">搜房网</a>
-                </div>
-                <div class="item_body">
-                   <a href="http://www.house365.com" title="http://www.house365.com">365网</a>
-                </div>
-                <div class="item_body">
-                   <a href="http://www.58.com" title="http://www.58.com">58同城</a>
-                </div>
-                <div class="item_body">
-                   <a href="http://hf.anjuke.com" title="http://hf.anjuke.com">安居客</a>
-                </div>
-                <div class="item_body">
-                   <a href="http://hfhouse.com" title="http://oldhouse.hfhouse.com">合房网</a>
-                </div>
-                <div class="item_body">
-                   <a href="http://www.zhongjiebao.com" title="http://www.zhongjiebao.com">中介宝</a>
-                </div>
-                <div class="item_body">
-                   <a href="http://www.baidu.com" title="http://www.baidu.com">百度</a>
-                </div>
+              <span id="sites">
+                  <div class="item_body">
+                    <a href="javascript:void(0);" style="width:70%;overflow: hidden;text-overflow: ellipsis;" onclick="openIE('${conts}');">${title}</a></span>
+                  </div>
               </span>
           </div>
         </div>

@@ -69,14 +69,17 @@ public class JSONHelper {
 	}
 	
 	public static JSONArray toJSONArray(List<?> list){
+		return toJSONArray(list, DataHelper.sdf.toPattern());
+	}
+	public static JSONArray toJSONArray(List<?> list , String timeFormat){
 		if(list==null){
 			return new JSONArray();
 		}
 		JSONArray arr = new JSONArray();
 		JsonConfig cfg = new JsonConfig();
 		cfg.setIgnorePublicFields(false);
-		cfg.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
-		cfg.registerJsonValueProcessor(Timestamp.class, new JsonDateValueProcessor());
+		cfg.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor(timeFormat));
+		cfg.registerJsonValueProcessor(Timestamp.class, new JsonDateValueProcessor(timeFormat));
 		for(Object obj : list){
 			if(obj instanceof Enum){
 				arr.add(JSONArray.fromObject(obj,cfg));

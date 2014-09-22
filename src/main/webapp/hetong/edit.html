@@ -17,6 +17,7 @@
 <script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/zb/hetong/bizman.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
 <script type="text/javascript">
 
@@ -54,6 +55,7 @@ function fillData(contract){
     select.val(contract[select.attr('name')]);
     select.change();
   });
+
 }
 
 $(function(){
@@ -64,6 +66,11 @@ $(function(){
     buildHtmlWithJsonArray("id_daikuan_lx",editPageData['daikuan_lx'],true); //贷款类型
     buildHtmlWithJsonArray("id_qzy",editPageData['qzy'],true); //签证人
     fillData(editPageData['contract']);
+    $('.bizman_get_comp').val(editPageData['bizman_qid']);
+    $('.bizman_get_comp').change();
+    $('.bizman_get_quyu').val(editPageData['bizman_did']);
+    $('.bizman_get_quyu').change();
+    $('.bizman_get_user').val(editPageData['contract']['bizman']);
   });
 });
 </script>
@@ -135,11 +142,17 @@ $(function(){
     </tr>
     <tr>
       <td>
-        <div class="input-group">
+        <!-- <div class="input-group">
           <span class="input-group-addon" style="padding:8px;">签证员</span>
           <select class="form-control" id="id_qzy" name="qzy">
             <option value="${name}">${name}</option>
           </select>
+        </div> -->
+        <div class="input-group input-group-select" style="width:600px;">
+          <span class="input-group-addon">交易员</span>
+          <select class="form-control bizman_get_comp" ></select>
+          <select class="form-control bizman_get_quyu" ></select>
+          <select class="form-control bizman_get_user" name="bizman"></select>
         </div>
       </td>
       <td colspan="3">

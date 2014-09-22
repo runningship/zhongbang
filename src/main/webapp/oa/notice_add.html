@@ -30,10 +30,9 @@ function save(){
     url: '/zb/c/oa/addNotice',
     data:text,
     success: function(data){
-      art.dialog.tips('保存成功,您还可以添加附件.');
-      recordId = JSON.parse(data)['recordId'];
-      initFileUpload();
+      art.dialog.close();
       art.dialog.opener.doSearch();
+      art.dialog.tips('保存成功');
     }
   });
   return false;

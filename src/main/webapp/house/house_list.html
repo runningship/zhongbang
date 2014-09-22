@@ -329,7 +329,7 @@ $(function(){
     this_hid=Thi.data('hid');
     //alert(Thi.find('.piliang').hasClass('hidden'))
     if(Thi.find('.piliang').hasClass('hidden')){
-      dialogs(this_hid);
+      // dialogs(this_hid);
     }else{
       var ThiCheckbox=Thi.find('.piliang').find('input[type=checkbox]');
 //      alert(ThiCheckbox.prop('checked'))
@@ -575,7 +575,7 @@ $(function(){
         <a auth="$${authParent}_edit" href="#" class="edit" data-hid="${id}" data-rel="edit">修改</a>
         <a auth="$${authParent}_del" href="##" class="del" data-hid="${id}" data-rel="del">删除</a>
         <a auth="$${authParent}_recover" href="###" class="revert hidden" data-hid="${id}" data-rel="revert">恢复</a>
-        <a href="javascript:void(0)" show="canView(${xingzhi})" class="see" data-hid="${id}" data-rel="see">查看</a></td>
+        <a auth="$${authParent}_view" href="javascript:void(0)" show="canView(${xingzhi})" class="see" data-hid="${id}" data-rel="see">查看</a></td>
     </tr>
     </tbody>
   </table>

@@ -45,7 +45,7 @@ public class ContractService {
 		ModelAndView mv = new ModelAndView();
 		mv.data.put("yongtu", HouseType.toJsonArray());
 		mv.data.put("daikuan_lx", DaiKuanType.toJsonArray());
-		mv.data.put("qzy", JSONHelper.toJSONArray(dao.listAsMap("select q.userId as userId , u.uname as name from Qzy q, User u where q.userId=u.id")));
+//		mv.data.put("qzy", JSONHelper.toJSONArray(dao.listAsMap("select q.userId as userId , u.uname as name from Qzy q, User u where q.userId=u.id")));
 		User user = ThreadSession.getUser();
 		mv.data.put("myId", user.id);
 		mv.data.put("myDeptId", user.Department().id);
@@ -57,6 +57,18 @@ public class ContractService {
 	public ModelAndView initEdit(int contractId){
 		ModelAndView mv = initAdd();
 		Contract contract = dao.get(Contract.class, contractId);
+		User bizman = null;
+		try{
+			bizman = dao.get(User.class, Integer.parseInt(contract.bizman));
+		}catch(Exception ex){
+			bizman = dao.getUniqueByKeyValue(User.class, "uname" , contract.bizman);
+			contract.bizman = bizman.id.toString();
+			dao.saveOrUpdate(contract);
+		}
+		if(bizman!=null){
+			mv.data.put("bizman_did", bizman.deptId);
+			mv.data.put("bizman_qid", bizman.Department().Parent().id);
+		}
 		mv.data.put("contract", JSONHelper.toJSON(contract));
 		if(contract.ywDeptId==null){
 			if(contract.ywUserId!=null){
@@ -76,7 +88,7 @@ public class ContractService {
 		ModelAndView mv = initEdit(contractId);
 		mv.data.put("bzy", JSONHelper.toJSONArray(dao.listAsMap("select b.userId as userId , u.uname as name from Bzy b, User u where b.userId=u.id")));
 		List<ContractProcess> processList = dao.listByParams(ContractProcess.class,"from ContractProcess where contractId=? order by ordera ",contractId);
-		mv.data.put("actions", JSONHelper.toJSONArray(processList));
+		mv.data.put("actions", JSONHelper.toJSONArray(processList, DataHelper.dateSdf.toPattern()));
 		//佣金收费
 		List<YongJin> yongjins = dao.listByParams(YongJin.class, "from YongJin where contractId = ? and flag=1", contractId);
 		mv.data.put("yongjins", JSONHelper.toJSONArray(yongjins));
@@ -119,6 +131,9 @@ public class ContractService {
 		Contract po = dao.get(Contract.class, contract.id);
 		if(po==null){
 			throw new GException(PlatformExceptionType.BusinessException, "合同已不存在");
+		}
+		if(contract.ywUserId==null){
+			throw new GException(PlatformExceptionType.BusinessException, "请先选择业务员");
 		}
 		contract.addtime = po.addtime;
 		contract.userId = po.userId;
