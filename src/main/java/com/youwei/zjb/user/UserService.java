@@ -476,8 +476,10 @@ public class UserService {
 	public ModelAndView logout(PC pc){
 		ModelAndView mv = new ModelAndView();
 		//httpsession timeout & remove sessionid from db
-		dao.execute("delete from UserSession where userid=? and sessionId=?", ThreadSession.getUser().id, ThreadSession.getHttpSession().getId());
-		ThreadSession.getHttpSession().invalidate();
+		if(ThreadSession.getUser()!=null){
+			dao.execute("delete from UserSession where userid=? and sessionId=?", ThreadSession.getUser().id, ThreadSession.getHttpSession().getId());
+			ThreadSession.getHttpSession().invalidate();
+		}
 		return mv;
 	}
 

@@ -196,6 +196,10 @@ public class ContractService {
 			hql.append(" and c.bianhao like ? ");
 			params.add("%"+query.bianhao+"%");
 		}
+		if(StringUtils.isNotEmpty(query.beizhu)){
+			hql.append(" and c.conts like ? ");
+			params.add("%"+query.beizhu+"%");
+		}
 		if(StringUtils.isNotEmpty(query.name)){
 			hql.append(" and (c.lxr_f like ? or c.lxr_k like ?)");
 			params.add("%"+query.name+"%");

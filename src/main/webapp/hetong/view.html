@@ -209,7 +209,7 @@ $(function(){
 .hadd  .colspan2{ width: 300px;}
 .hadd{ height: auto;}
 .input-group {
-  width: auto;
+  width: 180px;
 }
 #table_yongjin td{
   border:1px solid gray;
@@ -231,7 +231,7 @@ table.table>thead>tr>th, table.table>tbody>tr>th, table.table>tfoot>tr>th, table
 <form name="form1" method="post" action="/zb/c/contract/update" onsubmit="return funSubmit();">
   <input type="hidden" id="claid" name="claid" />
   <input type="hidden" id="contractId" name="id" />
-  <table class="table table-condensed">
+  <table class="table table-condensed" style="width:auto">
     <tr>
       <td>
         <div class="input-group">
@@ -239,8 +239,8 @@ table.table>thead>tr>th, table.table>tbody>tr>th, table.table>tfoot>tr>th, table
           <input type="text" class="form-control" name="bianhao" >
         </div>
       </td>
-      <td>
-        <div class="input-group ">
+      <td colspan="2">
+        <div class="input-group " style="width:393px">
           <span class="input-group-addon" style="padding:8px;">地址</span>
           <input type="text" class="form-control" name="addr" >
         </div>
@@ -281,22 +281,22 @@ table.table>thead>tr>th, table.table>tbody>tr>th, table.table>tfoot>tr>th, table
       </td>
     </tr>
     <tr>
-      <td>
+      <td colspan="2">
         <!-- <div class="input-group">
           <span class="input-group-addon" style="padding:8px;">签证员</span>
           <select class="form-control" id="id_qzy" name="qzy">
             <option value="${name}">${name}</option>
           </select>
         </div> -->
-        <div class="input-group input-group-select" style="width:600px;">
+        <div class="input-group input-group-select" style="width:406px;">
           <span class="input-group-addon">交易员</span>
           <select class="form-control bizman_get_comp" ></select>
           <select class="form-control bizman_get_quyu" ></select>
           <select class="form-control bizman_get_user" name="bizman"></select>
         </div>
       </td>
-      <td colspan="3">
-        <div class="input-group input-group-select" style="width:700px;">
+      <td colspan="2">
+        <div class="input-group input-group-select" style="width:406px;">
           <span class="input-group-addon">业务员</span>
           <select class="form-control get_comp" name="quyu"></select>
           <select class="form-control get_quyu" name="ywDeptId"></select>
@@ -387,14 +387,14 @@ table.table>thead>tr>th, table.table>tbody>tr>th, table.table>tfoot>tr>th, table
     </tr>
 
     <tr>
-      <td colspan="2">
-        <div class="input-group" style="width:100%">
+      <td colspan="">
+        <div class="input-group">
           <span class="input-group-addon">佣金总计</span>
           <span style="width:100%" type="text" class="form-control" id="yongjin_total"></span>
         </div>
       </td>
-      <td colspan="2">
-        <div class="input-group" style="width:100%">
+      <td colspan="">
+        <div class="input-group">
           <span class="input-group-addon">佣金损失</span>
           <span style="width:100%" class="form-control" id="yongjin_total"></span>
         </div>
@@ -412,13 +412,13 @@ table.table>thead>tr>th, table.table>tbody>tr>th, table.table>tfoot>tr>th, table
 
     <tr>
       <td colspan="2">
-        <div class="input-group" style="width:99%;">
+        <div class="input-group" style="width:98%;">
           <span class="input-group-addon">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注</span>
           <textarea type="text" class="form-control" name="conts" ></textarea>
         </div>
       </td>
       <td colspan="2">
-        <div class="input-group" style="width:99%;">
+        <div class="input-group" style="width:98%;">
           <span class="input-group-addon">附属设施</span>
           <textarea type="text" class="form-control" name="remark" ></textarea> 
         </div>

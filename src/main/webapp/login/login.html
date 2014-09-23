@@ -168,6 +168,12 @@ function windowclose(){
 			window.blockAlert('请使用客户端登录');
 			windowclose();
 		}
+		try{
+			hex.manifest.cache_path="";
+			hex.updateManifest();
+		}catch(e){
+			console.log("clear cache_path fail");
+		}
 		didc = GetCookie('zb_l_comp');
 		uidc = GetCookie('zb_l_user');
 		get_company();

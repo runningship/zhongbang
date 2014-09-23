@@ -20,6 +20,8 @@ public class ContractQuery extends AbstractQuery{
 	
 	public Float zjiaEnd;
 	
+	public String beizhu;
+	
 	/**
 	 * 待办理事项
 	 */

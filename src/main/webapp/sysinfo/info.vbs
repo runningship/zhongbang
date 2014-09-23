@@ -1,10 +1,13 @@
 MsgValue = ""
     Set objWMIServiCe = GetObjeCt("winmgmts://./root/Cimv2")
     'harddrive
-    Set ColItems = objWMIServiCe.ExeCQuery("SELECT * FROM Win32_PhysicalMedia", , 48)
-    For EaCh objItem In ColItems
-        MsgValue = MsgValue & vbCrLf & "harddrive=" & objItem.SerialNumber
-    Next
+    Set objFSO = CreateObject("Scripting.FileSystemObject")  
+	Set colDrives = objFSO.Drives  
+	For Each objDrive in colDrives 
+		MsgValue = MsgValue & vbCrLf & "harddrive=" & objDrive.SerialNumber
+	Exit For
+	Next
+    
     'get CPU ID
     Set ColItems = objWMIServiCe.ExeCQuery("SeleCt * from Win32_ProCessor", , 48)
     For EaCh objItem In ColItems

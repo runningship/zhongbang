@@ -92,6 +92,14 @@ function openPiYue(id){
 //   var piyue = dataArr[rowIndex]['reply'];
 // }
 
+function buildShenHe(sh){
+  if(sh==0){
+    return "未批准";
+  }else{
+    return "已批准";
+  }
+}
+
 function buildEdit(reply,myId,uid){
   if(reply==0 && myId==uid){
     return "修改";
@@ -181,7 +189,7 @@ $(function(){
       <td>${starttime}</td>
       <td>${endtime}</td>
       <td>${qjdays}</td>
-      <td ><a auth="yw_journal_qj_sh" href="javascript:void(0)" onclick="openPiYue(${id})">批阅</a></td>
+      <td ><a auth="yw_journal_qj_sh"  class="runscript" href="javascript:void(0)" onclick="openPiYue(${id})">buildShenHe(${reply})</a></td>
       <td><a auth="yw_journal_qj_del" href="javascript:void(0)" onclick="deleteQJ(${id})">删除</a> 
           <a auth="yw_journal_qj_edit" href="javascript:void(0)" onclick="openEdit(${id})"><span >修改</span></a> </td>
     </tr>
