@@ -2,22 +2,17 @@ package com.youwei.zjb.view.oa;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
-import com.youwei.zjb.ThreadSession;
-import com.youwei.zjb.entity.RoleAuthority;
-import com.youwei.zjb.entity.User;
-import com.youwei.zjb.util.DataHelper;
 
 public class desk {
 
 	String[] weekDays = {"星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
 	
-	public void initPage(Document doc , String dataScope){
+	public Document initPage(Document doc , HttpServletRequest req){
 		Elements list = doc.getElementsByAttributeValue("serverId","timeflash");
 		Date now = new Date();
 		SimpleDateFormat dateSdf = new SimpleDateFormat("yyyy年MM月dd日");
@@ -28,5 +23,6 @@ public class desk {
 	    if(!list.isEmpty()){
 	    	list.get(0).html(flash);
 	    }
+	    return doc;
 	}
 }

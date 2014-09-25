@@ -53,7 +53,7 @@ function selectHouse(clientId){
   art.dialog.open('house_list.html?clientId='+clientId,{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:600,
       width:1500
   });
@@ -63,7 +63,7 @@ function selectUname(clientId){
   art.dialog.open('uname_edit.html?dataScope=all&clientId='+clientId,{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:300,
       width:300
   });
@@ -200,9 +200,7 @@ $(function(){
     //   ThiId=ThiId=Thi.parents('tr').find('input[name=ids]').val()
     // }
     ThiId=$(this).attr('client');
-    if(ThiFlag=='fy'){
-      selectHouse(ThiId);
-    }else if(ThiFlag=='fp'){
+    if(ThiFlag=='fp'){
       selectUname(ThiId);
     }else if(ThiFlag=='edit'){
       btnEdit(ThiId);
@@ -335,7 +333,7 @@ function openView(cid){
       <td>${addtime}</td>
       <td class='runscript'>getEnumTextByCode(queryOpts['kehu'],${kehu})</td>
       <td>${uname}</td>
-      <td><a href="javascript:void(0)" class="btn btn-xs" data-flag="fy">房源</a></td>
+      <td><a href="javascript:void(0)" class="btn btn-xs" data-flag="fy" onclick="selectHouse(${id});">房源</a></td>
       <td ><a serverId="assign" client="${id}" show="showAssign($${userId},${salesman},'${addtime}','${gjtime}',$${auth})" href="javascript:void(0)" class="btn btn-xs" data-flag="fp">分配</a></td>
       <td><a href="javascript:void(0)" onclick="openView(${id});" class="btn btn-xs" data-flag="view">查看</a>
           <a auth="$${authParent}_edit" href="javascript:void(0)" class="btn btn-xs" data-flag="edit">修改</a>

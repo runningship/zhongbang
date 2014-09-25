@@ -57,12 +57,12 @@ public class ViewServlet extends HttpServlet{
 		Document doc = Jsoup.parse(html);
 		
 		clazz = "com.youwei.zjb.view"+clazz;
-		String dataScope = req.getParameter("dataScope");
+//		String dataScope = req.getParameter("dataScope");
 		try {
 			Class<?> pageClass = Class.forName(clazz);
-			Method init = pageClass.getDeclaredMethod("initPage", Document.class ,String.class);
+			Method init = pageClass.getDeclaredMethod("initPage", Document.class ,HttpServletRequest.class);
 			Object page = pageClass.newInstance();
-			init.invoke(page, doc , dataScope);
+			doc = (Document) init.invoke(page, doc , req);
 		} catch (IllegalArgumentException | ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException ex) {
 			LogUtil.warning("page init failed.");
 		}catch (InvocationTargetException e1) {

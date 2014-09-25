@@ -79,7 +79,7 @@ function openAdd(){
   art.dialog.open('add.html?category=2',{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:window.top.document.body.offsetHeight-45,
       width:window.top.document.body.offsetWidth
   });
@@ -89,17 +89,25 @@ function openEdit(id){
   art.dialog.open('edit.html?category=2&recordId='+id,{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:window.top.document.body.offsetHeight-45,
       width:window.top.document.body.offsetWidth
   });
+}
+
+function edit(reply){
+  if (reply==1) {
+    return "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+  }else{
+    return "修改"
+  };
 }
 
 function openView(id){
   art.dialog.open('view.html?category=2&recordId='+id,{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:window.top.document.body.offsetHeight-45,
       width:window.top.document.body.offsetWidth
   });
@@ -109,7 +117,7 @@ function openPiyue(id){
   art.dialog.open('week_piyue.html?category=2&recordId='+id,{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:window.top.document.body.offsetHeight-45,
       width:window.top.document.body.offsetWidth
   });
@@ -188,7 +196,7 @@ $(function(){
       <td>${pingji}</td>
       <td><a href="javascript:void(0)" onclick="openView(${id})" >查看</a>
           <a auth="yw_journal_week_work_sh" href="javascript:void(0)" onclick="openPiyue(${id})" >批阅</a> 
-          <a auth="yw_journal_week_work_edit" href="javascript:void(0)" onclick="openEdit(${id})" >修改</a>
+          <a auth="yw_journal_week_work_edit" href="javascript:void(0)" onclick="openEdit(${id})" class="runscript">edit(${reply})</a>
           <a auth="yw_journal_week_work_del" href="javascript:void(0)" onclick="deleteOut(${id})">删除</a></td>
     </tr>
     </tbody>

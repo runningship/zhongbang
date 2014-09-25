@@ -138,7 +138,7 @@ function openHouseXingzhi(id,xingzhi){
   art.dialog.open('xingzhi_edit.html?xingzhi='+xingzhi+'&hid='+id,{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:200,
       width:300
   })
@@ -330,6 +330,9 @@ $(function(){
     //alert(Thi.find('.piliang').hasClass('hidden'))
     if(Thi.find('.piliang').hasClass('hidden')){
       // dialogs(this_hid);
+      if(Thi.find('.see')){
+        dialogs(this_hid);
+      }
     }else{
       var ThiCheckbox=Thi.find('.piliang').find('input[type=checkbox]');
 //      alert(ThiCheckbox.prop('checked'))

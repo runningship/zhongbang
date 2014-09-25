@@ -46,7 +46,7 @@ function openView(id){
   art.dialog.open('user_detail.html?dataScope=all&userId='+id,{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:450,
       width:500
   });
@@ -55,7 +55,7 @@ function openEdit(id){
   art.dialog.open('user_edit.html?userId='+id,{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:450,
       width:500
   });
@@ -65,7 +65,7 @@ function openPassword(userId){
   art.dialog.open('password_reset.html?userId='+userId,{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:250,
       width:400,
       title:'重置密码',
@@ -77,7 +77,7 @@ function openAuth(userId){
   art.dialog.open('menuTree.html?userId='+userId,{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:600,
       title:'授权',
       width:600

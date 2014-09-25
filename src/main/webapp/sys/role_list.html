@@ -41,7 +41,7 @@ function openAdd(){
   art.dialog.open('add.html?category=1',{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:100,
       width:300
   });
@@ -51,7 +51,7 @@ function openEdit(id){
   art.dialog.open('xt_zw_edit.html?category=1&roleId='+id,{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:100,
       width:300
   });
@@ -61,7 +61,7 @@ function openAuth(roleId){
   art.dialog.open('menuTree.html?roleId='+roleId,{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:600,
       title:'授权',
       width:600

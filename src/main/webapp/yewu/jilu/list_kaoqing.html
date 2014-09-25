@@ -72,7 +72,7 @@ function openView(id){
   art.dialog.open('view.html?category='+category+'&recordId='+id,{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:window.top.document.body.offsetHeight-45,
       width:window.top.document.body.offsetWidth
   });
@@ -84,7 +84,7 @@ function openEdit(id){
   art.dialog.open(url,{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:window.top.document.body.offsetHeight-45,
       width:window.top.document.body.offsetWidth
   });
@@ -100,7 +100,7 @@ function openAdd(){
   var win = art.dialog.open(url,{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:h,
       width:w
   });

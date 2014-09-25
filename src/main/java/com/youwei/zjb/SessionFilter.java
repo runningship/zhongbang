@@ -34,7 +34,7 @@ public class SessionFilter implements Filter{
 		HttpSession session = req.getSession();
 		ThreadSession.setHttpSession(session);
 		ThreadSession.setHttpSession(resp);
-		if(path.equals("/user/login") || path.equals("/user/getUserTree")){
+		if(path.equals("/user/login") || path.equals("/pc/add") || path.equals("/user/getUserTree")){
 			chain.doFilter(request, response);
 			return;
 		}

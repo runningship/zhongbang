@@ -668,7 +668,11 @@
 			"type":"virtual",
 			"children":[{
 				"name":"ht_add_sell_page",
-				"text":"添加出售合同页面",
+				"text":"添加出售合同",
+				"type":"menu"
+				},{
+				"name":"ht_list_sell_buzhou_edit",
+				"text":"修改办理情况",
 				"type":"menu"
 				},{
 				"name":"ht_add_sell_data",
@@ -695,6 +699,10 @@
 			"children":[{
 				"name":"ht_add_rent_page",
 				"text":"添加出租合同页面",
+				"type":"menu"
+				},{
+				"name":"ht_list_rent_buzhou_edit",
+				"text":"修改办理情况",
 				"type":"menu"
 				},{
 				"name":"ht_add_rent_data",

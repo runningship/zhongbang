@@ -122,7 +122,12 @@ function buildBlrq(rowIndex){
 function buildZt(rowIndex){
   var action = actions[rowIndex];
   if(action.flag==2){
-    return '已完成<a href="javascript:void(0)" onclick="openEditProcess('+action.id+')" style="float:right">修改</a>';
+    if('$${canEditBlqk}'=='true'){
+      return '已完成<a href="javascript:void(0)" onclick="openEditProcess('+action.id+')" style="float:right">修改</a>';
+    }else{
+      return '已完成';
+    }
+    
   }
   return '<button onclick="doProcess('+rowIndex+')" class="btn btn-primary">确定</button> <button onclick="ignoreAction('+rowIndex+')" class="btn">无需办理</button>';
 }

@@ -2,6 +2,8 @@ package com.youwei.zjb.view.client;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -13,10 +15,11 @@ import com.youwei.zjb.entity.UserAuthority;
 
 public class client_list {
 
-	public void initPage(Document doc , String dataScope){
+	public Document initPage(Document doc , HttpServletRequest req ){
+		String dataScope = req.getParameter("dataScope");
 		Elements list = doc.getElementsByAttributeValue("serverId","assign");
 		if(list==null || list.isEmpty()){
-			return;
+			return doc;
 		}
 		Element assign = list.get(0);
 		User user = ThreadSession.getUser();
@@ -39,5 +42,6 @@ public class client_list {
 		String show = assign.attr("show");
 		show = show.replace("$${auth}", auth);
 		assign.attr("show" , show);
+		return doc;
 	}
 }

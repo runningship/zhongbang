@@ -78,4 +78,18 @@ public class UserHelper {
 		return false;
 	}
 	
+	public static boolean hasAuthority(User u , String authName){
+		if(u==null){
+			return false;
+		}
+		if(authName==null){
+			return true;
+		}
+		for(UserAuthority ra : u.Authorities()){
+			if(authName.equals(ra.name)){
+				return true;
+			}
+		}
+		return false;
+	}
 }

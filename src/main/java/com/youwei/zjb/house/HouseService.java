@@ -111,18 +111,54 @@ public class HouseService {
 	@WebMethod
 	public ModelAndView update(House house){
 		ModelAndView mv = new ModelAndView();
+		if(house.userId==null){
+			throw new GException(PlatformExceptionType.BusinessException,"请先选择业务员");
+		}
 		User user = ThreadSession.getUser();
 		Config quyu = service.getUniqueByParams(Config.class, new String[]{"type","name"},new Object[]{"quyu" , house.quyu});
-		house.quyuCode = quyu.pyShort;
-		house.houseNumber = quyu.pyShort+"-"+house.id;
-		service.saveOrUpdate(house);
+		
+		House po = service.get(House.class, house.id);
+		po.quyuCode = quyu.pyShort;
+		po.houseNumber = quyu.pyShort+"-"+house.id;
+		po.jiaoyi = house.jiaoyi;
+		po.quyu = house.quyu;
+		po.area = house.area;
+		po.dhao = house.dhao;
+		po.fhao = house.fhao;
+		po.lxing = house.lxing;
+		po.hxf = house.hxf;
+		po.hxt = house.hxt;
+		po.hxw = house.hxw;
+		po.hxy = house.hxy;
+		po.dateyear = house.dateyear;
+		po.lceng = house.lceng;
+		po.zceng = house.zceng;
+		po.mianji = house.mianji;
+		po.zjia = house.zjia;
+		po.sjia = house.sjia;
+		po.ztai = house.ztai;
+		po.xingzhi = house.xingzhi;
+		po.leibie = house.leibie;
+		po.zhuangxiu = house.zhuangxiu;
+		po.chaoxiang = house.chaoxiang;
+		po.tuijie = house.tuijie;
+		po.tudizheng = house.tudizheng;
+		po.tel = house.tel;
+		po.userId = house.userId;
+		po.chanquan = house.chanquan;
+		po.lxr = house.lxr;
+		po.fortel = house.fortel;
+		po.beizhu = house.beizhu;
+		po.fordlr = house.fordlr;
+		po.fordlrtel = house.fordlrtel;
+		service.saveOrUpdate(po);
 //		String py = DataHelper.toPinyin(house.quyu);
 //		if(StringUtils.isNotEmpty(py) && py.length()>0){
 //			house.houseNumber=  py.toUpperCase().charAt(0)+"-" + house.id;
 //		}else{
 //			LogUtil.warning("生成房源编号失败,houseId="+house.id);
 //		}
-		House po = service.get(House.class, house.id);
+		
 		String gjStr = DataHelper.compareHouse(po, house);
 		house.isdel = po.isdel;
 		house.dateadd = po.dateadd;

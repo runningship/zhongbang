@@ -77,7 +77,7 @@ function openAdd(id,name){
   art.dialog.open('finance_add.html?claid='+id+'&claName='+name,{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:600,
       width:1080
   });
@@ -87,7 +87,7 @@ function openBanli(id){
   art.dialog.open('finance_banli.html?tableId='+id,{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:window.top.document.body.offsetHeight-45,
       width:window.top.document.body.offsetWidth
   });
@@ -105,7 +105,7 @@ function openEdit(id,name){
   art.dialog.open('finance_edit.html?recordId='+id+'&claName='+name,{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:600,
       width:1080
   });
@@ -115,7 +115,7 @@ function openView(id,name){
   art.dialog.open('finance_view.html?recordId='+id+'&claName='+name,{
       padding:0,
       resize:true,
-      lock:1,
+      lock:0,
       height:600,
       width:1080
   });
