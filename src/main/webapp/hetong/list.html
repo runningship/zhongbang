@@ -52,7 +52,16 @@ function openEdit(contractId){
   });
 }
 
-function openView(contractId){
+function openView(contractId,claid){
+  if (claid==6) {
+  art.dialog.open('chuzu_view.html?dataScope='+dataScope+'&authParent='+authParent+'&contractId='+contractId,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:'100%',
+      width:'980'
+  });
+}else{
   art.dialog.open('view.html?dataScope='+dataScope+'&authParent='+authParent+'&contractId='+contractId,{
       padding:0,
       resize:true,
@@ -60,6 +69,7 @@ function openView(contractId){
       height:'100%',
       width:'980'
   });
+};
 }
 
 function qingkong(){
@@ -189,7 +199,7 @@ $(function(){
       <td>${lxr_f}</td>
       <td>${lxr_k}</td>
       <td>${ywUserName}</td>
-      <td><a onclick="openView(${id});" href="javascript:void(0)">查看</a> <a auth="$${authParent}_edit" onclick="openEdit(${id});" href="javascript:void(0)">修改</a> 
+      <td><a onclick="openView(${id},${claid});" href="javascript:void(0)">查看</a> <a auth="$${authParent}_edit" onclick="openEdit(${id});" href="javascript:void(0)">修改</a> 
       <a auth="$${authParent}_del" href="javascript:void(0)" onclick="deletecontract(${id})">删除</a></td>
     </tr>
     </tbody>

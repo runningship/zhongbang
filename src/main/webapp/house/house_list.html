@@ -191,12 +191,12 @@ $(function(){
     buildHtmlWithJsonArray("id_chaoxiang",queryOptions['chaoxiang'],true,1); //朝向
     buildHtmlWithJsonArray("id_fangxing",queryOptions['fangxing'],true,1);   //户型
     buildHtmlWithJsonArray("id_leibie",queryOptions['leibie'],true,1);       //类别
-    buildHtmlWithJsonArray("id_louxing",queryOptions['louxing'],true);     //楼型
-    buildHtmlWithJsonArray("id_jiaoyi",queryOptions['jiaoyi'],true,1);       //交易
-    buildHtmlWithJsonArray("id_quyu",queryOptions['quyu'],true);           //区域
-    buildHtmlWithJsonArray("id_zhuangtai",queryOptions['zhuangtai'],true,1); //状态
-    buildHtmlWithJsonArray("id_xingzhi",queryOptions['xingzhi'],true); //房型
-    buildHtmlWithJsonArray("id_datetype",queryOptions['datetype'],true,1); //房型
+    buildHtmlWithJsonArray("id_louxing",queryOptions['louxing'],true);     
+    buildHtmlWithJsonArray("id_jiaoyi",queryOptions['jiaoyi'],true,1);      
+    buildHtmlWithJsonArray("id_quyu",queryOptions['quyu'],true);          
+    buildHtmlWithJsonArray("id_zhuangtai",queryOptions['zhuangtai'],true,1); 
+    buildHtmlWithJsonArray("id_xingzhi",queryOptions['xingzhi'],true); 
+    buildHtmlWithJsonArray("id_datetype",queryOptions['datetype'],true,1); 
     Page.Init();
     $('select').each(function(index,obj){
       if(obj.name=='dateType'){
@@ -476,7 +476,7 @@ $(function(){
     <div class="clearfix" style="width:998px;">
       <div class="input-group">
         <span class="input-group-addon">日期</span>
-        <select class="form-control" id="id_datetype" name="dateType">
+        <select class="form-control" name="dateType" id="id_datetype">
           <option value="">所有</option>
           <option value="${name}">${name}</option>
         </select>
@@ -495,8 +495,8 @@ $(function(){
       </div>
       <div class="input-group">
         <span class="input-group-addon">面积</span>
-        <input type="text" class="form-control" name="mianjiStart" desc="面积" placeholder="面积开始(M²)">
-        <input type="text" class="form-control" name="mianjiEnd" desc="面积" placeholder="面积结束(M²)">
+        <input type="text" class="form-control" name="mianjiStart" desc="面积" placeholder="面积下限(M²)">
+        <input type="text" class="form-control" name="mianjiEnd" desc="面积" placeholder="面积上限(M²)">
       </div>
       <div class="input-group">
         <span class="input-group-addon">楼层</span>

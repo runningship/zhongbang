@@ -28,11 +28,11 @@ public class client_list {
 			if(user!=null){
 				List<UserAuthority> authorities = user.Authorities();
 				for(UserAuthority ra : authorities){
-					if((dataScope+"_assign_by_dept").equals(ra.name)){
+					if((dataScope+"_assign_up_5days").equals(ra.name)){
 						auth += ra.name;
 						break;
 					}
-					if((dataScope+"_assign_by_comp").equals(ra.name)){
+					if((dataScope+"_assign_up_7days").equals(ra.name)){
 						auth = ra.name;
 					}
 				}

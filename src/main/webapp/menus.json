@@ -224,11 +224,11 @@
 					"text":"删除",
 					"type":"menu"
 				},{
-					"name":"ky_client_buy_assign_by_dept",
-					"text":"分配三天以上房源",
+					"name":"ky_client_buy_assign_up_5days",
+					"text":"分配五天以上房源",
 					"type":"menu"
 				},{
-					"name":"ky_client_buy_assign_by_comp",
+					"name":"ky_client_buy_assign_up_7days",
 					"text":"分配七天以上房源",
 					"type":"menu"
 				},{
@@ -267,11 +267,11 @@
 					"text":"删除",
 					"type":"menu"
 				},{
-					"name":"ky_client_rent_assign_up_3days",
-					"text":"分配三天以上房源",
+					"name":"ky_client_rent_assign_up_5days",
+					"text":"分配五天以上房源",
 					"type":"menu"
 				},{
-					"name":"ky_client_rent_assign_up_5days",
+					"name":"ky_client_rent_assign_up_7days",
 					"text":"分配七天以上房源",
 					"type":"menu"
 				},{

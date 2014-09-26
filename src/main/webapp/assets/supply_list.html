@@ -123,12 +123,12 @@ $(function(){
       <span class="input-group-addon">标题</span>
       <input type="text" class="form-control" name="title">
     </div>
-    <div class="input-group input-group-select">
+    <div class="input-group input-group-select" style="width:330px">
       <span class="input-group-addon">分公司</span>
-      <select class="form-control get_comp" name="form_cid"></select>
-      <select class="form-control get_quyu" name="form_did"></select>
+      <select class="form-control get_comp" name="form_cid" style="width:130px;"></select>
+      <select class="form-control get_quyu" name="form_did" style="width:130px;"></select>
     </div>
-    <div class="input-group" style="width:400px">
+    <div class="input-group" style="width:320px">
       <span class="input-group-addon">登记时间</span>
       <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:120px;border-radius:0;">
       <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:120px">

@@ -134,11 +134,12 @@ var ThiId='',title;
 }
 
 function showAssign(userId,salesman,addtime,gjtime,auth){
-  if(userId==salesman){
-    //自己发布的客源，任何时刻都可以分配
-    return true;
-  }
+  // if(userId==salesman){
+  //   //自己发布的客源，任何时刻都可以分配
+  //   return true;
+  // }
   if(auth==""){
+    //自己不能分配自己的房源
     //没有权限,不能分配
     return false;
   }
@@ -151,14 +152,15 @@ function showAssign(userId,salesman,addtime,gjtime,auth){
   }
   var today = new Date();
   
-  if(auth==dataScope+"_assign_by_dept"){
-    //分配3天以上房源
-    if(today.getTime()-t.getTime()>3*24*3600*1000){
+  if(auth==dataScope+"_assign_up_5days"){
+    //分配5天以上房源
+    //9.24修改
+    if(today.getTime()-t.getTime()>5*24*3600*1000){
       return true;
     }
   }
-  if(auth==dataScope+"_assign_by_comp"){
-    if(today.getTime()-t.getTime()>5*24*3600*1000){
+  if(auth==dataScope+"_assign_up_7days"){
+    if(today.getTime()-t.getTime()>7*24*3600*1000){
       return true;
     }
   }
@@ -202,14 +204,6 @@ $(function(){
     ThiId=$(this).attr('client');
     if(ThiFlag=='fp'){
       selectUname(ThiId);
-    }else if(ThiFlag=='edit'){
-      btnEdit(ThiId);
-    }else if(ThiFlag=='add'){
-      btnEdit('');
-    }else if(ThiFlag=='del'){
-      deleteClient(ThiId);
-    }else{
-
     }
     return false;
   });
@@ -285,7 +279,7 @@ function openView(cid){
       
       <div class="btn-group">
         <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
-        <button  class="btn btn-primary btnadd" data-flag="add">登记</button>
+        <button  class="btn btn-primary btnadd" onclick="btnEdit('')">登记</button>
       </div>
     </div>
 
@@ -318,7 +312,7 @@ function openView(cid){
       <th>客户性质</th>
       <th>业务员</th>
       <th>客配房</th>
-      <th auth="$${authParent}_assign">分配</th>
+      <!-- <th auth="$${authParent}_assign">分配</th> -->
       <th>操作</th>
     </thead>
     <tbody id="id_GJ_list">
@@ -334,10 +328,11 @@ function openView(cid){
       <td class='runscript'>getEnumTextByCode(queryOpts['kehu'],${kehu})</td>
       <td>${uname}</td>
       <td><a href="javascript:void(0)" class="btn btn-xs" data-flag="fy" onclick="selectHouse(${id});">房源</a></td>
-      <td ><a serverId="assign" client="${id}" show="showAssign($${userId},${salesman},'${addtime}','${gjtime}',$${auth})" href="javascript:void(0)" class="btn btn-xs" data-flag="fp">分配</a></td>
-      <td><a href="javascript:void(0)" onclick="openView(${id});" class="btn btn-xs" data-flag="view">查看</a>
-          <a auth="$${authParent}_edit" href="javascript:void(0)" class="btn btn-xs" data-flag="edit">修改</a>
-          <a auth="$${authParent}_del" href="javascript:void(0)"  class="btn btn-xs" data-flag="del">删除</a>
+      <td>
+          <a serverId="assign" client="${id}" show="showAssign($${userId},${salesman},'${addtime}','${gjtime}',$${auth})" href="javascript:void(0)" class="btn btn-xs" data-flag="fp">分配</a>
+          <a href="javascript:void(0)" onclick="openView(${id});" class="btn btn-xs" data-flag="view">查看</a>
+          <a auth="$${authParent}_edit" href="javascript:void(0)" class="btn btn-xs" onclick="btnEdit(${id})">修改</a>
+          <a auth="$${authParent}_del" href="javascript:void(0)"  class="btn btn-xs" onclick="deleteClient(${id})">删除</a>
       </td>
       
     </tr>
