@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>查看合同</title>
+<link rel="stylesheet" href="/zb/style/css.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/style/house.css">
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
+<script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.timers.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/zb/hetong/bizman.js"></script>
+<script type="text/javascript" src="/zb/js/pagination.js"></script>
+<script type="text/javascript">
+
+var getStr;
+var editPageData='';
+var actions;
+var contractId;
+function funSubmit(){
+  var url=$('form[name=form1]').attr('action');
+  YW.ajax({
+    type: 'POST',
+    url: url,
+    data:formSerialize($('form')),
+    success: function(data){
+    var getStr=JSON.parse(data);
+        art.dialog({title:'提示',content:'提交成功',ok: function (){
+            art.dialog.close()
+          }
+        });
+    }
+  });
+  return false;
+}
+
+
+function openAddYongjin(id){
+  art.dialog.open('yongjin_add.html?yongjinId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:'300',
+      width:'400'
+  });
+}
+
+function openAddYongjinProxy(id){
+  art.dialog.open('yongjin_proxy_add.html?yongjinId='+id,{
+      padding:0,
+      resize:true,
+      lock:1,
+      height:'300',
+      width:'400'
+  });
+}
+
+function openEditProcess(id){
+  art.dialog.open('process_edit.html?id='+id,{
+      padding:0,
+      resize:false,
+      lock:1,
+      height:'270',
+      width:'600'
+  });
+}
+
+function fillData(contract){
+  var arr = $('input');
+  arr = arr.add($('textarea'));
+  $(arr).each(function(index,obj){
+    var input = $(this);
+    if(input.attr('type')=='submit'){
+      return;
+    }
+    input.val(contract[input.attr('name')]);
+  });
+  
+   $('select').each(function(index,obj){
+    var select = $(this);
+    select.val(contract[select.attr('name')]);
+    select.change();
+  });
+}
+
+function buildBlr(rowIndex){
+  var action = actions[rowIndex];
+  if(action.flag==2){
+    return '<span style="padding-left:10px;">'+action.blr+'</span>';
+  }
+  // if(action.qian==2){
+  //   return '<div><input style="width:200px;" type="text" class="form-control" id="blr_'+rowIndex+'" name="blr" ></div>';
+  // }
+  // var bzr = editPageData['bzy'];
+  // var str = '<select name="blr" id="blr_'+rowIndex+'" style="width:200px;">'
+  // for(var i=0;i<bzr.length;i++){
+  //   var name =  bzr[i]['name'];
+  //   var option = '<option value="'+name+'">'+name+'</option>';
+  //   str +=option;
+  // }
+  // str+='</select>';
+  var str = '<div class="input-group input-group-select" style="width:500px;"><select class="form-control bizman_get_comp_'+rowIndex+'" ></select><select class="form-control bizman_get_quyu_'+rowIndex+'" ></select><select class="form-control bizman_get_user_'+rowIndex+'" id="bizman_'+rowIndex+'"></select></div>';
+  return str;
+}
+
+function buildBlrq(rowIndex){
+  var action = actions[rowIndex];
+  if(action.flag==2){
+    return action.endtime;
+  }
+  return '<input type="text" class="form-control" name="endtime" id="endtime_'+rowIndex+'" style="width:150px;" onFocus="WdatePicker()">';
+}
+
+function buildZt(rowIndex){
+  var action = actions[rowIndex];
+  if(action.flag==2){
+    if('$${canEditBlqk}'=='true'){
+      return '已完成<a href="javascript:void(0)" onclick="openEditProcess('+action.id+')" style="float:right">修改</a>';
+    }else{
+      return '已完成';
+    }
+    
+  }
+  return '<button onclick="doProcess('+rowIndex+')" class="btn btn-primary">确定</button> <button onclick="ignoreAction('+rowIndex+')" class="btn">无需办理</button>';
+}
+
+function buildZj(rowIndex){
+  var action = actions[rowIndex];
+  if(action.flag==2){
+    return action.conts;
+  }
+  return '<div><input style="width:200px;" id="conts_'+rowIndex+'" type="text" class="form-control" name="conts" ></div>';
+}
+
+function ignoreAction(rowIndex){
+  var action = actions[rowIndex];
+  YW.ajax({
+    type: 'get',
+    url: '/zb/c/contract/process/ignore?id='+action.id,
+    success: function(data){
+      art.dialog.tips('办理成功');
+      var json = JSON.parse(data);
+      actions = json['actions'];
+      buildHtmlWithJsonArray("id_list",actions);
+    }
+  });
+}
+
+function doProcess(rowIndex){
+  var action = actions[rowIndex];
+  var data = 'blrId='+$('#bizman_'+rowIndex).val()+'&conts='+$('#conts_'+rowIndex).val()+'&endtime='+$('#endtime_'+rowIndex).val();
+  YW.ajax({
+    type: 'POST',
+    url: '/zb/c/contract/process/doProcess?id='+action.id,
+    data:data,
+    success: function(data){
+      art.dialog.tips('办理成功');
+      var json = JSON.parse(data);
+      actions = json['actions'];
+      buildHtmlWithJsonArray("id_list",actions);
+    }
+  });
+}
+
+$(function(){
+  contractId = getParam('contractId');
+  $.get('/zb/c/contract/view?contractId='+contractId, function(data) {
+    editPageData=JSON.parse(data);
+    actions = editPageData['actions']
+    buildHtmlWithJsonArray("id_yongtu",editPageData['yongtu'],true); //房屋类型
+    buildHtmlWithJsonArray("id_daikuan_lx",editPageData['daikuan_lx'],true); //贷款类型
+    // buildHtmlWithJsonArray("id_qzy",editPageData['qzy'],true); //签证人
+    fillData(editPageData['contract']);
+    buildHtmlWithJsonArray("id_list",editPageData['actions']);
+    buildHtmlWithJsonArray("id_list_yongjin",editPageData['yongjins']);
+    buildHtmlWithJsonArray("id_list_yongjinProxys",editPageData['yongjinProxys']);
+    
+    // if(editPageData['yongjins'].length==0){
+    //   $('#id_list_yongjin').append('等待财务添加...');
+    // }
+    if(editPageData['yongjinProxys'].length==0){
+      $('#thead_yongjinProxys').remove();
+      // $('#table_yongjinProxys').append('<tr><td colspan="3">等待财务添加...</td></tr>');
+    }
+    try{
+      $('.bizman_get_comp').val(editPageData['bizman_qid']);
+      $('.bizman_get_comp').change();
+      $('.bizman_get_quyu').val(editPageData['bizman_did']);
+      $('.bizman_get_quyu').change();
+      $('.bizman_get_user').val(editPageData['contract']['bizman']);
+    }catch(e){
+      console.log(e);
+    }
+    for(var i=0;i<actions.length;i++){
+      bizman_fun_get_comp(''+i);
+    }
+  });
+});
+</script>
+<style type="text/css">
+.table{ margin-bottom: 0px;}
+.pointerevents{pointer-events:none}
+.font_no_br{white-space:nowrap;word-break: keep-all;}
+.w40b{ width: 40%;}
+.w160px{ width: 160px;}
+.hadd  .colspan2{ width: 300px;}
+.hadd{ height: auto;}
+.input-group {
+  width: 180px;
+}
+#table_yongjin td{
+  border:1px solid gray;
+  height: 65px;
+  vertical-align: middle;
+}
+#table_yongjin th{
+  border:1px solid gray;
+  height: 50px;
+  background-color: #eee;
+  vertical-align: middle;
+  font-weight: bold;
+  border-bottom: none;
+}
+table.table>thead>tr>th, table.table>tbody>tr>th, table.table>tfoot>tr>th, table.table>thead>tr>td, table.table>tbody>tr>td, table.table>tfoot>tr>td {border-top: none;}
+</style>
+</head>
+<body style="overflow:hidden; overflow-y:auto" id="id_house_see">
+<form name="form1" method="post" action="/zb/c/contract/update" onsubmit="return funSubmit();">
+  <input type="hidden" id="claid" name="claid" />
+  <input type="hidden" id="contractId" name="id" />
+  <table class="table table-condensed" style="width:auto">
+    <tr>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">合同编号</span>
+          <input type="text" class="form-control" name="bianhao" >
+        </div>
+      </td>
+      <td colspan="2">
+        <div class="input-group " style="width:393px">
+          <span class="input-group-addon" style="padding:8px;">地址</span>
+          <input type="text" class="form-control" name="addr" >
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon" style="padding:8px;">用途</span>
+          <select class="form-control" id="id_yongtu" name="yongtu">
+            <option value="${name}">${name}</option>
+          </select>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">房主姓名</span>
+          <input type="text" class="form-control" name="lxr_f" >
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">房主电话</span>
+          <input type="text" class="form-control" name="tel_f">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">客户姓名</span>
+          <input type="text" class="form-control" name="lxr_k">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">客户电话</span>
+          <input type="text" class="form-control" name="tel_k">
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="input-group input-group-select" style="width:406px;">
+          <span class="input-group-addon">业务员</span>
+          <select class="form-control get_comp" name="quyu"></select>
+          <select class="form-control get_quyu" name="ywDeptId"></select>
+          <select class="form-control get_user" name="ywUserId"></select>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">面积</span>
+          <input type="text" class="form-control" name="mianji" >
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">总价</span>
+          <input type="text" class="form-control" name="zjia">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">单价</span>
+          <input type="text" class="form-control" name="djia">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">产权证号</span>
+          <input type="text" class="form-control" name="chanquan" >
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">甲方应收佣金</span>
+          <input type="text" class="form-control" name="yongjin_a1">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">甲方实收佣金</span>
+          <input type="text" class="form-control" name="yongjin_a2">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">乙方应收佣金</span>
+          <input type="text" class="form-control" name="yongjin_b1">
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon">乙方实收佣金</span>
+          <input type="text" class="form-control" name="yongjin_b2">
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="">
+        <div class="input-group">
+          <span class="input-group-addon">佣金总计</span>
+          <span style="width:100%" type="text" class="form-control" id="yongjin_total"></span>
+        </div>
+      </td>
+      <td colspan="">
+        <div class="input-group">
+          <span class="input-group-addon">佣金损失</span>
+          <span style="width:100%" class="form-control" id="yongjin_total"></span>
+        </div>
+      </td>
+      <td>
+        <div class="input-group">
+          <span class="input-group-addon" style="padding:8px;">签约日期</span>
+          <input type="text" class="form-control" name="signdate" id="idTimes" onFocus="WdatePicker()">
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="4">
+        <div class="input-group" style="width:99%;">
+          <span class="input-group-addon">预约事项</span>
+          <input type="text" class="form-control" name="otherItems" >
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2">
+        <div class="input-group" style="width:98%;">
+          <span class="input-group-addon">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注</span>
+          <textarea type="text" class="form-control" name="conts" ></textarea>
+        </div>
+      </td>
+      <td colspan="2">
+        <div class="input-group" style="width:98%;">
+          <span class="input-group-addon">附属设施</span>
+          <textarea type="text" class="form-control" name="remark" ></textarea> 
+        </div>
+      </td>
+    </tr>
+    
+  </table>
+  </form>
+</body>
+</html>
