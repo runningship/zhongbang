@@ -146,7 +146,7 @@ $(function(){
       <th>外出原因</th>
       <th>外出时间</th>
       <th>返回时间</th>
-      <th>状态</th>
+      <th auth="yw_out_gs_piyue">状态</th>
       <th>操作</th>
     </thead>
     <tbody id="id_list" >
@@ -157,8 +157,9 @@ $(function(){
       <td>${outCont}</td>
       <td>${outTime}</td>
       <td>${backTime}</td>
-      <td><a onclick="openPiyue(${id})" href="javascript:void(0)" class="runscript">getEnumTextByCode(queryOpts['piyue'],${reply})</a></td>
-      <td><a onclick="openView(${id})" href="#" >查看</a> <a href="#" onclick="deleteOut(${id})">删除</a></td>
+      <td auth="yw_out_gs_piyue"><a onclick="openPiyue(${id})" href="javascript:void(0)" class="runscript">getEnumTextByCode(queryOpts['piyue'],${reply})</a></td>
+      <td><a onclick="openView(${id})" href="#" >查看</a> 
+          <a auth="yw_out_gs_del" href="#" onclick="deleteOut(${id})">删除</a></td>
       
     </tr>
     </tbody>

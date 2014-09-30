@@ -204,6 +204,10 @@
 	"type":"module",
 	"text":"客源管理",
 	"children":[{
+		"name":"ky_add",
+		"text":"添加客源",
+		"type":"virtual"
+		},{
 		"name":"ky_client",
 		"text":"客源管理",
 		"type":"virtual",
@@ -225,11 +229,11 @@
 					"type":"menu"
 				},{
 					"name":"ky_client_buy_assign_up_5days",
-					"text":"分配五天以上房源",
+					"text":"分配五天以上客源",
 					"type":"menu"
 				},{
 					"name":"ky_client_buy_assign_up_7days",
-					"text":"分配七天以上房源",
+					"text":"分配七天以上客源",
 					"type":"menu"
 				},{
 					"name":"ky_client_buy_data",
@@ -336,7 +340,7 @@
 	},{
 		"name":"yw_out_gs",
 		"text":"外出公事",
-		"type":"menu",
+		"type":"virtual",
 		"children":[{
 			"name":"yw_out_gs_list",
 			"text":"列表",
