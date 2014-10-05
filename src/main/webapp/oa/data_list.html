@@ -105,7 +105,7 @@ function openView(id,name){
 
 $(function(){
   var claid = getParam('claid');
-  $.get('/zb/c/oa/listFenLei', function(data) {
+  $.get('/zb/c/oa/listAuthedFenLei', function(data) {
     queryOpts=JSON.parse(data);
     buildHtmlWithJsonArray("adminClassList",queryOpts['list']);
     buildHtmlWithJsonArray("adminClassList2",queryOpts['list']);
@@ -136,10 +136,10 @@ $(function(){
     </ul>
   </div>
 
-  <div style="float:right;margin-right:20px;">
+  <div>
   <form name="form1" onsubmit="return doSearch();">
     <div class="btn-group">
-      <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:35px;padding:0px 10px 0px 10px;width:150px;"><span id="btn_class_select">分 类</span> <span class="caret"></span></button>
+      <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:30px;padding:0px 10px 0px 10px;width:150px;"><span id="btn_class_select">分 类</span> <span class="caret"></span></button>
       <ul class="dropdown-menu">
         <li onclick="selectType('','所有')"><label><span  style="color:black;padding-left:10px;line-height:30px;font-weight:normal">所有</span></label></li>
         <span id="adminClassList2">

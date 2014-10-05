@@ -119,6 +119,40 @@
 			"name":"fy_add_rent",
 			"text":"添加出租",
 			"type":"menu"
+		},{
+			"name":"fy_add_sell_data",
+			"text":"添加出售数据权限",
+			"type":"virtual",
+			"children":[{
+				"name":"fy_add_sell_data_dept",
+				"text":"分公司",
+				"type":"menu"
+			},{
+				"name":"fy_add_sell_data_quyu",
+				"text":"区域",
+				"type":"menu"
+			},{
+				"name":"fy_add_sell_data_all",
+				"text":"所有",
+				"type":"menu"
+			}]
+		},{
+			"name":"fy_add_rent_data",
+			"text":"添加出租数据权限",
+			"type":"virtual",
+			"children":[{
+				"name":"fy_add_rent_data_dept",
+				"text":"分公司",
+				"type":"menu"
+			},{
+				"name":"fy_add_rent_data_quyu",
+				"text":"区域",
+				"type":"menu"
+			},{
+				"name":"fy_add_rent_data_all",
+				"text":"所有",
+				"type":"menu"
+			}]
 		}]
 	},{
 		"name":"fy_other",
@@ -1276,7 +1310,7 @@
 			}]
 		},{
 			"name":"oa_notice_list",
-			"text":"公告",
+			"text":"公告数据",
 			"type":"virtual",
 			"children":[{
 				"name":"oa_notice_list_list",
@@ -1293,6 +1327,14 @@
 			},{
 				"name":"oa_notice_list_del",
 				"text":"删除",
+				"type":"menu"
+			},{
+				"name":"oa_notice_gg_add",
+				"text":"发布最新公告",
+				"type":"menu"
+			},{
+				"name":"oa_notice_email_add",
+				"text":"发布内部邮件",
 				"type":"menu"
 			}]
 		},{

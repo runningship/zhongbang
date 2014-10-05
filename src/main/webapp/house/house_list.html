@@ -182,6 +182,10 @@ function setDateSec(select){
 }
 
 $(function(){
+    
+    if(authParent=="fy_list_all" || authParent=="fy_list_fav"){
+      $('#louceng').width(170); 
+    }
     $('#authParent').val(authParent);
     // onSubmit_Form();
     // doSearch();
@@ -362,7 +366,7 @@ $(function(){
   .input-group {width: 130px;}
   .input-group-addon{ padding: 6px 6px}
   .form-control{ padding: 6px 6px;}
-  .input-group-select {width: 555px;}
+  .input-group-select {width: 414px;}
 </style>
 </head>
 <body class="hlist bodyer" style="overflow-y:auto">
@@ -403,15 +407,15 @@ $(function(){
           <option value="${name}">${name}</option>
         </select>
       </div>
-      <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+      <div class="btn-group" >
+        <button type="button" style="width:130px;text-align:left" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
           性质 <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" id="id_xingzhi">
           <li><label><input type="checkbox" name="xingzhi" value="${name}"> ${name}</label>
         </ul>
       </div>
-      <div class="input-group input-group-max">
+      <div class="input-group input-group-max" style="width:170px">
         <span class="input-group-addon">楼盘</span>
         <input type="hidden" class="form-control" name="Address" id="Address">
         <input type="text" class="form-control" name="area" id="area"  onkeyup="keyupdeal(event);" onkeydown="keydowndeal(event);" onclick="keyupdeal(event);" autocomplete="off" placeholder="楼盘名称(最少字)">
@@ -473,7 +477,7 @@ $(function(){
       </div>
     </div>
 
-    <div class="clearfix" style="width:998px;">
+    <div class="clearfix" style="width:900px;">
       <div class="input-group">
         <span class="input-group-addon">日期</span>
         <select class="form-control" name="dateType" id="id_datetype">
@@ -498,22 +502,20 @@ $(function(){
         <input type="text" class="form-control" name="mianjiStart" desc="面积" placeholder="面积下限(M²)">
         <input type="text" class="form-control" name="mianjiEnd" desc="面积" placeholder="面积上限(M²)">
       </div>
-      <div class="input-group">
+      <div class="input-group" id="louceng" style="">
         <span class="input-group-addon">楼层</span>
         <input type="text" class="form-control" name="lcengStart" placeholder="楼层">
         <input type="text" class="form-control" name="lcengEnd" placeholder="楼层">
       </div>
-
-      <div class="input-group" style="width:170px;">
-        <span class="input-group-addon">手机</span>
-        <input type="text" class="form-control" name="tel" placeholder="11位内数字">
-      </div>
-      
       <div class="input-group input-group-select">
         <span class="input-group-addon">发布人</span>
         <select class="form-control get_comp" name="form_cid"></select>
         <select class="form-control get_quyu" name="form_did"></select>
         <select class="form-control get_user" name="form_uid"></select>
+      </div>
+      <div class="input-group" style="width:170px;margin-left:5px;">
+        <span class="input-group-addon">手机</span>
+        <input type="text" class="form-control" name="tel" placeholder="11位内数字">
       </div>
       <div class="btn-group">
         <button type="button" class="btn btn-primary btn_subnmit" onclick="doSearch();">搜索</button>

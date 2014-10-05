@@ -126,14 +126,14 @@ public class User {
 	
 	public List<String> AdminClassList(){
 		List<String> result = new ArrayList<String>();
-		List<RoleAuthority> list1 = SimpDaoTool.getGlobalCommonDaoService().listByParams(RoleAuthority.class, "from RoleAuthority where name like ?", "xzgl_%");
+		List<RoleAuthority> list1 = SimpDaoTool.getGlobalCommonDaoService().listByParams(RoleAuthority.class, "from RoleAuthority where roleId=? and   name like ?", roleId, "xzgl_%");
 		for(RoleAuthority ra : list1){
 			String str = ra.name.replace("xzgl_", "");
 			if(!result.contains(str)){
 				result.add(str);
 			}
 		}
-		List<UserAuthority> list2 = SimpDaoTool.getGlobalCommonDaoService().listByParams(UserAuthority.class, "from UserAuthority where name like ?", "xzgl_%");
+		List<UserAuthority> list2 = SimpDaoTool.getGlobalCommonDaoService().listByParams(UserAuthority.class, "from UserAuthority where userId=? and name like ?", id, "xzgl_%");
 		for(UserAuthority ua : list2){
 			String str = ua.name.replace("xzgl_", "");
 			if(!result.contains(str)){

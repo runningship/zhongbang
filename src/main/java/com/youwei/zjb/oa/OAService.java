@@ -24,6 +24,7 @@ import com.youwei.zjb.oa.entity.Notice;
 import com.youwei.zjb.oa.entity.NoticeClass;
 import com.youwei.zjb.oa.entity.NoticeReceiver;
 import com.youwei.zjb.oa.entity.SiteInfo;
+import com.youwei.zjb.user.UserHelper;
 import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.JSONHelper;
 
@@ -57,7 +58,9 @@ public class OAService {
 		Page<Map> page = new Page<Map>();
 		page.setPageSize(5);
 		for(NoticeClass fenlei: fenLeiList){
-			StringBuilder hql = new StringBuilder("select  n.id as noticeId, n.title as title, n.addtime as addtime, nc.fenlei as classTitle, u.uname as uname, nr.hasRead as hasRead from Notice n, NoticeReceiver nr , NoticeClass nc , User u where n.id=nr.noticeId and n.claid=nc.id and u.id=n.userId and n.claid=? and nr.receiverId=? order by n.addtime desc");
+			StringBuilder hql = new StringBuilder("select  n.id as noticeId, n.title as title, n.addtime as addtime, nc.fenlei as classTitle, u.uname as uname,"
+					+ " nr.hasRead as hasRead from Notice n, NoticeReceiver nr , NoticeClass nc , User u where n.id=nr.noticeId and n.claid=nc.id"
+					+ " and u.id=n.userId and n.claid=? and nr.receiverId=? order by n.addtime desc");
 			Page<Map> noticeList = dao.findPage(page, hql.toString(),true, new Object[]{fenlei.id , user.id});
 			mv.data.put(fenlei.fenlei, JSONHelper.toJSONArray(noticeList.getResult()));
 		}
@@ -153,6 +156,35 @@ public class OAService {
 		List<NoticeClass> list = dao.listByParams(NoticeClass.class, "from NoticeClass order by id desc");
 		mv.data.put("list", JSONHelper.toJSONArray(list));
 		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView listAuthedFenLei(){
+		ModelAndView mv = new ModelAndView();
+		List<NoticeClass> list = getAuthedFenlei();
+		mv.data.put("list", JSONHelper.toJSONArray(list));
+		return mv;
+	}
+	
+	private List<NoticeClass> getAuthedFenlei(){
+		List<NoticeClass> list = dao.listByParams(NoticeClass.class, "from NoticeClass order by id desc");
+		User user = ThreadSession.getUser();
+		List<NoticeClass> result = new ArrayList<NoticeClass>();
+		for(NoticeClass fenlei: list){
+			//特殊处理
+			if("内部邮件".equals(fenlei.fenlei)){
+				if(!UserHelper.hasAuthority(user, "oa_notice_gg_add")){
+					continue;
+				}
+			}
+			if("最新公告".equals(fenlei.fenlei)){
+				if(!UserHelper.hasAuthority(user, "oa_notice_email_add")){
+					continue;
+				}
+			}
+			result.add(fenlei);
+		}
+		return result;
 	}
 	
 	@WebMethod
