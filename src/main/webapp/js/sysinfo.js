@@ -67,7 +67,6 @@ function getLicence(){
         uuid = fs.readFileSync(sysDir+'zjb.lic',"utf-8");
         var fst = fs.statSync(sysDir+'zjb.lic');
         ctime = fst.ctime.getTime();
-        alert(ctime);
     }catch(e){
         alert('获取授权信息失败');
     }

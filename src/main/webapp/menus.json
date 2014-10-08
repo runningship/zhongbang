@@ -240,7 +240,7 @@
 	"children":[{
 		"name":"ky_add",
 		"text":"添加客源",
-		"type":"virtual"
+		"type":"menu"
 		},{
 		"name":"ky_client",
 		"text":"客源管理",
