@@ -37,7 +37,7 @@ function windowclose(){
 }
 
 	//alert(hex.formResized)
-	var getUserTreeStr, bios, cpu, baseboard, harddrive, didc, uidc;
+	var getUserTreeStr, bios, cpu, baseboard, harddrive, didc, uidc ,uuid, ctime;
 
 	function artdialog(conts, icon, callback) {
 		art.dialog({
@@ -136,7 +136,9 @@ function windowclose(){
 			cpu : cpu,
 			baseboard : baseboard,
 			bios : bios,
-			harddrive : harddrive
+			harddrive : harddrive,
+			uuid:uuid,
+			ctime:ctime
 		}, urls = "/zb/c/user/login";
 		if (uid == '') {
 			artdialog('请选择用户', 'warning', '');
@@ -196,7 +198,9 @@ function windowclose(){
 				cpu : cpu,
 				baseboard : baseboard,
 				bios : bios,
-				harddrive : harddrive
+				harddrive : harddrive,
+				uuid:uuid,
+				ctime:ctime
 			}, function(data, status) {
 				//alert("Data: " + data + "\nStatus: " + status);
 				var datas = eval('(' + unescape(data) + ')');

@@ -45,6 +45,14 @@ public class SecurityHelper {
 	}
 	
 	public static boolean validate(PC target){
+		PC po = SimpDaoTool.getGlobalCommonDaoService().getUniqueByParams(PC.class, new String[]{"deptId","uuid" , "ctime"},	new Object[]{target.deptId , target.uuid , target.ctime});
+		if(po!=null){
+			if(po.lock==1){
+				return true;	
+			}else{
+				throw new GException(PlatformExceptionType.BusinessException, "授权审核中...");
+			}
+		}
 		List<PC> list = SimpDaoTool.getGlobalCommonDaoService().listByParams(PC.class, new String[]{"deptId"}, new Object[]{target.deptId});
 		if(list==null){
 			return false;

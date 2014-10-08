@@ -41,6 +41,7 @@ public class PC {
 	
 	public String bios="";
 	
+	public String uuid="";
 	@Column(name="llock")
 	public Integer lock;
 	
@@ -48,4 +49,6 @@ public class PC {
 	public String authCode;
 	
 	public String beizhu;
+	
+	public Long ctime;
 }
