@@ -60,6 +60,7 @@ public class HouseService {
 	public ModelAndView add(House house){
 		ModelAndView mv = new ModelAndView();
 		User user = ThreadSession.getUser();
+		house.xingzhi = String.valueOf(HouseAttribute.私盘.getCode());
 		District area = service.getUniqueByKeyValue(District.class, "name", house.area);
 		if(area==null){
 			throw new GException(PlatformExceptionType.BusinessException,"楼盘在楼盘字典中不存在，您可以先在楼盘字典中添加该楼盘");
@@ -151,7 +152,7 @@ public class HouseService {
 		po.beizhu = house.beizhu;
 		po.fordlr = house.fordlr;
 		po.fordlrtel = house.fordlrtel;
-		service.saveOrUpdate(po);
+//		service.saveOrUpdate(po);
 //		String py = DataHelper.toPinyin(house.quyu);
 //		if(StringUtils.isNotEmpty(py) && py.length()>0){
 //			house.houseNumber=  py.toUpperCase().charAt(0)+"-" + house.id;
@@ -160,13 +161,13 @@ public class HouseService {
 //		}
 		
 		String gjStr = DataHelper.compareHouse(po, house);
-		house.isdel = po.isdel;
-		house.dateadd = po.dateadd;
-//		house.userId = po.userId;
-		house.deptId = po.deptId;
+//		po.isdel = house.isdel;
+//		po.dateadd = po.dateadd;
+		house.userId = po.userId;
+		po.deptId = house.deptId;
 		if(house.mianji!=null && house.mianji!=0){
 			int jiage = (int) (house.sjia*10000/house.mianji);
-			house.djia = (float) jiage;
+			po.djia = (float) jiage;
 		}
 //		try{
 //			User ywy = service.get(User.class, Integer.valueOf(house.fbrId));
@@ -175,7 +176,7 @@ public class HouseService {
 //		}catch(Exception ex){
 //			LogUtil.log(Level.WARN, "业务员信息不正确,forlxr="+house.fbr, ex);
 //		}
-		service.saveOrUpdate(house);
+		service.saveOrUpdate(po);
 		
 		if(StringUtils.isNotEmpty(gjStr)){
 			GenJin gj = new GenJin();
@@ -188,7 +189,7 @@ public class HouseService {
 			gj.hid = po.id;
 			service.saveOrUpdate(gj);
 		}
-		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 修改了房源["+house.houseNumber+"]";
+		String operConts = "["+user.Department().namea+"-"+user.uname+ "] 修改了房源["+po.houseNumber+"]";
 		operService.add(OperatorType.房源记录, operConts);
 		mv.data.put("msg", "修改成功");
 		mv.data.put("result", 0);
