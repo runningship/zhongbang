@@ -32,8 +32,9 @@ public class IMService {
 	@WebMethod
 	public ModelAndView getContacts(int userId) {
 		ModelAndView mv = new ModelAndView();
+		//and u.flag=0 离职的由用户自行从好友列表中删除
 		List<Map> list = dao.listAsMap("select c.id as id ,c.ownerId as ownerId ,c.contactId as contactId ,c.ugroup as group ,u.uname as contactName, "
-				+ " u.tel as contactTel,d.namea as deptName,u.avatar as avatar from User u,Contact c,Department d where c.contactId=u.id and d.id=u.deptId and u.sh=1 and u.flag=0 and c.ownerId=?", new Object[] { userId });
+				+ " u.tel as contactTel,d.namea as deptName,u.avatar as avatar from User u,Contact c,Department d where c.contactId=u.id and d.id=u.deptId and u.sh=1  and c.ownerId=?", new Object[] { userId });
 		for(Map map : list){
 			int uid = (int) map.get("contactId");
 			if(IMServer.isUserOnline(uid)){
@@ -51,8 +52,10 @@ public class IMService {
 		return mv;
 	}
 	public List<Map> countUnReadMessage(int userId){
-		String hql = "select count(*) as total, senderId as senderId from Message where hasRead=0 and receiverId=? group by senderId";
-		List<Map> list = dao.listAsMap(hql, userId);
+		//需要过滤掉不在自己好友列表里面的
+		String hql = "select count(*) as total, m.senderId as senderId from Message m,Contact c where c.contactId=m.senderId and c.ownerId=? "
+				+ " and m.hasRead=0 and m.receiverId=? group by senderId";
+		List<Map> list = dao.listAsMap(hql, userId , userId);
 		return list;
 	}
 	
@@ -139,6 +142,14 @@ public class IMService {
 		Contact po = dao.getUniqueByParams(Contact.class, new String[]{"ownerId", "contactId"}, new Object[]{contact.ownerId,contact.contactId});
 		if(po==null){
 			dao.saveOrUpdate(contact);
+		}
+		
+		Contact po2 = dao.getUniqueByParams(Contact.class, new String[]{"ownerId", "contactId"}, new Object[]{contact.contactId,contact.ownerId});
+		if(po2==null){
+			Contact contact2 = new Contact();
+			contact2.ownerId = contact.contactId;
+			contact2.contactId = contact.ownerId;
+			dao.saveOrUpdate(contact2);
 		}
 		mv.data.put("result", new JSONObject());
 		return mv;

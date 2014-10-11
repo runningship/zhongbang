@@ -31,12 +31,15 @@ var IM = {
 	            if(callback!=null){
 	            	callback();
 	        	}
+	        	var totalUnRead=0;
 	        	for(var i=0;i<data['unreads'].length;i++){
 	        		var obj = data['unreads'][i];
+	        		totalUnRead+=obj['total'];
 	        		var msgCount = $($('#'+obj['senderId']).children(0)[1]);
 					msgCount.text(obj['total']);
 					msgCount.css('display','');
 	        	}
+	        	art.dialog.opener.setUnReadCount(totalUnRead);
 	        }
 	    });
 	},
@@ -89,7 +92,6 @@ var IM = {
 		var data = JSON.parse("{}");
 		data["type"]="login";
 		data["userId"]=IM.myId;
-		data["username"]="xzye";
 		IM.ws.send(JSON.stringify(data));
 	},
 
@@ -451,7 +453,7 @@ var IM = {
 		// });
 
 
-		jQuery.hotkeys.add('return',{propagate: true},function(e){
+		jQuery.hotkeys.add('return',{propagate: false},function(e){
 			IM.send();
 		});
 

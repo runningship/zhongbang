@@ -82,9 +82,16 @@ function openAdd(){
   });
 }
 
+var searching=false;
 function doSearch(){
+  if(searching){
+    return;
+  }
+  if(event==undefined || $(event.srcElement).attr('action')!='page'){
+    $('.pageInput').val(1);
+  }
+  searching=true;
   getList(formSerialize($('form[name=form1]')));
-  return false;
 }
 
 function deleteOut(id){
@@ -173,7 +180,7 @@ $(function(){
           <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:150px">
         </div>
         <div class="btn-group">
-          <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
+          <button type="button" class="btn btn-primary btn_subnmit" onclick="doSearch();">搜索</button>
         </div>
       </div>
     

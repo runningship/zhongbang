@@ -54,12 +54,21 @@ function getHuseList(a){
     }
   });
 }
-function onSubmit_Form(){
 
-  $('form[name=form1]').on('submit', function(event) {
-    getHuseList(formSerialize($(this)));
-    return false;
-  });
+var searching=false;
+function doSearch(){
+  if(searching){
+    return;
+  }
+  if(event==undefined || $(event.srcElement).attr('action')!='page'){
+    $('.pageInput').val(1);
+  }
+  searching=true;
+  getHuseList(formSerialize($('form[name=form1]')));
+}
+
+function qingkong(){
+  window.location.reload();
 }
 
 function setDateSec(select){
@@ -90,29 +99,29 @@ function getEnumText(category,code){
 }
 
 $(function(){
-    onSubmit_Form();
     setMainHeight();
     getHuseList('');
     $.get('/zb/c/house/getQueryOptions', function(data) {
     getStr=JSON.parse(data);
     //  alert(getStr['datetype'])
-    buildHtmlWithJsonArray("id_chaoxiang",getStr['chaoxiang'],true,1); //朝向
-    buildHtmlWithJsonArray("id_fangxing",getStr['fangxing'],true,1);   //户型
-    buildHtmlWithJsonArray("id_leibie",getStr['leibie'],true,1);       //类别
+    buildHtmlWithJsonArray("id_chaoxiang",getStr['chaoxiang'],true); //朝向
+    buildHtmlWithJsonArray("id_fangxing",getStr['fangxing'],true);   //户型
+    buildHtmlWithJsonArray("id_leibie",getStr['leibie'],true);       //类别
     buildHtmlWithJsonArray("id_louxing",getStr['louxing']);     //楼型
-    buildHtmlWithJsonArray("id_jiaoyi",getStr['jiaoyi'],true,1);       //交易
-    buildHtmlWithJsonArray("id_quyu",getStr['quyu']);           //区域
-    buildHtmlWithJsonArray("id_zhuangtai",getStr['zhuangtai'],true,1); //状态
-    buildHtmlWithJsonArray("id_xingzhi",getStr['xingzhi']); //房型
+    buildHtmlWithJsonArray("id_jiaoyi",getStr['jiaoyi'],true);       //交易
+    buildHtmlWithJsonArray("id_quyu",getStr['quyu'],true);           //区域
+    buildHtmlWithJsonArray("id_zhuangtai",getStr['zhuangtai'],true); //状态
+    buildHtmlWithJsonArray("id_xingzhi",getStr['xingzhi'],true); //房型
     buildHtmlWithJsonArray("id_datetype",getStr['datetype'],true); //房型
     Page.Init();
-    // $('select').each(function(index,obj){
-    //   if(obj.name=='dateType'){
-    //     return;
-    //   }
-    //   $(obj).prepend('<option value="">所有</option>');
-    //   $(obj).val("");
-    // });
+    $('select').each(function(index,obj){
+      if(obj.name=='dateType'){
+        return;
+      }
+      $(obj).prepend('<option value="">所有</option>');
+      $(obj).val("");
+    });
+    doSearch();
   });
 
   // $('#id_House_list').on('click', 'a', function(event) {
@@ -171,21 +180,18 @@ function chooseHouse(){
       <div class="input-group input-group-min">
         <span class="input-group-addon">状态</span>
         <select class="form-control " name="ztai" id="id_zhuangtai">
-          <option value="">所有</option>
           <option value="${name}">${name}</option>
         </select>
       </div>
       <div class="input-group input-group-min">
         <span class="input-group-addon">朝向</span>
         <select class="form-control " name="chaoxiang" id="id_chaoxiang">
-          <option value="">所有</option>
           <option value="${name}">${name}</option>
         </select>
       </div>
       <div class="input-group input-group-min">
         <span class="input-group-addon">房屋类别</span>
         <select class="form-control " name="leibie" id="id_leibie" style="width:70px">
-          <option value="">所有</option>
           <option value="${name}">${name}</option>
         </select>
       </div>
@@ -200,7 +206,6 @@ function chooseHouse(){
       <div class="input-group input-group-min">
         <span class="input-group-addon">交易</span>
         <select class="form-control " name="jiaoyis" id="id_jiaoyi">
-          <option value="">所有</option>
           <option value="${name}">${name}</option>
         </select>
       </div>
@@ -215,7 +220,6 @@ function chooseHouse(){
       <div class="input-group input-group-min">
         <span class="input-group-addon">房型</span>
         <select class="form-control " name="fangxing" id="id_fangxing">
-          <option value="">所有</option>
           <option value="${name}">${name}</option>
         </select>
       </div>
@@ -228,7 +232,7 @@ function chooseHouse(){
         </ul>
       </div>
       <div class="btn-group">
-        <button type="submit" class="btn btn-primary btn_subnmit">搜索提交</button>
+        <button type="button" class="btn btn-primary btn_subnmit" onclick="doSearch();">搜索提交</button>
         <button type="submit" class="btn">清空</button>
       </div>
     </div>

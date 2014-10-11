@@ -105,6 +105,7 @@ YW={
         complete: function(XMLHttpRequest, textStatus){
           $('#loading').remove();
           $('.block-submit').removeAttr('disabled');
+            searching=false;
         },
         error: function(data){
             if(data.status==500){

@@ -144,9 +144,19 @@ function openHouseXingzhi(id,xingzhi){
   })
 }
 
+var searching=false;
 function doSearch(){
+  if(searching){
+    return;
+  }
+  if(event==undefined || $(event.srcElement).attr('action')!='page'){
+    $('.pageInput').val(1);
+  }
+  searching=true;
   getHuseList(formSerialize($('form[name=form1]')));
 }
+
+
 function canView(xingzhi){
   //审核员
   if(xingzhi==5){
@@ -518,8 +528,7 @@ $(function(){
         <input type="text" class="form-control" name="tel" placeholder="11位内数字">
       </div>
       <div class="btn-group">
-        <button type="button" class="btn btn-primary btn_subnmit" onclick="doSearch();">搜索</button>
-        
+        <button type="button" class="btn btn-primary btn_subnmit" id="searchBtn" onclick="doSearch();">搜索</button>
         <button type="button" class="btn" data-type="qingkong" onclick="qingkong();">清空</button>
         <button type="button" class="btn btn-primary" auth="$${authParent}_export" onclick="houseExport();">导出</button>
       </div>

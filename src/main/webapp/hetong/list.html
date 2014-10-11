@@ -37,9 +37,17 @@ function getList(search){
   });
 }
 
+
+var searching=false;
 function doSearch(){
+  if(searching){
+    return;
+  }
+  if(event==undefined || $(event.srcElement).attr('action')!='page'){
+    $('.pageInput').val(1);
+  }
+  searching=true;
   getList(formSerialize($('form[name=form1]')));
-  return false;
 }
 
 function openEdit(contractId){
@@ -142,7 +150,7 @@ $(function(){
         <input type="text" class="form-control" name="tel">
       </div>
     </div>
-    <div class="clearfix">
+    <div class="clearfix" style="width:800px;">
       <div class="input-group">
         <span class="input-group-addon" style="padding:8px;">签约日期</span>
         <input type="text" class="form-control" name="dateStart" id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})">

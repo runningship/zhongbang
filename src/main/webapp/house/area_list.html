@@ -40,9 +40,19 @@ function getAreaList(search){
   });
 }
 
+var searching=false;
 function doSearch(){
-  var search = $("form[name=form1]").serialize(); //自动将form表单封装成json
-    getAreaList(search);
+  if(searching){
+    return;
+  }
+  if(event==undefined || $(event.srcElement).attr('action')!='page'){
+    $('.pageInput').val(1);
+  }
+  searching=true;
+  // $('#searchBtn').attr('disabled','disabled');
+  var a=$('form[name=form1]').serialize();
+  getAreaList(a);
+  // pushQueryToHistory($('form[name=form1]').serializeArray());
 }
 
 function onSubmit_Form(){
@@ -122,7 +132,7 @@ $(document).ready(function() {
 
 <div class="header">
     <div class="btn-group">
-      <button type="submit" class="btn btn-primary" onclick="openEdit();">添加</button>
+      <button type="button" class="btn btn-primary" onclick="openEdit();">添加</button>
     </div>
     <form name="form1">
     <div class="input-group input-group-max">
@@ -130,7 +140,7 @@ $(document).ready(function() {
       <input type="text" class="form-control" name="search">
     </div>
     <div class="btn-group">
-      <button type="submit" class="btn btn-primary">搜索</button>
+      <button type="button" class="btn btn-primary" onclick="doSearch();">搜索</button>
     </div>
     </form>
 </div>

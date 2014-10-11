@@ -71,9 +71,16 @@ function openAdd(){
   });
 }
 
+var searching=false;
 function doSearch(){
+  if(searching){
+    return;
+  }
+  if(event==undefined || $(event.srcElement).attr('action')!='page'){
+    $('.pageInput').val(1);
+  }
+  searching=true;
   getList(formSerialize($('form[name=form1]')));
-  return false;
 }
 
 function deleteOut(id){

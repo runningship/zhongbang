@@ -39,6 +39,7 @@ function getHuseList(){
   YW.ajax({
     type: 'POST',
     url: url,
+    data: formSerialize($('form[name=form1]')),
 //    async:false,
     success: function(data){
       getStr=JSON.parse(data);
@@ -48,6 +49,7 @@ function getHuseList(){
     }
   });
 }
+
 var getStr;
 var options;
 function getEnumText(category,code){
@@ -69,6 +71,7 @@ if (clientId=="") {
 $.get('/zb/c/house/getQueryOptions', function(data) {
     options=JSON.parse(data);
     getHuseList();
+    Page.Init();
   });
 
 });
@@ -82,7 +85,13 @@ $.get('/zb/c/house/getQueryOptions', function(data) {
 </head>
 <body class="hlist bodyer">
 <div class="header">
-  <form class="form-horizontal" role="form" name="form1"></form>
+  <form class="form-horizontal" role="form" name="form1">
+    <input type="hidden" class="userInput" name="xpath" value="">
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary btn_subnmit hidden" onclick="getHuseList();return false;">搜索提交</button>
+        <button type="submit" class="btn hidden">清空</button>
+      </div>
+    </form>
   <table class="table TableH">
     <tr>
       <th class="font_no_br">房源编号</th>

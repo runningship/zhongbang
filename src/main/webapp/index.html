@@ -136,6 +136,14 @@ function readMsg(readCount){
   }
 }
 
+function setUnReadCount(count){
+  if(count==0){
+    return;
+  }
+  var msgCount=$('#msgCount');
+  msgCount.text(count);
+  msgCount.css('display',''); 
+}
 function receiveChatMessage(data){
 	//alert(data);
 	var msgCount=$('#msgCount');

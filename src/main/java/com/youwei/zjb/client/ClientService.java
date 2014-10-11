@@ -20,6 +20,7 @@ import com.youwei.zjb.ThreadSession;
 import com.youwei.zjb.entity.Client;
 import com.youwei.zjb.entity.ClientGenJin;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.house.FangXing;
 import com.youwei.zjb.house.HouseQuery;
 import com.youwei.zjb.house.JiaoYi;
 import com.youwei.zjb.house.entity.House;
@@ -80,6 +81,10 @@ public class ClientService {
 		ModelAndView mv = new ModelAndView();
 		Client client = dao.get(Client.class, clientId);
 		User salesman = dao.get(User.class, client.salesman);
+		if(client.salesman!=null && !ThreadSession.getUser().id.equals(client.salesman)){
+			//不显示客户电话号码
+			client.tel="";
+		}
 		mv.data.put("client", JSONHelper.toJSON(client));
 		if(salesman!=null){
 			mv.data.getJSONObject("client").put("salesmanDeptId",salesman.deptId);
@@ -138,6 +143,19 @@ public class ClientService {
 			}
 			hql.append(")");
 		}
+		//区域
+		if(StringUtils.isNotEmpty(client.quyuas)){
+			String[] quyuArr = client.quyuas.split(",");
+			hql.append(" and ( ");
+			for (int i = 0; i < quyuArr.length; i++) {
+				hql.append(" quyu = ? ");
+				if (i < quyuArr.length - 1) {
+					hql.append(" or ");
+				}
+				params.add(quyuArr[i]);
+			}
+			hql.append(" )");
+		}
 		if(client.mianjiFrom!=null){
 			hql.append(" and mianji>=?");
 			params.add(client.mianjiFrom);
@@ -153,6 +171,33 @@ public class ClientService {
 		if(client.jiageTo!=null){
 			hql.append(" and sjia<=?");
 			params.add(client.jiageTo);
+		}
+		//楼层
+		if(client.loucengFrom!=null){
+			hql.append(" and lceng>=?");
+			params.add(client.loucengFrom);
+		}
+		if(client.loucengTo!=null){
+			hql.append(" and lceng<=?");
+			params.add(client.loucengTo);
+		}
+		//户型
+		if(StringUtils.isNotEmpty(client.huxing)){
+//			if (query.fangxing != null) {
+//				hql.append(" and ").append(query.fangxing.getQueryStr());
+//			}
+			String[] hxArr = client.huxing.split(",");
+			if(hxArr.length>0){
+				hql.append(" and (");
+				for(int i=0;i<hxArr.length;i++){
+					FangXing fx = FangXing.valueOf(hxArr[i]);
+					hql.append(fx.getQueryStr());
+					if(i<hxArr.length-1){
+						hql.append(" or ");
+					}
+				}
+				hql.append(")");
+			}
 		}
 		HouseQuery query = new HouseQuery();
 		query.jiaoyis = new ArrayList<String>();

@@ -44,9 +44,16 @@ function onSubmit_Form(){
   });
 }
 
+var searching=false;
 function doSearch(){
+  if(searching){
+    return;
+  }
+  if(event==undefined || $(event.srcElement).attr('action')!='page'){
+    $('.pageInput').val(1);
+  }
+  searching=true;
   getList(formSerialize($('form[name=form1]')));
-  return false;
 }
 
 function selectHouse(clientId){
@@ -278,7 +285,7 @@ function openView(cid){
       </div>
       
       <div class="btn-group">
-        <button type="submit" class="btn btn-primary btn_subnmit">搜索</button>
+        <button type="button" class="btn btn-primary btn_subnmit" onclick="doSearch();">搜索</button>
         <button auth="ky_add" class="btn btn-primary btnadd" onclick="btnEdit('')">登记</button>
       </div>
     </div>
@@ -304,7 +311,6 @@ function openView(cid){
       <th auth="$${authParent}_del" style="width:40px;"><a auth="$${authParent}_del" href="javascript:void(0)" onclick="deleteSelected()">删除</a></th>
       <th> 编号</th>
       <th>姓名</th>
-      <th>电话</th>
       <th>面积</th>
       <th>价格(万)</th>
       <th>楼层</th>
@@ -320,7 +326,6 @@ function openView(cid){
       <td auth="$${authParent}_del"><input type="checkbox" name="ids" value="${id}"/></td>
       <td>${id}</td>
       <td>${lxr}</td>
-      <td>${tel}</td>
       <td>${mianjiFrom}-${mianjiTo}</td>
       <td>${jiageFrom}-${jiageTo}</td>
       <td>${loucengFrom}-${loucengTo}</td>
