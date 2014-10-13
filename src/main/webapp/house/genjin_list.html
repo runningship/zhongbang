@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.4/src/SearchInfoWindow_min.css" />
 <script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
 <script type="text/javascript" src="/zb/js/pagination.js"></script>
+<script type="text/javascript" src="/zb/js/house_addr.js"></script>
 <script type="text/javascript">
 var shEnums;
 function getGJList(search){
@@ -125,6 +126,7 @@ $(function(){
     shEnums = queryOpts['shenhe'];
     buildHtmlWithJsonArray("id_jiaoyi",queryOpts['jiaoyi'],true,1);       //交易
     buildHtmlWithJsonArray("id_shenhe",queryOpts['shenhe'],true,1);       //审核
+    buildHtmlWithJsonArray("id_quyu",queryOptions['quyu'],true);
     $('select').each(function(index,obj){
       if(obj.name=='dateType'){
         return;
@@ -173,32 +175,44 @@ $(function(){
             <option value="${name}">${name}</option>
           </select>
         </div>
-        <div class="input-group" style="width:192px;">
+        <div class="input-group" style="width:162px;">
           <span class="input-group-addon">房源编号</span>
           <input type="text" class="form-control" name="bianhao">
         </div>
-        <div class="input-group input-group-max">
+        <!-- <div class="input-group input-group-max">
           <span class="input-group-addon">楼盘</span>
           <input type="text" class="form-control" name="area">
+        </div> -->
+        <div class="btn-group">
+          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="width:60px;">
+            区域<span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu" id="id_quyu">
+            <li><label><input type="checkbox" name="quyus" value="${name}"> ${name}</label>
+          </ul>
+        </div>
+        <div class="input-group input-group-max" style="width:270px">
+          <span class="input-group-addon">楼盘</span>
+          <input type="hidden" class="form-control" name="Address" id="Address">
+          <input type="text" class="form-control" name="area" id="area"  onkeyup="keyupdeal(event);" onkeydown="keydowndeal(event);" onclick="keyupdeal(event);" autocomplete="off" placeholder="楼盘名称(最少字)">
+          <div id="suggest" style="position:absolute;height:400px;overflow-y:auto;z-index: 100;display:none"></div>
         </div>
         <div class="btn-group">
           <button type="button" class="btn btn-primary btn_subnmit" onclick="doSearch();">搜索</button>
         </div>
-      </div>
+        </div>
 
       <div class="clearfix">
-        <div class="input-group">
+        <div class="input-group" style="width:270px">
           <span class="input-group-addon">登记时间</span>
-          <input type="text" id="idTimes" class="form-control" name="addtimeStart" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})"  style="width:150px;border-radius:0;">
-          <input type="text" class="form-control" name="addtimeEnd" id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" style="width:150px">
+          <input type="text" id="idTimes" class="form-control" name="addtimeStart" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})"  style="width:104px;border-radius:0;">
+          <input type="text" class="form-control" name="addtimeEnd" id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" style="width:104px">
         </div>
-        <div class="input-group input-group-max">
+        <div class="input-group input-group-max" style="width:162px;">
           <span class="input-group-addon">内容</span>
           <input type="text" class="form-control" name="conts">
         </div>
-        <br/>
-        <br/>
-        <div class="input-group input-group-mt3 input-group-select" style="margin-top:1px;">
+        <div class="input-group input-group-mt3 input-group-select" style="margin-top:1px;width:420px;">
           <span class="input-group-addon">跟进人</span>
           <select class="form-control get_comp" name="form_cid"></select>
           <select class="form-control get_quyu" name="form_did"></select>

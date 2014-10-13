@@ -88,10 +88,10 @@ function openSearch(id){
       </div>
     </div>
 
-    <div id="contractPanel" style="width:250px;height:450px;background-color:#eee;font-size:16px;font-family:微软雅黑;border:solid 1px #ccc;overflow-y:auto">
+    <div id="contractPanel" style="width:250px;height:500px;background-color:#eee;font-size:16px;font-family:微软雅黑;border:solid 1px #ccc;overflow-y:auto">
       <div>
         <span id="contact">
-          <div onclick="IM.openChat(${contactId});" id="${contactId}" style="display:none;padding-left:5px;background-color:whitesmoke;height:56px;border-bottom:1px solid #ddd;cursor:pointer">
+          <div onclick="IM.openChat(${contactId});" class="contact" id="${contactId}" style="display:none;padding-left:5px;background-color:whitesmoke;height:56px;border-bottom:1px solid #ddd;cursor:pointer">
             <span onclick="IM.delContact(${contactId})" style="float:right;margin-right:10px;color:#aaa">x</span>
             <div style="display:none;background:red;color:white;float:right;margin-right:10px;margin-top:10px;border-radius:8px;height:16px;width:25px;text-align:center;font-size:12px;">0</div>
             <img src="" srcx="/zb/style/image/avatar/${avatar}.jpg" style="width:40px;height:40px;margin-top:5px;margin-right:5px;float:left" />
@@ -106,23 +106,23 @@ function openSearch(id){
 
     </div>
 
-    <div style="background-color:#555;width:252px;height:50px;border-radius:0px 0px 8px 8px;">
+    <div style="background-color:#555;width:252px;height:50px;border-radius:0px 0px 8px 8px;display:none">
       
     </div>
   </div>
 
-  <div id="chatWindow" style="float:left;width:652px;display:none;margin-left:5px;">
+  <div id="chatWindow" style="float:left;width:655px;display:none;margin-left:2px;">
     <div style="background-color:#444;height:45px;border-radius:8px 8px 0px 0px;text-align:center;" >
       <div style="padding-top:14px;">
       <span id="cname" style="font-size:22px;color:white;padding-left:20px;font-weight:bold"></span>
       </div>
     </div>
-    <div id="msgContainer" style="height:502px;background-color:white;overflow-y:scroll;" class="bubble">
+    <div id="msgContainer" style="height:452px;background-color:white;overflow-y:scroll;" class="bubble">
         
     </div>
-    <div style="background-color:#555;height:50px;border-radius:0px 0px 8px 8px;" id="messageInputWrap">
-      <textarea id="message" style="height:36px;width:560px;border-radius:6px;margin:8px 0px 0px 20px;resize:none;padding-top:7px;font-size:18px;color:#666"></textarea>
-      <button onclick="IM.send();" style="width:50px;height:38px;font-size:14px;vertical-align:middle;background:-webkit-linear-gradient(top,#5f9cc5,#396b9e);border-color:#044062;border:1px solid;border-radius:5px;float:right;margin-top:8px;margin-right:10px;">
+    <div style="background-color:#555;height:100px;border-radius:0px 0px 8px 8px;" id="messageInputWrap">
+      <textarea id="message" style="height:86px;width:560px;border-radius:6px;margin:8px 0px 0px 20px;resize:none;padding-top:7px;font-size:18px;color:#666"></textarea>
+      <button onclick="IM.send();" style="width:50px;height:38px;font-size:14px;vertical-align:middle;background:-webkit-linear-gradient(top,#5f9cc5,#396b9e);border-color:#044062;border:1px solid;border-radius:5px;float:right;margin-top:55px;margin-right:10px;">
         <span style="color:white;text-align:center;">发送</span>
       </button>
     </div>

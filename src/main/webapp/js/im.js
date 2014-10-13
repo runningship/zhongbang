@@ -121,7 +121,8 @@ var IM = {
 		}else{
 			IM.msgContainer.html(openChat.chatHistory);
 		}
-		
+		$('.contact').css('background-color','');
+		$('#'+contactId).css('background-color','beige');
 		$('#chatWindow').css('display','');
 		YW.ajax({
 	        url:'/zb/c/im/setRead?myId='+IM.myId+'&contactId='+contactId,
@@ -453,7 +454,7 @@ var IM = {
 		// });
 
 
-		jQuery.hotkeys.add('return',{propagate: false},function(e){
+		jQuery.hotkeys.add('ctrl+return',{propagate: false},function(e){
 			IM.send();
 		});
 

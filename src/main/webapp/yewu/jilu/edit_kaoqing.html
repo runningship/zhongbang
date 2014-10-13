@@ -30,7 +30,7 @@ function save(){
     url: '/zb/c/jilu/update',
     data:text,
     success: function(data){
-      alert('保存成功');
+      alert('修改成功');
       initFileUpload();
     }
   });
@@ -95,6 +95,7 @@ function getContent(){
     success: function(result){
       var json = JSON.parse(result);
       $('#addtime').val(json['jilu']['addtime']);
+      $('#title').val(json['jilu']['title']);
       ue.setContent(json['jilu']['conts'] ,false);
       initFileUpload();
       getAttachList();
@@ -138,6 +139,7 @@ $(function(){
       <input type="text" class="form-control" name="addtime" id="addtime" onFocus="WdatePicker()">
     </div>
     <input id="conts" name="conts" type="hidden" />
+    <input id="title" name="title" type="hidden" />
     <input type="hidden" name="category" id="category" />
     <input type="hidden" name="id" id="id" />
     </div>

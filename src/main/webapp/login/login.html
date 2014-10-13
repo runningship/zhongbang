@@ -150,8 +150,8 @@ function windowclose(){
 			$('.password').focus();
 			return false;
 		}
-		SetCookie('zb_l_comp', did);
-		SetCookie('zb_l_user', uid);
+		SetCookie('dept_id', did);
+		SetCookie('user_id', uid);
 		YW.ajax({
 			async : true,
 			type : 'POST',
@@ -176,8 +176,11 @@ function windowclose(){
 		}catch(e){
 			console.log("clear cache_path fail");
 		}
-		didc = GetCookie('zb_l_comp');
-		uidc = GetCookie('zb_l_user');
+		var acc = getAccount();
+		// didc = GetCookie('zb_l_comp');
+		// uidc = GetCookie('zb_l_user');
+		didc = acc['dept_id'];
+		uidc= acc['user_id'];
 		get_company();
 		
 		//$('.btn_go_reg').text(didc+'|'+uidc)

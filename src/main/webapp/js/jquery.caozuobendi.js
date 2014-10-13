@@ -275,10 +275,16 @@ function clearAll(name){
 /*-=-=-=-=-=-=-=-=-=[ cookies ]=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
 //写入cookies
 function SetCookie(name,value){
-    var Days = 30;
-    var exp = new Date(); 
-    exp.setTime(exp.getTime() + Days*24*60*60*1000);
-    document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+  var json = loadConfigAsJSON();
+  json[name]=value;
+  writeConfig(json);
+    // var Days = 30;
+    // var exp = new Date(); 
+    // exp.setTime(exp.getTime() + Days*24*60*60*1000);
+    // document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+}
+function getAccount(){
+  return loadConfigAsJSON();
 }
 //读取cookies
 function GetCookie(name){
@@ -292,6 +298,35 @@ function DelCookie(name){
     exp.setTime(exp.getTime() - 1);
     var cval=GetCookie(name);
     if(cval!=null) document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+}
+
+//写入
+function writeConfig(json){
+    var fs = require("fs");
+    fs.writeFileSync("account.data", JSON.stringify(json), 'utf8')
+}
+
+//读取
+function loadConfigAsJSON(){
+
+    var fs=null;
+    try{
+        fs=require("fs");    
+    }catch(e){
+        return JSON.parse("{}");
+    }
+    if(!fs.existsSync("account.data")){
+        fs.writeFileSync("account.data", "{}", 'utf8')
+    }
+    var data=fs.readFileSync("account.data","utf-8");
+    var json = null;
+    try{
+        json = JSON.parse(data);
+    }catch(e){
+        console.error("load account.data faild,"+e);
+        json = JSON.parse("{}");
+    }
+    return json;
 }
 //使用示例
 //SetAsaiCookie("Asai","isj8.com");

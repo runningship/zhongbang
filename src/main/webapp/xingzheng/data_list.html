@@ -143,7 +143,7 @@ $(function(){
     doSearch();
   });
   Page.Init();
-    jQuery.hotkeys.add('return',function(e){
+  jQuery.hotkeys.add('return',function(e){
     doSearch();
   });
 });
@@ -155,7 +155,7 @@ $(function(){
 </head>
 <body class="hlist bodyer" style="overflow:auto">
 
-<div class="header">
+<div class="header" style="position:relative;height:80px;width:900px">
   <div class="btn-group">
     <button auth="xz_table_list_add" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:30px;padding:0px 10px 0px 10px">添加 <span class="caret"></span></button>
     <ul class="dropdown-menu">
@@ -170,7 +170,7 @@ $(function(){
     <input auth="xz_table_list_shenhe" type="hidden" name="sh" value="0" />
     <input type="hidden" class="userInput" name="xpath" value="">
     <div class="btn-group">
-      <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:30px;padding:0px 10px 0px 10px;width:150px;"><span id="btn_class_select">分 类</span> <span class="caret"></span></button>
+      <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:30px;padding:0px 10px 0px 10px;"><span id="btn_class_select">分类</span> <span class="caret"></span></button>
       <ul class="dropdown-menu">
         <li onclick="selectType('','所有')"><label><span  style="color:black;padding-left:10px;line-height:30px;font-weight:normal">所有</span></label></li>
         <span id="adminClassList2">
@@ -178,30 +178,32 @@ $(function(){
         </span>
       </ul>
     </div>
-    <div class="input-group input-group-max">
+    <div class="input-group input-group-max" style="width:200px;">
       <span class="input-group-addon">标题</span>
       <input type="text" class="form-control" name="title">
     </div>
-   <div class="input-group input-group-select">
+   
+    <div class="input-group" style="width:250px">
+      <span class="input-group-addon">日期</span>
+      <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:100px;border-radius:0;">
+      <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:100px">
+    </div>
+    <div class="btn-group">
+      <button type="button" class="btn btn-primary btn_subnmit" onclick="doSearch();">搜索</button>
+    </div>
+    <div class="input-group input-group-select" style="width:420px;margin-top:3px;">
       <span class="input-group-addon">发布人</span>
       <select class="form-control get_comp" name="form_cid"></select>
       <select class="form-control get_quyu" name="form_did"></select>
       <select class="form-control get_user" name="form_uid"></select>
     </div>
-    <div class="input-group" style="width:355px">
-      <span class="input-group-addon">日期</span>
-      <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:120px;border-radius:0;">
-      <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:120px">
-    </div>
-    <div class="btn-group">
-      <button type="button" class="btn btn-primary btn_subnmit" onclick="doSearch();">搜索</button>
-    </div>
+    
     <input type="hidden" id="classId" name="classId" />
   </form>
   </div>
 
 </div>
-<div class="mainer">
+<div class="mainer" style="">
   <table class="table table-hover .table_bodyer" >
     <thead>
       <th>标题</th>

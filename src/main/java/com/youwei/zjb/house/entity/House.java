@@ -73,7 +73,7 @@ public class House {
 	/**
 	 * 房型(房数)
 	 */
-	public Integer hxf;
+	public Float hxf;
 
 	/**
 	 * 房型(厅数)

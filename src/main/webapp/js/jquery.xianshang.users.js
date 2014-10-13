@@ -196,6 +196,9 @@ function formSerialize(form){
     if(userId!=null && userId!=undefined && userId!=""){
         xpath=xpath+"-"+userId;
     }
-    form.find('input[name=xpath]').val(xpath);
+    if(xpath!=undefined){
+        form.find('input[name=xpath]').val(xpath);    
+    }
+    
     return form.serialize();
 }
