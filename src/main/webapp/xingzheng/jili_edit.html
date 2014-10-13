@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>添加表格</title>
+<link rel="stylesheet" href="/zb/style/css.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/style/house.css">
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/uploadify/jquery.uploadify.js"></script>
+<link href="/zb/js/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/zb/js/pagination.js"></script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.all.js"> </script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+var recordId;
+var tableId;
+function save(){
+  var text = $('form[name=form1]').serialize();
+  YW.ajax({
+    type: 'POST',
+    url: '/zb/c/jili/update',
+    data:text,
+    success: function(data){
+      art.dialog.opener.doSearch();
+      art.dialog.close();
+      alert('修改成功');
+    }
+  });
+}
+
+function loadData(){
+  YW.ajax({
+    type: 'get',
+    url: '/zb/c/jili/get?id='+id,
+    data:'',
+    success: function(data){
+      var json = JSON.parse(data);
+      $('#uname').val(json['uname']);
+      $('#id').val(json['id']);
+      $('#uid').val(json['uid']);
+      $('#score').val(json['score']);
+      $('#reason').val(json['reason']);
+    },
+    error:function(data){
+      alert('加载数据失败,'+data.responseText);
+    }
+  });
+}
+
+$(function(){
+  id = getParam('id')
+  $('#id').val(id);
+    loadData();
+});
+
+</script>
+</head>
+<body class="hlist bodyer" style="overflow:auto;min-width:500px;">
+
+<div class="header" style="position:relative;height:50px;width:100%">
+  <form name="form1">
+    <input type="hidden" id="id" name="id" />
+    <input type="hidden" id="uid" name="uid" />
+    <div class="input-group input-group-max">
+      <span class="input-group-addon">业务员</span>
+      <input type="text" class="form-control" id="uname" name="uname">
+    </div>
+    <div class="input-group input-group-max" style="float:none;padding-left:10px;">
+      <span class="input-group-addon">激励值</span>
+      <input type="text" class="form-control" id="score" name="score">
+    </div>
+    <div class="input-group input-group-max" style="float:none;width:500px;padding-top:10px;">
+      <span class="input-group-addon">激励原因</span>
+      <input type="text" class="form-control" id="reason" name="reason">
+    </div>
+    <div class="btn-group" style="padding-top:10px;padding-left:400px;">
+      <button onclick="save();return false;" class="btn btn-primary btn_subnmit">提交</button>
+    </div>
+  </form>
+  <div>
+    <input id="file_upload" name="file_upload" style="display:none">
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>记录</title>
+<link rel="stylesheet" href="/zb/style/css.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/style/house.css">
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/zb/js/pagination.js"></script>
+<script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.hotkeys.js"></script>
+<script type="text/javascript">
+var queryOpts;
+
+function getList(search){
+  var url='/zb/c/jili/list';
+  YW.ajax({
+    type: 'POST',
+    url: url,
+    data:search,
+    success: function(data){
+      var getStr=JSON.parse(data);
+      dataArr = getStr['page']['data'];
+      buildHtmlWithJsonArray("id_list",dataArr);
+      Page.setPageInfo(getStr['page']);
+    }
+  });
+}
+
+var searching=false;
+function doSearch(){
+  if(searching){
+    return;
+  }
+  if(event==undefined || $(event.srcElement).attr('action')!='page'){
+    $('.pageInput').val(1);
+  }
+  searching=true;
+  getList(formSerialize($('form[name=form1]')));
+}
+
+function onSubmit_Form(){
+  $('form[name=form1]').on('submit', function(event) {
+    doSearch();
+    return false;
+  });
+}
+
+function deleteData(id){
+    art.dialog({
+    title:'提示',
+    content:'确定删除这条记录吗？',
+    lock:true,
+    ok:function(){
+  YW.ajax({
+    type: 'POST',
+    url: '/zb/c/jili/delete?id='+id,
+    data:'',
+    success: function(data){
+      doSearch();
+      alert("删除成功")
+    }
+  });
+    },
+    cancel:true
+  });
+  
+}
+
+function openAdd(id){
+  art.dialog.open('jili_add.html?dataScope=all',{
+      padding:0,
+      resize:true,
+      lock:0,
+      height:300,
+      width:520
+  });
+}
+
+function openEdit(id){
+  art.dialog.open('jili_edit.html?dataScope=all&id='+id,{
+      padding:0,
+      resize:true,
+      lock:0,
+      height:300,
+      width:520
+  });
+}
+
+function isSelf(pubUserId,userId){
+  return pubUserId==userId;
+}
+
+$(function(){
+  xpath = getParam('xpath')
+  var detail = getParam('detail')
+  if(detail==1){
+    $('div.jl').remove()
+  }
+  onSubmit_Form();
+  $.get('/zb/c/admin/class/listofuser', function(data) {
+    queryOpts=JSON.parse(data);
+    buildHtmlWithJsonArray("adminClassList",queryOpts['list']);
+    buildHtmlWithJsonArray("adminClassList2",queryOpts['list']);
+    $('#xpath').val(xpath);
+    doSearch();
+  });
+  
+  //   jQuery.hotkeys.add('return',function(e){
+  //   doSearch();
+  // });
+});
+
+</script>
+<style type="text/css">
+  .table{ margin-bottom: 0px;}
+</style>
+</head>
+<body class="hlist bodyer" style="overflow:auto">
+
+<div class="header">
+  <div class="btn-group jl">
+    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="height:30px;padding:0px 10px 0px 10px" onclick="openAdd();">添加</button>
+  </div>
+
+  <div style="">
+  <form name="form1">
+    <input type="hidden" id="xpath" name="xpath" value="">
+    <input type="hidden" name="uid" id="uid" value="">
+
+    <div class="input-group input-group-select jl" style="width:450px;">
+      <span class="input-group-addon">业务员</span>
+      <select class="form-control get_comp" name="form_cid"></select>
+      <select class="form-control get_quyu" name="form_did"></select>
+      <select class="form-control get_user" name="form_uid"></select>
+    </div>
+    <div class="input-group" style="width:240px">
+      <span class="input-group-addon">日期</span>
+      <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:95px;border-radius:0;">
+      <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:95px">
+    </div>
+    <div class="btn-group">
+      <button type="button" class="btn btn-primary btn_subnmit" onclick="doSearch();">搜索</button>
+    </div>
+  </form>
+  </div>
+
+</div>
+<div class="mainer">
+  <table class="table table-hover .table_bodyer" >
+    <thead>
+      <th>业务员</th>
+      <th>激励值</th>
+      <th>激励时间</th>
+      <th>操作</th>
+    </thead>
+    <tbody id="id_list">
+    <tr style="display:none">
+      <td>${uname}</td>
+      <td>${score}</td>
+      <td>${addtime}</td>
+      <td><a auth="xz_table_list_edit" onclick="openEdit(${id})" href="javascript:void(0)">修改</a> 
+          <a auth="xz_table_list_del" href="javascript:void(0)" onclick="deleteData(${id});">删除</a></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

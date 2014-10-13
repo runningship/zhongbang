@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>添加表格</title>
+<link rel="stylesheet" href="/zb/style/css.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/style/house.css">
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/uploadify/jquery.uploadify.js"></script>
+<link href="/zb/js/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/zb/js/pagination.js"></script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.all.js"> </script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript">
+var recordId;
+function save(){
+  var text = $('form[name=form1]').serialize();
+  YW.ajax({
+    type: 'POST',
+    url: '/zb/c/jili/add',
+    data:text,
+    success: function(data){
+      art.dialog.opener.doSearch();
+      art.dialog.close();
+      alert('保存成功');
+    }
+  });
+}
+
+$(function(){
+});
+
+</script>
+</head>
+<body class="hlist bodyer" style="overflow:auto;min-width:500px;">
+
+<div class="header" style="position:relative;height:50px;width:100%">
+  <form name="form1">
+    <div class="input-group input-group-select" style="450px;">
+      <span class="input-group-addon">业务员</span>
+      <select class="form-control get_comp" name="form_cid"></select>
+      <select class="form-control get_quyu" name="form_did"></select>
+      <select class="form-control get_user" name="uid"></select>
+    </div>
+    <div class="input-group input-group-max" style="float:none;padding-top:10px;">
+      <span class="input-group-addon">激励值</span>
+      <input type="text" class="form-control" name="score">
+    </div>
+    <div class="input-group input-group-max" style="float:none;width:450px;padding-top:10px;">
+      <span class="input-group-addon">激励原因</span>
+      <input type="text" class="form-control" name="reason">
+    </div>
+    <div class="btn-group" style="padding-top:10px;">
+      <button onclick="save();return false;" class="btn btn-primary btn_subnmit">提交</button>
+    </div>
+  </form>
+<div id="attachList">
+  <span style="display:none">
+    <div>
+      <a href="/file/download?bizType=xingzheng&recordId=${recordId}&file=${id}">${filename}</a> <a href="javascript:void(0)" onclick="deleteAttach(${id})">删除</a>
+    </div>
+  </span>
+</div>
+</div>
+
+</body>
+</html>
