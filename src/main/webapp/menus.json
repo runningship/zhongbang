@@ -1059,6 +1059,70 @@
 				"type":"menu"
 			}]
 		}]
+	},{
+		"name":"xz_jili_list",
+		"text":"激励管理",
+		"type":"virtual",
+		"children":[{
+			"name":"xz_jili_list_list",
+			"text":"列表",
+			"type":"menu"
+		},{
+			"name":"xz_jili_list_add",
+			"text":"添加",
+			"type":"menu"
+		},{
+			"name":"xz_jili_list_edit",
+			"text":"修改",
+			"type":"menu"
+		},{
+			"name":"xz_jili_list_del",
+			"text":"删除",
+			"type":"menu"
+		},{
+			"name":"xz_jili_list_data",
+			"text":"数据权限",
+			"type":"virtual",
+			"children":[{
+				"name":"xz_jili_list_data_dept",
+				"text":"分公司",
+				"type":"menu"
+			},{
+				"name":"xz_jili_list_data_quyu",
+				"text":"区域",
+				"type":"menu"
+			},{
+				"name":"xz_jili_list_data_all",
+				"text":"所有",
+				"type":"menu"
+			}]
+		}]
+	},{
+		"name":"xz_jili_tongji",
+		"text":"激励汇总",
+		"type":"virtual",
+		"children":[{
+			"name":"xz_jili_tongji_list",
+			"text":"列表",
+			"type":"menu"
+		},{
+			"name":"xz_jili_tongji_data",
+			"text":"数据权限",
+			"type":"virtual",
+			"children":[{
+				"name":"xz_jili_tongji_data_dept",
+				"text":"分公司",
+				"type":"menu"
+			},{
+				"name":"xz_jili_tongji_data_quyu",
+				"text":"区域",
+				"type":"menu"
+			},{
+				"name":"xz_jili_tongji_data_all",
+				"text":"所有",
+				"type":"menu"
+			}]
+		}]
 	}]
 },{
 	"name":"zc",
