@@ -20,6 +20,7 @@
 <script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.config.js"></script>
 <script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.all.js"> </script>
 <script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript">
 var recordId;
 var tableId;
@@ -48,6 +49,7 @@ function loadData(){
       $('#id').val(json['id']);
       $('#uid').val(json['uid']);
       $('#score').val(json['score']);
+      $('#addtime').val(json['addtime']);
       $('#reason').val(json['reason']);
     },
     error:function(data){
@@ -70,15 +72,22 @@ $(function(){
   <form name="form1">
     <input type="hidden" id="id" name="id" />
     <input type="hidden" id="uid" name="uid" />
-    <div class="input-group input-group-max">
+    <div class="input-group input-group-max" style="float:none;width:225px;">
       <span class="input-group-addon">业务员</span>
       <input type="text" class="form-control" id="uname" name="uname">
     </div>
-    <div class="input-group input-group-max" style="float:none;padding-left:10px;">
+    <div class="input-group input-group-max" style="float:none;padding-top:10px;width:225px;">
       <span class="input-group-addon">激励值</span>
       <input type="text" class="form-control" id="score" name="score">
+      <span class="input-group-addon">元</span>
     </div>
-    <div class="input-group input-group-max" style="float:none;width:500px;padding-top:10px;">
+   <div class="input-group input-group-max" style="padding-top:10px;float:none;">
+      <span class="input-group-addon" >激励时间</span>
+      <input type="text"  id="addtime" onFocus="var timeend=$dp.$('idTime');WdatePicker({dateFmt:'yyyy-MM-dd',onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtime" style="width:150px;border-radius:0;">
+      <span class="input-group-addon hidden" style="padding:1px 6px">返回时间</span>
+      <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control hidden" name="backTime" >
+  </div>
+    <div class="input-group input-group-max" style="float:none;width:480px;padding-top:10px;">
       <span class="input-group-addon">激励原因</span>
       <input type="text" class="form-control" id="reason" name="reason">
     </div>

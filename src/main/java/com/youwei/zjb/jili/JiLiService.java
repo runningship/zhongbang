@@ -30,7 +30,6 @@ public class JiLiService {
 	@WebMethod
 	public ModelAndView add(JiLi jili){
 		ModelAndView mv = new ModelAndView();
-		jili.addtime = new Date();
 		dao.saveOrUpdate(jili);
 		return mv;
 	}
@@ -40,7 +39,7 @@ public class JiLiService {
 		ModelAndView mv = new ModelAndView();
 		JiLi po = dao.get(JiLi.class, id);
 		User u = dao.get(User.class, po.uid);
-		mv.data = JSONHelper.toJSON(po);
+		mv.data = JSONHelper.toJSON(po,DataHelper.dateSdf.toPattern());
 		mv.data.put("uname", u.uname);
 		return mv;
 	}
@@ -54,8 +53,8 @@ public class JiLiService {
 			hql.append(" and u.orgpath like ?");
 			params.add(query.xpath+"%");
 		}
-		HqlHelper.buildDateSegment("addtime", query.addtimeStart, DateSeparator.After, params);
-		HqlHelper.buildDateSegment("addtime", query.addtimeEnd, DateSeparator.Before, params);
+		hql.append(HqlHelper.buildDateSegment("jl.addtime", query.addtimeStart, DateSeparator.After, params));
+		hql.append(HqlHelper.buildDateSegment("jl.addtime", query.addtimeEnd, DateSeparator.Before, params));
 		hql.append(" group by jl.uid ");
 		List<Map> list = dao.listAsMap(hql.toString(), params.toArray());
 		mv.data.put("list", JSONHelper.toJSONArray(list , DataHelper.dateSdf.toPattern()));
@@ -75,8 +74,8 @@ public class JiLiService {
 			hql.append(" and u.orgpath like ?");
 			params.add(query.xpath+"%");
 		}
-		HqlHelper.buildDateSegment("addtime", query.addtimeStart, DateSeparator.After, params);
-		HqlHelper.buildDateSegment("addtime", query.addtimeEnd, DateSeparator.Before, params);
+		hql.append(HqlHelper.buildDateSegment("jl.addtime", query.addtimeStart, DateSeparator.After, params));
+		hql.append(HqlHelper.buildDateSegment("jl.addtime", query.addtimeEnd, DateSeparator.Before, params));
 		page = dao.findPage(page, hql.toString(), true, params.toArray());
 		mv.data.put("page", JSONHelper.toJSON(page , DataHelper.dateSdf.toPattern()));
 		return mv;

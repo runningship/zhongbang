@@ -10,6 +10,7 @@
     padding-left:50px; 
     position:relative; 
     padding-top: 20px;
+    word-wrap:break-word;
 }
 
 .triangle {
@@ -44,6 +45,7 @@
     background-image:-moz-linear-gradient(center top , #4D90FE, #4787ED);
     background-image:linear-gradient(top,#4D90FE,#4787ED);
     white-space: pre;
+    max-width: 520px;
 }
 
 .fr { padding-left:0px; padding-right:50px; }
