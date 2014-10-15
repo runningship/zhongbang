@@ -104,6 +104,7 @@ public class IMServer extends WebSocketServer{
 					data.getInt("myId"), data.getInt("contactId") ,data.getInt("contactId"), data.getInt("myId") );
 			data.put("history", JSONHelper.toJSONArray(page.getResult()));
 			data.put("contactId", data.getInt("contactId") );
+			data.put("more", data.get("more"));
 			conn.send(data.toString());
 		}else if("countUnRead".equals(data.getString("type"))){
 			

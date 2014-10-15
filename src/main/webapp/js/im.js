@@ -186,6 +186,12 @@ var IM = {
 			dhtml = dhtml.replace('display:none','');
 			IM.msgContainer.append(dhtml);
 			IM.msgContainer.scrollTop(IM.msgContainer.scroll(0)[0].scrollHeight);
+			YW.ajax({
+		        url:'/zb/c/im/setRead?myId='+IM.myId+'&contactId='+data['senderId'],
+		        type:'get',
+		        success:function (data, textStatus) {
+		        }
+	      	});
 		}else{
 			var msgCount = $($('#'+data['senderId']).children(0)[1]);
 			var count = parseInt(msgCount.text());
@@ -219,7 +225,7 @@ var IM = {
 		}
 	},
 
-	buildHistory : function(contactId,list){
+	buildHistory : function(contactId,list , more){
 		// IM.msgContainer.empty();
 		var lastTimelineSpan = IM.msgContainer.find('span[name=sendtime]');
 		var lastTimeline;
@@ -268,13 +274,15 @@ var IM = {
 			// }
 		}
 		if(list.length>0){
-			IM.msgContainer.prepend('<div style="text-align:center"><a onclick="$(this).remove();IM.loadHistory('+contactId+')" href="javascript:void(0)">查看更多</a></div>');
+			IM.msgContainer.prepend('<div style="text-align:center"><a onclick="$(this).remove();IM.loadHistory('+contactId+',true)" href="javascript:void(0)">查看更多</a></div>');
 		}
-		// IM.msgContainer.scrollTop(IM.msgContainer.scroll(0)[0].scrollHeight);
+		if(!more){
+			IM.msgContainer.scrollTop(IM.msgContainer.scroll(0)[0].scrollHeight);	
+		}
 	},
 
 
-	loadHistory : function(cid){
+	loadHistory : function(cid,more){
 		var chat = this.getChat(cid);
 		chat.page++;
 		var data = JSON.parse('{}');
@@ -282,6 +290,7 @@ var IM = {
 		data['myId'] = IM.myId;
 		data['contactId']=cid;
 		data['page']=chat.page;
+		data['more']=more;
 		IM.ws.send(JSON.stringify(data));
 	},
 
@@ -421,7 +430,7 @@ var IM = {
 			if(json['type']=='msg'){
 				IM.onReceiveMsg(json);
 			}else if(json['type']=='history'){
-				IM.buildHistory(json['contactId'],json['history']);
+				IM.buildHistory(json['contactId'],json['history'],json['more']);
 			}else if(json['type']=='userprofile'){
 				IM.setUserProfile(json);
 			}else if(json['type']=='status'){
