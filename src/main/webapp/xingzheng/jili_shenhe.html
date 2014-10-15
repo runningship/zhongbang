@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>添加表格</title>
+<link rel="stylesheet" href="/zb/style/css.css">
+<link rel="stylesheet" href="/zb/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/zb/style/house.css">
+<script type="text/javascript" src="/zb/js/jquery.js"></script>
+<script src="/zb/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
+<script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.js"></script>
+<script type="text/javascript" src="/zb/js/uploadify/jquery.uploadify.js"></script>
+<link href="/zb/js/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/zb/js/buildHtml.js"></script>
+<script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
+<script type="text/javascript" src="/zb/js/pagination.js"></script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/ueditor.all.js"> </script>
+<script type="text/javascript" charset="utf-8" src="/zb/js/ueditor1_4_3/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+var recordId;
+var tableId;
+function save(sh){
+  var text = $('form[name=form1]').serialize();
+  YW.ajax({
+    type: 'POST',
+    url: '/zb/c/jili/shenhe?sh='+sh,
+    data:text,
+    success: function(data){
+      art.dialog.opener.doSearch();
+      art.dialog.close();
+      alert('审核完成');
+    }
+  });
+}
+
+function loadData(){
+  YW.ajax({
+    type: 'get',
+    url: '/zb/c/jili/get?id='+id,
+    data:'',
+    success: function(data){
+      var json = JSON.parse(data);
+      $('#uname').val(json['uname']);
+      $('#id').val(json['id']);
+      $('#uid').val(json['uid']);
+      $('#score').val(json['score']);
+      $('#addtime').val(json['addtime']);
+      $('#reason').val(json['reason']);
+    },
+    error:function(data){
+      alert('加载数据失败,'+data.responseText);
+    }
+  });
+}
+
+$(function(){
+  id = getParam('id')
+  $('#id').val(id);
+  var sh = getParam('sh')
+  if (sh!=0) {
+  $('div.shenhe').remove()
+  };
+    loadData();
+});
+
+</script>
+</head>
+<body class="hlist bodyer" style="overflow:auto;min-width:500px;">
+
+<div class="header" style="position:relative;height:50px;width:100%">
+  <form name="form1">
+    <input type="hidden" id="id" name="id" />
+    <input type="hidden" id="uid" name="uid" />
+    <div class="input-group input-group-max" style="float:none;width:225px;">
+      <span class="input-group-addon">业务员</span>
+      <input type="text" class="form-control" readonly="true" id="uname" name="uname">
+    </div>
+    <div class="input-group input-group-max" style="float:none;padding-top:10px;width:225px;">
+      <span class="input-group-addon">激励值</span>
+      <input type="text" class="form-control" id="score" name="score">
+      <span class="input-group-addon">元</span>
+    </div>
+   <div class="input-group input-group-max" style="padding-top:10px;float:none;">
+      <span class="input-group-addon" >激励时间</span>
+      <input type="text"  id="addtime" onFocus="var timeend=$dp.$('idTime');WdatePicker({dateFmt:'yyyy-MM-dd',onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtime" style="width:150px;border-radius:0;">
+      <span class="input-group-addon hidden" style="padding:1px 6px">返回时间</span>
+      <input type="text"  id="idTime" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control hidden" name="backTime" >
+  </div>
+    <div class="input-group input-group-max" style="float:none;width:480px;padding-top:10px;">
+      <span class="input-group-addon">激励原因</span>
+      <input type="text" class="form-control" id="reason" name="reason">
+    </div>
+    <div class="btn-group shenhe" style="padding-top:10px;padding-left:300px;">
+      <button onclick="save(1);return false;" class="btn btn-primary btn_subnmit">通过</button>
+    </div>
+    <div class="btn-group shenhe" style="padding-top:10px;padding-left:10px;">
+      <button onclick="save(2);return false;" class="btn btn-primary btn_subnmit">不通过</button>
+    </div>
+  </form>
+  <div>
+    <input id="file_upload" name="file_upload" style="display:none">
+</div>
+</div>
+
+</body>
+</html>
