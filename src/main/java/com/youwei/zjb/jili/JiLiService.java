@@ -30,6 +30,7 @@ public class JiLiService {
 	@WebMethod
 	public ModelAndView add(JiLi jili){
 		ModelAndView mv = new ModelAndView();
+		jili.sh=0;
 		dao.saveOrUpdate(jili);
 		return mv;
 	}
@@ -48,7 +49,7 @@ public class JiLiService {
 	public ModelAndView tongji(JiLiQuery query,Page<Map> page){
 		ModelAndView mv = new ModelAndView();
 		List<Object> params = new ArrayList<Object>();
-		StringBuilder hql = new StringBuilder("select jl.uid as uid, u.uname as uname ,u.orgpath as xpath, sum(jl.score) as total ,d.namea as dname,q.namea as qname from JiLi jl, User u ,Department d , Department q where jl.uid=u.id and d.id=u.deptId and q.id=d.fid");
+		StringBuilder hql = new StringBuilder("select jl.uid as uid, u.uname as uname ,u.orgpath as xpath, sum(jl.score) as total ,d.namea as dname,q.namea as qname from JiLi jl, User u ,Department d , Department q where jl.uid=u.id and d.id=u.deptId and q.id=d.fid and jl.sh=1");
 		if(StringUtils.isNotEmpty(query.xpath)){
 			hql.append(" and u.orgpath like ?");
 			params.add(query.xpath+"%");
@@ -64,7 +65,7 @@ public class JiLiService {
 	@WebMethod
 	public ModelAndView list(JiLiQuery query ,Page<Map> page){
 		ModelAndView mv = new ModelAndView();
-		StringBuilder hql = new StringBuilder("select jl.id as id, u.uname as uname ,d.namea as dname,q.namea as qname, jl.score as score , jl.addtime as addtime, jl.reason as reason from JiLi jl, User u , Department d,Department q where jl.uid=u.id and u.deptId=d.id and q.id=d.fid");
+		StringBuilder hql = new StringBuilder("select jl.id as id,jl.sh as sh, u.uname as uname ,d.namea as dname,q.namea as qname, jl.score as score , jl.addtime as addtime, jl.reason as reason from JiLi jl, User u , Department d,Department q where jl.uid=u.id and u.deptId=d.id and q.id=d.fid");
 		List<Object> params = new ArrayList<Object>();
 		if(StringUtils.isNotEmpty(query.reason)){
 			hql.append(" and reason like ? ");
@@ -73,6 +74,10 @@ public class JiLiService {
 		if(StringUtils.isNotEmpty(query.xpath)){
 			hql.append(" and u.orgpath like ?");
 			params.add(query.xpath+"%");
+		}
+		if(query.sh!=null){
+			hql.append(" and jl.sh=?");
+			params.add(query.sh);
 		}
 		hql.append(HqlHelper.buildDateSegment("jl.addtime", query.addtimeStart, DateSeparator.After, params));
 		hql.append(HqlHelper.buildDateSegment("jl.addtime", query.addtimeEnd, DateSeparator.Before, params));
@@ -88,6 +93,21 @@ public class JiLiService {
 		if(po!=null){
 			po.reason = jili.reason;
 			po.score = jili.score;
+			dao.saveOrUpdate(jili);
+		}else{
+			throw new GException(PlatformExceptionType.BusinessException, "数据不存在或已被删除");
+		}
+		return mv;
+	}
+	
+	@WebMethod
+	public ModelAndView shenhe(JiLi jili){
+		ModelAndView mv = new ModelAndView();
+		JiLi po = dao.get(JiLi.class, jili.id);
+		if(po!=null){
+			po.reason = jili.reason;
+			po.score = jili.score;
+			po.sh = jili.sh;
 			dao.saveOrUpdate(jili);
 		}else{
 			throw new GException(PlatformExceptionType.BusinessException, "数据不存在或已被删除");

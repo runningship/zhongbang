@@ -107,7 +107,7 @@ function buildBlr(rowIndex){
   //   str +=option;
   // }
   // str+='</select>';
-  var str = '<div class="input-group input-group-select" style="width:500px;"><select class="form-control bizman_get_comp_'+rowIndex+'" ></select><select class="form-control bizman_get_quyu_'+rowIndex+'" ></select><select class="form-control bizman_get_user_'+rowIndex+'" id="bizman_'+rowIndex+'"></select></div>';
+  var str = '<div class="input-group input-group-select" style="width:390px;"><select class="form-control bizman_get_comp_'+rowIndex+'" ></select><select class="form-control bizman_get_quyu_'+rowIndex+'" ></select><select class="form-control bizman_get_user_'+rowIndex+'" id="bizman_'+rowIndex+'"></select></div>';
   return str;
 }
 
@@ -116,7 +116,7 @@ function buildBlrq(rowIndex){
   if(action.flag==2){
     return action.endtime;
   }
-  return '<input type="text" class="form-control" name="endtime" id="endtime_'+rowIndex+'" style="width:150px;" onFocus="WdatePicker()">';
+  return '<input type="text" class="form-control" name="endtime" id="endtime_'+rowIndex+'" style="width:96px;" onFocus="WdatePicker()">';
 }
 
 function buildZt(rowIndex){
@@ -150,6 +150,9 @@ function ignoreAction(rowIndex){
       var json = JSON.parse(data);
       actions = json['actions'];
       buildHtmlWithJsonArray("id_list",actions);
+      for(var i=0;i<actions.length;i++){
+        bizman_fun_get_comp(''+i);
+      }
     }
   });
 }
@@ -166,6 +169,9 @@ function doProcess(rowIndex){
       var json = JSON.parse(data);
       actions = json['actions'];
       buildHtmlWithJsonArray("id_list",actions);
+      for(var i=0;i<actions.length;i++){
+        bizman_fun_get_comp(''+i);
+      }
     }
   });
 }
@@ -245,7 +251,7 @@ table.table>thead>tr>th, table.table>tbody>tr>th, table.table>tfoot>tr>th, table
         </div>
       </td>
       <td colspan="2">
-        <div class="input-group " style="width:393px">
+        <div class="input-group " style="width:383px">
           <span class="input-group-addon" style="padding:8px;">地址</span>
           <input type="text" class="form-control" name="addr" >
         </div>
@@ -293,7 +299,7 @@ table.table>thead>tr>th, table.table>tbody>tr>th, table.table>tfoot>tr>th, table
             <option value="${name}">${name}</option>
           </select>
         </div> -->
-        <div class="input-group input-group-select" style="width:406px;">
+        <div class="input-group input-group-select" style="width:385px;">
           <span class="input-group-addon">交易员</span>
           <select class="form-control bizman_get_comp" ></select>
           <select class="form-control bizman_get_quyu" ></select>
@@ -301,7 +307,7 @@ table.table>thead>tr>th, table.table>tbody>tr>th, table.table>tfoot>tr>th, table
         </div>
       </td>
       <td colspan="2">
-        <div class="input-group input-group-select" style="width:406px;">
+        <div class="input-group input-group-select" style="width:396px;">
           <span class="input-group-addon">业务员</span>
           <select class="form-control get_comp" name="quyu"></select>
           <select class="form-control get_quyu" name="ywDeptId"></select>
@@ -452,7 +458,7 @@ table.table>thead>tr>th, table.table>tbody>tr>th, table.table>tfoot>tr>th, table
           <select class="form-control bizman_get_user" name="bizman"></select>
         </div>
       </td> -->
-      <td style="vertical-align:middle;width:180px;" class="runscript">buildBlrq(${rowIndex})</td>
+      <td style="vertical-align:middle;width:110px;" class="runscript">buildBlrq(${rowIndex})</td>
       <!-- <td style="vertical-align:middle" class="runscript">buildZj(${rowIndex})</td> -->
       <td style="vertical-align:middle" class="runscript">buildZt(${rowIndex})</td>
     </tr>

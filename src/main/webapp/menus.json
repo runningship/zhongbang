@@ -1076,6 +1076,10 @@
 			"text":"修改",
 			"type":"menu"
 		},{
+			"name":"xz_jili_list_shenhe",
+			"text":"审核",
+			"type":"menu"
+		},{
 			"name":"xz_jili_list_del",
 			"text":"删除",
 			"type":"menu"

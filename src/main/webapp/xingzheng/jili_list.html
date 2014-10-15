@@ -96,6 +96,26 @@ function openEdit(id){
   });
 }
 
+function openshenhe(id,sh){
+  art.dialog.open('jili_shenhe.html?id='+id+'&sh='+sh,{
+      padding:0,
+      resize:true,
+      lock:0,
+      height:400,
+      width:520
+  });
+}
+
+function buildShenHe(sh){
+  if(sh==0){
+    return "未审核";
+  }else if(sh==1){
+    return "已通过";
+  }else{
+    return "未通过"
+  }
+}
+
 function isSelf(pubUserId,userId){
   return pubUserId==userId;
 }
@@ -123,6 +143,8 @@ $(function(){
 </script>
 <style type="text/css">
   .table{ margin-bottom: 0px;}
+  .shenhe_2{color:red;}
+  .shenhe_1{color:green;}
 </style>
 </head>
 <body class="hlist bodyer" style="overflow:auto">
@@ -136,7 +158,7 @@ $(function(){
   <form name="form1">
     <input type="hidden" id="xpath" name="xpath" value="">
     <input type="hidden" name="uid" id="uid" value="">
-
+    <input auth="!xz_jili_list_shenhe" type="hidden" name="sh" value="1">
     <div class="input-group input-group-select jl" style="width:450px;">
       <span class="input-group-addon">业务员</span>
       <select class="form-control get_comp" name="form_cid"></select>
@@ -168,7 +190,8 @@ $(function(){
       <td>${uname}</td>
       <td>${score}</td>
       <td>${addtime}</td>
-      <td><a auth="xz_jili_list_edit" onclick="openEdit(${id})" href="javascript:void(0)">修改</a> 
+      <td><a auth="xz_jili_list_edit" onclick="openEdit(${id})" href="javascript:void(0)">修改</a>
+          <a auth="xz_jili_list_shenhe" class="runscript shenhe_${sh}" onclick="openshenhe(${id},${sh})" href="javascript:void(0)">buildShenHe(${sh})</a> 
           <a auth="xz_jili_list_del" href="javascript:void(0)" onclick="deleteData(${id});">删除</a></td>
     </tr>
     </tbody>

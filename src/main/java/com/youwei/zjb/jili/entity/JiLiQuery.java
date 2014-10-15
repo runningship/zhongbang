@@ -8,4 +8,6 @@ public String addtimeStart;
 public String addtimeEnd;
 
 public String reason;
+
+public Integer sh;
 }

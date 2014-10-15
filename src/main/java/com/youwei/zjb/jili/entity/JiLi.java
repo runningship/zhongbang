@@ -24,4 +24,9 @@ public class JiLi {
 	public Date addtime;
 	
 	public String reason;
+	
+	/**
+	 * 0,未审核 1通过,2为通过
+	 */
+	public Integer sh;
 }

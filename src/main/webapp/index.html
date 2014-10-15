@@ -182,7 +182,15 @@ function relogin(){
     }
   });
 }
-
+function notifyUserOnline(text){
+  art.dialog.notice({
+    title: '好友状态',
+    width: 120,
+    content: '<span style="font-size:13px;">'+text+'</span>',
+    padding:10,
+    time:5
+  }); 
+}
 function showUnReadMessage(){
   YW.ajax({
     type: 'get',
@@ -196,7 +204,7 @@ function showUnReadMessage(){
           title: '您有新的未读消息',
           width: 220,
           content: $('#oa_message_statistic').html(),
-          padding:15
+          padding:15,
         });  
       }
       

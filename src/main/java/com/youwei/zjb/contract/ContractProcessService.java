@@ -13,6 +13,7 @@ import com.youwei.zjb.PlatformExceptionType;
 import com.youwei.zjb.contract.entity.Contract;
 import com.youwei.zjb.contract.entity.ContractProcess;
 import com.youwei.zjb.entity.User;
+import com.youwei.zjb.util.DataHelper;
 import com.youwei.zjb.util.JSONHelper;
 
 @Module(name="/contract/process/")
@@ -80,7 +81,7 @@ public class ContractProcessService {
 		}
 		dao.saveOrUpdate(contract);
 		List<ContractProcess> processList = dao.listByParams(ContractProcess.class,"from ContractProcess where contractId=? order by ordera ",process.contractId);
-		mv.data.put("actions", JSONHelper.toJSONArray(processList));
+		mv.data.put("actions", JSONHelper.toJSONArray(processList , DataHelper.dateSdf.toPattern()));
 		return mv;
 	}
 	

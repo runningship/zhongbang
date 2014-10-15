@@ -98,7 +98,7 @@ public class IMServer extends WebSocketServer{
 			sendMsg(conn,data);
 		}else if("history".equals(data.getString("type"))){
 			Page<Message> page = new Page<Message>();
-			page.setPageSize(5);
+			page.setPageSize(10);
 			page.setCurrentPageNo(data.getInt("page"));
 			page = dao.findPage(page ,"from Message where (senderId=? and  receiverId=?) or (senderId=? and  receiverId=?) order by sendtime desc", 
 					data.getInt("myId"), data.getInt("contactId") ,data.getInt("contactId"), data.getInt("myId") );
@@ -124,7 +124,7 @@ public class IMServer extends WebSocketServer{
 			if(conn==null){
 				continue;
 			}
-			jobj.put("contactId", cont.contactId);
+			jobj.put("contactId", ownerId);
 			conn.send(jobj.toString());
 		}
 	}

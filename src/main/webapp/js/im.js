@@ -80,6 +80,12 @@ var IM = {
 
 	setUserStatus : function(json){
 		IM.loadContacts();
+		
+		if(json.status=='在线'){
+			var contact = IM.getContact(json['contactId']);
+			art.dialog.opener.notifyUserOnline(contact.contactName+' 已经上线');
+			// alert(contact.contactName+' 已经上线');	
+		}
 	},
 
 	setUserProfile : function(profile){
@@ -130,6 +136,7 @@ var IM = {
 	        success:function (data, textStatus) {
 	        }
       	});
+      	// IM.msgContainer.scrollTop(IM.msgContainer.scroll(0)[0].scrollHeight);
 		// if(IM.chatWindow!=null && IM.chatWindowOpen){
 		// 	// chatWindowLeft = chatWindow.DOM.wrap[0].offsetLeft;
 		// 	// chatWindowTop = chatWindow.DOM.wrap[0].offsetTop;
@@ -263,7 +270,7 @@ var IM = {
 		if(list.length>0){
 			IM.msgContainer.prepend('<div style="text-align:center"><a onclick="$(this).remove();IM.loadHistory('+contactId+')" href="javascript:void(0)">查看更多</a></div>');
 		}
-		IM.msgContainer.scrollTop(IM.msgContainer.scroll(0)[0].scrollHeight);
+		// IM.msgContainer.scrollTop(IM.msgContainer.scroll(0)[0].scrollHeight);
 	},
 
 
