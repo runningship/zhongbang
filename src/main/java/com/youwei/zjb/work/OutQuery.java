@@ -16,4 +16,6 @@ public class OutQuery extends AbstractQuery{
 	public Integer uid;
 	
 	public String pingji;
+	public Integer finish;
+	public Integer reply;
 }

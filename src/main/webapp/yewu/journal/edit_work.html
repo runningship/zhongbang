@@ -31,7 +31,8 @@ function save(){
     data:text,
     success: function(data){
       art.dialog.opener.getList();
-      alert('保存成功');
+      art.dialog.close();
+      alert('修改成功');
       // initFileUpload();
     }
   });

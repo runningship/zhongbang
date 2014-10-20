@@ -34,4 +34,5 @@ public class PYItem {
 	
 	public String conts;
 	
+	public Integer finish;
 }

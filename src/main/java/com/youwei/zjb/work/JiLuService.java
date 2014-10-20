@@ -38,6 +38,16 @@ public class JiLuService {
 		User user = ThreadSession.getUser();
 		jilu.userId = user.id;
 		dao.saveOrUpdate(jilu);
+		//产生一个空的批阅项
+		PYItem py = new PYItem();
+		py.category = jilu.category;
+		py.conts = "";
+		py.uid = user.id;
+		py.uname = user.uname;
+		py.addtime = new Date();
+		py.bizId = jilu.id;
+		py.finish=0;
+		dao.saveOrUpdate(py);
 		mv.data.put("result", 0);
 		mv.data.put("recordId", jilu.id);
 		return mv;
@@ -68,15 +78,21 @@ public class JiLuService {
 	public ModelAndView list(JiLuQuery query,Page<Map> page){
 		ModelAndView mv = new ModelAndView();
 		List<Object> params = new ArrayList<Object>();
-		StringBuilder hql = new StringBuilder("select u.uname as uname,d.namea as deptName,q.namea as quyu,j.title as title ,j.addtime as addtime , j.starttime as starttime "
-				+ ",j.id as id , j.category as category ,j.pingji as pingji from JiLu j, User u,Department d,Department q where j.userId=u.id and u.deptId=d.id and d.fid=q.id");
+		StringBuilder hql = new StringBuilder("select py.finish as py, u.uname as uname,d.namea as deptName,q.namea as quyu,j.title as title ,j.addtime as addtime , j.starttime as starttime "
+				+ ",j.id as id , j.category as category ,j.pingji as pingji from JiLu j,PYItem py, User u,Department d,Department q where j.userId=u.id and py.bizId=j.id and u.deptId=d.id and d.fid=q.id and py.uid=? ");
+		params.add(ThreadSession.getUser().id);
 		if(query.category!=null){
-			hql.append(" and j.category=?");
+			hql.append(" and j.category=? and py.category=? ");
+			params.add(query.category);
 			params.add(query.category);
 		}
-		if(query.pingji!=null){
+		if(StringUtils.isNotEmpty(query.pingji)){
 			hql.append(" and j.pingji=?");
 			params.add(query.pingji);
+		}
+		if(query.finish!=null){
+			hql.append(" and py.finish=?");
+			params.add(query.finish);
 		}
 		if(StringUtils.isNotEmpty(query.goin)){
 			hql.append(" and j.goin like ? ");
@@ -115,6 +131,7 @@ public class JiLuService {
 		PYItem pypo = dao.getUniqueByParams(PYItem.class, new String[]{"category" , "bizId","uid"}, new Object[]{po.category , po.id , user.id});
 		if(pypo!=null){
 			pypo.conts = contb;
+			pypo.finish=1;
 			dao.saveOrUpdate(pypo);
 		}else{
 			PYItem py = new PYItem();
@@ -124,6 +141,7 @@ public class JiLuService {
 			py.uname = user.uname;
 			py.addtime = new Date();
 			py.bizId = po.id;
+			py.finish = 1;
 			dao.saveOrUpdate(py);
 		}
 		if(pingji!=null){

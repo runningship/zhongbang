@@ -126,6 +126,8 @@ $(function(){
   if(detail==1){
     $('div.jl').remove()
   }
+  var shenhe = getParam('shenhe');
+  $('#shenhe').val(shenhe);
   onSubmit_Form();
   $.get('/zb/c/admin/class/listofuser', function(data) {
     queryOpts=JSON.parse(data);
@@ -170,6 +172,15 @@ $(function(){
       <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:95px;border-radius:0;">
       <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:95px">
     </div>
+      <div class="input-group " >
+        <span class="input-group-addon">批阅</span>
+        <select class="form-control" name="sh" id="shenhe" style="width:80px;">
+            <option value="">所有</option>
+            <option value="0">未审核</option>
+            <option value="1">已通过</option>
+            <option value="2">未通过</option>
+        </select>
+      </div>
     <div class="btn-group">
       <button type="button" class="btn btn-primary btn_subnmit" onclick="doSearch();">搜索</button>
     </div>

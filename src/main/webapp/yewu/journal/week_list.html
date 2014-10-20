@@ -130,7 +130,17 @@ function openPiyue(id){
   });
 }
 
+function getPiYue(py){
+  if (py==1) {
+    return '已批阅';
+  }else{
+    return '未批阅';
+  };
+}
+
 $(function(){
+  var shenhe = getParam('shenhe');
+  $('#shenhe').val(shenhe);
   onSubmit_Form();
   doSearch();
   $.get('/zb/c/house/getQueryOptions', function(data) {
@@ -167,6 +177,14 @@ $(function(){
           <option value="C">C</option>
       </select>
     </div>
+      <div class="input-group " >
+        <span class="input-group-addon">批阅</span>
+        <select class="form-control" name="finish" id="shenhe" style="width:80px;">
+            <option value="">所有</option>
+            <option value="0">未批阅</option>
+            <option value="1">已批阅</option>
+        </select>
+      </div>
     <div class="btn-group">
           <button type="button" class="btn btn-primary btn_subnmit" onclick="doSearch();">搜索</button>
     </div>
@@ -190,7 +208,7 @@ $(function(){
       <th>业务员</th>
       <th>开始时间</th>
       <th>结束时间</th>
-      <td>评级</td>
+      <th>评级</th>
       <th>操作</th>
     </thead>
     <tbody id="id_list">
@@ -202,7 +220,7 @@ $(function(){
       <td>${endtime}</td>
       <td>${pingji}</td>
       <td><a href="javascript:void(0)" onclick="openView(${id})" >查看</a>
-          <a auth="yw_journal_week_work_sh" href="javascript:void(0)" onclick="openPiyue(${id})" >批阅</a> 
+          <a auth="yw_journal_week_work_sh" href="javascript:void(0)" onclick="openPiyue(${id})" class="runscript">getPiYue(${py})</a> 
           <a auth="yw_journal_week_work_edit" href="javascript:void(0)" onclick="openEdit(${id})" class="runscript">edit(${reply})</a>
           <a auth="yw_journal_week_work_del" href="javascript:void(0)" onclick="deleteOut(${id})">删除</a></td>
     </tr>

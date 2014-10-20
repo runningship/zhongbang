@@ -163,6 +163,10 @@ public class OutService {
 			hql.append(" and o.outHouse=?");
 			params.add(query.kanfang);
 		}
+		if(query.finish!=null){
+			hql.append(" and o.reply=?");
+			params.add(query.finish);
+		}
 		if(StringUtils.isNotEmpty(query.xpath)){
 			hql.append(" and u.orgpath like ? ");
 			params.add(query.xpath+"%");

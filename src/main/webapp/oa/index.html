@@ -24,7 +24,13 @@ $(document).ready(function(){
         $('#oa_iframe').attr('src',aHref);
         return false;
     });
-    $('.sider').find('a').eq(0).click();
+    var fenleiId = getParam('fenleiId');
+    if(fenleiId==undefined || fenleiId==""){
+        $('.sider').find('a').eq(0).click();   
+    }else{
+        select(fenleiId);
+    }
+    
 });
 
 function select(fenleiId){

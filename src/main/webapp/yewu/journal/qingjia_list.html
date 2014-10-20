@@ -132,6 +132,8 @@ $(function(){
     $('div.xz').remove()
   }
   $('#uid').val(uid);
+  var shenhe = getParam('shenhe');
+  $('#shenhe').val(shenhe);
   onSubmit_Form();
   doSearch();
   $.get('/zb/c/house/getQueryOptions', function(data) {
@@ -168,6 +170,14 @@ $(function(){
           <select class="form-control get_quyu" name="form_did"></select>
           <select class="form-control get_user" name="form_uid"></select>
         </div>
+      <div class="input-group " >
+        <span class="input-group-addon">批阅</span>
+        <select class="form-control" name="finish" id="shenhe" style="width:80px;">
+            <option value="">所有</option>
+            <option value="0">未批阅</option>
+            <option value="1">已批阅</option>
+        </select>
+      </div>
         <div class="btn-group">
           <button type="button" class="btn btn-primary btn_subnmit" onclick="doSearch();">搜索</button>
         </div>

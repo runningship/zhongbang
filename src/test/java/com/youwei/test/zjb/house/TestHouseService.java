@@ -156,17 +156,6 @@ public class TestHouseService {
 	}
 	
 	@Test
-	public void testListBydateyear(){
-		HouseService hs = new HouseService();
-		HouseQuery hq = new HouseQuery();
-		hq.dateType = DateType.建房年代;
-		hq.dateStart = "2013";
-		hq.dateEnd = "2013";
-		ModelAndView mv = hs.listAll(hq,new Page<House>());
-		printResult(mv);
-	}
-	
-	@Test
 	public void testListByXPath(){
 		HouseService hs = new HouseService();
 		HouseQuery hq = new HouseQuery();

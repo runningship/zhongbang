@@ -24,8 +24,20 @@ $(document).ready(function(){
         $('iframe').attr('src',aHref);
         return false;
     });
-    $('.sider').find('a').eq(0).click();
+    var selected=getParam('selected');
+    if(selected==undefined || selected==""){
+        $('.sider').find('a').eq(0).click();
+    }else{
+        select(selected);
+    }
 });
+function select(selected){
+    var menu = $('.'+selected);
+    var oldTarget= menu.attr('target');
+    // menu.attr('target',oldTarget+"?claid="+fenleiId);
+    menu.click();
+    // menu.attr('target',oldTarget);
+}
 </script>
 </head>
 <body>
@@ -39,7 +51,7 @@ $(document).ready(function(){
             <dl auth="zc_bg" class="sidedl">
                 <dt></dt>
                 <dd auth="zc_bg_add"><a class="aNavBtn" href="supply_add.html"  target="house_iframe" >申请办公用品</a></dd>
-                <dd auth="zc_bg_dsh"><a class="aNavBtn" href="supply_list.html?dataScope=zc_bg&shenhe=0&authParent=zc_bg_dsh" target="house_iframe" >待审核</a></dd>
+                <dd auth="zc_bg_dsh"><a class="aNavBtn bangong" href="supply_list.html?dataScope=zc_bg&shenhe=0&authParent=zc_bg_dsh" target="house_iframe" >待审核</a></dd>
                 <dd auth="zc_bg_ysh"><a class="aNavBtn" href="supply_list.html?dataScope=zc_bg&shenhe=1&authParent=zc_bg_ysh" target="house_iframe" >已审核</a></dd>
                 <dd auth="zc_bg_np"><a class="aNavBtn" href="supply_list.html?dataScope=zc_bg&shenhe=2&authParent=zc_bg_np" target="house_iframe" >审核不通过</a></dd>
             </dl>

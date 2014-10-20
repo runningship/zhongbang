@@ -73,6 +73,7 @@ public class HouseService {
 		}else{
 			house.isdel = 0;
 			house.dateadd = new Date();
+			house.dateweituo = house.dateadd;
 //			house.userId = user.id;
 			house.deptId = user.deptId;
 			if(house.sjia ==null){
@@ -152,6 +153,7 @@ public class HouseService {
 		po.beizhu = house.beizhu;
 		po.fordlr = house.fordlr;
 		po.fordlrtel = house.fordlrtel;
+		po.dateweituo = house.dateweituo;
 //		service.saveOrUpdate(po);
 //		String py = DataHelper.toPinyin(house.quyu);
 //		if(StringUtils.isNotEmpty(py) && py.length()>0){
@@ -385,8 +387,8 @@ public class HouseService {
 		list.add(house);
 		mv.data.put("house", JSONHelper.toJSONArray(list));
 //		User fbr = service.get(User.class, house.fbrId);
-		//把业务员当作发布人
-		User fbr = service.get(User.class, house.userId);
+		//发布人，首次上报人
+		User fbr = service.get(User.class, house.fbrId);
 		User ywy = service.get(User.class, house.userId);
 		mv.data.getJSONArray("house").getJSONObject(0).put("ywy", ywy.uname);
 		if(fbr!=null){

@@ -76,7 +76,7 @@ public class OAService {
 	@WebMethod
 	public ModelAndView getUnReadStatistic(){
 		ModelAndView mv = new ModelAndView();
-		StringBuilder hql = new StringBuilder("select  nc.fenlei as fenlei,count(*) as total from Notice n, NoticeReceiver nr , NoticeClass nc"
+		StringBuilder hql = new StringBuilder("select nc.id as id,  nc.fenlei as fenlei,count(*) as total from Notice n, NoticeReceiver nr , NoticeClass nc"
 				+ " where n.id=nr.noticeId and n.claid=nc.id  and nr.receiverId=? and nr.hasRead=0 group by nc.fenlei");
 		List<Map> list = dao.listAsMap(hql.toString(), ThreadSession.getUser().id);
 		mv.data.put("oaData", JSONHelper.toJSONArray(list));
@@ -192,7 +192,7 @@ public class OAService {
 		ModelAndView mv = new ModelAndView();
 		List<Object> params = new ArrayList<Object>();
 		User user = ThreadSession.getUser();
-		StringBuilder hql = new StringBuilder("select n.id as id, n.title as title, n.addtime as addtime, nc.fenlei as classTitle, u.uname as uname from Notice n, NoticeReceiver nr , NoticeClass nc , User u where n.id=nr.noticeId and n.claid=nc.id and u.id=n.userId and nr.receiverId=?");
+		StringBuilder hql = new StringBuilder("select nr.hasRead as hasRead,n.id as id, n.title as title, n.addtime as addtime, nc.fenlei as classTitle, u.uname as uname from Notice n, NoticeReceiver nr , NoticeClass nc , User u where n.id=nr.noticeId and n.claid=nc.id and u.id=n.userId and nr.receiverId=?");
 		params.add(user.id);
 		if(query.claid!=null){
 			hql.append("  and n.claid=? ");

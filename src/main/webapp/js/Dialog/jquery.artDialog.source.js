@@ -1014,7 +1014,8 @@ artDialog._templates =
 artDialog.defaults = {
 								// 消息内容
 	content: '<div class="aui_loading"><span>loading..</span></div>',
-	title: '\u6d88\u606f',		// 标题. 默认'消息'
+	// title: '\ ',
+	title: '\u606f\u6d88',		// 标题. 默认'消息'
 	button: null,				// 自定义按钮
 	ok: null,					// 确定按钮回调函数
 	cancel: null,				// 取消按钮回调函数

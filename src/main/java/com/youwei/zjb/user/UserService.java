@@ -92,6 +92,29 @@ public class UserService {
 		return mv;
 	}
 	
+	private String getOrgPathByDataScope(String dataScope){
+		User user = ThreadSession.getUser();
+		String code = "";
+		if(!"all".equals(dataScope)){
+			if(user!=null){
+				List<UserAuthority> authorities = user.Authorities();
+				code = user.orgpath;
+				for(UserAuthority ra : authorities){
+					if((dataScope+"_data_dept").equals(ra.name)){
+						code = user.Department().path;
+					}
+					if((dataScope+"_data_quyu").equals(ra.name)){
+						code = String.valueOf(user.Department().Parent().path);
+					}
+					if((dataScope+"_data_all").equals(ra.name)){
+						code = "";
+					}
+				}
+			}
+		}
+		return code;
+	}
+	
 	@WebMethod
 	public ModelAndView getBizmanTree(){
 		ModelAndView mv = new ModelAndView();
@@ -143,6 +166,69 @@ public class UserService {
 		String hql = "select nc.fenlei as fenlei,count(*) as total from Notice n, NoticeReceiver nr , NoticeClass nc where nr.receiverId=? and n.id=nr.noticeId and nc.id=n.claid and nr.hasRead=0 group by nc.fenlei";
 		List<Map> notices = dao.listAsMap(hql, new Object[]{user.id});
 		mv.data.put("notices", JSONHelper.toJSONArray(notices));
+		
+		// 激励待审核
+		String jlOrgPath = getOrgPathByDataScope("xz_jili_list");
+		StringBuilder jlhql = new StringBuilder("select count(1) from JiLi jl , User u where jl.uid=u.id and u.orgpath like ? and jl.sh=0");
+		long jlCount = dao.countHql(jlhql.toString(),jlOrgPath+"%");
+		mv.data.put("jlCount", jlCount);
+		
+		// 外出待审核
+		String wcOrgPath = getOrgPathByDataScope("yw_out_gs");
+		StringBuilder wchql = new StringBuilder("select count(1) from OutRecord o , User u where o.userId=u.id and u.orgpath like ? and o.reply=0 and o.category=1");
+		long wcCount = dao.countHql(wchql.toString(), wcOrgPath+"%");
+		mv.data.put("wcCount", wcCount);
+		// 请假登记待审核
+		String qjOrgPath = getOrgPathByDataScope("yw_journal_qj");
+		StringBuilder qjhql = new StringBuilder("select count(1) from Journal j , User u ,PYItem py where j.id=py.bizId and py.category=1 and"
+				+ " j.userId=u.id and u.orgpath like ? and py.finish=0 and j.category=1 and py.uid=?");
+		long qjCount = dao.countHql(qjhql.toString(), qjOrgPath+"%",user.id);
+		mv.data.put("qjCount", qjCount);
+		
+		// 工作日清待审核
+		String rqOrgPath = getOrgPathByDataScope("yw_journal_work");
+		StringBuilder rqhql = new StringBuilder("select count(1) from Journal j , User u ,PYItem py where j.id=py.bizId and py.category=0 and"
+				+ " j.userId=u.id and u.orgpath like ? and py.finish=0 and j.category=0 and py.uid=?");
+		long rqCount = dao.countHql(rqhql.toString(), rqOrgPath+"%" , user.id);
+		mv.data.put("rqCount", rqCount);
+		
+		// 周呈报表待审核
+		String weekOrgPath = getOrgPathByDataScope("yw_journal_week_work");
+		StringBuilder weekhql = new StringBuilder("select count(1) from Journal j , User u,PYItem py where j.id=py.bizId and py.category=2 and "
+				+ " j.userId=u.id and u.orgpath like ? and py.finish=0 and j.category=2 and py.uid=?");
+		long weekCount = dao.countHql(weekhql.toString(), weekOrgPath+"%", user.id);
+		mv.data.put("weekCount", weekCount);
+		
+		// 优质房源待审核
+		String fyOrgPath = getOrgPathByDataScope("yw_jilu_fy");
+		StringBuilder fyhql = new StringBuilder("select count(1) from JiLu jl , User u,PYItem py where jl.id=py.bizId and py.category=1 and py.finish=0 and "
+				+ " jl.userId=u.id and u.orgpath like ? and jl.category=1 and py.uid=?");
+		long fyCount = dao.countHql(fyhql.toString(), fyOrgPath+"%",user.id);
+		mv.data.put("fyCount", fyCount);
+		// 月度总结待审核
+		String monthOrgPath = getOrgPathByDataScope("yw_jilu_zj");
+		StringBuilder monthhql = new StringBuilder("select count(1) from JiLu jl , User u,PYItem py where jl.id=py.bizId and py.category=2 and py.finish=0 and "
+				+ " jl.userId=u.id and u.orgpath like ? and jl.category=2 and py.uid=?");
+		long monthCount = dao.countHql(monthhql.toString(), monthOrgPath+"%" , user.id);
+		mv.data.put("monthCount", monthCount);
+		
+		//办公用品待审核
+		String bgOrgPath = getOrgPathByDataScope("zc_bg");
+		StringBuilder bghql = new StringBuilder("select count(1) from OfficeSupply os,User u where u.id=os.userId and u.orgpath like ? and shenhe=0");
+		long bgCount = dao.countHql(bghql.toString(), bgOrgPath+"%");
+		mv.data.put("bgCount", bgCount);
+		
+		//入职待审核
+		String rzOrgPath = getOrgPathByDataScope("rs_rz");
+		StringBuilder rzhql = new StringBuilder("select count(1) from RenShiReview review,User u where u.id=review.userId and u.orgpath like ? and review.sh=0 and review.category='join' and review.sprId=?");
+		long rzCount = dao.countHql(rzhql.toString(), rzOrgPath+"%",user.id);
+		mv.data.put("rzCount", rzCount);
+		
+		//入职待审核
+		String zwOrgPath = getOrgPathByDataScope("rs_zwtz");
+		StringBuilder zwhql = new StringBuilder("select count(1) from RenShiReview review,User u where u.id=review.userId and u.orgpath like ? and review.sh=0 and review.category='adjust' and review.sprId=?");
+		long zhiwuCount = dao.countHql(zwhql.toString(), zwOrgPath+"%",user.id);
+		mv.data.put("zhiwuCount", zhiwuCount);
 		return mv;
 	}
 	

@@ -44,7 +44,7 @@ public class Journal {
 	/**
 	 * 2.周呈报表
 	 * 1.请假 
-	 * 0.工作日志
+	 * 0.工作日清
 	 */
 	@Column(name="cate")
 	public Integer category;

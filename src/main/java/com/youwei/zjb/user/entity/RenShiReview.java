@@ -17,7 +17,7 @@ public class RenShiReview {
 	 */
 	public Integer userId;
 	
-	//待审核项
+	//待审核项,入职审核没有
 	public Integer itemId;
 	
 	/**

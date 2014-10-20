@@ -132,6 +132,14 @@ function openAdd(){
   // win.size(800,1024);
 }
 
+function getPiYue(py){
+  if (py==1) {
+    return '已批阅';
+  }else{
+    return '未批阅';
+  };
+}
+
 function isHuiYi(){
   return category==0;
 }
@@ -146,6 +154,8 @@ $(function(){
     var str = '<div show="isHuiYi()" class="input-group input-group-max"><span class="input-group-addon">参会人</span><input type="text" class="form-control" name="goin"></div>';
     $('#form1').prepend(str);
   }
+  var shenhe = getParam('shenhe');
+  $('#shenhe').val(shenhe);
   onSubmit_Form();
   doSearch();
   $.get('/zb/c/house/getQueryOptions', function(data) {
@@ -179,6 +189,14 @@ $(function(){
       <select class="form-control get_quyu" name="form_did"></select>
       <select class="form-control get_user" name="form_uid"></select>
     </div>
+      <div class="input-group " >
+        <span class="input-group-addon">批阅</span>
+        <select class="form-control" name="finish" id="shenhe" style="width:80px;">
+            <option value="">所有</option>
+            <option value="0">未批阅</option>
+            <option value="1">已批阅</option>
+        </select>
+      </div>
     <div class="btn-group">
           <button type="button" class="btn btn-primary btn_subnmit" onclick="doSearch();">搜索</button>
     </div>
@@ -203,7 +221,7 @@ $(function(){
       <td>${addtime}</td>
       <td>
         <a onclick="openView(${id})" href="javascript:void(0)" >查看</a>
-        <a auth="yw_journal_qj_sh" href="javascript:void(0)" onclick="openPiYue(${id})">批阅</a>
+        <a auth="yw_journal_qj_sh" href="javascript:void(0)" onclick="openPiYue(${id})" class="runscript">getPiYue(${py})</a>
         <a auth="$${authParent}_edit" onclick="openEdit(${id})" href="javascript:void(0)" >修改</a>
         <a auth="$${authParent}_del" href="javascript:void(0)" onclick="deleteOut(${id})">删除</a>
       </td>

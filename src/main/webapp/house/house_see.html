@@ -12,12 +12,9 @@
 <script src="/zb/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/zb/js/Dialog/jquery.artDialog.js?skin=aero"></script>
 <script type="text/javascript" src="/zb/js/Dialog/plugins/iframeTools.source.js"></script>
-<script type="text/javascript" src="/zb/js/DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.timers.js"></script>
 <script type="text/javascript" src="/zb/js/jquery.caozuobendi.js"></script>
 <script type="text/javascript" src="/zb/js/buildHtml.js"></script>
-<script type="text/javascript" src="/zb/js/jquery.xianshang.users.js"></script>
-<script type="text/javascript" src="/zb/js/pagination.js"></script>
 <script type="text/javascript">
 var tudizheng = ["有","无"];
 var authParent = getParam('authParent');
@@ -80,7 +77,7 @@ function getFbr(){
   if(getStr['fbr']==undefined){
     return "";
   }
-  return '由 <b>' + getStr['fbr'] + '</b> 发布';
+  return ' <b>' + getStr['fbr'] + '</b> ';
 }
 $(function(){
   $('.btn_submit_gj').on('click', function(event) {
@@ -100,9 +97,6 @@ $(function(){
           },cancel:true
         });
     });
-  });
-  $.get('/zb/c/house/getQueryOptions', function(data) {
-    QueryOptions=JSON.parse(data);
   });
   $.get('/zb/c/house/view?authParent='+authParent+'&houseId='+getHid, function(data) {
     getStr=JSON.parse(data);
@@ -130,6 +124,7 @@ $(function(){
 <table class="seeBox" width="100%">
   <tr>
     <td>
+
     <span id="id_house_see">
   <table class="table table-bordered">
     <thead>
@@ -150,8 +145,8 @@ $(function(){
               <div class="row-fluid">
                 ${area} <b style="padding:0px;" class="">${dhao}#${fhao}</b>
               </div>
-              <div class="row-fluid runscript">
-                getFbr()
+              <div>
+                <span>首次录入：</span>${dateadd} <b style="padding:0px;" class="row-fluid runscript">getFbr()</b>
               </div>
             </div>
           </div>

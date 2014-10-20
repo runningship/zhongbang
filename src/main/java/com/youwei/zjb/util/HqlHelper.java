@@ -167,6 +167,14 @@ public class HqlHelper {
 			hql.append(" and h.zjia<= ? ");
 			params.add(query.zjiaEnd);
 		}
+		if (query.dateyearStart != null) {
+			hql.append(" and h.dateyear>= ? ");
+			params.add(query.dateyearStart);
+		}
+		if (query.dateyearEnd != null) {
+			hql.append(" and h.dateyear<= ? ");
+			params.add(query.dateyearEnd);
+		}
 		if (query.dateType == null) {
 			query.dateType = DateType.首次录入日;
 		}
@@ -228,14 +236,14 @@ public class HqlHelper {
 
 	private static String buildDateHql(DateType dateType,String dateStr,DateSeparator sep,List<Object> params){
 		if(StringUtils.isNotEmpty(dateStr)){
-			if(DateType.建房年代==dateType){
-				params.add(Integer.valueOf(dateStr));
-				if(sep==DateSeparator.Before){
-					return " and " + dateType.getField()+"<=?";
-				}else{
-					return " and " + dateType.getField()+">=?";
-				}
-			}
+//			if(DateType.建房年代==dateType){
+//				params.add(Integer.valueOf(dateStr));
+//				if(sep==DateSeparator.Before){
+//					return " and " + dateType.getField()+"<=?";
+//				}else{
+//					return " and " + dateType.getField()+">=?";
+//				}
+//			}
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			try {
 				Date date = sdf.parse(dateStr);

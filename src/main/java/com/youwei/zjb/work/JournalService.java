@@ -48,6 +48,16 @@ public class JournalService {
 			journal.userId = user.id;
 		}
 		dao.saveOrUpdate(journal);
+		//产生一个空的批阅项
+		PYItem py = new PYItem();
+		py.category = journal.category;
+		py.conts = "";
+		py.uid = user.id;
+		py.uname = user.uname;
+		py.addtime = new Date();
+		py.bizId = journal.id;
+		py.finish=0;
+		dao.saveOrUpdate(py);
 		mv.data.put("result", 0);
 		mv.data.put("recordId", journal.id);
 		return mv;
@@ -83,20 +93,26 @@ public class JournalService {
 	@WebMethod
 	public ModelAndView list(OutQuery query ,Page<Map> page){
 		ModelAndView mv = new ModelAndView();
-		StringBuilder hql = new StringBuilder("select j.id as id,d.namea as deptName ,q.namea as quyu, u.uname as uname,u.id as uid, j.title as title, "
-				+ "j.addtime as addtime,j.starttime as starttime,j.endtime as endtime,j.qjdays as qjdays ,  j.reply as reply ,j.pingji as pingji from Journal j , User u , Department d,Department q where j.userId=u.id and u.deptId=d.id and q.id=d.fid");
+		StringBuilder hql = new StringBuilder("select py.finish as py, j.id as id,d.namea as deptName ,q.namea as quyu, u.uname as uname,u.id as uid, j.title as title, "
+				+ "j.addtime as addtime,j.starttime as starttime,j.endtime as endtime,j.qjdays as qjdays ,  j.reply as reply ,j.pingji as pingji from Journal j ,PYItem py, User u , Department d,Department q where j.userId=u.id and py.bizId=j.id and u.deptId=d.id and q.id=d.fid and py.uid=?");
 		List<Object> params = new ArrayList<Object>();
+		params.add(ThreadSession.getUser().id);
 		hql.append(HqlHelper.buildDateSegment("j.starttime", query.addtimeStart, DateSeparator.After, params));
 		hql.append(HqlHelper.buildDateSegment("j.starttime", query.addtimeEnd, DateSeparator.Before, params));
 		if(query.category!=null){
-			hql.append(" and j.category=? ");
+			hql.append(" and j.category=? and py.category=? ");
+			params.add(query.category);
 			params.add(query.category);
 		}
 		if(query.uid!=null){
 			hql.append(" and u.id=? ");
 			params.add(query.uid);
 		}
-		if(query.pingji!=null){
+		if(query.finish!=null){
+			hql.append(" and py.finish=? ");
+			params.add(query.finish);
+		}
+		if(StringUtils.isNotEmpty(query.pingji)){
 			hql.append(" and j.pingji=? ");
 			params.add(query.pingji);
 		}
@@ -176,6 +192,7 @@ public class JournalService {
 		PYItem pypo = dao.getUniqueByParams(PYItem.class, new String[]{"category" , "bizId","uid"}, new Object[]{po.category , po.id , user.id});
 		if(pypo!=null){
 			pypo.conts = contb;
+			pypo.finish=1;
 			dao.saveOrUpdate(pypo);
 		}else{
 			PYItem py = new PYItem();
@@ -185,6 +202,7 @@ public class JournalService {
 			py.uname = user.uname;
 			py.addtime = new Date();
 			py.bizId = po.id;
+			py.finish=1;
 			dao.saveOrUpdate(py);
 		}
 		if(pingji!=null){

@@ -72,7 +72,60 @@ function init(){
       hostname = json.hostname;
       $('#win_im').click();
       var notices = json.notices;
-      // chatWindow.close();
+      var total=0;
+      if(json['wcCount']>0){
+        $('#waichu').css('display','block');
+        $('#waichu').find('a').text(json['wcCount']);
+        total+=json['wcCount'];
+      }
+      if(json['jlCount']>0){
+        $('#jili').css('display','block');
+        $('#jili').find('a').text(json['jlCount']);
+        total+=json['jlCount'];
+      }
+      if(json['qjCount']>0){
+        $('#qingjia').css('display','block');
+        $('#qingjia').find('a').text(json['qjCount']);
+        total+=json['qjCount'];
+      }
+      if(json['rqCount']>0){
+        $('#riqing').css('display','block');
+        $('#riqing').find('a').text(json['rqCount']);
+        total+=json['rqCount'];
+      }
+      if(json['weekCount']>0){
+        $('#week').css('display','block');
+        $('#week').find('a').text(json['weekCount']);
+        total+=json['weekCount'];
+      }
+      if(json['fyCount']>0){
+        $('#fangyuan').css('display','block');
+        $('#fangyuan').find('a').text(json['fyCount']);
+        total+=json['fyCount'];
+      }
+      if(json['monthCount']>0){
+        $('#yuedu').css('display','block');
+        $('#yuedu').find('a').text(json['monthCount']);
+        total+=json['monthCount'];
+      }
+      if(json['bgCount']>0){
+        $('#bangong').css('display','block');
+        $('#bangong').find('a').text(json['bgCount']);
+        total+=json['bgCount'];
+      }
+      if(json['rzCount']>0){
+        $('#ruzhi').css('display','block');
+        $('#ruzhi').find('a').text(json['rzCount']);
+        total+=json['rzCount'];
+      }
+      if(json['zhiwuCount']>0){
+        $('#zhiwu').css('display','block');
+        $('#zhiwu').find('a').text(json['zhiwuCount']);
+        total+=json['zhiwuCount'];
+      }
+      if(total>0){
+        $('#todo_message').css('display','');
+      }
     }
   });
 }
@@ -198,14 +251,11 @@ function showUnReadMessage(){
     data:'',
     success: function(data){
       var json = JSON.parse(data);
-      buildHtmlWithJsonArray("oa_message_statistic_list",json['oaData']);
       if(json['oaData'].length>0){
-        art.dialog.notice({
-          title: '您有新的未读消息',
-          width: 220,
-          content: $('#oa_message_statistic').html(),
-          padding:15,
-        });  
+        $('#oa_message').css('display','inline-block');
+        buildHtmlWithJsonArray("oa_message_statistic_list",json['oaData']);  
+      }else{
+        $('#oa_message').remove();
       }
       
     }
@@ -227,6 +277,52 @@ function revert(){
 function showMenu(e){
   $('#start_item').css('display','block');
   e.cancelBubble=true;
+}
+
+function openOA(obj){
+  var win = $('#win_oa');
+  myLib.desktop.win.newWin({
+    WindowTitle:win.children("div.text").text(),
+    iframSrc:win.attr('path')+'?fenleiId='+$(obj).find('.fenlei_id').text(),
+    WindowsId:win.attr('id'),
+    WindowAnimation:'easeInBack'
+ });
+}
+function openYewu(obj){
+  var win = $('#win_yw');
+  myLib.desktop.win.newWin({
+    WindowTitle:win.children("div.text").text(),
+    iframSrc:win.attr('path')+'?selected='+$(obj).attr('id'),
+    WindowsId:win.attr('id'),
+    WindowAnimation:'easeInBack'
+ });
+}
+function openjili(obj){
+  var win = $('#win10');
+  myLib.desktop.win.newWin({
+    WindowTitle:win.children("div.text").text(),
+    iframSrc:win.attr('path')+'?selected='+$(obj).attr('id'),
+    WindowsId:win.attr('id'),
+    WindowAnimation:'easeInBack'
+ });
+}
+function openbangong(obj){
+  var win = $('#win11');
+  myLib.desktop.win.newWin({
+    WindowTitle:win.children("div.text").text(),
+    iframSrc:win.attr('path')+'?selected='+$(obj).attr('id'),
+    WindowsId:win.attr('id'),
+    WindowAnimation:'easeInBack'
+ });
+}
+function openRenShi(obj){
+  var win = $('#win9');
+  myLib.desktop.win.newWin({
+    WindowTitle:win.children("div.text").text(),
+    iframSrc:win.attr('path')+'?selected='+$(obj).attr('id'),
+    WindowsId:win.attr('id'),
+    WindowAnimation:'easeInBack'
+ });
 }
 </script>
 <style type="text/css">
@@ -254,6 +350,38 @@ border-radius: 6px;
 box-shadow: 0px 1px 5px #000;
 /*border: 1px solid #333;*/
 }
+</style>
+<style type="text/css">
+    .M_con{ width:275px; margin-bottom:15px; display:inline-block;}
+    .M_con i{ width:0; height:0; display:block; position:absolute; border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:8px solid #85c29b; margin:0; padding:0;}
+    .M_con span.line{ float:left; width:0; border-right:1px solid #cedcdf; border-left:1px solid #80979d;}
+    .M_con div.line{border-right:1px solid #cedcdf; border-left:1px solid #80979d;}
+    .P-left1{ width:50px; height:42px; display:inline-block; float:left; position:relative; background-color:#85c29b; border-radius:3px; margin:0; padding:0; text-align:center; vertical-align:middle;}
+    .P-left1 i{  left:50px; top:13px;}
+    .M_con em{ width:30px; display:inline-block; overflow:hidden;  background:url(/zb/icon.png) no-repeat; vertical-align:middle;}
+    .M_con em.ico1{ background-position:0 0;margin-top:10px; height:20px;}
+    .P-right1{ float:right; width:208px; display:inline-block; border-radius:3px; overflow:hidden;background-color: #abbcbc}
+    .P-right1 div{ width:68px; height:42px; float:left; background-color:#abbcbc; overflow:hidden; font-size:12px; color:#ffffff; line-height:42px; text-align:center; position:relative; }
+    .P-right1 div:hover{ background-color:#ffae73;}
+    .P-right1 span.line{ height:42px;}
+    .P-right1 div a{ display:block; padding:2px 4px; height:10px; line-height:10px; border-radius:8px; position:absolute; top:3px; right:3px; text-decoration:none; color:#ffffff; background-color:#ff3c3c; font-family:Verdana; }
+    .P-left2{ width:50px; height:64px; display:inline-block; float:left; position:relative; background-color:#85c29b; border-radius:3px; margin:0; padding:0; text-align:center; vertical-align:middle;}
+    .M_con em.ico2{ background-position:0 -22px;margin-top:19px; height:26px;}
+    .P-left2 i{left:50px; top:23px;}
+    .P-right2{ background-color:#abbcbc; float:right; width:208px; display:inline-block; margin-bottom:1px; border-radius:3px; font-size:12px; color:#fff; text-align:center;}
+    .P-right2 div{ width:68px; height:64px; float:left; overflow:hidden; font-size:12px; color:#ffffff; text-align:center; position:relative;}
+    .P-right2 div:hover{ background-color:#ffae73;}
+    .P-right2 span.line{ height:63px;}
+    .P-right2 div p{ margin:8px 0 0 0; padding:0;}
+    .P-right2 div a{ display:block; padding:2px 4px; height:10px; line-height:10px; border-radius:8px; position:absolute; top:3px; right:3px; text-decoration:none; color:#ffffff; background-color:#ff3c3c; font-family:Verdana; }
+    .M_con em.ico3{ background-position:0 -50px;margin-top:12px; height:20px;}
+    .M_con em.ico4{ background-position:0 -73px;margin-top:12px; height:20px;}
+    .M_con em.ico5{ background-position:0 -96px;margin-top:12px; height:20px;}
+    .M_con em.ico6{ background-position:0 -119px;margin-top:12px; height:20px;}
+    .M_con em.ico7{ background-position:0 -143px;margin-top:12px; height:20px;}
+    .M_con em.ico8{ background-position:0 -166px;margin-top:10px; height:22px;}
+    .pointer{cursor: pointer;display: none}
+    .pointer2{cursor: pointer;}
 </style>
 </head>
 <body>
@@ -304,7 +432,7 @@ box-shadow: 0px 1px 5px #000;
       <div class="right_cron"></div>
     </div>
   </li>
-  <li auth="yw" class="desktop_icon" id="win7" path="/zb/v/yewu/index.html"> <span class="icon"><img src="/zb/style/icon/ico_b_yewu_big.png"/></span>
+  <li auth="yw" class="desktop_icon" id="win_yw" path="/zb/v/yewu/index.html"> <span class="icon"><img src="/zb/style/icon/ico_b_yewu_big.png"/></span>
     <div class="text">业务管理
       <div class="right_cron"></div>
     </div>
@@ -334,7 +462,7 @@ box-shadow: 0px 1px 5px #000;
       <div class="right_cron"></div>
     </div>
   </li>
-  <li auth="oa" class="desktop_icon" id="win12" path="/zb/v/oa/index.html"> <span class="icon"><img src="/zb/style/icon/ico_b_oa_big.png"/></span>
+  <li auth="oa" class="desktop_icon" id="win_oa" path="/zb/v/oa/index.html"> <span class="icon"><img src="/zb/style/icon/ico_b_oa_big.png"/></span>
     <div class="text">OA管理
       <div class="right_cron"></div>
     </div>
@@ -355,6 +483,75 @@ box-shadow: 0px 1px 5px #000;
   </li>
 </ul>
 
+<div style="width:300px;position:absolute;top:40px;right:10px;" id="todo"> 
+    <div class="M_con" id="oa_message" style="display:none"> 
+         <p class="P-left1"><em class="ico1"></em> <i></i></p> 
+         <div class="P-right1">
+            <span id="oa_message_statistic_list" >
+             <div class="pointer2" style="display:none" onclick="openOA(this);">
+              ${fenlei} <span class="fenlei_id" style="display:none">${id}</span>
+              <a href="javascript:void(0)">${total}</a> 
+             </div>
+             </span>
+             
+          </div>
+    </div> 
+    <div class="M_con" id="todo_message" style="display:none">
+         <p class="P-left2"><em class="ico2"></em> <i></i></p> 
+         <div class="P-right2">
+                 <div class="pointer" id="jili" onclick="openjili(this)">
+                  <em class="ico3"></em>
+                  <p>激励管理</p>
+                  <a href="javascript:void(0)">0</a> 
+                 </div> 
+                 <div class="pointer" id="bangong" onclick="openbangong(this)">
+                  <em class="ico4"></em>
+                  <p>办公用品</p> 
+                  <a href="javascript:void(0)">0</a> 
+                 </div> 
+                 <div class="pointer" id="ruzhi" onclick="openRenShi(this)">
+                  <em class="ico5"></em>
+                  <p>人员入职</p> 
+                  <a href="javascript:void(0)">0</a> 
+                 </div>
+                 <div class="pointer" id="riqing" onclick="openYewu(this)">
+                  <em class="ico6"></em>
+                  <p>工作日清</p>
+                  <a href="javascript:void(0)">0</a> 
+                 </div> 
+                 <div class="pointer" id="yuedu" onclick="openYewu(this)">
+                  <em class="ico7"></em>
+                  <p>月度总结</p> 
+                  <a href="javascript:void(0)">0</a> 
+                 </div> 
+                 <div class="pointer" id="qingjia" onclick="openYewu(this)">
+                  <em class="ico8"></em>
+                  <p>请假登记</p> 
+                  <a href="javascript:void(0)">0</a> 
+                 </div>
+                 <div class="pointer" id="waichu" onclick="openYewu(this)">
+                  <em class="ico6"></em>
+                  <p>外出公事</p>
+                  <a href="javascript:void(0)">0</a> 
+                 </div> 
+                 <div class="pointer" id="fangyuan" onclick="openYewu(this)">
+                  <em class="ico7"></em>
+                  <p>优质房源</p> 
+                  <a href="javascript:void(0)">0</a> 
+                 </div> 
+                 <div class="pointer" id="week" onclick="openYewu(this)">
+                  <em class="ico8"></em>
+                  <p>周呈报表</p> 
+                  <a href="javascript:void(0)">0</a> 
+                 </div>
+                 <div class="pointer" id="zhiwu" onclick="openRenShi(this)">
+                  <em class="ico8"></em>
+                  <p>职务调整</p> 
+                  <a href="javascript:void(0)">0</a> 
+                 </div> 
+         </div> 
+    </div> 
+   </div>
 <div id="taskBar">
   <div id="leftBtn"><a href="#" class="upBtn"></a></div>
   <div id="rightBtn"><a href="#" class="downBtn"></a> </div>
@@ -362,14 +559,6 @@ box-shadow: 0px 1px 5px #000;
     <div id="task_lb"></div>
   </div>
 </div>
-</div>
-
-<div id="oa_message_statistic" style="display:none">
-  <div  id="oa_message_statistic_list" style="width:150px;font-size:14px;">
-    <div style="margin-bottom:10px;">
-    <span>${fenlei}</span><span style="float:right"><span style="color:red">${total}</span>条</span>
-    </div>
-  </div>
 </div>
 </body>
 

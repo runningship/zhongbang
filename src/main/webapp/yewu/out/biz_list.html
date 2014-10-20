@@ -106,6 +106,8 @@ function deleteOut(id){
 
 
 $(function(){
+  var shenhe = getParam('shenhe');
+  $('#shenhe').val(shenhe);
   onSubmit_Form();
   $.get('/zb/c/house/getQueryOptions', function(data) {
     queryOpts=JSON.parse(data);
@@ -128,17 +130,25 @@ $(function(){
     <form name="form1">
     <input type="hidden" class="userInput" name="xpath" value="">
 
-    <div class="input-group input-group-select">
+    <div class="input-group input-group-select" style="width:400px;">
       <span class="input-group-addon">分公司</span>
       <select class="form-control get_comp" name="form_cid"></select>
       <select class="form-control get_quyu" name="form_did"></select>
       <select class="form-control get_user" name="form_uid"></select>
     </div>
-    <div class="input-group" style="width:400px">
+    <div class="input-group" style="width:300px">
       <span class="input-group-addon">登记时间</span>
-      <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:150px;border-radius:0;">
-      <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:150px">
+      <input type="text"  id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" class="form-control" name="addtimeStart" style="width:100px;border-radius:0;">
+      <input type="text"  id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" class="form-control" name="addtimeEnd" style="width:100px">
     </div>
+      <div class="input-group " >
+        <span class="input-group-addon">批阅</span>
+        <select class="form-control" name="finish" id="shenhe" style="width:80px;">
+            <option value="">所有</option>
+            <option value="0">未批阅</option>
+            <option value="1">已批阅</option>
+        </select>
+      </div>
     </form>
     <div class="btn-group">
       <button onclick="doSearch()" class="btn btn-primary btn_subnmit">搜索</button>

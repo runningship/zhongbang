@@ -32,11 +32,12 @@ function save(){
     url: url,
     data:text,
     success: function(data){
-      alert('保存成功,您还可以添加附件.');
-      recordId = JSON.parse(data)['recordId'];
-      url = '/zb/c/journal/update?id='+recordId;
+      // recordId = JSON.parse(data)['recordId'];
+      // url = '/zb/c/journal/update?id='+recordId;
       art.dialog.opener.doSearch();
-      initFileUpload();
+      art.dialog.close();
+      alert('保存成功');
+      // initFileUpload();
     }
   });
   return false;
@@ -97,6 +98,8 @@ $(function(){
   if(category==null || category==""){
     alert("未指明的分类");
   }
+    api = art.dialog.open.api,  //      art.dialog.open扩展方法
+    api.title('')
   $('#category').val(category);
   ue = UE.getEditor('editor');
   ue.addListener( 'ready', function( editor ) {

@@ -24,8 +24,20 @@ $(document).ready(function(){
         $('iframe').attr('src',aHref);
         return false;
     });
-    $('.sider').find('a').eq(0).click();
+    var selected=getParam('selected');
+    if(selected==undefined || selected==""){
+        $('.sider').find('a').eq(0).click();
+    }else{
+        select(selected);
+    }
 });
+function select(selected){
+    var menu = $('.'+selected);
+    var oldTarget= menu.attr('href');
+    menu.attr('href',oldTarget+"&shenhe=0");
+    menu.click();
+    menu.attr('href',oldTarget);
+}
 </script>
 </head>
 <body>
@@ -38,7 +50,7 @@ $(document).ready(function(){
             </dl>
             <dl class="sidedl">
                 <dt></dt>
-                <dd auth="xz_jili_list"><a class="aNavBtn" href="jili_list.html?dataScope=xz_jili_list"  target="house_iframe" >激励列表</a>
+                <dd auth="xz_jili_list"><a class="aNavBtn jili" href="jili_list.html?dataScope=xz_jili_list"  target="house_iframe" >激励列表</a>
                 <dd auth="xz_jili_tongji"><a class="aNavBtn" href="jili_total_list.html?dataScope=xz_jili_tongji"  target="house_iframe" >激励汇总</a></dd>
             </dl>
         </div>

@@ -122,6 +122,8 @@ $(function(){
 </script>
 <style type="text/css">
   .table{ margin-bottom: 0px;}
+.text0{color:red;}
+.text1{display: none;}
 </style>
 </head>
 <body class="hlist bodyer" style="overflow:auto">
@@ -163,7 +165,7 @@ $(function(){
     </thead>
     <tbody id="id_list">
     <tr style="display:none">
-      <td>${title}</td>
+      <td><span class="text${hasRead}">新</span>${title}</td>
       <td>${uname}</td>
       <td>${addtime}</td>
       <td>${classTitle}</td>
