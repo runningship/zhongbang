@@ -2,15 +2,24 @@ package com.youwei.zjb.applet;
 
 import java.applet.Applet;
 
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+
 public class JWordViewer extends Applet{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1702633580910466L;
 	org.eclipse.swt.widgets.Display display;
 	  org.eclipse.swt.widgets.Shell swtParent;
 	  java.awt.Canvas awtParent;
 	  
 	  public void init() {
+		  
 		    Thread thread = new Thread(new Runnable() {
 		      public void run() {
+		    	  
 		        setLayout(new java.awt.GridLayout(1, 1));
 		        awtParent = new java.awt.Canvas();
 		        add(awtParent);
@@ -28,6 +37,8 @@ public class JWordViewer extends Applet{
 		        } catch (org.eclipse.swt.SWTException e) {
 		          String str = "Create OleClientSite Error" + e.toString();
 		          System.out.println(str);
+		          JLabel label = new JLabel(str, SwingConstants.CENTER);  
+			      add(label);  
 		          return;
 		        }
 		        setSize(500, 500);
@@ -38,6 +49,8 @@ public class JWordViewer extends Applet{
 		          if (!display.readAndDispatch())
 		            display.sleep();
 		        }
+		        JLabel label = new JLabel("dsadadsad", SwingConstants.CENTER);  
+			      add(label);  
 		      }
 		    });
 		    thread.start();
