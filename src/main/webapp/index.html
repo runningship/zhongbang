@@ -324,6 +324,38 @@ function openRenShi(obj){
     WindowAnimation:'easeInBack'
  });
 }
+
+function editOffice(bizType,recordId,id){
+    var path='C:\\"Program Files (x86)"\\"Microsoft Office"\\Office12\\EXCEL.EXE';
+    try{
+        var exec = require('child_process').exec;
+        var command = path;
+        exec(command, function(err, stdout, stderr) {
+            if(err!=null){
+                alert(err);
+            }
+        });
+      }catch(e){
+        alert(e);
+      }
+}
+function saveOffice(name,data){
+  var fs = require("fs");
+  try{
+      fs.writeFileSync(name, data);
+  }catch(e){
+      console.log(e);
+  }
+}
+
+function readOffice(name){
+  var fs = require("fs");
+  try{
+      return fs.readFileSync(name);
+  }catch(e){
+      console.log(e);
+  }
+}
 </script>
 <style type="text/css">
 html{border:1px solid #000;}

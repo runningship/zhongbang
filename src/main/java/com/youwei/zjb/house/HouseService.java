@@ -314,7 +314,7 @@ public class HouseService {
 		ModelAndView mv = new ModelAndView();
 		House house = service.get(House.class, id);
 		User ywy = service.get(User.class,house.userId);
-		mv.data = JSONHelper.toJSON(house);
+		mv.data = JSONHelper.toJSON(house,DataHelper.dateSdf.toPattern());
 //		mv.data.put("house", JSONHelper.toJSON(house));
 		User forlxr = service.get(User.class, house.fbrId);
 		if(forlxr!=null){

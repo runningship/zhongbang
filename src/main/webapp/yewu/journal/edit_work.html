@@ -140,6 +140,20 @@ $(function(){
   initFileUpload();
 });
 
+function editOfficex(bizType,recordId,id,filename){
+  ///zb/file/download?
+  var data = window.top.readOffice("1111.xls");
+  console.log(data);
+  window.top.saveOffice("2222.xls",data);
+  YW.ajax({
+    type: 'get',
+    url: '/zb/file/download?bizType='+bizType+'&recordId='+recordId+'&file='+id,
+    success: function(result){
+      window.top.saveOffice(filename,result);
+    }
+  });
+  // window.top.editOffice(bizType,recordId,id);
+}
 </script>
 </head>
 <body style="overflow:; ">
@@ -173,6 +187,7 @@ $(function(){
   <span style="display:none">
     <div>
       <a href="/zb/file/download?bizType=${bizType}&recordId=${recordId}&file=${id}">${filename}</a> <a href="javascript:void(0)" onclick="deleteAttach(${id})">删除</a>
+      <a href="javascript:void(0)" onclick='editOfficex("${bizType}",${recordId},${id},"${filename}")'>编辑</a>
     </div>
   </span>
 </div>

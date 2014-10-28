@@ -137,6 +137,7 @@ $(function(){
     buildHtmlWithJsonArray("id_zhuangxiu",QueryOptions['zhuangxiu'],true);   //装修
     
     if(getHid){
+      $('#dateweituo').css('display','');
       $('form[name=form1]').attr('action', '/zb/c/house/update');
       //alert($('form[name=form1]').attr('action'))
       $.get('/zb/c/house/get?id='+getHid, function(data) {
@@ -156,6 +157,7 @@ $(function(){
       fillData(gerStrNull['page']['data'][0]);
       selectYwy($${qid},$${did},$${userId});
       $('#id_xingzhi').attr('disabled',"disabled");
+
     }
     
   });
@@ -241,8 +243,8 @@ $(function(){
         </div>
       </td>
       <td class="w160px">
-        <div class="input-group">
-          <span class="input-group-addon">委托时间</span>
+        <div class="input-group" id="dateweituo" style="display:none">
+          <span class="input-group-addon" style="padding-left:8px;padding-right:8px;">委托日期</span>
         <input type="text" class="form-control" name="dateweituo" id="idTimes" onFocus="var timeend=$dp.$('idTime');WdatePicker({onpicked:function(){idTime.focus();},maxDate:'#F{$dp.$D(\'idTime\')}'})" placeholder="">
         <input type="text" class="form-control" name="dateEnd" id="idTime" onFocus="WdatePicker({minDate:'#F{$dp.$D(\'idTimes\')}'})" placeholder="" class="hidden">
       </td>

@@ -55,7 +55,6 @@ public class UserHelper {
 	public static String getDataScope(User user , String dataPrefix){
 		String code=user.orgpath;
 		for(UserAuthority ra :  user.Authorities()){
-			System.out.println(ra.name);
 			if((dataPrefix+"_data_dept").equals(ra.name)){
 				code = user.Department().path;
 			}

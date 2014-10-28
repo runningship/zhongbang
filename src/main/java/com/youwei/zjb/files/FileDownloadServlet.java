@@ -37,6 +37,8 @@ public class FileDownloadServlet extends HttpServlet{
 		}
 		resp.addHeader("Content-Disposition", "attachment;filename=" + new String(fileName.getBytes("utf-8"),"ISO-8859-1"));
         resp.addHeader("Content-Length", "" + file.length());
+//        resp.addHeader("Content-Transfer-Encoding","binary");
+//        resp.addHeader("Content-Type","binary/octet-stream");
 		FileInputStream ins = FileUtils.openInputStream(file);
 		IOUtils.copy(ins, out);
 		IOUtils.closeQuietly(ins);

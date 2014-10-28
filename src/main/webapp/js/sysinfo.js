@@ -50,7 +50,6 @@ function writeLicence(lic){
         if(lic==undefined || lic==""){
             return;
         }
-        var fs = require("fs");
         fs.writeFileSync(sysDir+"zjb.lic", lic, 'utf8');
     }catch(e){
         console.log(e);
